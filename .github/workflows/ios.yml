@@ -1,0 +1,109 @@
+# Builds Bite on a Mac in the cloud, so it works from a Windows PC too.
+# Each run uploads:
+#   screenshots          real simulator screenshots of every screen, light and dark
+#   Bite-unsigned-ipa    an .ipa to install on your iPhone with Sideloadly and your Apple ID
+name: Build Bite
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      # The newest released Xcode on the runner. With Xcode 26 the dock, the toast and the
+      # photo pills are Liquid Glass; older Xcodes build the frosted fallback.
+      - name: Use the newest Xcode
+        run: |
+          latest=$(python3 - <<'PY'
+          import glob, re
+          apps = [a for a in glob.glob('/Applications/Xcode_*.app') if not re.search(r'beta|rc', a, re.I)]
+          key = lambda a: [int(n) for n in re.findall(r'\d+', a.split('Xcode_', 1)[1])]
+          print(max(apps, key=key) if apps else '')
+          PY
+          )
+          if [ -n "$latest" ]; then sudo xcode-select -s "$latest"; fi
+          xcodebuild -version
+
+      - name: Build for the simulator
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Bite.xcodeproj \
+            -scheme Bite \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Screenshots
+        run: |
+          set -euo pipefail
+          APP=build/Build/Products/Debug-iphonesimulator/Bite.app
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          phones = [d for runtime, items in devices.items() if "iOS" in runtime for d in items
+                    if d["name"].startswith("iPhone") and "SE" not in d["name"]]
+          preferred = [d for d in phones if d["name"] in ("iPhone 16", "iPhone 16 Pro", "iPhone 15", "iPhone 15 Pro")]
+          print((preferred or phones)[-1]["udid"])
+          ')
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl status_bar "$UDID" override --time 9:41 --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
+          xcrun simctl install "$UDID" "$APP"
+          mkdir -p screenshots
+
+          shoot() {
+            name=$1; shift
+            xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
+            xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "$@"
+            sleep 9
+            xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
+          }
+
+          shoot 00-welcome
+          shoot 01-today -onboarded YES
+          shoot 02-food -onboarded YES -screen food
+          shoot 03-search -onboarded YES -screen search -query skyr
+          shoot 04-saved-and-recent -onboarded YES -screen search
+          shoot 05-settings -onboarded YES -screen settings
+          shoot 06-scan-barcode -onboarded YES -screen scanner
+          shoot 07-scan-food -onboarded YES -screen photo
+          shoot 08-estimate -onboarded YES -screen estimate
+          shoot 09-week -onboarded YES -screen week
+          shoot 10-month -onboarded YES -screen month
+          shoot 11-saved-editor -onboarded YES -screen saved
+          shoot 12-edit -onboarded YES -screen edit
+          xcrun simctl ui "$UDID" appearance dark
+          shoot 13-today-dark -onboarded YES
+          shoot 14-food-dark -onboarded YES -screen food
+          shoot 15-week-dark -onboarded YES -screen week
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots
+
+      - name: Unsigned IPA for sideloading
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Bite.xcodeproj \
+            -scheme Bite \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build-device \
+            CODE_SIGNING_ALLOWED=NO
+          mkdir -p Payload
+          cp -R build-device/Build/Products/Release-iphoneos/Bite.app Payload/
+          zip -qry Bite-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Bite-unsigned-ipa
+          path: Bite-unsigned.ipa

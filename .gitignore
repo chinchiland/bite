@@ -1,0 +1,10 @@
+.DS_Store
+build/
+build-device/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+Payload/
+*.ipa
+screenshots/
+_previews/

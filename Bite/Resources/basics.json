@@ -1,0 +1,2587 @@
+[
+ {
+  "id": 171688,
+  "name": "Apple",
+  "emoji": "🍎",
+  "unit": "g",
+  "aliases": [
+   "pomme"
+  ],
+  "kcal": 52.0,
+  "protein": 0.26,
+  "carbs": 13.81,
+  "fat": 0.17,
+  "sugar": 10.39,
+  "fiber": 2.4,
+  "saturatedFat": 0.03,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 182
+   },
+   {
+    "label": "1 small",
+    "amount": 149
+   }
+  ]
+ },
+ {
+  "id": 173944,
+  "name": "Banana",
+  "emoji": "🍌",
+  "unit": "g",
+  "aliases": [
+   "banane"
+  ],
+  "kcal": 89.0,
+  "protein": 1.09,
+  "carbs": 22.84,
+  "fat": 0.33,
+  "sugar": 12.23,
+  "fiber": 2.6,
+  "saturatedFat": 0.11,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 118
+   },
+   {
+    "label": "1 large",
+    "amount": 136
+   }
+  ]
+ },
+ {
+  "id": 169097,
+  "name": "Orange",
+  "emoji": "🍊",
+  "unit": "g",
+  "aliases": [
+   "orange"
+  ],
+  "kcal": 47.0,
+  "protein": 0.94,
+  "carbs": 11.75,
+  "fat": 0.12,
+  "sugar": 9.35,
+  "fiber": 2.4,
+  "saturatedFat": 0.01,
+  "salt": 0.0,
+  "portions": [
+   {
+    "label": "1 orange",
+    "amount": 131
+   }
+  ]
+ },
+ {
+  "id": 169118,
+  "name": "Pear",
+  "emoji": "🍐",
+  "unit": "g",
+  "aliases": [
+   "poire"
+  ],
+  "kcal": 57.0,
+  "protein": 0.36,
+  "carbs": 15.23,
+  "fat": 0.14,
+  "sugar": 9.75,
+  "fiber": 3.1,
+  "saturatedFat": 0.02,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 178
+   }
+  ]
+ },
+ {
+  "id": 167762,
+  "name": "Strawberries",
+  "emoji": "🍓",
+  "unit": "g",
+  "aliases": [
+   "fraises",
+   "fraise"
+  ],
+  "kcal": 32.0,
+  "protein": 0.67,
+  "carbs": 7.68,
+  "fat": 0.3,
+  "sugar": 4.89,
+  "fiber": 2.0,
+  "saturatedFat": 0.01,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 144
+   }
+  ]
+ },
+ {
+  "id": 171711,
+  "name": "Blueberries",
+  "emoji": "🫐",
+  "unit": "g",
+  "aliases": [
+   "myrtilles",
+   "myrtille"
+  ],
+  "kcal": 57.0,
+  "protein": 0.74,
+  "carbs": 14.49,
+  "fat": 0.33,
+  "sugar": 9.96,
+  "fiber": 2.4,
+  "saturatedFat": 0.03,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 148
+   }
+  ]
+ },
+ {
+  "id": 174683,
+  "name": "Grapes",
+  "emoji": "🍇",
+  "unit": "g",
+  "aliases": [
+   "raisin",
+   "raisins"
+  ],
+  "kcal": 69.0,
+  "protein": 0.72,
+  "carbs": 18.1,
+  "fat": 0.16,
+  "sugar": 15.48,
+  "fiber": 0.9,
+  "saturatedFat": 0.05,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "10 grapes",
+    "amount": 49
+   },
+   {
+    "label": "1 bowl",
+    "amount": 151
+   }
+  ]
+ },
+ {
+  "id": 168153,
+  "name": "Kiwi",
+  "emoji": "🥝",
+  "unit": "g",
+  "aliases": [
+   "kiwi"
+  ],
+  "kcal": 61.0,
+  "protein": 1.14,
+  "carbs": 14.66,
+  "fat": 0.52,
+  "sugar": 8.99,
+  "fiber": 3.0,
+  "saturatedFat": 0.03,
+  "salt": 0.007,
+  "portions": [
+   {
+    "label": "1 kiwi",
+    "amount": 69
+   }
+  ]
+ },
+ {
+  "id": 169910,
+  "name": "Mango",
+  "emoji": "🥭",
+  "unit": "g",
+  "aliases": [
+   "mangue"
+  ],
+  "kcal": 60.0,
+  "protein": 0.82,
+  "carbs": 14.98,
+  "fat": 0.38,
+  "sugar": 13.66,
+  "fiber": 1.6,
+  "saturatedFat": 0.09,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 165
+   },
+   {
+    "label": "1 mango",
+    "amount": 336
+   }
+  ]
+ },
+ {
+  "id": 169124,
+  "name": "Pineapple",
+  "emoji": "🍍",
+  "unit": "g",
+  "aliases": [
+   "ananas"
+  ],
+  "kcal": 50.0,
+  "protein": 0.54,
+  "carbs": 13.12,
+  "fat": 0.12,
+  "sugar": 9.85,
+  "fiber": 1.4,
+  "saturatedFat": 0.01,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 84
+   },
+   {
+    "label": "1 bowl",
+    "amount": 165
+   }
+  ]
+ },
+ {
+  "id": 167765,
+  "name": "Watermelon",
+  "emoji": "🍉",
+  "unit": "g",
+  "aliases": [
+   "pastèque",
+   "melon d'eau"
+  ],
+  "kcal": 30.0,
+  "protein": 0.61,
+  "carbs": 7.55,
+  "fat": 0.15,
+  "sugar": 6.2,
+  "fiber": 0.4,
+  "saturatedFat": 0.02,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 wedge",
+    "amount": 286
+   },
+   {
+    "label": "1 bowl",
+    "amount": 152
+   }
+  ]
+ },
+ {
+  "id": 171705,
+  "name": "Avocado",
+  "emoji": "🥑",
+  "unit": "g",
+  "aliases": [
+   "avocat"
+  ],
+  "kcal": 160.0,
+  "protein": 2.0,
+  "carbs": 8.53,
+  "fat": 14.66,
+  "sugar": 0.66,
+  "fiber": 6.7,
+  "saturatedFat": 2.13,
+  "salt": 0.018,
+  "portions": [
+   {
+    "label": "½ avocado",
+    "amount": 100
+   },
+   {
+    "label": "1 avocado",
+    "amount": 201
+   }
+  ]
+ },
+ {
+  "id": 169928,
+  "name": "Peach",
+  "emoji": "🍑",
+  "unit": "g",
+  "aliases": [
+   "pêche"
+  ],
+  "kcal": 39.0,
+  "protein": 0.91,
+  "carbs": 9.54,
+  "fat": 0.25,
+  "sugar": 8.39,
+  "fiber": 1.5,
+  "saturatedFat": 0.02,
+  "salt": 0.0,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 150
+   }
+  ]
+ },
+ {
+  "id": 171719,
+  "name": "Cherries",
+  "emoji": "🍒",
+  "unit": "g",
+  "aliases": [
+   "cerises",
+   "cerise"
+  ],
+  "kcal": 63.0,
+  "protein": 1.06,
+  "carbs": 16.01,
+  "fat": 0.2,
+  "sugar": 12.82,
+  "fiber": 2.1,
+  "saturatedFat": 0.04,
+  "salt": 0.0,
+  "portions": [
+   {
+    "label": "10 cherries",
+    "amount": 82
+   },
+   {
+    "label": "1 bowl",
+    "amount": 154
+   }
+  ]
+ },
+ {
+  "id": 170379,
+  "name": "Broccoli",
+  "emoji": "🥦",
+  "unit": "g",
+  "aliases": [
+   "brocoli"
+  ],
+  "kcal": 34.0,
+  "protein": 2.82,
+  "carbs": 6.64,
+  "fat": 0.37,
+  "sugar": 1.7,
+  "fiber": 2.6,
+  "saturatedFat": 0.11,
+  "salt": 0.083,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 91
+   }
+  ]
+ },
+ {
+  "id": 170393,
+  "name": "Carrot",
+  "emoji": "🥕",
+  "unit": "g",
+  "aliases": [
+   "carotte",
+   "carottes"
+  ],
+  "kcal": 41.0,
+  "protein": 0.93,
+  "carbs": 9.58,
+  "fat": 0.24,
+  "sugar": 4.74,
+  "fiber": 2.8,
+  "saturatedFat": 0.03,
+  "salt": 0.172,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 61
+   }
+  ]
+ },
+ {
+  "id": 170457,
+  "name": "Tomato",
+  "emoji": "🍅",
+  "unit": "g",
+  "aliases": [
+   "tomate",
+   "tomates"
+  ],
+  "kcal": 18.0,
+  "protein": 0.88,
+  "carbs": 3.89,
+  "fat": 0.2,
+  "sugar": 2.63,
+  "fiber": 1.2,
+  "saturatedFat": 0.03,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 123
+   },
+   {
+    "label": "1 cherry tomato",
+    "amount": 17
+   }
+  ]
+ },
+ {
+  "id": 168409,
+  "name": "Cucumber",
+  "emoji": "🥒",
+  "unit": "g",
+  "aliases": [
+   "concombre"
+  ],
+  "kcal": 15.0,
+  "protein": 0.65,
+  "carbs": 3.63,
+  "fat": 0.11,
+  "sugar": 1.67,
+  "fiber": 0.5,
+  "saturatedFat": 0.04,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "½ cucumber",
+    "amount": 150
+   }
+  ]
+ },
+ {
+  "id": 169247,
+  "name": "Lettuce",
+  "emoji": "🥬",
+  "unit": "g",
+  "aliases": [
+   "salade",
+   "laitue",
+   "romaine"
+  ],
+  "kcal": 17.0,
+  "protein": 1.23,
+  "carbs": 3.29,
+  "fat": 0.3,
+  "sugar": 1.19,
+  "fiber": 2.1,
+  "saturatedFat": 0.04,
+  "salt": 0.02,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 47
+   }
+  ]
+ },
+ {
+  "id": 168462,
+  "name": "Spinach",
+  "emoji": "🥬",
+  "unit": "g",
+  "aliases": [
+   "épinards",
+   "epinard"
+  ],
+  "kcal": 23.0,
+  "protein": 2.86,
+  "carbs": 3.63,
+  "fat": 0.39,
+  "sugar": 0.42,
+  "fiber": 2.2,
+  "saturatedFat": 0.06,
+  "salt": 0.198,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 30
+   }
+  ]
+ },
+ {
+  "id": 170108,
+  "name": "Bell pepper",
+  "emoji": "🫑",
+  "unit": "g",
+  "aliases": [
+   "poivron"
+  ],
+  "kcal": 26.0,
+  "protein": 0.99,
+  "carbs": 6.03,
+  "fat": 0.3,
+  "sugar": 4.2,
+  "fiber": 2.1,
+  "saturatedFat": 0.06,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 119
+   }
+  ]
+ },
+ {
+  "id": 169291,
+  "name": "Zucchini",
+  "emoji": "🥒",
+  "unit": "g",
+  "aliases": [
+   "courgette",
+   "courgettes"
+  ],
+  "kcal": 17.0,
+  "protein": 1.21,
+  "carbs": 3.11,
+  "fat": 0.32,
+  "sugar": 2.5,
+  "fiber": 1.0,
+  "saturatedFat": 0.08,
+  "salt": 0.02,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 196
+   }
+  ]
+ },
+ {
+  "id": 170000,
+  "name": "Onion",
+  "emoji": "🧅",
+  "unit": "g",
+  "aliases": [
+   "oignon",
+   "oignons"
+  ],
+  "kcal": 40.0,
+  "protein": 1.1,
+  "carbs": 9.34,
+  "fat": 0.1,
+  "sugar": 4.24,
+  "fiber": 1.7,
+  "saturatedFat": 0.04,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 110
+   }
+  ]
+ },
+ {
+  "id": 169251,
+  "name": "Mushrooms",
+  "emoji": "🍄",
+  "unit": "g",
+  "aliases": [
+   "champignons",
+   "champignon"
+  ],
+  "kcal": 22.0,
+  "protein": 3.09,
+  "carbs": 3.26,
+  "fat": 0.34,
+  "sugar": 1.98,
+  "fiber": 1.0,
+  "saturatedFat": 0.05,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 70
+   }
+  ]
+ },
+ {
+  "id": 169961,
+  "name": "Green beans",
+  "emoji": "🫛",
+  "unit": "g",
+  "aliases": [
+   "haricots verts"
+  ],
+  "kcal": 31.0,
+  "protein": 1.83,
+  "carbs": 6.97,
+  "fat": 0.22,
+  "sugar": 3.26,
+  "fiber": 2.7,
+  "saturatedFat": 0.05,
+  "salt": 0.015,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 100
+   }
+  ]
+ },
+ {
+  "id": 168483,
+  "name": "Sweet potato",
+  "emoji": "🍠",
+  "unit": "g",
+  "aliases": [
+   "patate douce"
+  ],
+  "kcal": 90.0,
+  "protein": 2.01,
+  "carbs": 20.71,
+  "fat": 0.15,
+  "sugar": 6.48,
+  "fiber": 3.3,
+  "saturatedFat": 0.05,
+  "salt": 0.09,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 114
+   }
+  ]
+ },
+ {
+  "id": 170438,
+  "name": "Potato, boiled",
+  "emoji": "🥔",
+  "unit": "g",
+  "aliases": [
+   "pomme de terre",
+   "pommes de terre",
+   "patate"
+  ],
+  "kcal": 87.0,
+  "protein": 1.87,
+  "carbs": 20.13,
+  "fat": 0.1,
+  "sugar": 0.91,
+  "fiber": 1.8,
+  "saturatedFat": 0.03,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 potato",
+    "amount": 136
+   }
+  ]
+ },
+ {
+  "id": 170093,
+  "name": "Potato, baked",
+  "emoji": "🥔",
+  "unit": "g",
+  "aliases": [
+   "pomme de terre au four"
+  ],
+  "kcal": 93.0,
+  "protein": 2.5,
+  "carbs": 21.15,
+  "fat": 0.13,
+  "sugar": 1.18,
+  "fiber": 2.2,
+  "saturatedFat": 0.03,
+  "salt": 0.025,
+  "portions": [
+   {
+    "label": "1 medium",
+    "amount": 173
+   }
+  ]
+ },
+ {
+  "id": 169214,
+  "name": "Sweet corn",
+  "emoji": "🌽",
+  "unit": "g",
+  "aliases": [
+   "maïs"
+  ],
+  "kcal": 67.0,
+  "protein": 2.29,
+  "carbs": 14.34,
+  "fat": 1.22,
+  "sugar": 4.44,
+  "fiber": 2.0,
+  "saturatedFat": 0.24,
+  "salt": 0.512,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 164
+   }
+  ]
+ },
+ {
+  "id": 170419,
+  "name": "Peas",
+  "emoji": "🫛",
+  "unit": "g",
+  "aliases": [
+   "petits pois"
+  ],
+  "kcal": 81.0,
+  "protein": 5.42,
+  "carbs": 14.45,
+  "fat": 0.4,
+  "sugar": 5.67,
+  "fiber": 5.7,
+  "saturatedFat": 0.07,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 145
+   }
+  ]
+ },
+ {
+  "id": 171287,
+  "name": "Egg",
+  "emoji": "🥚",
+  "unit": "g",
+  "aliases": [
+   "oeuf",
+   "œuf",
+   "oeufs",
+   "œufs"
+  ],
+  "kcal": 143.0,
+  "protein": 12.56,
+  "carbs": 0.72,
+  "fat": 9.51,
+  "sugar": 0.37,
+  "fiber": 0.0,
+  "saturatedFat": 3.13,
+  "salt": 0.355,
+  "portions": [
+   {
+    "label": "1 large",
+    "amount": 50
+   },
+   {
+    "label": "1 medium",
+    "amount": 44
+   }
+  ]
+ },
+ {
+  "id": 172183,
+  "name": "Egg white",
+  "emoji": "🥚",
+  "unit": "g",
+  "aliases": [
+   "blanc d'oeuf",
+   "blanc d'œuf"
+  ],
+  "kcal": 52.0,
+  "protein": 10.9,
+  "carbs": 0.73,
+  "fat": 0.17,
+  "sugar": 0.71,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.415,
+  "portions": [
+   {
+    "label": "1 large",
+    "amount": 33
+   }
+  ]
+ },
+ {
+  "id": 171477,
+  "name": "Chicken breast, cooked",
+  "emoji": "🍗",
+  "unit": "g",
+  "aliases": [
+   "poulet",
+   "blanc de poulet"
+  ],
+  "kcal": 165.0,
+  "protein": 31.02,
+  "carbs": 0.0,
+  "fat": 3.57,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 1.01,
+  "salt": 0.185,
+  "portions": [
+   {
+    "label": "½ breast",
+    "amount": 86
+   },
+   {
+    "label": "1 breast",
+    "amount": 172
+   }
+  ]
+ },
+ {
+  "id": 172388,
+  "name": "Chicken thigh, cooked",
+  "emoji": "🍗",
+  "unit": "g",
+  "aliases": [
+   "cuisse de poulet"
+  ],
+  "kcal": 179.0,
+  "protein": 24.76,
+  "carbs": 0.0,
+  "fat": 8.15,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 2.31,
+  "salt": 0.265,
+  "portions": [
+   {
+    "label": "1 thigh",
+    "amount": 116
+   }
+  ]
+ },
+ {
+  "id": 174034,
+  "name": "Ground beef 85%, cooked",
+  "emoji": "🥩",
+  "unit": "g",
+  "aliases": [
+   "boeuf haché",
+   "bœuf haché",
+   "steak haché"
+  ],
+  "kcal": 256.0,
+  "protein": 27.73,
+  "carbs": 0.0,
+  "fat": 15.3,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 5.81,
+  "salt": 0.223,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 85
+   }
+  ]
+ },
+ {
+  "id": 173118,
+  "name": "Steak, cooked",
+  "emoji": "🥩",
+  "unit": "g",
+  "aliases": [
+   "steak",
+   "boeuf",
+   "bœuf",
+   "entrecôte"
+  ],
+  "kcal": 187.0,
+  "protein": 29.51,
+  "carbs": 0.0,
+  "fat": 6.72,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 2.56,
+  "salt": 0.152,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 85
+   },
+   {
+    "label": "1 steak",
+    "amount": 200
+   }
+  ]
+ },
+ {
+  "id": 175168,
+  "name": "Salmon, cooked",
+  "emoji": "🐟",
+  "unit": "g",
+  "aliases": [
+   "saumon"
+  ],
+  "kcal": 206.0,
+  "protein": 22.1,
+  "carbs": 0.0,
+  "fat": 12.35,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 2.4,
+  "salt": 0.152,
+  "portions": [
+   {
+    "label": "1 fillet",
+    "amount": 178
+   }
+  ]
+ },
+ {
+  "id": 173709,
+  "name": "Tuna, canned in water",
+  "emoji": "🐟",
+  "unit": "g",
+  "aliases": [
+   "thon"
+  ],
+  "kcal": 86.0,
+  "protein": 19.44,
+  "carbs": 0.0,
+  "fat": 0.96,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 0.21,
+  "salt": 0.618,
+  "portions": [
+   {
+    "label": "1 can",
+    "amount": 165
+   }
+  ]
+ },
+ {
+  "id": 171956,
+  "name": "Cod, cooked",
+  "emoji": "🐟",
+  "unit": "g",
+  "aliases": [
+   "cabillaud",
+   "morue"
+  ],
+  "kcal": 105.0,
+  "protein": 22.83,
+  "carbs": 0.0,
+  "fat": 0.86,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 0.17,
+  "salt": 0.195,
+  "portions": [
+   {
+    "label": "1 fillet",
+    "amount": 180
+   }
+  ]
+ },
+ {
+  "id": 175180,
+  "name": "Shrimp, cooked",
+  "emoji": "🦐",
+  "unit": "g",
+  "aliases": [
+   "crevettes",
+   "crevette"
+  ],
+  "kcal": 99.0,
+  "protein": 23.98,
+  "carbs": 0.2,
+  "fat": 0.28,
+  "sugar": null,
+  "fiber": null,
+  "saturatedFat": 0.06,
+  "salt": 0.278,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 85
+   }
+  ]
+ },
+ {
+  "id": 168250,
+  "name": "Pork tenderloin, cooked",
+  "emoji": "🥩",
+  "unit": "g",
+  "aliases": [
+   "filet de porc",
+   "porc"
+  ],
+  "kcal": 143.0,
+  "protein": 26.17,
+  "carbs": 0.0,
+  "fat": 3.51,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 1.2,
+  "salt": 0.142,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 85
+   }
+  ]
+ },
+ {
+  "id": 171496,
+  "name": "Turkey breast, cooked",
+  "emoji": "🦃",
+  "unit": "g",
+  "aliases": [
+   "dinde",
+   "blanc de dinde"
+  ],
+  "kcal": 147.0,
+  "protein": 30.13,
+  "carbs": 0.0,
+  "fat": 2.08,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 0.59,
+  "salt": 0.247,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 85
+   }
+  ]
+ },
+ {
+  "id": 173864,
+  "name": "Ham",
+  "emoji": "🍖",
+  "unit": "g",
+  "aliases": [
+   "jambon"
+  ],
+  "kcal": 164.0,
+  "protein": 16.6,
+  "carbs": 3.63,
+  "fat": 8.8,
+  "sugar": 1.0,
+  "fiber": 1.3,
+  "saturatedFat": 0.5,
+  "salt": 2.035,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 167914,
+  "name": "Bacon, cooked",
+  "emoji": "🥓",
+  "unit": "g",
+  "aliases": [
+   "lard",
+   "lardons",
+   "bacon"
+  ],
+  "kcal": 548.0,
+  "protein": 35.73,
+  "carbs": 1.35,
+  "fat": 43.27,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 14.19,
+  "salt": 5.482,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 8.1
+   }
+  ]
+ },
+ {
+  "id": 172475,
+  "name": "Tofu, firm",
+  "emoji": "🫘",
+  "unit": "g",
+  "aliases": [
+   "tofu"
+  ],
+  "kcal": 144.0,
+  "protein": 17.27,
+  "carbs": 2.78,
+  "fat": 8.72,
+  "sugar": null,
+  "fiber": 2.3,
+  "saturatedFat": 1.26,
+  "salt": 0.035,
+  "portions": [
+   {
+    "label": "¼ block",
+    "amount": 81
+   }
+  ]
+ },
+ {
+  "id": 171265,
+  "name": "Milk, whole",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "lait entier",
+   "lait"
+  ],
+  "kcal": 61.0,
+  "protein": 3.15,
+  "carbs": 4.8,
+  "fat": 3.25,
+  "sugar": 5.05,
+  "fiber": 0.0,
+  "saturatedFat": 1.86,
+  "salt": 0.107,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   },
+   {
+    "label": "1 splash",
+    "amount": 15
+   }
+  ]
+ },
+ {
+  "id": 171267,
+  "name": "Milk, semi-skimmed",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "lait demi-écrémé",
+   "lait"
+  ],
+  "kcal": 50.0,
+  "protein": 3.3,
+  "carbs": 4.8,
+  "fat": 1.98,
+  "sugar": 5.06,
+  "fiber": 0.0,
+  "saturatedFat": 1.26,
+  "salt": 0.117,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   },
+   {
+    "label": "1 splash",
+    "amount": 15
+   }
+  ]
+ },
+ {
+  "id": 171269,
+  "name": "Milk, skim",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "lait écrémé"
+  ],
+  "kcal": 34.0,
+  "protein": 3.37,
+  "carbs": 4.96,
+  "fat": 0.08,
+  "sugar": 5.09,
+  "fiber": 0.0,
+  "saturatedFat": 0.06,
+  "salt": 0.105,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   }
+  ]
+ },
+ {
+  "id": 170894,
+  "name": "Greek yogurt, 0%",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "yaourt grec 0%",
+   "yogourt grec"
+  ],
+  "kcal": 59.0,
+  "protein": 10.19,
+  "carbs": 3.6,
+  "fat": 0.39,
+  "sugar": 3.24,
+  "fiber": 0.0,
+  "saturatedFat": 0.12,
+  "salt": 0.09,
+  "portions": [
+   {
+    "label": "1 pot",
+    "amount": 170
+   }
+  ]
+ },
+ {
+  "id": 171304,
+  "name": "Greek yogurt",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "yaourt grec",
+   "yogourt grec"
+  ],
+  "kcal": 97.0,
+  "protein": 9.0,
+  "carbs": 3.98,
+  "fat": 5.0,
+  "sugar": 4.0,
+  "fiber": 0.0,
+  "saturatedFat": 2.4,
+  "salt": 0.087,
+  "portions": [
+   {
+    "label": "1 pot",
+    "amount": 170
+   }
+  ]
+ },
+ {
+  "id": 171284,
+  "name": "Plain yogurt",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "yaourt nature",
+   "yogourt nature",
+   "yaourt"
+  ],
+  "kcal": 61.0,
+  "protein": 3.47,
+  "carbs": 4.66,
+  "fat": 3.25,
+  "sugar": 4.66,
+  "fiber": 0.0,
+  "saturatedFat": 2.1,
+  "salt": 0.115,
+  "portions": [
+   {
+    "label": "1 pot",
+    "amount": 125
+   }
+  ]
+ },
+ {
+  "id": 172182,
+  "name": "Cottage cheese",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "cottage"
+  ],
+  "kcal": 81.0,
+  "protein": 10.45,
+  "carbs": 4.76,
+  "fat": 2.27,
+  "sugar": 4.0,
+  "fiber": 0.0,
+  "saturatedFat": 1.24,
+  "salt": 0.77,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 113
+   }
+  ]
+ },
+ {
+  "id": 173414,
+  "name": "Cheddar",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "cheddar",
+   "fromage"
+  ],
+  "kcal": 403.0,
+  "protein": 22.87,
+  "carbs": 3.37,
+  "fat": 33.31,
+  "sugar": 0.48,
+  "fiber": 0.0,
+  "saturatedFat": 18.87,
+  "salt": 1.633,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 170845,
+  "name": "Mozzarella",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "mozzarella"
+  ],
+  "kcal": 299.0,
+  "protein": 22.17,
+  "carbs": 2.4,
+  "fat": 22.14,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 13.9,
+  "salt": 1.215,
+  "portions": [
+   {
+    "label": "1 ball",
+    "amount": 125
+   },
+   {
+    "label": "1 serving",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 171247,
+  "name": "Parmesan",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "parmesan"
+  ],
+  "kcal": 420.0,
+  "protein": 28.42,
+  "carbs": 13.91,
+  "fat": 27.84,
+  "sugar": 0.07,
+  "fiber": 0.0,
+  "saturatedFat": 15.37,
+  "salt": 4.51,
+  "portions": [
+   {
+    "label": "1 tbsp grated",
+    "amount": 5
+   }
+  ]
+ },
+ {
+  "id": 173420,
+  "name": "Feta",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "feta"
+  ],
+  "kcal": 265.0,
+  "protein": 14.21,
+  "carbs": 3.88,
+  "fat": 21.49,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 13.3,
+  "salt": 2.848,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 38
+   }
+  ]
+ },
+ {
+  "id": 171242,
+  "name": "Gruyère",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "gruyère",
+   "gruyere",
+   "fromage"
+  ],
+  "kcal": 413.0,
+  "protein": 29.81,
+  "carbs": 0.36,
+  "fat": 32.34,
+  "sugar": 0.36,
+  "fiber": 0.0,
+  "saturatedFat": 18.91,
+  "salt": 1.785,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 171251,
+  "name": "Emmental",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "emmental",
+   "emmentaler",
+   "fromage suisse"
+  ],
+  "kcal": 393.0,
+  "protein": 26.96,
+  "carbs": 1.44,
+  "fat": 30.99,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 18.23,
+  "salt": 0.468,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 172177,
+  "name": "Brie",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "brie"
+  ],
+  "kcal": 334.0,
+  "protein": 20.75,
+  "carbs": 0.45,
+  "fat": 27.68,
+  "sugar": 0.45,
+  "fiber": 0.0,
+  "saturatedFat": 17.41,
+  "salt": 1.573,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 173418,
+  "name": "Cream cheese",
+  "emoji": "🧀",
+  "unit": "g",
+  "aliases": [
+   "fromage frais",
+   "philadelphia"
+  ],
+  "kcal": 350.0,
+  "protein": 6.15,
+  "carbs": 5.52,
+  "fat": 34.44,
+  "sugar": 3.76,
+  "fiber": 0.0,
+  "saturatedFat": 20.21,
+  "salt": 0.785,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 14.5
+   }
+  ]
+ },
+ {
+  "id": 173410,
+  "name": "Butter",
+  "emoji": "🧈",
+  "unit": "g",
+  "aliases": [
+   "beurre"
+  ],
+  "kcal": 717.0,
+  "protein": 0.85,
+  "carbs": 0.06,
+  "fat": 81.11,
+  "sugar": 0.06,
+  "fiber": 0.0,
+  "saturatedFat": 51.37,
+  "salt": 1.607,
+  "portions": [
+   {
+    "label": "1 tsp",
+    "amount": 5
+   },
+   {
+    "label": "1 tbsp",
+    "amount": 14.2
+   }
+  ]
+ },
+ {
+  "id": 170859,
+  "name": "Cream",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "crème",
+   "creme"
+  ],
+  "kcal": 340.0,
+  "protein": 2.84,
+  "carbs": 2.84,
+  "fat": 36.08,
+  "sugar": 2.92,
+  "fiber": 0.0,
+  "saturatedFat": 23.03,
+  "salt": 0.068,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 15
+   }
+  ]
+ },
+ {
+  "id": 174832,
+  "name": "Almond milk",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "lait d'amande"
+  ],
+  "kcal": 15.0,
+  "protein": 0.4,
+  "carbs": 1.31,
+  "fat": 0.96,
+  "sugar": 0.81,
+  "fiber": 0.2,
+  "saturatedFat": 0.08,
+  "salt": 0.18,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   }
+  ]
+ },
+ {
+  "id": 172446,
+  "name": "Soy milk",
+  "emoji": "🥛",
+  "unit": "ml",
+  "aliases": [
+   "lait de soja"
+  ],
+  "kcal": 54.0,
+  "protein": 3.27,
+  "carbs": 6.28,
+  "fat": 1.75,
+  "sugar": 3.99,
+  "fiber": 0.6,
+  "saturatedFat": 0.2,
+  "salt": 0.128,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   }
+  ]
+ },
+ {
+  "id": 168878,
+  "name": "Rice, cooked",
+  "emoji": "🍚",
+  "unit": "g",
+  "aliases": [
+   "riz"
+  ],
+  "kcal": 130.0,
+  "protein": 2.69,
+  "carbs": 28.17,
+  "fat": 0.28,
+  "sugar": 0.05,
+  "fiber": 0.4,
+  "saturatedFat": 0.08,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 158
+   }
+  ]
+ },
+ {
+  "id": 169704,
+  "name": "Brown rice, cooked",
+  "emoji": "🍚",
+  "unit": "g",
+  "aliases": [
+   "riz complet"
+  ],
+  "kcal": 123.0,
+  "protein": 2.74,
+  "carbs": 25.58,
+  "fat": 0.97,
+  "sugar": 0.24,
+  "fiber": 1.6,
+  "saturatedFat": 0.26,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 202
+   }
+  ]
+ },
+ {
+  "id": 168877,
+  "name": "Rice, dry",
+  "emoji": "🍚",
+  "unit": "g",
+  "aliases": [
+   "riz cru"
+  ],
+  "kcal": 365.0,
+  "protein": 7.13,
+  "carbs": 79.95,
+  "fat": 0.66,
+  "sugar": 0.12,
+  "fiber": 1.3,
+  "saturatedFat": 0.18,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 portion",
+    "amount": 75
+   }
+  ]
+ },
+ {
+  "id": 169737,
+  "name": "Pasta, cooked",
+  "emoji": "🍝",
+  "unit": "g",
+  "aliases": [
+   "pâtes",
+   "pates",
+   "spaghetti"
+  ],
+  "kcal": 158.0,
+  "protein": 5.8,
+  "carbs": 30.86,
+  "fat": 0.93,
+  "sugar": 0.56,
+  "fiber": 1.8,
+  "saturatedFat": 0.18,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 plate",
+    "amount": 220
+   },
+   {
+    "label": "1 bowl",
+    "amount": 124
+   }
+  ]
+ },
+ {
+  "id": 169736,
+  "name": "Pasta, dry",
+  "emoji": "🍝",
+  "unit": "g",
+  "aliases": [
+   "pâtes crues",
+   "pates crues"
+  ],
+  "kcal": 371.0,
+  "protein": 13.04,
+  "carbs": 74.67,
+  "fat": 1.51,
+  "sugar": 2.67,
+  "fiber": 3.2,
+  "saturatedFat": 0.28,
+  "salt": 0.015,
+  "portions": [
+   {
+    "label": "1 portion",
+    "amount": 100
+   }
+  ]
+ },
+ {
+  "id": 173904,
+  "name": "Oats",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "flocons d'avoine",
+   "avoine",
+   "porridge"
+  ],
+  "kcal": 379.0,
+  "protein": 13.15,
+  "carbs": 67.7,
+  "fat": 6.52,
+  "sugar": 0.99,
+  "fiber": 10.1,
+  "saturatedFat": 1.11,
+  "salt": 0.015,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 40
+   }
+  ]
+ },
+ {
+  "id": 171646,
+  "name": "Granola",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "granola",
+   "muesli"
+  ],
+  "kcal": 489.0,
+  "protein": 13.67,
+  "carbs": 53.88,
+  "fat": 24.31,
+  "sugar": 19.8,
+  "fiber": 8.9,
+  "saturatedFat": 3.96,
+  "salt": 0.065,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 45
+   }
+  ]
+ },
+ {
+  "id": 174924,
+  "name": "White bread",
+  "emoji": "🍞",
+  "unit": "g",
+  "aliases": [
+   "pain blanc",
+   "pain de mie",
+   "pain"
+  ],
+  "kcal": 266.0,
+  "protein": 8.85,
+  "carbs": 49.42,
+  "fat": 3.33,
+  "sugar": 5.67,
+  "fiber": 2.7,
+  "saturatedFat": 0.7,
+  "salt": 1.225,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 29
+   }
+  ]
+ },
+ {
+  "id": 172688,
+  "name": "Whole wheat bread",
+  "emoji": "🍞",
+  "unit": "g",
+  "aliases": [
+   "pain complet"
+  ],
+  "kcal": 252.0,
+  "protein": 12.45,
+  "carbs": 42.71,
+  "fat": 3.5,
+  "sugar": 4.34,
+  "fiber": 6.0,
+  "saturatedFat": 0.72,
+  "salt": 1.137,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 32
+   }
+  ]
+ },
+ {
+  "id": 172675,
+  "name": "Baguette",
+  "emoji": "🥖",
+  "unit": "g",
+  "aliases": [
+   "baguette",
+   "pain"
+  ],
+  "kcal": 272.0,
+  "protein": 10.75,
+  "carbs": 51.88,
+  "fat": 2.42,
+  "sugar": 4.62,
+  "fiber": 2.2,
+  "saturatedFat": 0.53,
+  "salt": 1.505,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 30
+   },
+   {
+    "label": "¼ baguette",
+    "amount": 62
+   }
+  ]
+ },
+ {
+  "id": 174987,
+  "name": "Croissant",
+  "emoji": "🥐",
+  "unit": "g",
+  "aliases": [
+   "croissant"
+  ],
+  "kcal": 406.0,
+  "protein": 8.2,
+  "carbs": 45.8,
+  "fat": 21.0,
+  "sugar": 11.26,
+  "fiber": 2.6,
+  "saturatedFat": 11.66,
+  "salt": 0.96,
+  "portions": [
+   {
+    "label": "1 croissant",
+    "amount": 57
+   }
+  ]
+ },
+ {
+  "id": 174899,
+  "name": "Bagel",
+  "emoji": "🥯",
+  "unit": "g",
+  "aliases": [
+   "bagel"
+  ],
+  "kcal": 264.0,
+  "protein": 10.56,
+  "carbs": 52.38,
+  "fat": 1.32,
+  "sugar": 8.43,
+  "fiber": 1.6,
+  "saturatedFat": 0.36,
+  "salt": 1.055,
+  "portions": [
+   {
+    "label": "1 bagel",
+    "amount": 99
+   }
+  ]
+ },
+ {
+  "id": 175037,
+  "name": "Tortilla wrap",
+  "emoji": "🫓",
+  "unit": "g",
+  "aliases": [
+   "wrap",
+   "tortilla"
+  ],
+  "kcal": 306.0,
+  "protein": 8.2,
+  "carbs": 49.38,
+  "fat": 7.99,
+  "sugar": 3.71,
+  "fiber": 3.5,
+  "saturatedFat": 2.92,
+  "salt": 1.84,
+  "portions": [
+   {
+    "label": "1 wrap",
+    "amount": 49
+   }
+  ]
+ },
+ {
+  "id": 168917,
+  "name": "Quinoa, cooked",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "quinoa"
+  ],
+  "kcal": 120.0,
+  "protein": 4.4,
+  "carbs": 21.3,
+  "fat": 1.92,
+  "sugar": 0.87,
+  "fiber": 2.8,
+  "saturatedFat": 0.23,
+  "salt": 0.018,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 185
+   }
+  ]
+ },
+ {
+  "id": 169700,
+  "name": "Couscous, cooked",
+  "emoji": "🥣",
+  "unit": "g",
+  "aliases": [
+   "couscous",
+   "semoule"
+  ],
+  "kcal": 112.0,
+  "protein": 3.79,
+  "carbs": 23.22,
+  "fat": 0.16,
+  "sugar": 0.1,
+  "fiber": 1.4,
+  "saturatedFat": 0.03,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 157
+   }
+  ]
+ },
+ {
+  "id": 170317,
+  "name": "Cheese pizza",
+  "emoji": "🍕",
+  "unit": "g",
+  "aliases": [
+   "pizza"
+  ],
+  "kcal": 268.0,
+  "protein": 10.36,
+  "carbs": 29.02,
+  "fat": 12.28,
+  "sugar": 3.57,
+  "fiber": 2.2,
+  "saturatedFat": 4.27,
+  "salt": 1.117,
+  "portions": [
+   {
+    "label": "1 slice",
+    "amount": 81
+   },
+   {
+    "label": "1 pizza",
+    "amount": 452
+   }
+  ]
+ },
+ {
+  "id": 172421,
+  "name": "Lentils, cooked",
+  "emoji": "🫘",
+  "unit": "g",
+  "aliases": [
+   "lentilles"
+  ],
+  "kcal": 116.0,
+  "protein": 9.02,
+  "carbs": 20.13,
+  "fat": 0.38,
+  "sugar": 1.8,
+  "fiber": 7.9,
+  "saturatedFat": 0.05,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 198
+   }
+  ]
+ },
+ {
+  "id": 173757,
+  "name": "Chickpeas, cooked",
+  "emoji": "🫘",
+  "unit": "g",
+  "aliases": [
+   "pois chiches"
+  ],
+  "kcal": 164.0,
+  "protein": 8.86,
+  "carbs": 27.42,
+  "fat": 2.59,
+  "sugar": 4.8,
+  "fiber": 7.6,
+  "saturatedFat": 0.27,
+  "salt": 0.018,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 164
+   }
+  ]
+ },
+ {
+  "id": 173735,
+  "name": "Black beans, cooked",
+  "emoji": "🫘",
+  "unit": "g",
+  "aliases": [
+   "haricots noirs"
+  ],
+  "kcal": 132.0,
+  "protein": 8.86,
+  "carbs": 23.71,
+  "fat": 0.54,
+  "sugar": 0.32,
+  "fiber": 8.7,
+  "saturatedFat": 0.14,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 bowl",
+    "amount": 172
+   }
+  ]
+ },
+ {
+  "id": 174289,
+  "name": "Hummus",
+  "emoji": "🫘",
+  "unit": "g",
+  "aliases": [
+   "houmous",
+   "hummus"
+  ],
+  "kcal": 237.0,
+  "protein": 7.78,
+  "carbs": 15.0,
+  "fat": 17.82,
+  "sugar": 0.62,
+  "fiber": 5.5,
+  "saturatedFat": 2.56,
+  "salt": 1.065,
+  "portions": [
+   {
+    "label": "2 tbsp",
+    "amount": 30
+   }
+  ]
+ },
+ {
+  "id": 170567,
+  "name": "Almonds",
+  "emoji": "🌰",
+  "unit": "g",
+  "aliases": [
+   "amandes",
+   "amande"
+  ],
+  "kcal": 579.0,
+  "protein": 21.15,
+  "carbs": 21.55,
+  "fat": 49.93,
+  "sugar": 4.35,
+  "fiber": 12.5,
+  "saturatedFat": 3.8,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 handful",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 170187,
+  "name": "Walnuts",
+  "emoji": "🌰",
+  "unit": "g",
+  "aliases": [
+   "noix"
+  ],
+  "kcal": 654.0,
+  "protein": 15.23,
+  "carbs": 13.71,
+  "fat": 65.21,
+  "sugar": 2.61,
+  "fiber": 6.7,
+  "saturatedFat": 6.13,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "1 handful",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 170162,
+  "name": "Cashews",
+  "emoji": "🌰",
+  "unit": "g",
+  "aliases": [
+   "noix de cajou",
+   "cajou"
+  ],
+  "kcal": 553.0,
+  "protein": 18.22,
+  "carbs": 30.19,
+  "fat": 43.85,
+  "sugar": 5.91,
+  "fiber": 3.3,
+  "saturatedFat": 7.78,
+  "salt": 0.03,
+  "portions": [
+   {
+    "label": "1 handful",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 173806,
+  "name": "Peanuts",
+  "emoji": "🥜",
+  "unit": "g",
+  "aliases": [
+   "cacahuètes",
+   "cacahuetes",
+   "arachides"
+  ],
+  "kcal": 587.0,
+  "protein": 24.35,
+  "carbs": 21.26,
+  "fat": 49.66,
+  "sugar": 4.9,
+  "fiber": 8.4,
+  "saturatedFat": 7.72,
+  "salt": 0.015,
+  "portions": [
+   {
+    "label": "1 handful",
+    "amount": 28
+   }
+  ]
+ },
+ {
+  "id": 172470,
+  "name": "Peanut butter",
+  "emoji": "🥜",
+  "unit": "g",
+  "aliases": [
+   "beurre de cacahuète",
+   "beurre de cacahuete"
+  ],
+  "kcal": 598.0,
+  "protein": 22.21,
+  "carbs": 22.31,
+  "fat": 51.36,
+  "sugar": 10.49,
+  "fiber": 5.0,
+  "saturatedFat": 10.32,
+  "salt": 0.043,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 16
+   }
+  ]
+ },
+ {
+  "id": 170554,
+  "name": "Chia seeds",
+  "emoji": "🌱",
+  "unit": "g",
+  "aliases": [
+   "graines de chia",
+   "chia"
+  ],
+  "kcal": 486.0,
+  "protein": 16.54,
+  "carbs": 42.12,
+  "fat": 30.74,
+  "sugar": null,
+  "fiber": 34.4,
+  "saturatedFat": 3.33,
+  "salt": 0.04,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 12
+   }
+  ]
+ },
+ {
+  "id": 171413,
+  "name": "Olive oil",
+  "emoji": "🫒",
+  "unit": "g",
+  "aliases": [
+   "huile d'olive",
+   "huile"
+  ],
+  "kcal": 884.0,
+  "protein": 0.0,
+  "carbs": 0.0,
+  "fat": 100.0,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 13.81,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 13.5
+   },
+   {
+    "label": "1 tsp",
+    "amount": 4.5
+   }
+  ]
+ },
+ {
+  "id": 169640,
+  "name": "Honey",
+  "emoji": "🍯",
+  "unit": "g",
+  "aliases": [
+   "miel"
+  ],
+  "kcal": 304.0,
+  "protein": 0.3,
+  "carbs": 82.4,
+  "fat": 0.0,
+  "sugar": 82.12,
+  "fiber": 0.2,
+  "saturatedFat": 0.0,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 tsp",
+    "amount": 7
+   },
+   {
+    "label": "1 tbsp",
+    "amount": 21
+   }
+  ]
+ },
+ {
+  "id": 169655,
+  "name": "Sugar",
+  "emoji": "🍬",
+  "unit": "g",
+  "aliases": [
+   "sucre"
+  ],
+  "kcal": 387.0,
+  "protein": 0.0,
+  "carbs": 99.98,
+  "fat": 0.0,
+  "sugar": 99.8,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 tsp",
+    "amount": 4.2
+   },
+   {
+    "label": "1 cube",
+    "amount": 2.3
+   }
+  ]
+ },
+ {
+  "id": 170273,
+  "name": "Dark chocolate",
+  "emoji": "🍫",
+  "unit": "g",
+  "aliases": [
+   "chocolat noir",
+   "chocolat"
+  ],
+  "kcal": 598.0,
+  "protein": 7.79,
+  "carbs": 45.9,
+  "fat": 42.63,
+  "sugar": 23.99,
+  "fiber": 10.9,
+  "saturatedFat": 24.49,
+  "salt": 0.05,
+  "portions": [
+   {
+    "label": "1 square",
+    "amount": 10
+   },
+   {
+    "label": "1 bar",
+    "amount": 100
+   }
+  ]
+ },
+ {
+  "id": 169641,
+  "name": "Jam",
+  "emoji": "🫙",
+  "unit": "g",
+  "aliases": [
+   "confiture"
+  ],
+  "kcal": 278.0,
+  "protein": 0.37,
+  "carbs": 68.86,
+  "fat": 0.07,
+  "sugar": 48.5,
+  "fiber": 1.1,
+  "saturatedFat": 0.01,
+  "salt": 0.08,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 20
+   }
+  ]
+ },
+ {
+  "id": 171009,
+  "name": "Mayonnaise",
+  "emoji": "🫙",
+  "unit": "g",
+  "aliases": [
+   "mayo",
+   "mayonnaise"
+  ],
+  "kcal": 680.0,
+  "protein": 0.96,
+  "carbs": 0.57,
+  "fat": 74.85,
+  "sugar": 0.57,
+  "fiber": 0.0,
+  "saturatedFat": 11.7,
+  "salt": 1.587,
+  "portions": [
+   {
+    "label": "1 tbsp",
+    "amount": 13.8
+   }
+  ]
+ },
+ {
+  "id": 171192,
+  "name": "Tomato sauce",
+  "emoji": "🍅",
+  "unit": "g",
+  "aliases": [
+   "sauce tomate",
+   "sauce pâtes"
+  ],
+  "kcal": 50.0,
+  "protein": 1.39,
+  "carbs": 7.43,
+  "fat": 1.61,
+  "sugar": 4.91,
+  "fiber": 1.8,
+  "saturatedFat": 0.22,
+  "salt": 1.093,
+  "portions": [
+   {
+    "label": "1 serving",
+    "amount": 132
+   }
+  ]
+ },
+ {
+  "id": 172716,
+  "name": "Chocolate chip cookie",
+  "emoji": "🍪",
+  "unit": "g",
+  "aliases": [
+   "cookie",
+   "biscuit"
+  ],
+  "kcal": 492.0,
+  "protein": 5.1,
+  "carbs": 65.36,
+  "fat": 24.72,
+  "sugar": 32.9,
+  "fiber": 2.0,
+  "saturatedFat": 8.09,
+  "salt": 0.777,
+  "portions": [
+   {
+    "label": "1 cookie",
+    "amount": 13
+   }
+  ]
+ },
+ {
+  "id": 167575,
+  "name": "Vanilla ice cream",
+  "emoji": "🍦",
+  "unit": "g",
+  "aliases": [
+   "glace vanille",
+   "glace"
+  ],
+  "kcal": 207.0,
+  "protein": 3.5,
+  "carbs": 23.6,
+  "fat": 11.0,
+  "sugar": 21.22,
+  "fiber": 0.7,
+  "saturatedFat": 6.79,
+  "salt": 0.2,
+  "portions": [
+   {
+    "label": "1 scoop",
+    "amount": 66
+   }
+  ]
+ },
+ {
+  "id": 171890,
+  "name": "Coffee, black",
+  "emoji": "☕",
+  "unit": "ml",
+  "aliases": [
+   "café",
+   "cafe",
+   "espresso"
+  ],
+  "kcal": 1.0,
+  "protein": 0.12,
+  "carbs": 0.0,
+  "fat": 0.02,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.005,
+  "portions": [
+   {
+    "label": "1 cup",
+    "amount": 240
+   }
+  ]
+ },
+ {
+  "id": 169098,
+  "name": "Orange juice",
+  "emoji": "🧃",
+  "unit": "ml",
+  "aliases": [
+   "jus d'orange"
+  ],
+  "kcal": 45.0,
+  "protein": 0.7,
+  "carbs": 10.4,
+  "fat": 0.2,
+  "sugar": 8.4,
+  "fiber": 0.2,
+  "saturatedFat": 0.02,
+  "salt": 0.003,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 250
+   }
+  ]
+ },
+ {
+  "id": 168746,
+  "name": "Beer",
+  "emoji": "🍺",
+  "unit": "ml",
+  "aliases": [
+   "bière",
+   "biere"
+  ],
+  "kcal": 43.0,
+  "protein": 0.46,
+  "carbs": 3.55,
+  "fat": 0.0,
+  "sugar": 0.0,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 bottle",
+    "amount": 330
+   },
+   {
+    "label": "1 pint",
+    "amount": 500
+   }
+  ]
+ },
+ {
+  "id": 173190,
+  "name": "Red wine",
+  "emoji": "🍷",
+  "unit": "ml",
+  "aliases": [
+   "vin rouge",
+   "vin"
+  ],
+  "kcal": 85.0,
+  "protein": 0.07,
+  "carbs": 2.61,
+  "fat": 0.0,
+  "sugar": 0.62,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.01,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 150
+   }
+  ]
+ },
+ {
+  "id": 174837,
+  "name": "White wine",
+  "emoji": "🥂",
+  "unit": "ml",
+  "aliases": [
+   "vin blanc",
+   "vin"
+  ],
+  "kcal": 82.0,
+  "protein": 0.07,
+  "carbs": 2.6,
+  "fat": 0.0,
+  "sugar": 0.96,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.013,
+  "portions": [
+   {
+    "label": "1 glass",
+    "amount": 150
+   }
+  ]
+ },
+ {
+  "id": 174852,
+  "name": "Cola",
+  "emoji": "🥤",
+  "unit": "ml",
+  "aliases": [
+   "coca",
+   "soda"
+  ],
+  "kcal": 42.0,
+  "protein": 0.0,
+  "carbs": 10.36,
+  "fat": 0.25,
+  "sugar": 9.94,
+  "fiber": 0.0,
+  "saturatedFat": 0.0,
+  "salt": 0.007,
+  "portions": [
+   {
+    "label": "1 can",
+    "amount": 330
+   }
+  ]
+ }
+]

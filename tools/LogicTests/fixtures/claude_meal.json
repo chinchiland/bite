@@ -1,0 +1,12 @@
+{
+  "id": "msg_01FixtureMealEstimate",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-opus-5-5",
+  "content": [
+    {"type": "thinking", "thinking": "", "signature": "fixture"},
+    {"type": "text", "text": "{\"title\":\"Poulet riz brocoli\",\"emoji\":\"🍗\",\"confidence\":\"medium\",\"note\":\"La sauce sous le riz peut ajouter 80 kcal.\",\"items\":[{\"name\":\"Poulet grillé\",\"emoji\":\"🍗\",\"grams\":150,\"kcal\":248,\"protein\":46.5,\"carbs\":0,\"fat\":5.4},{\"name\":\"Riz blanc\",\"emoji\":\"🍚\",\"grams\":180,\"kcal\":234,\"protein\":4.8,\"carbs\":50.7,\"fat\":0.5},{\"name\":\"Brocoli\",\"emoji\":\"🥦\",\"grams\":80,\"kcal\":27,\"protein\":2.3,\"carbs\":5.3,\"fat\":0.3},{\"name\":\"Erreur\",\"emoji\":\"❓\",\"grams\":-5,\"kcal\":10,\"protein\":0,\"carbs\":0,\"fat\":0}]}"}
+  ],
+  "stop_reason": "end_turn",
+  "usage": {"input_tokens": 1712, "output_tokens": 640}
+}
