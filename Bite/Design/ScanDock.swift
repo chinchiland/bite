@@ -50,9 +50,9 @@ private struct ScanCapsule: View {
             taps += 1
             action()
         } label: {
-            HStack(spacing: 9) {
+            HStack(spacing: 10) {
                 ScanGlyph(color: Theme.page)
-                    .frame(width: 22, height: 19)
+                    .frame(width: 26, height: 22)
                 Text("Scan")
                     .font(.ui(16, .semibold))
                     .foregroundStyle(Theme.page)
@@ -82,17 +82,20 @@ struct ScanGlyph: View {
     var body: some View {
         GeometryReader { geometry in
             let size = geometry.size
+            // The bars and their gaps share the middle 60% of the width, so the glyph never
+            // grows past its frame however small it is drawn.
+            let gap: CGFloat = 0.9
+            let unit = size.width * 0.6 / (Self.bars.reduce(0, +) + gap * CGFloat(Self.bars.count - 1))
             ZStack {
                 ScanCorners()
                     .stroke(color, style: StrokeStyle(lineWidth: max(1.6, size.width * 0.07), lineCap: .round, lineJoin: .round))
-                HStack(spacing: size.width * 0.045) {
+                HStack(spacing: unit * gap) {
                     ForEach(Self.bars.indices, id: \.self) { index in
                         Rectangle()
                             .fill(color)
-                            .frame(width: Self.bars[index] * size.width * 0.04)
+                            .frame(width: Self.bars[index] * unit)
                     }
                 }
-                .padding(.horizontal, size.width * 0.2)
                 .padding(.vertical, size.height * 0.26)
                 Capsule()
                     .fill(Theme.laser)

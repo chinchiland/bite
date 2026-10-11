@@ -153,7 +153,7 @@ struct RangeView<Switcher: View>: View {
                                 .foregroundStyle(Theme.secondary)
                         }
                         if let change = Insights.change(from: before.averageKcal, to: now.averageKcal) {
-                            HStack(spacing: 5) {
+                            HStack(alignment: .firstTextBaseline, spacing: 5) {
                                 ChangeLabel(change: change)
                                 Text(range.comparison)
                                     .font(.ui(13))

@@ -540,12 +540,13 @@ struct FlowLayout: Layout {
 // MARK: - Glass and transitions
 
 extension View {
-    /// Chrome that floats over content (the dock, the toast): Liquid Glass on iOS 26, frosted
-    /// material with a hairline edge before it. Never a drop shadow.
+    /// Chrome that floats over content (the dock, the toast): Liquid Glass on iOS 26, tinted
+    /// with paper so the tiles scrolling under it stay a soft blur instead of a colored smear;
+    /// frosted material with a hairline edge before it. Never a drop shadow.
     @ViewBuilder func floatingGlass<S: Shape>(in shape: S) -> some View {
         #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
-            glassEffect(.regular, in: shape)
+            glassEffect(.regular.tint(Theme.page.opacity(0.6)), in: shape)
         } else {
             frosted(in: shape)
         }

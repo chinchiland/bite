@@ -79,9 +79,14 @@ struct TodayView: View {
                 case .month:
                     rangePage(.month)
                 }
+                if tab != .today || !coverOnScreen {
+                    TopFade(height: proxy.safeAreaInsets.top)
+                        .transition(.opacity)
+                }
                 bottomStack
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .animation(.easeOut(duration: 0.2), value: coverOnScreen)
         }
         // A photo cover runs to the top edge, where the time would sit dark on the picture.
         .statusBarHidden(tab == .today && cover != nil && coverOnScreen && colorScheme == .light)
@@ -522,7 +527,7 @@ struct TodayView: View {
     /// opens a screen straight away, for screenshots.
     private func openDemoScreen() {
         switch UserDefaults.standard.string(forKey: "screen") {
-        case "food": editing = dayEntries.first
+        case "food": editing = dayEntries.first { $0.imageURLString != nil } ?? dayEntries.first
         case "search": sheet = .search(nil)
         case "settings": sheet = .settings
         case "scanner", "photo", "estimate": showScanner = true
@@ -579,6 +584,28 @@ struct HomeSwitcher<Label: View>: View {
         }
         .menuOrder(.fixed)
         .accessibilityHint("Shows another day, or your last 7 or 30 days")
+    }
+}
+
+/// Paper fading in under the status bar, so content scrolled up never runs into the time.
+private struct TopFade: View {
+    let height: CGFloat
+
+    var body: some View {
+        LinearGradient(
+            stops: [
+                .init(color: Theme.page, location: 0),
+                .init(color: Theme.page, location: 0.65),
+                .init(color: Theme.page.opacity(0), location: 1),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(height: height)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .ignoresSafeArea(edges: .top)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

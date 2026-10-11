@@ -78,16 +78,7 @@ private struct DotRingCanvas: View, Animatable {
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             let diameter = Self.dot * unit
             let colored = parts.reduce(0) { $0 + max($1.share, 0) }
-            // Where one part ends and the next starts; each boundary leaves one dot empty.
-            var boundaries: [Double] = []
-            if colored > 0 {
-                var running = 0.0
-                for part in parts where part.share > 0 {
-                    boundaries.append(running)
-                    running += part.share
-                }
-                if running < 0.999 { boundaries.append(running) }
-            }
+            let boundaries = Self.boundaries(parts.map(\.share), colored: colored)
             for ring in 0..<Self.rings {
                 let radius = (Self.inner + Self.ringGap * CGFloat(ring)) * unit
                 let count = max(Int((2 * .pi * radius / (Self.pitch * unit)).rounded()), 12)
@@ -117,6 +108,24 @@ private struct DotRingCanvas: View, Animatable {
             start += part.share
         }
         return nil
+    }
+
+    /// Where one part meets the next, each leaving one dot empty so the parts read apart. A
+    /// sliver (under 4% of the ring) gets no gaps: two gaps would swallow its few dots and
+    /// leave a notch.
+    private static func boundaries(_ shares: [Double], colored: Double) -> [Double] {
+        var segments = shares.filter { $0 > 0 }
+        guard colored > 0 else { return [] }
+        if colored < 0.999 { segments.append(1 - colored) }
+        guard segments.count > 1 else { return [] }
+        var result: [Double] = []
+        var start = 0.0
+        for (index, share) in segments.enumerated() {
+            let previous = segments[(index + segments.count - 1) % segments.count]
+            if share >= 0.04, previous >= 0.04 { result.append(start) }
+            start += share
+        }
+        return result
     }
 
     /// Distance round the ring, so 0.99 and 0.01 are close.
@@ -197,6 +206,8 @@ struct MacroBlock: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             ZStack {
                 DottedRing(parts: ring, overflow: overflow)
+                // Inside the inner ring, which leaves about 84 pt: the unit takes a second line
+                // when a language needs it ("kcal consommées").
                 VStack(spacing: 3) {
                     Text(number.kcalText)
                         .font(.number(numberSize))
@@ -208,8 +219,10 @@ struct MacroBlock: View {
                     Text(unit)
                         .font(.ui(numberSize >= 34 ? 13 : 12))
                         .foregroundStyle(Theme.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
                 }
-                .padding(.horizontal, 30)
+                .frame(maxWidth: 84)
                 .accessibilityElement(children: .combine)
             }
             .frame(width: 176, height: 176)
@@ -319,7 +332,7 @@ extension View {
         background {
             ZStack {
                 shape.fill(.ultraThinMaterial)
-                shape.fill(onPhoto ? Color.black.opacity(0.2) : Color.white.opacity(0.35))
+                shape.fill(onPhoto ? Color.black.opacity(0.12) : Color.white.opacity(0.35))
             }
             .environment(\.colorScheme, onPhoto ? .dark : .light)
         }
