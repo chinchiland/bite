@@ -2,8 +2,9 @@ import SwiftUI
 import SwiftData
 import UIKit
 
-/// One food, before you log it or while you edit it. The picture and name, the calories for
-/// your amount with its macros, the amount, a few quality facts, and the full label on demand.
+/// One food, before you log it or while you edit it. Its picture as the hero, then on a white
+/// sheet: the name, a few quality facts, the macros and the ring for your amount, the amount,
+/// and the full label on demand.
 struct FoodDetailView: View {
     let food: Food
     let entry: FoodEntry?
@@ -14,6 +15,8 @@ struct FoodDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(LogEvents.self) private var events
     @Query private var savedFoods: [SavedFood]
+    @AppStorage("goal.kcal") private var goalKcal = 2000
+    @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @State private var amount: Double
     @State private var amountText: String
     @State private var meal: Meal
@@ -43,24 +46,25 @@ struct FoodDetailView: View {
 
     private var totals: Nutrients { food.nutrients(for: amount) }
     private var isSaved: Bool { savedFoods.contains { $0.foodID == food.id } }
+    private var targets: MacroTargets {
+        MacroTargets(kcal: Double(goalKcal), split: MacroSplit(rawValue: splitRaw) ?? .balanced)
+    }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                header
-                numbers
-                amountCard
-                quality
-                facts
-                sourceLink
+            VStack(alignment: .leading, spacing: 0) {
+                FoodHero(food: food, height: 330)
+                sheet
+                    .padding(.top, -32)
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            .padding(.bottom, 12)
         }
+        .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
-        .background(Theme.page.ignoresSafeArea())
+        .ignoresSafeArea(edges: .top)
+        .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -74,110 +78,82 @@ struct FoodDetailView: View {
                     .accessibilityLabel("Delete from log")
                 }
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: toggleSaved) {
+                    Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                        .contentTransition(.symbolEffect(.replace))
+                }
+                .sensoryFeedback(.success, trigger: saves)
+                .accessibilityLabel(isSaved ? "Saved to your shelf" : "Save to your shelf")
+            }
         }
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .navigationBarTitleDisplayMode(.inline)
         .onChange(of: amountText) { _, text in
             amount = Self.parse(text) ?? 0
         }
     }
 
-    // MARK: Sections
+    // MARK: Sheet
 
-    private var header: some View {
-        HStack(alignment: .center, spacing: 14) {
-            FoodThumb(food: food, size: 72)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(food.name)
-                    .font(.ui(26, .semibold))
-                    .foregroundStyle(Theme.ink)
-                    .lineLimit(3)
-                    .fixedSize(horizontal: false, vertical: true)
-                if let brand = food.brand {
-                    if let url = food.sourceURL {
-                        // The brand links to the product's page in its database.
-                        Link(destination: url) {
-                            HStack(spacing: 3) {
-                                Text(brand)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 12, weight: .medium))
-                            }
-                            .font(.ui(15))
-                        }
-                    } else {
-                        Text(brand)
-                            .font(.ui(15))
-                            .foregroundStyle(Theme.secondary)
-                    }
-                }
-            }
+    private var sheet: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(food.name)
+                .font(.ui(27, .medium))
+                .tracking(-0.6)
+                .foregroundStyle(Theme.ink)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+            brand
+                .padding(.top, 2)
+            quality
+                .padding(.top, 14)
+            MacroBlock(
+                nutrients: totals,
+                targets: targets,
+                ring: DottedRing.food(totals),
+                number: totals.kcal,
+                unit: "kcal",
+                numberSize: 40,
+                showsTarget: false
+            )
+            .padding(.top, 20)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(
+                "\(totals.kcal.kcalText) calories. Protein \(totals.protein.gramsText) grams, carbs \(totals.carbs.gramsText) grams, fat \(totals.fat.gramsText) grams."
+            )
+            amountPicker
+                .padding(.top, 22)
+            facts
+                .padding(.top, 22)
+            sourceLink
+                .padding(.top, 16)
         }
-    }
-
-    /// The calories for your amount as the headline, its three macros in a row under it.
-    private var numbers: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 22))
-                    .foregroundStyle(Theme.energy)
-                Text(totals.kcal.kcalText)
-                    .font(.number(50))
-                    .foregroundStyle(Theme.ink)
-                    .contentTransition(.numericText(value: totals.kcal.rounded()))
-                Text("kcal")
-                    .font(.ui(17))
-                    .foregroundStyle(Theme.secondary)
-            }
-            HStack(spacing: 8) {
-                ForEach(Macro.allCases, id: \.self) { macro in
-                    MacroPill(macro: macro, grams: macro.grams(in: totals))
-                }
-            }
-            MacroSplitBar(nutrients: totals)
-        }
-        .animation(.snappy, value: totals.kcal.rounded())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            "\(totals.kcal.kcalText) calories. Protein \(totals.protein.gramsText) grams, carbs \(totals.carbs.gramsText) grams, fat \(totals.fat.gramsText) grams."
+        .padding(.horizontal, Theme.margin)
+        .padding(.top, 26)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Theme.card,
+            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
         )
     }
 
-    private var amountCard: some View {
-        Card(padding: 16) {
-            VStack(spacing: 14) {
-                HStack {
-                    StepButton(systemImage: "minus", label: "Less") { step(-food.unit.step) }
-                    Spacer()
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        TextField("0", text: $amountText)
-                            .keyboardType(.decimalPad)
-                            .focused($amountFocused)
-                            .multilineTextAlignment(.trailing)
-                            .font(.number(36))
-                            .foregroundStyle(Theme.ink)
-                            .fixedSize()
-                            .accessibilityLabel("Amount")
-                        Text(unitLabel)
-                            .font(.ui(17))
-                            .foregroundStyle(Theme.secondary)
+    @ViewBuilder private var brand: some View {
+        if let brand = food.brand {
+            if let url = food.sourceURL {
+                // The brand links to the product's page in its database.
+                Link(destination: url) {
+                    HStack(spacing: 3) {
+                        Text(brand)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .medium))
                     }
-                    Spacer()
-                    StepButton(systemImage: "plus", label: "More") { step(food.unit.step) }
+                    .font(.ui(15))
+                    .foregroundStyle(Theme.link)
                 }
-
-                if !food.portions.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(food.portions, id: \.self) { portion in
-                                Button { set(portion.amount) } label: {
-                                    Text(chipTitle(portion))
-                                }
-                                .buttonStyle(ChipButtonStyle(isSelected: abs(amount - portion.amount) < 0.01))
-                            }
-                        }
-                    }
-                }
+            } else {
+                Text(brand)
+                    .font(.ui(15))
+                    .foregroundStyle(Theme.secondary)
             }
         }
     }
@@ -186,49 +162,91 @@ struct FoodDetailView: View {
         let highlights = food.highlights
         let processing = food.processingLabel
         if food.nutriScore != nil || processing != nil || !highlights.isEmpty {
-            FlowLayout(spacing: 8) {
+            FlowLayout(spacing: 7) {
                 if let grade = food.nutriScore {
-                    NutriScoreBadge(grade: grade)
+                    NutriScoreChip(grade: grade)
                 }
                 if let processing {
-                    TintChip(title: processing.title, style: processing.kind?.chipStyle ?? .neutral)
+                    let style = processing.kind?.chipStyle ?? .neutral
+                    TintChip(title: processing.title, style: style, systemImage: processing.kind?.chipSymbol)
                 }
                 ForEach(highlights) { highlight in
-                    TintChip(title: highlight.title, style: highlight.kind.chipStyle)
+                    TintChip(title: highlight.title, style: highlight.kind.chipStyle, systemImage: highlight.kind.chipSymbol)
                 }
             }
         }
     }
 
-    private var facts: some View {
-        Card(padding: 16) {
-            VStack(alignment: .leading, spacing: 0) {
-                Button {
-                    withAnimation(.snappy) { showFacts.toggle() }
-                } label: {
-                    HStack {
-                        Text("Nutrition facts")
-                            .font(.ui(17, .medium))
-                            .foregroundStyle(Theme.ink)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(Theme.secondary)
-                            .rotationEffect(.degrees(showFacts ? 180 : 0))
+    private var amountPicker: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if !food.portions.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(food.portions, id: \.self) { portion in
+                            Button { set(portion.amount) } label: {
+                                Text(chipTitle(portion))
+                            }
+                            .buttonStyle(ChipButtonStyle(isSelected: abs(amount - portion.amount) < 0.01))
+                        }
                     }
-                    .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
+                .scrollClipDisabled()
+            }
+            HStack {
+                StepButton(systemImage: "minus", label: "Less") { step(-food.unit.step) }
+                Spacer()
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    TextField("0", text: $amountText)
+                        .keyboardType(.decimalPad)
+                        .focused($amountFocused)
+                        .multilineTextAlignment(.trailing)
+                        .font(.number(32))
+                        .foregroundStyle(Theme.ink)
+                        .fixedSize()
+                        .accessibilityLabel("Amount")
+                    Text(unitLabel)
+                        .font(.ui(17))
+                        .foregroundStyle(Theme.secondary)
+                }
+                Spacer()
+                StepButton(systemImage: "plus", label: "More") { step(food.unit.step) }
+            }
+            .padding(10)
+            .background(Theme.inset, in: RoundedRectangle(cornerRadius: Theme.insetRadius, style: .continuous))
+        }
+    }
 
-                if showFacts {
-                    NutritionTable(food: food, amount: amount)
-                        .padding(.top, 16)
-                    if !food.allergens.isEmpty {
-                        Text("Contains \(food.allergens.joined(separator: ", ").lowercased()).")
-                            .font(.ui(15))
-                            .foregroundStyle(Theme.secondary)
-                            .padding(.top, 14)
-                    }
+    private var facts: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(.snappy) { showFacts.toggle() }
+            } label: {
+                HStack {
+                    Text("Nutrition facts")
+                        .font(.ui(17, .medium))
+                        .foregroundStyle(Theme.ink)
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Theme.secondary)
+                        .rotationEffect(.degrees(showFacts ? 180 : 0))
+                }
+                .padding(.vertical, 14)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .overlay(alignment: .top) {
+                Rectangle().fill(Theme.hairline).frame(height: 1)
+            }
+
+            if showFacts {
+                NutritionTable(food: food, amount: amount)
+                    .padding(.top, 4)
+                if !food.allergens.isEmpty {
+                    Text("Contains \(food.allergens.joined(separator: ", ").lowercased()).")
+                        .font(.ui(15))
+                        .foregroundStyle(Theme.secondary)
+                        .padding(.top, 14)
                 }
             }
         }
@@ -265,17 +283,21 @@ struct FoodDetailView: View {
             }
             .accessibilityLabel("Meal: \(meal.title)")
 
-            Button(entry == nil ? "Add" : "Save", action: save)
-                .buttonStyle(PrimaryButtonStyle())
-                .disabled(amount <= 0)
-
-            BookmarkButton(isSaved: isSaved, action: toggleSaved)
-                .sensoryFeedback(.success, trigger: saves)
+            Button(action: save) {
+                Text(actionTitle)
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .disabled(amount <= 0)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.page.ignoresSafeArea())
+        .background(Theme.card.ignoresSafeArea())
+    }
+
+    private var actionTitle: LocalizedStringKey {
+        if entry != nil { return "Save" }
+        return Calendar.current.isDateInToday(day) ? "Add to today" : "Add"
     }
 
     // MARK: Amount
@@ -347,6 +369,60 @@ struct FoodDetailView: View {
         if calendar.isDateInToday(day) { return .now }
         let time = calendar.dateComponents([.hour, .minute], from: .now)
         return calendar.date(bySettingHour: time.hour ?? 12, minute: time.minute ?? 0, second: 0, of: day) ?? day
+    }
+}
+
+/// A food's hero: your photo filling the top, or the product standing on a soft light in its
+/// tint, or its emoji, big. Pulling down stretches it.
+struct FoodHero: View {
+    let food: Food
+    let height: CGFloat
+
+    var body: some View {
+        Color.clear
+            .frame(height: height)
+            .frame(maxWidth: .infinity)
+            .overlay { content }
+            .clipped()
+            .visualEffect { content, proxy in
+                let pull = max(proxy.frame(in: .scrollView).minY, 0)
+                return content.scaleEffect(1 + pull / max(proxy.size.height, 1), anchor: .bottom)
+            }
+            .accessibilityHidden(true)
+    }
+
+    @ViewBuilder private var content: some View {
+        if let data = food.imageData, let photo = UIImage(data: data) {
+            Image(uiImage: photo)
+                .resizable()
+                .scaledToFill()
+                .overlay {
+                    LinearGradient(colors: [.black.opacity(0.3), .clear], startPoint: .top, endPoint: .center)
+                }
+        } else {
+            ZStack {
+                Theme.heroGradient(food.displayTint)
+                if let url = food.imageURL {
+                    AsyncImage(url: url) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .blendMode(.multiply)
+                        } else {
+                            Color.clear
+                        }
+                    }
+                    .frame(width: 220, height: 220)
+                    .padding(.top, 34)
+                } else {
+                    Text(food.emoji ?? "🍽️")
+                        .font(.system(size: 110))
+                        .padding(.top, 34)
+                }
+            }
+            .compositingGroup()
+        }
     }
 }
 

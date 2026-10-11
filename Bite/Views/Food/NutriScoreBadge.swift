@@ -1,45 +1,40 @@
 import SwiftUI
 
-/// The Nutri-Score strip shoppers in Europe know from the front of the pack: five grades,
-/// the product's own grade raised out of the line.
-struct NutriScoreBadge: View {
+/// Nutri-Score as a chip: the grade's letter on its official color, then the name. The chip is
+/// green for A and B, quiet for C, warm for D and E.
+struct NutriScoreChip: View {
     let grade: String
 
-    private static let letters = ["A", "B", "C", "D", "E"]
-    private static let hexes: [UInt32] = [0x038141, 0x85BB2F, 0xFECB02, 0xEE8100, 0xE63E11]
-    private static let colors: [Color] = hexes.map { Color(lightHex: $0, darkHex: $0) }
-    private static let cell: CGFloat = 17
+    private static let hexes: [String: UInt32] = [
+        "A": 0x038141, "B": 0x85BB2F, "C": 0xFECB02, "D": 0xEE8100, "E": 0xE63E11,
+    ]
 
     var body: some View {
-        let selected = Self.letters.firstIndex(of: grade.uppercased())
-        ZStack {
-            HStack(spacing: 0) {
-                ForEach(0..<5, id: \.self) { index in
-                    Text(Self.letters[index])
-                        .font(.system(size: 10, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.75))
-                        .frame(width: Self.cell, height: 20)
-                        .background(Self.colors[index])
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-
-            if let selected {
-                Text(Self.letters[selected])
-                    .font(.system(size: 16, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(width: 24, height: 30)
-                    .background(Self.colors[selected], in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(Theme.page, lineWidth: 2)
-                    }
-                    .offset(x: CGFloat(selected - 2) * Self.cell)
-            }
+        let letter = grade.uppercased()
+        let hex = Self.hexes[letter] ?? 0x9A9890
+        HStack(spacing: 6) {
+            Text(verbatim: letter)
+                .font(.ui(13, .semibold))
+                .foregroundStyle(letter == "C" ? Color.black.opacity(0.7) : Color.white)
+                .frame(width: 24, height: 24)
+                .background(Color(lightHex: hex, darkHex: hex), in: Circle())
+            Text("Nutri-Score")
+                .font(.ui(13, .medium))
+                .foregroundStyle(style.text)
         }
-        .padding(.horizontal, 4)
-        .frame(height: 30)
+        .padding(.leading, 4)
+        .padding(.trailing, 11)
+        .frame(height: 32)
+        .background(style.fill, in: Capsule())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Nutri-Score \(grade.uppercased())")
+        .accessibilityLabel("Nutri-Score \(letter)")
+    }
+
+    private var style: (text: Color, fill: Color) {
+        switch grade.uppercased() {
+        case "A", "B": (text: Theme.goodText, fill: Theme.goodFill)
+        case "D", "E": (text: Theme.watchText, fill: Theme.watchFill)
+        default: (text: Theme.ink, fill: Theme.fill)
+        }
     }
 }

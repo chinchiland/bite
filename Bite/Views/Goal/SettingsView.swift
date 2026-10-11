@@ -53,12 +53,17 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Picker("Split", selection: $splitRaw) {
+                    Picker(selection: $splitRaw) {
                         ForEach(MacroSplit.allCases) { split in
                             Text(split.title).tag(split.rawValue)
                         }
+                    } label: {
+                        Text("Split")
+                            .font(.ui(17))
+                            .foregroundStyle(Theme.ink)
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
+                    .tint(Theme.secondary)
                     .listRowBackground(Theme.card)
 
                     ForEach(Macro.allCases, id: \.self) { macro in

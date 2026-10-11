@@ -2,8 +2,9 @@ import SwiftUI
 import SwiftData
 import UIKit
 
-/// The photo you took, with Claude's estimate floating on it and the details underneath:
-/// the meal, its calories and macros, each ingredient you can adjust, then add or save.
+/// The photo you took as the hero, and Claude's estimate on a white sheet under it: the meal,
+/// how sure Claude is, the macros and the ring, each ingredient you can adjust, then add or
+/// save.
 struct EstimateView: View {
     let image: UIImage
     let isLabel: Bool
@@ -14,6 +15,8 @@ struct EstimateView: View {
     @Environment(\.modelContext) private var context
     @Environment(LogEvents.self) private var events
     @Query(sort: \SavedFood.sortIndex) private var saved: [SavedFood]
+    @AppStorage("goal.kcal") private var goalKcal = 2000
+    @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
 
     @State private var phase: Phase = .working
     @State private var estimate: MealEstimate?
@@ -31,20 +34,30 @@ struct EstimateView: View {
     }
 
     private var totals: Nutrients { estimate?.totals ?? .zero }
+    private var targets: MacroTargets {
+        MacroTargets(kcal: Double(goalKcal), split: MacroSplit(rawValue: splitRaw) ?? .balanced)
+    }
     private static let skeleton: [CGFloat] = [220, 170, 250]
 
     var body: some View {
-        GeometryReader { geometry in
-            let photoHeight = geometry.size.height * 0.5
-            ZStack(alignment: .top) {
-                Theme.page.ignoresSafeArea()
-                photo(height: photoHeight + geometry.safeAreaInsets.top)
-                    .ignoresSafeArea(edges: .top)
-                sheet
-                    .padding(.top, photoHeight - 28)
+        ZStack(alignment: .topLeading) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    photo
+                    sheet
+                        .padding(.top, -32)
+                }
+            }
+            .scrollIndicators(.hidden)
+            .ignoresSafeArea(edges: .top)
+            backButton
+        }
+        .background(Theme.card.ignoresSafeArea())
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if phase == .ready, let estimate, !estimate.items.isEmpty {
+                actionBar(estimate)
             }
         }
-        .overlay(alignment: .top) { topBar }
         .task(id: attempt) { await run() }
         .sheet(isPresented: $showSettings, onDismiss: { attempt += 1 }) {
             SettingsView()
@@ -53,48 +66,34 @@ struct EstimateView: View {
 
     // MARK: Photo
 
-    private func photo(height: CGFloat) -> some View {
-        Image(uiImage: image)
-            .resizable()
-            .scaledToFill()
-            .frame(height: height)
+    private var photo: some View {
+        Color.clear
+            .frame(height: 400)
             .frame(maxWidth: .infinity)
-            .clipped()
+            .overlay {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .overlay {
+                        LinearGradient(colors: [.black.opacity(0.32), .clear], startPoint: .top, endPoint: .center)
+                    }
+            }
             .overlay {
                 if phase == .working {
                     ScanBand()
                 }
             }
-            .overlay(alignment: .bottom) {
-                if phase == .ready, estimate != nil {
-                    VStack(spacing: 8) {
-                        KcalPill(kcal: totals.kcal, onPhoto: true)
-                        HStack(spacing: 8) {
-                            ForEach(Macro.allCases, id: \.self) { macro in
-                                MacroPill(macro: macro, grams: macro.grams(in: totals), onPhoto: true)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 44)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
+            .clipped()
+            .visualEffect { content, proxy in
+                let pull = max(proxy.frame(in: .scrollView).minY, 0)
+                return content.scaleEffect(1 + pull / max(proxy.size.height, 1), anchor: .bottom)
             }
-            .animation(.spring(response: 0.5, dampingFraction: 0.8), value: phase)
+            .accessibilityHidden(true)
     }
 
-    private var topBar: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(Theme.ink)
-                    .frame(width: 44, height: 44)
-                    .floatingGlass(in: Circle())
-            }
-            .buttonStyle(PressableStyle(scale: 0.9))
-            .accessibilityLabel("Back to the camera")
-            Spacer()
+    private var backButton: some View {
+        GlassCircleButton(systemImage: "chevron.left", label: "Back to the camera", onPhoto: true) {
+            dismiss()
         }
         .padding(.horizontal, 16)
         .padding(.top, 4)
@@ -104,39 +103,33 @@ struct EstimateView: View {
 
     private var sheet: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    switch phase {
-                    case .working:
-                        working
-                    case .needsKey:
-                        message(
-                            "Photo estimates use Claude",
-                            detail: String(localized: "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds."),
-                            action: ("Open Settings", { showSettings = true })
-                        )
-                    case .failed(let text):
-                        message("That didn't work", detail: text, action: ("Try again", { attempt += 1 }))
-                    case .ready:
-                        if let estimate {
-                            ready(estimate)
-                        }
-                    }
+            switch phase {
+            case .working:
+                working
+                    .padding(.horizontal, Theme.margin)
+            case .needsKey:
+                message(
+                    "Photo estimates use Claude",
+                    detail: String(localized: "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds."),
+                    action: ("Open Settings", { showSettings = true })
+                )
+                .padding(.horizontal, Theme.margin)
+            case .failed(let text):
+                message("That didn't work", detail: text, action: ("Try again", { attempt += 1 }))
+                    .padding(.horizontal, Theme.margin)
+            case .ready:
+                if let estimate {
+                    ready(estimate)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 26)
-                .padding(.bottom, 16)
-            }
-            if phase == .ready, let estimate, !estimate.items.isEmpty {
-                actionBar(estimate)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.top, 26)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, minHeight: 360, alignment: .topLeading)
         .background(
-            Theme.page,
-            in: UnevenRoundedRectangle(topLeadingRadius: 30, topTrailingRadius: 30, style: .continuous)
+            Theme.card,
+            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
         )
-        .ignoresSafeArea(edges: .bottom)
     }
 
     private var working: some View {
@@ -168,51 +161,79 @@ struct EstimateView: View {
                 .foregroundStyle(Theme.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             Button(action.0, action: action.1)
-                .buttonStyle(PrimaryButtonStyle(height: 48))
+                .buttonStyle(PrimaryButtonStyle(height: 50))
                 .padding(.top, 4)
         }
     }
 
     @ViewBuilder private func ready(_ estimate: MealEstimate) -> some View {
-        Text(verbatim: "\(estimate.emoji) \(estimate.title)")
-            .font(.ui(28, .semibold))
-            .foregroundStyle(Theme.ink)
-            .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 0) {
+            Text(verbatim: "\(estimate.emoji) \(estimate.title)")
+                .font(.ui(27, .medium))
+                .tracking(-0.6)
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
 
-        FlowLayout(spacing: 8) {
-            TintChip(title: estimate.confidence.label, style: estimate.confidence == .low ? .watch : .info)
-            if estimate.items.isEmpty {
-                TintChip(title: String(localized: "No food found"), style: .watch)
+            FlowLayout(spacing: 7) {
+                TintChip(
+                    title: estimate.confidence.label,
+                    style: estimate.confidence == .low ? .watch : .info,
+                    systemImage: "sparkles"
+                )
+                if estimate.items.isEmpty {
+                    TintChip(title: String(localized: "No food found"), style: .watch)
+                }
+            }
+            .padding(.top, 12)
+
+            if !estimate.note.isEmpty {
+                Text(estimate.note)
+                    .font(.ui(15))
+                    .foregroundStyle(Theme.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 12)
+            }
+
+            if !estimate.items.isEmpty {
+                MacroBlock(
+                    nutrients: totals,
+                    targets: targets,
+                    ring: DottedRing.food(totals),
+                    number: totals.kcal,
+                    unit: "kcal",
+                    numberSize: 40,
+                    showsTarget: false
+                )
+                .padding(.top, 20)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(
+                    "\(totals.kcal.kcalText) calories. Protein \(totals.protein.gramsText) grams, carbs \(totals.carbs.gramsText) grams, fat \(totals.fat.gramsText) grams."
+                )
             }
         }
-
-        if !estimate.note.isEmpty {
-            Text(estimate.note)
-                .font(.ui(15))
-                .foregroundStyle(Theme.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        .padding(.horizontal, Theme.margin)
 
         if !estimate.items.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                SectionLabel(title: "Ingredients", detail: "Tap one to adjust", size: 17)
-                    .padding(.horizontal, -4)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(alignment: .top, spacing: 12) {
-                        ForEach(estimate.items.indices, id: \.self) { index in
-                            IngredientBubble(item: estimate.items[index], isSelected: selected == index) {
-                                withAnimation(.snappy) { selected = selected == index ? nil : index }
-                            }
+            SectionLabel(title: "Ingredients", detail: "Tap one to adjust", size: 17)
+                .padding(.horizontal, Theme.margin)
+                .padding(.top, 24)
+                .padding(.bottom, 12)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(alignment: .top, spacing: 12) {
+                    ForEach(estimate.items.indices, id: \.self) { index in
+                        IngredientBubble(item: estimate.items[index], isSelected: selected == index) {
+                            withAnimation(.snappy) { selected = selected == index ? nil : index }
                         }
                     }
-                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, -20)
+            }
+            .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
 
-                if let selected, estimate.items.indices.contains(selected) {
-                    adjuster(estimate.items[selected], index: selected)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                }
+            if let selected, estimate.items.indices.contains(selected) {
+                adjuster(estimate.items[selected], index: selected)
+                    .padding(.horizontal, Theme.margin)
+                    .padding(.top, 12)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
     }
@@ -261,10 +282,10 @@ struct EstimateView: View {
             BookmarkButton(isSaved: isSaved) { save(estimate) }
                 .disabled(isSaved)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
-        .padding(.bottom, 30)
-        .background(Theme.page)
+        .padding(.bottom, 8)
+        .background(Theme.card.ignoresSafeArea())
     }
 
     // MARK: Actions
@@ -309,8 +330,9 @@ struct EstimateView: View {
         withAnimation(.snappy) { estimate = current }
     }
 
+    /// The plate as one food, keeping the photo sharp enough to be the day's cover.
     private func plate(_ estimate: MealEstimate) -> Food {
-        estimate.food(imageData: ImageTools.jpeg(image, maxSide: 600))
+        estimate.food(imageData: ImageTools.jpeg(image, maxSide: 1000, quality: 0.7))
     }
 
     private func add(_ estimate: MealEstimate) {

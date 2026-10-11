@@ -127,7 +127,6 @@ struct ScannerView: View {
             NavigationStack {
                 FoodDetailView(food: food, day: day) { dismiss() }
             }
-            .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
         .sheet(item: $quickAdd, onDismiss: resume) { draft in
@@ -411,7 +410,7 @@ struct ScannerView: View {
         case "photo":
             modeRaw = ScanMode.food.rawValue
         case "estimate":
-            photo = CapturedPhoto(image: DemoData.platePhoto(), isLabel: false)
+            photo = CapturedPhoto(image: DemoData.plateImage(), isLabel: false)
         default:
             break
         }

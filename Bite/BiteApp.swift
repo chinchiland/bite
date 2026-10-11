@@ -6,6 +6,7 @@ struct BiteApp: App {
     let container: ModelContainer
 
     init() {
+        Typeface.setUp()
         #if DEBUG
         let demo = ProcessInfo.processInfo.arguments.contains("-demo")
         #else

@@ -10,14 +10,13 @@ enum HomeTab: String, CaseIterable, Identifiable {
     case month = "Month"
 
     var id: String { rawValue }
+}
 
-    var title: LocalizedStringKey {
-        switch self {
-        case .today: "Day"
-        case .week: "Week"
-        case .month: "Month"
-        }
-    }
+/// What the switcher at the top of home can show: one of the last days, or a range.
+enum HomeSelection: Hashable {
+    case day(Date)
+    case week
+    case month
 }
 
 /// Every sheet home can open, one at a time.
@@ -31,11 +30,13 @@ enum HomeSheet: Identifiable, Hashable {
     var id: Self { self }
 }
 
-/// Home: today's calories and meals with the scan dock, or your week and month.
+/// Home: the day under your latest meal photo, its macros, your meals and saved foods, with
+/// the scan dock; or your last 7 or 30 days.
 struct TodayView: View {
     @Environment(\.modelContext) private var context
     @Environment(LogEvents.self) private var events
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.colorScheme) private var colorScheme
     @Query private var entries: [FoodEntry]
     @Query(sort: \SavedFood.sortIndex) private var saved: [SavedFood]
 
@@ -52,36 +53,38 @@ struct TodayView: View {
     @State private var deleting: FoodEntry?
     @State private var activity: DayActivity?
     @State private var activityRefresh = 0
+    @State private var cover: (id: PersistentIdentifier, image: UIImage)?
+    @State private var coverOnScreen = true
     @Namespace private var zoom
+
+    /// How far back home reads the log: a month for the ranges, and the month before it so
+    /// they can show how things moved.
+    static let daysBack = 62
 
     init() {
         let calendar = Calendar.current
-        let start = calendar.date(byAdding: .day, value: -WeekPager.daysBack, to: calendar.startOfDay(for: .now)) ?? .distantPast
+        let start = calendar.date(byAdding: .day, value: -Self.daysBack, to: calendar.startOfDay(for: .now)) ?? .distantPast
         _entries = Query(filter: #Predicate<FoodEntry> { $0.date >= start }, sort: \FoodEntry.date)
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(spacing: Theme.gap) {
-                    header
-                    switch tab {
-                    case .today:
-                        todayContent
-                    case .week:
-                        InsightsView(range: .week, entries: entries, goal: Double(goalKcal), targets: targets)
-                    case .month:
-                        InsightsView(range: .month, entries: entries, goal: Double(goalKcal), targets: targets)
-                    }
+        GeometryReader { proxy in
+            ZStack(alignment: .bottom) {
+                Theme.page.ignoresSafeArea()
+                switch tab {
+                case .today:
+                    dayPage(topInset: proxy.safeAreaInsets.top)
+                case .week:
+                    rangePage(.week)
+                case .month:
+                    rangePage(.month)
                 }
-                .padding(.horizontal, Theme.margin)
-                .padding(.bottom, 140)
+                bottomStack
             }
-            .scrollIndicators(.hidden)
-
-            bottomStack
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Theme.page.ignoresSafeArea())
+        // A photo cover runs to the top edge, where the time would sit dark on the picture.
+        .statusBarHidden(tab == .today && cover != nil && coverOnScreen && colorScheme == .light)
         .fullScreenCover(isPresented: $showScanner) {
             ScannerView(day: day)
                 .zoomTransition(id: "scan", in: zoom)
@@ -110,6 +113,9 @@ struct TodayView: View {
         .task(id: "\(day.timeIntervalSince1970) \(activityRefresh) \(healthAsked)") {
             await loadActivity()
         }
+        .task(id: coverEntry?.persistentModelID) {
+            loadCover()
+        }
         .onChange(of: scenePhase) { _, phase in
             // Back from a walk: pick up the new steps.
             if phase == .active { activityRefresh += 1 }
@@ -119,72 +125,154 @@ struct TodayView: View {
         #endif
     }
 
-    // MARK: Header and tabs
+    // MARK: Day
 
-    private var header: some View {
-        HStack(spacing: 10) {
-            Picker("Show", selection: $tab.animation(.snappy)) {
-                ForEach(HomeTab.allCases) { tab in
-                    Text(tab.title).tag(tab)
+    private func dayPage(topInset: CGFloat) -> some View {
+        let photo = cover?.image
+        return ScrollView {
+            VStack(spacing: 0) {
+                DayCover(
+                    photo: photo,
+                    height: topInset + (photo == nil ? 290 : 371),
+                    topInset: topInset,
+                    number: hero.number,
+                    unit: hero.unit,
+                    caption: heroCaption,
+                    detail: String(localized: "Goal \(budget.kcalText)")
+                ) {
+                    coverControls(onPhoto: photo != nil)
                 }
+                .onGeometryChange(for: Bool.self) { geometry in
+                    geometry.frame(in: .scrollView).maxY > 120
+                } action: { onScreen in
+                    coverOnScreen = onScreen
+                }
+
+                daySheet
+                    .padding(.top, -26)
             }
-            .pickerStyle(.segmented)
-            .frame(width: 228)
-            Spacer()
-            CircleIconButton(systemImage: "gearshape", label: "Settings") { sheet = .settings }
         }
-        .padding(.top, 4)
+        .scrollIndicators(.hidden)
+        .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
+        .ignoresSafeArea(edges: .top)
     }
 
-    @ViewBuilder private var todayContent: some View {
-        HStack(alignment: .center, spacing: 10) {
-            Text(title)
-                .font(.ui(32, .bold))
-                .foregroundStyle(Theme.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            Spacer(minLength: 8)
-            if let chip = dayChip {
-                TintChip(title: chip.title, style: chip.style, systemImage: chip.symbol, iconColor: chip.iconColor)
-            }
-            if !Calendar.current.isDateInToday(day) {
-                Button("Today") {
-                    withAnimation(.snappy) { day = Calendar.current.startOfDay(for: .now) }
+    private func coverControls(onPhoto: Bool) -> some View {
+        HStack(spacing: 8) {
+            HomeSwitcher(selection: homeSelection, days: recentDays) {
+                HStack(spacing: 6) {
+                    Text(title)
+                        .font(.ui(16, .semibold))
+                        .lineLimit(1)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 12, weight: .semibold))
                 }
-                .buttonStyle(ChipButtonStyle(isSelected: false))
+                .foregroundStyle(onPhoto ? Color.white : Theme.ink)
+                .padding(.leading, 16)
+                .padding(.trailing, 13)
+                .frame(height: 38)
+                .coverGlass(in: Capsule(), onPhoto: onPhoto)
+            }
+            Spacer(minLength: 8)
+            if let streak = streakToShow {
+                HStack(spacing: 6) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.energy)
+                    Text("\(streak)-day streak")
+                        .font(.ui(14, .semibold))
+                        .lineLimit(1)
+                }
+                .foregroundStyle(onPhoto ? Color.white : Theme.ink)
+                .padding(.leading, 11)
+                .padding(.trailing, 13)
+                .frame(height: 38)
+                .coverGlass(in: Capsule(), onPhoto: onPhoto)
+                .accessibilityElement(children: .combine)
+            }
+            GlassCircleButton(systemImage: "gearshape", label: "Settings", onPhoto: onPhoto, size: 38) {
+                sheet = .settings
             }
         }
-        .padding(.horizontal, 4)
-        .padding(.top, 6)
+    }
 
-        WeekPager(selection: $day, verdicts: verdicts)
+    private var daySheet: some View {
+        let ring = DottedRing.day(totals, goal: budget)
+        return VStack(alignment: .leading, spacing: 0) {
+            MacroBlock(
+                nutrients: totals,
+                targets: targets,
+                ring: ring.parts,
+                overflow: ring.overflow,
+                number: totals.kcal,
+                unit: "kcal eaten"
+            )
+            ActivityChips(health: healthState, onConnect: connectHealth)
+                .padding(.top, 16)
 
-        DayCard(totals: totals, goal: budget, targets: targets, health: healthState, onConnectHealth: connectHealth)
+            SectionLabel(title: "Your day")
+                .padding(.top, 26)
+                .padding(.bottom, 14)
+            if dayEntries.isEmpty {
+                EmptyDay(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
+            } else {
+                DayTimeline(
+                    entries: dayEntries,
+                    onSelect: { editing = $0 },
+                    onSave: { save($0.food, amount: $0.amount, meal: $0.meal) },
+                    onDelete: delete,
+                    onAddHere: { sheet = .search($0) },
+                    onSaveMeal: saveMeal
+                )
+            }
 
-        SavedShelf(
-            saved: saved,
-            onAdd: add,
-            onEdit: { sheet = .editSaved($0) },
-            onDelete: removeSaved,
-            onNew: { sheet = .newSaved }
+            SavedShelf(
+                saved: saved,
+                onAdd: add,
+                onEdit: { sheet = .editSaved($0) },
+                onDelete: removeSaved,
+                onNew: { sheet = .newSaved }
+            )
+            .padding(.top, 30)
+        }
+        .padding(.horizontal, Theme.margin)
+        .padding(.top, 22)
+        .padding(.bottom, 140)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Theme.page,
+            in: UnevenRoundedRectangle(topLeadingRadius: Theme.sheetRadius, topTrailingRadius: Theme.sheetRadius, style: .continuous)
         )
-        .padding(.top, 8)
+    }
 
-        if dayEntries.isEmpty {
-            EmptyDayCard(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
-        } else {
-            ForEach(Meal.allCases) { meal in
-                let items = dayEntries.filter { $0.meal == meal }
-                if !items.isEmpty {
-                    MealCard(
-                        meal: meal,
-                        entries: items,
-                        onSelect: { editing = $0 },
-                        onSave: { save($0.food, amount: $0.amount, meal: $0.meal) },
-                        onDelete: delete,
-                        onAddHere: { sheet = .search(meal) },
-                        onSaveMeal: { saveMeal(meal, items) }
-                    )
+    // MARK: Week and month
+
+    private func rangePage(_ range: InsightsRange) -> some View {
+        RangeView(
+            range: range,
+            entries: entries,
+            goal: Double(goalKcal),
+            targets: targets,
+            onOpenDay: { date in
+                withAnimation(.snappy) {
+                    day = date
+                    tab = .today
+                }
+            },
+            onSettings: { sheet = .settings }
+        ) {
+            HomeSwitcher(selection: homeSelection, days: recentDays) {
+                HStack(spacing: 6) {
+                    Text(range.title)
+                        .font(.ui(30, .semibold))
+                        .tracking(-0.6)
+                        .foregroundStyle(Theme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Theme.secondary)
+                        .padding(.top, 3)
                 }
             }
         }
@@ -234,15 +322,56 @@ struct TodayView: View {
     // MARK: Data
 
     private var title: String {
-        let calendar = Calendar.current
+        Self.name(of: day)
+    }
+
+    /// "Today", "Yesterday", then "Friday 9".
+    static func name(of day: Date, calendar: Calendar = .current) -> String {
         if calendar.isDateInToday(day) { return String(localized: "Today") }
         if calendar.isDateInYesterday(day) { return String(localized: "Yesterday") }
-        return day.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
+        return day.formatted(.dateTime.weekday(.wide).day())
+    }
+
+    /// Today and the six days before it, for the switcher.
+    private var recentDays: [Date] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: -$0, to: today) }
+    }
+
+    private var homeSelection: Binding<HomeSelection> {
+        Binding(
+            get: {
+                switch tab {
+                case .today: .day(day)
+                case .week: .week
+                case .month: .month
+                }
+            },
+            set: { selection in
+                withAnimation(.snappy) {
+                    switch selection {
+                    case .day(let date):
+                        day = date
+                        tab = .today
+                    case .week:
+                        tab = .week
+                    case .month:
+                        tab = .month
+                    }
+                }
+            }
+        )
     }
 
     private var dayEntries: [FoodEntry] {
         let calendar = Calendar.current
         return entries.filter { calendar.isDate($0.date, inSameDayAs: day) }
+    }
+
+    /// The day's latest photo: a plate Claude estimated or a saved food with your picture.
+    private var coverEntry: FoodEntry? {
+        dayEntries.last { $0.imageData != nil }
     }
 
     private var totals: Nutrients {
@@ -258,6 +387,28 @@ struct TodayView: View {
         Double(goalKcal) + (addBurned ? activity?.activeKcal ?? 0 : 0)
     }
 
+    /// Today counts down what is left (or what went over); a past day shows what you ate.
+    private var hero: (number: Double, unit: String) {
+        guard Calendar.current.isDateInToday(day) else {
+            return (number: totals.kcal, unit: String(localized: "kcal eaten"))
+        }
+        if totals.kcal > budget {
+            return (number: totals.kcal - budget, unit: String(localized: "kcal over today"))
+        }
+        return (number: budget - totals.kcal, unit: String(localized: "kcal left today"))
+    }
+
+    /// Under the number: the photo's meal, or the last thing you ate; a past day's verdict.
+    private var heroCaption: String? {
+        if !Calendar.current.isDateInToday(day) {
+            return verdicts[day]?.label
+        }
+        if cover != nil, let name = coverEntry?.name {
+            return name
+        }
+        return dayEntries.last.map { String(localized: "Last meal: \($0.name)") }
+    }
+
     private var summaries: [DaySummary] {
         InsightsData.summaries(of: entries)
     }
@@ -270,22 +421,25 @@ struct TodayView: View {
         return result
     }
 
-    /// A streak for today, the verdict for a past day.
-    private var dayChip: (title: String, style: TintChip.Style, symbol: String, iconColor: Color?)? {
-        if Calendar.current.isDateInToday(day) {
-            let streak = Insights.streak(summaries, goal: Double(goalKcal), today: .now)
-            guard streak >= 2 else { return nil }
-            return (title: String(localized: "\(streak)-day streak"), style: .neutral, symbol: "flame.fill", iconColor: Theme.energy)
-        }
-        let verdict = verdicts[day] ?? .empty
-        guard let label = verdict.label else { return nil }
-        return (title: label, style: verdict.chipStyle, symbol: verdict.symbol, iconColor: nil)
+    /// The streak, on today only and from two days.
+    private var streakToShow: Int? {
+        guard Calendar.current.isDateInToday(day) else { return nil }
+        let streak = Insights.streak(summaries, goal: Double(goalKcal), today: .now)
+        return streak >= 2 ? streak : nil
     }
 
     private var healthState: HealthState {
         guard HealthActivity.isAvailable else { return .unavailable }
         guard healthAsked else { return .notConnected }
         return .connected(activity ?? DayActivity(steps: 0, activeKcal: 0))
+    }
+
+    private func loadCover() {
+        guard let entry = coverEntry, let data = entry.imageData, let image = UIImage(data: data) else {
+            cover = nil
+            return
+        }
+        cover = (id: entry.persistentModelID, image: image)
     }
 
     // MARK: Actions
@@ -364,8 +518,8 @@ struct TodayView: View {
     }
 
     #if DEBUG
-    /// `-screen food|search|settings|scanner|photo|estimate|edit|saved|week|month` opens a
-    /// screen straight away, for screenshots.
+    /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday`
+    /// opens a screen straight away, for screenshots.
     private func openDemoScreen() {
         switch UserDefaults.standard.string(forKey: "screen") {
         case "food": editing = dayEntries.first
@@ -373,37 +527,83 @@ struct TodayView: View {
         case "settings": sheet = .settings
         case "scanner", "photo", "estimate": showScanner = true
         case "edit": editing = dayEntries.last
+        case "plate": editing = dayEntries.first { $0.imageData != nil }
         case "saved": if let first = saved.first { sheet = .editSaved(first) }
         case "week": tab = .week
         case "month": tab = .month
+        case "yesterday": day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
         default: break
         }
     }
     #endif
 }
 
-/// Nothing logged yet: the scan glyph, one line, and the way in.
-private struct EmptyDayCard: View {
+/// Launch arguments that set screens up for screenshots. Release builds ignore them.
+enum ScreenshotFlags {
+    /// `-anchor bottom` opens a long page scrolled to its end.
+    static var scrollAnchor: UnitPoint? {
+        #if DEBUG
+        return UserDefaults.standard.string(forKey: "anchor") == "bottom" ? .bottom : nil
+        #else
+        return nil
+        #endif
+    }
+}
+
+/// The menu behind the day's name: today and the six days before it, then the last 7 and 30
+/// days.
+struct HomeSwitcher<Label: View>: View {
+    @Binding var selection: HomeSelection
+    let days: [Date]
+    @ViewBuilder let label: Label
+
+    var body: some View {
+        Menu {
+            Picker(selection: $selection) {
+                ForEach(days, id: \.self) { day in
+                    Text(TodayView.name(of: day)).tag(HomeSelection.day(day))
+                }
+            } label: {
+                EmptyView()
+            }
+            .pickerStyle(.inline)
+            Picker(selection: $selection) {
+                Text("Last 7 days").tag(HomeSelection.week)
+                Text("Last 30 days").tag(HomeSelection.month)
+            } label: {
+                EmptyView()
+            }
+            .pickerStyle(.inline)
+        } label: {
+            label
+        }
+        .menuOrder(.fixed)
+        .accessibilityHint("Shows another day, or your last 7 or 30 days")
+    }
+}
+
+/// Nothing logged yet: the scan glyph and one line.
+private struct EmptyDay: View {
     let isToday: Bool
     let onScan: () -> Void
 
     var body: some View {
-        Card(padding: 24) {
-            VStack(spacing: 14) {
-                ScanGlyph(color: Theme.ink)
-                    .frame(width: 40, height: 34)
-                    .frame(width: 72, height: 72)
-                    .background(Theme.inset, in: Circle())
+        HStack(spacing: 14) {
+            ScanGlyph(color: Theme.ink, animated: isToday)
+                .frame(width: 30, height: 26)
+                .frame(width: 76, height: 76)
+                .background(Theme.fill, in: RoundedRectangle(cornerRadius: FoodThumb.radius(for: 76), style: .continuous))
+            VStack(alignment: .leading, spacing: 6) {
                 Text(isToday ? "Scan a barcode or snap your plate to log your first bite." : "Nothing logged this day.")
                     .font(.ui(15))
                     .foregroundStyle(Theme.secondary)
-                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
                 if isToday {
                     Button("Scan food", action: onScan)
-                        .buttonStyle(SoftButtonStyle())
+                        .font(.ui(15, .semibold))
+                        .foregroundStyle(Theme.ink)
                 }
             }
-            .frame(maxWidth: .infinity)
         }
     }
 }

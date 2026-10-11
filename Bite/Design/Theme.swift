@@ -3,55 +3,64 @@ import UIKit
 
 /// Bite's design tokens. The rules they serve are written up in DESIGN.md.
 ///
-/// Apple's grouped look: the system background, cards on it, soft insets inside cards for the
-/// quieter facts. Text wears the system label colors, so contrast and dark mode come from iOS.
-/// Color always means something: calories, the three macros, burned and steps, a status, a
-/// rank, or the pastel tile that tells foods apart.
+/// The Journal look: a warm paper page, white sheets on it, your food photos as covers, ink
+/// numbers, DM Sans. Color always means something: the three macros, burned and steps, a
+/// verdict, a rank, or the pastel tile that tells foods apart.
 enum Theme {
-    // MARK: Surfaces and text (iOS system colors)
+    // MARK: Surfaces and text
 
-    static let page = Color(uiColor: .systemGroupedBackground)
-    static let card = Color(uiColor: .secondarySystemGroupedBackground)
+    /// The warm paper every screen sits on.
+    static let page = Color(lightHex: 0xFAFAF8, darkHex: 0x121110)
+    /// White sheets and cards on the page.
+    static let card = Color(lightHex: 0xFFFFFF, darkHex: 0x1C1B19)
     /// The soft box inside a card that groups secondary facts.
-    static let inset = Color(uiColor: .tertiarySystemGroupedBackground)
-    static let ink = Color(uiColor: .label)
-    static let secondary = Color(uiColor: .secondaryLabel)
-    static let tertiary = Color(uiColor: .tertiaryLabel)
-    /// Quiet controls: soft buttons, neutral chips, step buttons.
-    static let fill = Color(uiColor: .tertiarySystemFill)
-    /// The empty part of a bar or of the gauge.
-    static let track = Color(uiColor: .systemGray5)
-    static let hairline = Color(uiColor: .separator)
-    /// Product photos sit on a light tile in both modes so their white backgrounds melt away.
-    static let photoTile = Color(lightHex: 0xF5F5F7, darkHex: 0xE8E8ED)
+    static let inset = Color(lightHex: 0xF4F3EF, darkHex: 0x24231F)
+    static let ink = Color(lightHex: 0x141414, darkHex: 0xF3F2EE)
+    static let secondary = Color(lightHex: 0x75736E, darkHex: 0xA3A09A)
+    static let tertiary = Color(lightHex: 0xA9A69F, darkHex: 0x6E6B65)
+    /// Quiet controls: chips, soft buttons, step buttons.
+    static let fill = Color(lightHex: 0xF0EEE9, darkHex: 0x272622)
+    /// The empty part of a bar.
+    static let track = Color(lightHex: 0xECE9E1, darkHex: 0x2E2C28)
+    /// The dots of the ring that are still to eat.
+    static let ringRest = Color(lightHex: 0xE6E3DA, darkHex: 0x3A3833)
+    static let hairline = Color(lightHex: 0xECEAE5, darkHex: 0x2B2A26)
+    /// The hairline that keeps a white product tile from melting into a white sheet.
+    static let edge = Color(lightHex: 0xEEECE7, darkHex: 0x33312D)
+    /// Product photos sit on white in both modes so their white backgrounds melt away.
+    static let photoTile = Color(lightHex: 0xFFFFFF, darkHex: 0xEDEBE6)
 
     // MARK: Data
 
-    // The macro trio is the dataviz palette's first three slots, which pass the color-vision
-    // checks as a set in both modes, so stacked segments stay tellable apart.
-    static let protein = Color(lightHex: 0xEB6834, darkHex: 0xD95926)
-    static let carbs = Color(lightHex: 0x2A78D6, darkHex: 0x3987E5)
-    static let fat = Color(lightHex: 0x1BAF7A, darkHex: 0x199E70)
-    /// Calories: sunny amber, warm without shouting. Never drawn next to the macros in one chart.
-    static let energy = Color(lightHex: 0xF4A80C, darkHex: 0xF2B233)
-    /// The light end of the gauge, which warms to amber as the day fills up.
-    static let energyLight = Color(lightHex: 0xFFCB45, darkHex: 0xFFD666)
-    static let energySoft = Color(lightHex: 0xFFF3D6, darkHex: 0x33290F)
+    // The macro trio is calm and passes the color-vision checks as a set on the paper and on
+    // the dark page, so ring segments and bars stay tellable apart.
+    static let protein = Color(lightHex: 0xD2693C, darkHex: 0xD2693C)
+    static let carbs = Color(lightHex: 0x4C7FC0, darkHex: 0x4C7FC0)
+    static let fat = Color(lightHex: 0x3E9A76, darkHex: 0x3E9A76)
+    /// The streak flame and the calories flame.
+    static let energy = Color(lightHex: 0xF2A93B, darkHex: 0xFFC24D)
     /// Burned calories wear the Move ring's pink, steps wear indigo. Food never uses either.
-    static let burned = Color(uiColor: .systemPink)
-    static let steps = Color(uiColor: .systemIndigo)
-    static let over = Color(lightHex: 0xE5484D, darkHex: 0xFF6369)
-    /// The scan laser: the one warm red on the home screen, so the eye finds the scan button.
+    static let burned = Color(lightHex: 0xE8335C, darkHex: 0xFF5C7F)
+    static let steps = Color(lightHex: 0x5B4FD9, darkHex: 0x8A80F0)
+    /// Over the goal: a day's dot, a bar, the ring's last dots.
+    static let over = Color(lightHex: 0xD9482B, darkHex: 0xF06A50)
+    /// On target and light days, as the dot beside a day.
+    static let onTarget = Color(lightHex: 0x2E9E62, darkHex: 0x4CC283)
+    static let light = Color(lightHex: 0xC8C5BE, darkHex: 0x57544E)
+    /// The scan laser in the camera.
     static let laser = Color(lightHex: 0xFF453A, darkHex: 0xFF6961)
 
     // MARK: Status chips (soft fill, strong text)
 
-    static let goodText = Color(lightHex: 0x248A3D, darkHex: 0x7AD69E)
-    static let goodFill = Color(lightHex: 0xE5F4EA, darkHex: 0x17301F)
-    static let watchText = Color(lightHex: 0xA2530B, darkHex: 0xF0A65C)
-    static let watchFill = Color(lightHex: 0xFCEEDD, darkHex: 0x382816)
-    static let infoText = Color(lightHex: 0x0062CC, darkHex: 0x8DB5F5)
-    static let infoFill = Color(lightHex: 0xE6EEFB, darkHex: 0x1B2A40)
+    static let goodText = Color(lightHex: 0x2F6B34, darkHex: 0x9CD49A)
+    static let goodFill = Color(lightHex: 0xE8F3DF, darkHex: 0x1E2A1C)
+    static let goodIcon = Color(lightHex: 0x3E8A45, darkHex: 0x7CC47F)
+    static let watchText = Color(lightHex: 0x9A4A12, darkHex: 0xF0A66C)
+    static let watchFill = Color(lightHex: 0xFBEBDD, darkHex: 0x33241A)
+    static let infoText = Color(lightHex: 0x2F5E9E, darkHex: 0x9DBBE8)
+    static let infoFill = Color(lightHex: 0xE6EEF8, darkHex: 0x1B2636)
+    /// A brand that links to its page.
+    static let link = Color(lightHex: 0x3E7F45, darkHex: 0x8FCB8F)
 
     // MARK: Ranks
 
@@ -72,14 +81,43 @@ enum Theme {
         }
     }
 
+    /// A food's hero: its tint as a soft light in the middle, deeper at the edges.
+    static func heroGradient(_ tint: FoodTint) -> RadialGradient {
+        let (center, edge): (UInt32, UInt32) = switch tint {
+        case .sand: (0xF6F1EA, 0xE6DCCE)
+        case .peach: (0xFDEDE3, 0xF6D3BD)
+        case .butter: (0xFBF4D9, 0xF0E1A8)
+        case .mint: (0xE6F4EA, 0xC9E6D2)
+        case .sky: (0xE3EEFA, 0xBCD3EE)
+        case .lilac: (0xEFEAFA, 0xD6CCF2)
+        case .blush: (0xFBE8EC, 0xF2C9D2)
+        }
+        return RadialGradient(
+            colors: [Color(lightHex: center, darkHex: 0x2A2925), Color(lightHex: edge, darkHex: 0x1C1B19)],
+            center: UnitPoint(x: 0.5, y: 0.4),
+            startRadius: 0,
+            endRadius: 420
+        )
+    }
+
+    /// The cover of a day with no photo yet: fresh green into butter, like a kitchen in the
+    /// morning.
+    static let coverGradient = LinearGradient(
+        colors: [Color(lightHex: 0xDDEBCD, darkHex: 0x1F2A1E), Color(lightHex: 0xF4EFD6, darkHex: 0x2A2719)],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+
     // MARK: Layout
 
     /// Side margin of every screen.
-    static let margin: CGFloat = 16
+    static let margin: CGFloat = 20
     /// Space between cards.
     static let gap: CGFloat = 12
     static let cardRadius: CGFloat = 22
     static let insetRadius: CGFloat = 16
+    /// The rounded top of a sheet that rises over a cover.
+    static let sheetRadius: CGFloat = 28
 }
 
 extension Color {
@@ -101,19 +139,26 @@ extension UIColor {
     }
 }
 
-/// The type scale, Apple's: 32 screen titles, 28 and 26 sheet titles, 20 section and card
-/// titles, 17 for names and body, 15 for details, 13 for small print, 12 only for chart axes
-/// and tiny captions. Text is regular or medium; semibold is for titles and numbers.
+/// The type scale, all DM Sans: 66 for the day's number, 30 screen titles, 27 a food's name,
+/// 20 section titles, 16 and 17 names and body, 14 and 15 details, 13 small print, 12 only for
+/// chart axes. Text is regular or medium; semibold is for titles and numbers.
 extension Font {
-    /// SF Pro for numbers, with tabular digits so they line up and roll in place. Big numbers
-    /// are medium and smaller ones semibold, so every number reads at the same weight.
+    /// Numbers. Big ones are medium and smaller ones semibold, so every number reads at the
+    /// same weight.
     static func number(_ size: CGFloat, _ weight: Font.Weight? = nil) -> Font {
-        .system(size: size, weight: weight ?? (size >= 34 ? .medium : .semibold)).monospacedDigit()
+        Typeface.font(size: size, weight: weight ?? (size >= 34 ? .medium : .semibold))
     }
 
-    /// SF Pro for names, labels and buttons.
+    /// Names, labels and buttons.
     static func ui(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight)
+        Typeface.font(size: size, weight: weight)
+    }
+}
+
+extension View {
+    /// Big numbers sit tighter, the way display type does: 4% of the size at 66 pt, 2% at 22.
+    func numberTracking(_ size: CGFloat) -> some View {
+        tracking(-size * (size >= 50 ? 0.04 : size >= 28 ? 0.03 : 0.02))
     }
 }
 
@@ -158,6 +203,9 @@ enum Macro: CaseIterable {
         case .fat: "drop.fill"
         }
     }
+
+    /// Calories in a gram.
+    var kcalPerGram: Double { self == .fat ? 9 : 4 }
 
     func grams(in nutrients: Nutrients) -> Double {
         switch self {

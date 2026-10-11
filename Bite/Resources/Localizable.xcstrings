@@ -17,6 +17,22 @@
         }
       }
     },
+    "%@ burned" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ quemadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ brûlées"
+          }
+        }
+      }
+    },
     "%@ calories left" : {
       "localizations" : {
         "es" : {
@@ -177,6 +193,22 @@
         }
       }
     },
+    "%@ steps" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ pasos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ pas"
+          }
+        }
+      }
+    },
     "%@ to %@" : {
       "localizations" : {
         "es" : {
@@ -225,6 +257,22 @@
         }
       }
     },
+    "%@, %@ kcal, %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@ kcal, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@ kcal, %@"
+          }
+        }
+      }
+    },
     "%@, %@, %@ calories" : {
       "localizations" : {
         "es" : {
@@ -237,6 +285,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@, %@, %@ calories"
+          }
+        }
+      }
+    },
+    "%@: %@ grams" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@: %@ gramos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ : %@ grammes"
           }
         }
       }
@@ -539,6 +603,22 @@
         }
       }
     },
+    "Add to today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter à aujourd’hui"
+          }
+        }
+      }
+    },
     "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds." : {
       "localizations" : {
         "es" : {
@@ -775,6 +855,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Petit-déjeuner"
+          }
+        }
+      }
+    },
+    "Buddha bowl" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buddha bowl"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buddha bowl"
           }
         }
       }
@@ -1451,6 +1547,22 @@
         }
       }
     },
+    "Eggs and greens" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huevos con espinacas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Œufs et légumes verts"
+          }
+        }
+      }
+    },
     "Emoji" : {
       "localizations" : {
         "es" : {
@@ -1707,6 +1819,22 @@
         }
       }
     },
+    "Goal %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif %@"
+          }
+        }
+      }
+    },
     "Good estimate" : {
       "localizations" : {
         "es" : {
@@ -1943,6 +2071,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "7 derniers jours"
+          }
+        }
+      }
+    },
+    "Last meal: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Última comida: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier repas : %@"
           }
         }
       }
@@ -2651,6 +2795,22 @@
         }
       }
     },
+    "Nutri-Score" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutri-Score"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutri-Score"
+          }
+        }
+      }
+    },
     "Nutri-Score %@" : {
       "localizations" : {
         "es" : {
@@ -2903,6 +3063,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Image"
+          }
+        }
+      }
+    },
+    "Pizza" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pizza"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pizza"
           }
         }
       }
@@ -3191,6 +3367,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bowl au saumon"
+          }
+        }
+      }
+    },
+    "Salmon with vegetables" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salmón con verduras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saumon aux légumes"
           }
         }
       }
@@ -3627,6 +3819,22 @@
         }
       }
     },
+    "Shows another day, or your last 7 or 30 days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra otro día, o tus últimos 7 o 30 días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche un autre jour, ou tes 7 ou 30 derniers jours"
+          }
+        }
+      }
+    },
     "Shows your steps and burned calories from Apple Health" : {
       "localizations" : {
         "es" : {
@@ -3735,6 +3943,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "C’est parti"
+          }
+        }
+      }
+    },
+    "Steak and greens" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ternera con verduras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bœuf et légumes verts"
           }
         }
       }
@@ -4315,6 +4539,22 @@
         }
       }
     },
+    "Your day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta journée"
+          }
+        }
+      }
+    },
     "Your goal" : {
       "localizations" : {
         "es" : {
@@ -4347,6 +4587,22 @@
         }
       }
     },
+    "Your month in food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu mes en el plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton mois dans l’assiette"
+          }
+        }
+      }
+    },
     "Your week" : {
       "localizations" : {
         "es" : {
@@ -4359,6 +4615,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta semaine"
+          }
+        }
+      }
+    },
+    "Your week in food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu semana en el plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta semaine dans l’assiette"
           }
         }
       }
@@ -4443,6 +4715,22 @@
         }
       }
     },
+    "kcal eaten" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal consumidas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal consommées"
+          }
+        }
+      }
+    },
     "kcal left" : {
       "localizations" : {
         "es" : {
@@ -4459,6 +4747,22 @@
         }
       }
     },
+    "kcal left today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal restantes hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal restantes aujourd’hui"
+          }
+        }
+      }
+    },
     "kcal over" : {
       "localizations" : {
         "es" : {
@@ -4471,6 +4775,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "kcal en trop"
+          }
+        }
+      }
+    },
+    "kcal over today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal de más hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kcal en trop aujourd’hui"
           }
         }
       }
@@ -4593,6 +4913,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "portions"
+          }
+        }
+      }
+    },
+    "vs the 30 days before" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs los 30 días anteriores"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs les 30 jours d’avant"
+          }
+        }
+      }
+    },
+    "vs the 7 days before" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs los 7 días anteriores"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs les 7 jours d’avant"
           }
         }
       }

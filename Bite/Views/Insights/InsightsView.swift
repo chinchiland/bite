@@ -1,5 +1,4 @@
 import SwiftUI
-import Charts
 
 /// Turns logged entries into the plain numbers the scores and ranks are made of.
 enum InsightsData {
@@ -30,161 +29,6 @@ enum InsightsData {
         }
         .sorted { $0.day < $1.day }
     }
-}
-
-/// Your week or month: the days on a chart the way the Health app draws them (touch a bar for
-/// its day), how it moved, your best days and the foods you come back to, ranked the
-/// Brandsearch way.
-struct InsightsView: View {
-    enum Range {
-        case week
-        case month
-
-        var days: Int { self == .week ? 7 : 30 }
-        var title: LocalizedStringKey { self == .week ? "Last 7 days" : "Last 30 days" }
-    }
-
-    let range: Range
-    let entries: [FoodEntry]
-    let goal: Double
-    let targets: MacroTargets
-
-    /// The day under your finger on the chart.
-    @State private var picked: Date?
-
-    var body: some View {
-        // Whole days only: today is still being eaten, so it waits until tomorrow.
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: .now)
-        let start = calendar.date(byAdding: .day, value: -range.days, to: today) ?? today
-        let previousStart = calendar.date(byAdding: .day, value: -range.days, to: start) ?? start
-        let all = InsightsData.summaries(of: entries)
-        let current = all.filter { $0.day >= start && $0.day < today }
-        let previous = all.filter { $0.day >= previousStart && $0.day < start }
-        let now = Insights.period(current, goal: goal)
-        let before = Insights.period(previous, goal: goal)
-        let periodEntries = entries.filter { $0.date >= start && $0.date < today }
-
-        VStack(spacing: Theme.gap) {
-            HStack(alignment: .center) {
-                Text(range.title)
-                    .font(.ui(32, .bold))
-                    .foregroundStyle(Theme.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Spacer(minLength: 8)
-                let streak = Insights.streak(all, goal: goal, today: .now)
-                if streak >= 2 {
-                    TintChip(title: String(localized: "\(streak)-day streak"), systemImage: "flame.fill", iconColor: Theme.energy)
-                }
-            }
-            .padding(.horizontal, 4)
-            .padding(.top, 6)
-
-            if now.loggedDays == 0 {
-                Card(padding: 24) {
-                    Text("Log a few days and they show up here, with your best days ranked.")
-                        .font(.ui(15))
-                        .foregroundStyle(Theme.secondary)
-                        .frame(maxWidth: .infinity)
-                        .multilineTextAlignment(.center)
-                }
-            } else {
-                chart(current, start: start, today: today, now: now, before: before)
-                kpis(now: now, before: before)
-                bestDays(current)
-                mostEaten(periodEntries)
-            }
-        }
-    }
-
-    // MARK: Chart
-
-    private func chart(_ days: [DaySummary], start: Date, today: Date, now: Insights.Period, before: Insights.Period) -> some View {
-        let calendar = Calendar.current
-        let last = calendar.date(byAdding: .day, value: -1, to: today) ?? today
-        let selected = picked.flatMap { date in days.first { calendar.isDate($0.day, inSameDayAs: date) } }
-        let shown = selected?.kcal ?? now.averageKcal
-        let dayStarts = (0..<range.days).compactMap { calendar.date(byAdding: .day, value: $0, to: start) }
-        let labelDays = range == .week ? dayStarts : stride(from: 0, to: dayStarts.count, by: 7).map { dayStarts[$0] }
-        let axisFormat: Date.FormatStyle = range == .week ? .dateTime.weekday(.narrow) : .dateTime.day()
-        let peak = max(days.map(\.kcal).filter(\.isFinite).max() ?? 0, goal, 1)
-
-        return Card(padding: 18) {
-            VStack(alignment: .leading, spacing: 0) {
-                // The Health app's header: what you are looking at, the number, when.
-                Text(selected.map { $0.day.formatted(.dateTime.weekday(.wide).day().month(.wide)) } ?? String(localized: "Daily average"))
-                    .font(.ui(13, .semibold))
-                    .textCase(.uppercase)
-                    .foregroundStyle(Theme.secondary)
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(shown.kcalText)
-                            .font(.number(30))
-                            .foregroundStyle(Theme.ink)
-                            .contentTransition(.numericText(value: shown))
-                        Text("kcal")
-                            .font(.ui(17))
-                            .foregroundStyle(Theme.secondary)
-                    }
-                    if selected == nil, let change = Insights.change(from: before.averageKcal, to: now.averageKcal) {
-                        ChangeLabel(change: change)
-                    }
-                }
-                .padding(.top, 2)
-                Text(selected.map { DayVerdict(kcal: $0.kcal, entries: $0.entries, goal: goal).label ?? "" } ?? Self.span(start, last))
-                    .font(.ui(15))
-                    .foregroundStyle(Theme.secondary)
-                    .padding(.top, 1)
-                    .padding(.bottom, 14)
-
-                Chart {
-                    ForEach(days, id: \.day) { day in
-                        BarMark(
-                            x: .value("Day", day.day, unit: .day),
-                            y: .value("Calories", day.kcal),
-                            width: .ratio(range == .week ? 0.55 : 0.6)
-                        )
-                        .foregroundStyle(day.kcal > goal * 1.05 ? Theme.over : Theme.energy)
-                        .cornerRadius(range == .week ? 5 : 3, style: .continuous)
-                        .opacity(selected == nil || selected?.day == day.day ? 1 : 0.35)
-                    }
-                    RuleMark(y: .value("Goal", goal))
-                        .foregroundStyle(Theme.ink.opacity(0.5))
-                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
-                }
-                .chartXScale(domain: start...today)
-                .chartYScale(domain: 0...(peak * 1.12))
-                .chartXSelection(value: $picked)
-                .chartYAxis {
-                    AxisMarks(position: .trailing, values: [0, goal / 2]) { _ in
-                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                        AxisValueLabel()
-                            .font(.ui(12))
-                    }
-                    // The goal is labeled in ink where its dashed line meets the axis.
-                    AxisMarks(position: .trailing, values: [goal]) { _ in
-                        AxisValueLabel()
-                            .font(.ui(12, .semibold))
-                            .foregroundStyle(Theme.ink)
-                    }
-                }
-                .chartXAxis {
-                    AxisMarks(values: labelDays) { value in
-                        AxisValueLabel(centered: true) {
-                            if let date = value.as(Date.self) {
-                                Text(date, format: axisFormat)
-                                    .font(.ui(12, .medium))
-                            }
-                        }
-                    }
-                }
-                .frame(height: 180)
-                .sensoryFeedback(.selection, trigger: selected?.day)
-                .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText)")
-            }
-        }
-    }
 
     /// "4 to 10 October" (or "October 4 to 10", in the order your region writes dates), and
     /// "28 September to 4 October" across two months.
@@ -201,68 +45,184 @@ struct InsightsView: View {
             ? String(localized: "\(firstDay) to \(lastDay) \(month)")
             : String(localized: "\(month) \(firstDay) to \(lastDay)")
     }
+}
 
-    // MARK: Cards
+/// The two ranges home can show besides a day.
+enum InsightsRange {
+    case week
+    case month
 
-    private func kpis(now: Insights.Period, before: Insights.Period) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Card(padding: 0) {
-                HStack(alignment: .top, spacing: 16) {
-                    StatTile(
-                        label: "On target",
-                        value: "\(now.daysOnTarget)",
-                        unit: "of \(now.loggedDays) days"
-                    )
-                    Rectangle()
-                        .fill(Theme.hairline)
-                        .frame(width: 0.5)
-                    StatTile(
-                        label: "Protein a day",
-                        value: now.averageProtein.kcalText,
-                        unit: "g",
-                        change: Insights.change(from: before.averageProtein, to: now.averageProtein),
-                        higherIsBetter: true
-                    )
+    var days: Int { self == .week ? 7 : 30 }
+    var title: LocalizedStringKey { self == .week ? "Last 7 days" : "Last 30 days" }
+    var foodTitle: LocalizedStringKey { self == .week ? "Your week in food" : "Your month in food" }
+    var comparison: LocalizedStringKey { self == .week ? "vs the 7 days before" : "vs the 30 days before" }
+}
+
+/// Your last 7 or 30 days as a food diary: the daily average and its bars, each day with its
+/// verdict and its food, then your best days and the foods you come back to, ranked the
+/// Brandsearch way. Whole days only: today joins tomorrow.
+struct RangeView<Switcher: View>: View {
+    let range: InsightsRange
+    let entries: [FoodEntry]
+    let goal: Double
+    let targets: MacroTargets
+    let onOpenDay: (Date) -> Void
+    let onSettings: () -> Void
+    @ViewBuilder let switcher: Switcher
+
+    var body: some View {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let start = calendar.date(byAdding: .day, value: -range.days, to: today) ?? today
+        let last = calendar.date(byAdding: .day, value: -1, to: today) ?? today
+        let previousStart = calendar.date(byAdding: .day, value: -range.days, to: start) ?? start
+        let all = InsightsData.summaries(of: entries)
+        let current = all.filter { $0.day >= start && $0.day < today }
+        let previous = all.filter { $0.day >= previousStart && $0.day < start }
+        let now = Insights.period(current, goal: goal)
+        let before = Insights.period(previous, goal: goal)
+        let periodEntries = entries.filter { $0.date >= start && $0.date < today }
+
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                header(start: start, last: last)
+                if now.loggedDays == 0 {
+                    Card(padding: 24) {
+                        Text("Log a few days and they show up here, with your best days ranked.")
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.secondary)
+                            .frame(maxWidth: .infinity)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 18)
+                } else {
+                    averageCard(current, start: start, now: now, before: before)
+                        .padding(.top, 18)
+                    SectionLabel(title: range.foodTitle)
+                        .padding(.top, 28)
+                        .padding(.bottom, 6)
+                    dayRows(current, entries: periodEntries)
+                    bestDays(current)
+                        .padding(.top, 30)
+                    mostEaten(periodEntries)
+                        .padding(.top, 30)
                 }
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 18)
-                .padding(.vertical, 16)
             }
-            Text("Moves compare with the \(range.days) days before. Today joins tomorrow.")
-                .font(.ui(13))
-                .foregroundStyle(Theme.secondary)
-                .padding(.horizontal, 4)
+            .padding(.horizontal, Theme.margin)
+            .padding(.top, 8)
+            .padding(.bottom, 140)
+        }
+        .scrollIndicators(.hidden)
+        .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
+    }
+
+    private func header(start: Date, last: Date) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                switcher
+                Text(InsightsData.span(start, last))
+                    .font(.ui(14))
+                    .foregroundStyle(Theme.secondary)
+            }
+            Spacer(minLength: 0)
+            CircleIconButton(systemImage: "gearshape", label: "Settings", action: onSettings)
         }
     }
 
+    // MARK: Average
+
+    private func averageCard(_ days: [DaySummary], start: Date, now: Insights.Period, before: Insights.Period) -> some View {
+        let calendar = Calendar.current
+        let dayStarts = (0..<range.days).compactMap { calendar.date(byAdding: .day, value: $0, to: start) }
+        let kcal = Dictionary(days.map { ($0.day, $0.kcal) }, uniquingKeysWith: { a, _ in a })
+        let bars = DayBars(days: dayStarts, kcal: kcal, goal: goal)
+        return Card(padding: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(alignment: .bottom, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Daily average")
+                            .font(.ui(13))
+                            .foregroundStyle(Theme.secondary)
+                        HStack(alignment: .firstTextBaseline, spacing: 5) {
+                            Text(now.averageKcal.kcalText)
+                                .font(.number(36))
+                                .numberTracking(36)
+                                .foregroundStyle(Theme.ink)
+                            Text("kcal")
+                                .font(.ui(15))
+                                .foregroundStyle(Theme.secondary)
+                        }
+                        if let change = Insights.change(from: before.averageKcal, to: now.averageKcal) {
+                            HStack(spacing: 5) {
+                                ChangeLabel(change: change)
+                                Text(range.comparison)
+                                    .font(.ui(13))
+                                    .foregroundStyle(Theme.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                    Spacer(minLength: 0)
+                    if range == .week {
+                        bars.frame(width: 120, height: 56)
+                    }
+                }
+                if range == .month {
+                    bars.frame(height: 64)
+                }
+            }
+            .padding(.horizontal, 18)
+            .padding(.vertical, 16)
+        }
+    }
+
+    // MARK: Days
+
+    private func dayRows(_ summaries: [DaySummary], entries: [FoodEntry]) -> some View {
+        let calendar = Calendar.current
+        let byDay = Dictionary(grouping: entries) { calendar.startOfDay(for: $0.date) }
+        let logged = summaries.filter { $0.entries > 0 }.sorted { $0.day > $1.day }
+        return VStack(spacing: 0) {
+            ForEach(logged, id: \.day) { summary in
+                Button { onOpenDay(summary.day) } label: {
+                    DayRow(summary: summary, entries: byDay[summary.day] ?? [], goal: goal)
+                }
+                .buttonStyle(PressableStyle(scale: 0.98))
+            }
+        }
+    }
+
+    // MARK: Ranks
+
     private func bestDays(_ days: [DaySummary]) -> some View {
         let best = Insights.bestDays(days, goal: goal, proteinTarget: targets.protein)
-        return Card(padding: 16) {
-            VStack(alignment: .leading, spacing: 0) {
-                SectionLabel(title: "Best days", detail: "Score out of 100", size: 17)
-                    .padding(.horizontal, -4)
-                    .padding(.bottom, 4)
-                ForEach(Array(best.enumerated()), id: \.offset) { index, item in
-                    if index > 0 { RowDivider(leading: 64) }
-                    HStack(spacing: 10) {
-                        LaurelBadge(rank: index + 1)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(item.day.day.formatted(.dateTime.weekday(.wide).day().month(.wide)))
-                                .font(.ui(17))
-                                .foregroundStyle(Theme.ink)
-                                .lineLimit(1)
-                            Text("\(item.day.kcal.kcalText) kcal · \(item.day.protein.kcalText) g protein")
-                                .font(.ui(15))
-                                .monospacedDigit()
-                                .foregroundStyle(Theme.secondary)
-                                .lineLimit(1)
-                        }
-                        Spacer(minLength: 8)
-                        Text(verbatim: "\(item.score)")
-                            .font(.number(22))
+        return VStack(alignment: .leading, spacing: 0) {
+            SectionLabel(title: "Best days", detail: "Score out of 100")
+                .padding(.bottom, 4)
+            ForEach(Array(best.enumerated()), id: \.offset) { index, item in
+                HStack(spacing: 10) {
+                    LaurelBadge(rank: index + 1)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(item.day.day.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+                            .font(.ui(16, .medium))
                             .foregroundStyle(Theme.ink)
+                            .lineLimit(1)
+                        Text("\(item.day.kcal.kcalText) kcal · \(item.day.protein.kcalText) g protein")
+                            .font(.ui(14))
+                            .monospacedDigit()
+                            .foregroundStyle(Theme.secondary)
+                            .lineLimit(1)
                     }
-                    .padding(.vertical, 10)
+                    Spacer(minLength: 8)
+                    Text(verbatim: "\(item.score)")
+                        .font(.number(22))
+                        .foregroundStyle(Theme.ink)
+                }
+                .padding(.vertical, 11)
+                .overlay(alignment: .top) {
+                    if index > 0 {
+                        Rectangle().fill(Theme.hairline).frame(height: 1).padding(.leading, 64)
+                    }
                 }
             }
         }
@@ -272,36 +232,146 @@ struct InsightsView: View {
         let logs = periodEntries.map { (foodID: $0.foodID, name: $0.name, kcal: $0.totals.kcal) }
         let top = Insights.topFoods(logs)
         let latest = Dictionary(periodEntries.map { ($0.foodID, $0) }, uniquingKeysWith: { _, last in last })
-        return Card(padding: 16) {
-            VStack(alignment: .leading, spacing: 0) {
-                SectionLabel(title: "Most eaten", detail: "Times logged", size: 17)
-                    .padding(.horizontal, -4)
-                    .padding(.bottom, 4)
-                ForEach(Array(top.enumerated()), id: \.offset) { index, food in
-                    if index > 0 { RowDivider(leading: 114) }
-                    HStack(spacing: 10) {
-                        LaurelBadge(rank: index + 1)
-                        if let entry = latest[food.foodID] {
-                            FoodThumb(food: entry.food, size: 40)
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(food.name)
-                                .font(.ui(17))
-                                .foregroundStyle(Theme.ink)
-                                .lineLimit(1)
-                            Text("\(food.kcal.kcalText) kcal in total")
-                                .font(.ui(15))
-                                .monospacedDigit()
-                                .foregroundStyle(Theme.secondary)
-                        }
-                        Spacer(minLength: 8)
-                        Text(verbatim: "×\(food.times)")
-                            .font(.number(20))
-                            .foregroundStyle(Theme.ink)
+        return VStack(alignment: .leading, spacing: 0) {
+            SectionLabel(title: "Most eaten", detail: "Times logged")
+                .padding(.bottom, 4)
+            ForEach(Array(top.enumerated()), id: \.offset) { index, food in
+                HStack(spacing: 10) {
+                    LaurelBadge(rank: index + 1)
+                    if let entry = latest[food.foodID] {
+                        FoodThumb(food: entry.food, size: 44)
                     }
-                    .padding(.vertical, 10)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(food.name)
+                            .font(.ui(16, .medium))
+                            .foregroundStyle(Theme.ink)
+                            .lineLimit(1)
+                        Text("\(food.kcal.kcalText) kcal in total")
+                            .font(.ui(14))
+                            .monospacedDigit()
+                            .foregroundStyle(Theme.secondary)
+                    }
+                    Spacer(minLength: 8)
+                    Text(verbatim: "×\(food.times)")
+                        .font(.number(20))
+                        .foregroundStyle(Theme.ink)
+                }
+                .padding(.vertical, 10)
+                .overlay(alignment: .top) {
+                    if index > 0 {
+                        Rectangle().fill(Theme.hairline).frame(height: 1).padding(.leading, 118)
+                    }
                 }
             }
         }
+    }
+}
+
+/// One day in the diary: its name, a dot for how it went and its calories, then its food.
+private struct DayRow: View {
+    let summary: DaySummary
+    let entries: [FoodEntry]
+    let goal: Double
+
+    private var verdict: DayVerdict {
+        DayVerdict(kcal: summary.kcal, entries: summary.entries, goal: goal)
+    }
+
+    /// Up to four of the day's foods, photos first, each food once.
+    private var pictures: [FoodEntry] {
+        var seen = Set<String>()
+        let unique = entries.filter { seen.insert($0.foodID).inserted }
+        let ranked = unique.enumerated().sorted { a, b in
+            let rankA = a.element.imageData != nil ? 0 : a.element.imageURLString != nil ? 1 : 2
+            let rankB = b.element.imageData != nil ? 0 : b.element.imageURLString != nil ? 1 : 2
+            return (rankA, a.offset) < (rankB, b.offset)
+        }
+        return ranked.prefix(4).map(\.element)
+    }
+
+    private var isOver: Bool {
+        if case .over = verdict { return true }
+        return false
+    }
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(summary.day.formatted(.dateTime.weekday(.abbreviated).day()))
+                    .font(.ui(16, .semibold))
+                    .foregroundStyle(Theme.ink)
+                    .lineLimit(1)
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(verdict.dotColor)
+                        .frame(width: 7, height: 7)
+                    Text(summary.kcal.kcalText)
+                        .font(.ui(13))
+                        .monospacedDigit()
+                        .foregroundStyle(isOver ? Theme.over : Theme.secondary)
+                }
+            }
+            .frame(width: 74, alignment: .leading)
+            HStack(spacing: 6) {
+                ForEach(pictures) { entry in
+                    FoodThumb(food: entry.food, size: 58)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
+        .overlay(alignment: .top) {
+            Rectangle().fill(Theme.hairline).frame(height: 1)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(summary.day.formatted(date: .complete, time: .omitted)), \(summary.kcal.kcalText) kcal, \(verdict.label ?? "")")
+    }
+}
+
+/// The days as thin bars against the goal's dashed line: ink when fine, red when over. They
+/// grow from the baseline when they appear.
+private struct DayBars: View {
+    let days: [Date]
+    let kcal: [Date: Double]
+    let goal: Double
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var grown = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            let size = geometry.size
+            let count = max(days.count, 1)
+            let barWidth: CGFloat = count > 10 ? max(3, (size.width - CGFloat(count - 1) * 3) / CGFloat(count)) : 6
+            let spacing = count > 1 ? (size.width - barWidth * CGFloat(count)) / CGFloat(count - 1) : 0
+            let peak = max(kcal.values.filter(\.isFinite).max() ?? 0, goal, 1) * 1.06
+            let goalY = size.height * (1 - goal / peak)
+            ZStack(alignment: .bottomLeading) {
+                Path { path in
+                    path.move(to: CGPoint(x: 0, y: goalY))
+                    path.addLine(to: CGPoint(x: size.width, y: goalY))
+                }
+                .stroke(Theme.ink.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                ForEach(Array(days.enumerated()), id: \.offset) { index, day in
+                    let value = kcal[day] ?? 0
+                    let height = value > 0 ? max(size.height * value / peak, barWidth) : 0
+                    RoundedRectangle(cornerRadius: barWidth / 2, style: .continuous)
+                        .fill(value > goal * 1.05 ? Theme.over : Theme.ink)
+                        .frame(width: barWidth, height: grown ? height : 0)
+                        .offset(x: CGFloat(index) * (barWidth + spacing))
+                }
+            }
+            .frame(width: size.width, height: size.height, alignment: .bottomLeading)
+        }
+        .onAppear {
+            if reduceMotion {
+                grown = true
+            } else {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.85).delay(0.1)) { grown = true }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText)")
     }
 }

@@ -97,7 +97,7 @@ struct SavedFoodEditor: View {
             }
             .fullScreenCover(isPresented: $showCamera) {
                 CameraPicker { image in
-                    photoData = ImageTools.jpeg(image, maxSide: 600)
+                    photoData = ImageTools.jpeg(image, maxSide: 1000, quality: 0.7)
                     usesPhoto = photoData != nil
                 }
                 .ignoresSafeArea()
@@ -129,8 +129,19 @@ struct SavedFoodEditor: View {
                     .multilineTextAlignment(.center)
             }
             if let kcal = previewKcal {
-                KcalPill(kcal: kcal)
-                    .padding(.top, 6)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(kcal.kcalText)
+                        .font(.number(20))
+                        .foregroundStyle(Theme.ink)
+                        .contentTransition(.numericText(value: kcal))
+                    Text("kcal")
+                        .font(.ui(15))
+                        .foregroundStyle(Theme.secondary)
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 40)
+                .background(Theme.fill, in: Capsule())
+                .padding(.top, 6)
             }
         }
         .frame(maxWidth: .infinity)
@@ -222,28 +233,45 @@ struct SavedFoodEditor: View {
     }
 
     private var photoChoices: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             if productImageURL != nil {
                 Button {
                     photoData = nil
                 } label: {
-                    Label("Product", systemImage: "shippingbox")
+                    choice("Product", systemImage: "shippingbox")
                 }
-                .buttonStyle(SoftButtonStyle(height: 40))
+                .buttonStyle(PressableStyle())
             }
             Button {
                 showCamera = true
             } label: {
-                Label("Take", systemImage: "camera")
+                choice("Take", systemImage: "camera")
             }
-            .buttonStyle(SoftButtonStyle(height: 40))
+            .buttonStyle(PressableStyle())
             .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera))
 
             PhotosPicker(selection: $pickedPhoto, matching: .images) {
-                Label("Choose", systemImage: "photo")
+                choice("Choose", systemImage: "photo")
             }
-            .buttonStyle(SoftButtonStyle(height: 40))
+            .buttonStyle(PressableStyle())
         }
+    }
+
+    /// A photo source as a soft tile: its icon over its word, so three fit side by side in any
+    /// language.
+    private func choice(_ title: LocalizedStringKey, systemImage: String) -> some View {
+        VStack(spacing: 5) {
+            Image(systemName: systemImage)
+                .font(.system(size: 18, weight: .regular))
+            Text(title)
+                .font(.ui(13, .medium))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .foregroundStyle(Theme.ink)
+        .frame(maxWidth: .infinity)
+        .frame(height: 62)
+        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
     // MARK: Words
@@ -312,7 +340,7 @@ struct SavedFoodEditor: View {
                 Text("Per serving")
                     .font(.ui(17, .semibold))
                     .foregroundStyle(Theme.ink)
-                numberField("Calories", unit: "kcal", text: $kcalText, icon: AnyView(IconCircle(systemImage: "flame.fill", color: Theme.energy, fill: Theme.energySoft, size: 28)))
+                numberField("Calories", unit: "kcal", text: $kcalText, icon: AnyView(IconCircle(systemImage: "flame.fill", color: Theme.energy, fill: Theme.energy.opacity(0.14), size: 28)))
                 numberField("Protein", unit: "g", text: $proteinText, icon: AnyView(MacroIcon(macro: .protein)))
                 numberField("Carbs", unit: "g", text: $carbsText, icon: AnyView(MacroIcon(macro: .carbs)))
                 numberField("Fat", unit: "g", text: $fatText, icon: AnyView(MacroIcon(macro: .fat)))
@@ -380,7 +408,7 @@ struct SavedFoodEditor: View {
         guard let item,
               let data = try? await item.loadTransferable(type: Data.self),
               let image = UIImage(data: data) else { return }
-        photoData = ImageTools.jpeg(image, maxSide: 600)
+        photoData = ImageTools.jpeg(image, maxSide: 1000, quality: 0.7)
         usesPhoto = photoData != nil
     }
 

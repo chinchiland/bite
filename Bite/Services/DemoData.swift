@@ -3,8 +3,9 @@ import Foundation
 import SwiftData
 import UIKit
 
-/// A believable week of logs for previews and screenshots. Launch with `-demo` to use it;
-/// it lives in memory and never touches your real log.
+/// A believable two weeks of logs for previews and screenshots. Launch with `-demo` to use it;
+/// it lives in memory and never touches your real log. The plate photos are from Unsplash and
+/// ship in Debug builds only.
 enum DemoData {
     /// Real Open Food Facts data for Danone's skyr, so the demo shows what a scan returns.
     static let skyr = Food(
@@ -55,7 +56,18 @@ enum DemoData {
         ]
     )
 
-    /// A stand-in plate photo for screenshots, drawn so it needs no file or camera.
+    /// A bundled plate photo, as JPEG data.
+    static func photo(_ name: String) -> Data? {
+        guard let url = Bundle.main.url(forResource: "demo-\(name)", withExtension: "jpg") else { return nil }
+        return try? Data(contentsOf: url)
+    }
+
+    /// The salmon bowl as a camera would hand it over, for the photo estimate screenshots.
+    static func plateImage() -> UIImage {
+        photo("salmon-bowl").flatMap(UIImage.init(data:)) ?? platePhoto()
+    }
+
+    /// A stand-in plate photo drawn in code, for when the bundled photos are missing.
     static func platePhoto(size: CGSize = CGSize(width: 900, height: 900)) -> UIImage {
         UIGraphicsImageRenderer(size: size).image { context in
             let rect = CGRect(origin: .zero, size: size)
@@ -64,10 +76,6 @@ enum DemoData {
             let plate = rect.insetBy(dx: size.width * 0.08, dy: size.height * 0.08)
             UIColor(white: 0.97, alpha: 1).setFill()
             UIBezierPath(ovalIn: plate).fill()
-            UIColor(white: 0.9, alpha: 1).setStroke()
-            let rim = UIBezierPath(ovalIn: plate.insetBy(dx: size.width * 0.07, dy: size.height * 0.07))
-            rim.lineWidth = 6
-            rim.stroke()
             let foods: [(String, CGFloat, CGFloat, CGFloat)] = [
                 ("🥬", 0.34, 0.40, 0.28), ("🐟", 0.62, 0.38, 0.28), ("🥚", 0.40, 0.66, 0.22), ("🌽", 0.64, 0.64, 0.22),
             ]
@@ -95,6 +103,20 @@ enum DemoData {
         return container
     }
 
+    /// A plate Claude estimated, with its photo: one serving.
+    private static func plate(_ key: String, _ name: String, emoji: String, kcal: Double, protein: Double, carbs: Double, fat: Double) -> Food {
+        Food(
+            id: "demo:\(key)",
+            name: name,
+            emoji: emoji,
+            source: .ai,
+            unit: .serving,
+            per: 1,
+            nutrients: Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat),
+            imageData: photo(key)
+        )
+    }
+
     @MainActor static func seed(_ context: ModelContext) {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
@@ -103,10 +125,10 @@ enum DemoData {
             BasicFoods.index.first { $0.key == name }?.food
         }
 
-        func log(_ food: Food?, _ amount: Double, _ meal: Meal, daysAgo: Int, at hour: Int) {
+        func log(_ food: Food?, _ amount: Double, _ meal: Meal, daysAgo: Int, at hour: Int, _ minute: Int) {
             guard let food,
                   let day = calendar.date(byAdding: .day, value: -daysAgo, to: today),
-                  let date = calendar.date(bySettingHour: hour, minute: 10, second: 0, of: day) else { return }
+                  let date = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) else { return }
             context.insert(FoodEntry(food: food, amount: amount, meal: meal, date: date))
         }
 
@@ -121,16 +143,24 @@ enum DemoData {
             )
         }
 
-        // Today, early afternoon: breakfast, lunch and a snack.
-        log(skyr, 120, .breakfast, daysAgo: 0, at: 8)
-        log(basic("Banana"), 118, .breakfast, daysAgo: 0, at: 8)
-        log(basic("Coffee, black"), 240, .breakfast, daysAgo: 0, at: 8)
-        log(estimate.food(imageData: ImageTools.jpeg(platePhoto(), maxSide: 600)), 1, .lunch, daysAgo: 0, at: 12)
-        log(basic("Almonds"), 28, .snack, daysAgo: 0, at: 16)
-        log(toblerone, 25, .snack, daysAgo: 0, at: 16)
+        let saladBowl = estimate.food(imageData: photo("salmon-bowl") ?? ImageTools.jpeg(platePhoto(), maxSide: 600))
+        let buddha = plate("buddha-bowl", tr("Buddha bowl"), emoji: "🥗", kcal: 620, protein: 22, carbs: 70, fat: 26)
+        let steak = plate("steak", tr("Steak and greens"), emoji: "🥩", kcal: 690, protein: 45, carbs: 30, fat: 40)
+        let salmonPlate = plate("salmon-plate", tr("Salmon with vegetables"), emoji: "🐟", kcal: 640, protein: 38, carbs: 28, fat: 38)
+        let eggBowl = plate("egg-bowl", tr("Eggs and greens"), emoji: "🍳", kcal: 420, protein: 24, carbs: 18, fat: 27)
+        let pizza = plate("pizza", tr("Pizza"), emoji: "🍕", kcal: 780, protein: 30, carbs: 92, fat: 30)
+        let lunchOut = quick(tr("Lunch out"), kcal: 780, protein: 38, carbs: 85, fat: 30)
 
-        // Two weeks before today: yesterday and the day before on target (a streak), the
-        // week before eating a little more, so Week shows moves.
+        // Today, early afternoon: breakfast, the salmon bowl for lunch (the cover), a snack.
+        log(skyr, 120, .breakfast, daysAgo: 0, at: 8, 10)
+        log(basic("Banana"), 118, .breakfast, daysAgo: 0, at: 8, 10)
+        log(basic("Coffee, black"), 240, .breakfast, daysAgo: 0, at: 8, 10)
+        log(saladBowl, 1, .lunch, daysAgo: 0, at: 12, 40)
+        log(basic("Almonds"), 28, .snack, daysAgo: 0, at: 16, 10)
+        log(toblerone, 25, .snack, daysAgo: 0, at: 16, 10)
+
+        // Two weeks before today, each day landing where `scale` puts it: yesterday and the day
+        // before on target (a streak), the week before eating a little more, so Week shows moves.
         let days: [(breakfast: Double, lunch: Double, dinner: Double)] = [
             (breakfast: 1.0, lunch: 1.25, dinner: 1.1),
             (breakfast: 1.0, lunch: 1.3, dinner: 1.2),
@@ -149,15 +179,42 @@ enum DemoData {
         ]
         for (index, scale) in days.enumerated() {
             let daysAgo = index + 1
-            log(basic("Oats"), 60 * scale.breakfast, .breakfast, daysAgo: daysAgo, at: 8)
-            log(basic("Milk, semi-skimmed"), 200, .breakfast, daysAgo: daysAgo, at: 8)
-            log(basic("Blueberries"), 80, .breakfast, daysAgo: daysAgo, at: 8)
-            log(quick(tr("Lunch out"), kcal: 780 * scale.lunch, protein: 38, carbs: 85, fat: 30), 1, .lunch, daysAgo: daysAgo, at: 12)
-            log(basic("Pasta, cooked"), 220 * scale.dinner, .dinner, daysAgo: daysAgo, at: 19)
-            log(basic("Tomato sauce"), 132, .dinner, daysAgo: daysAgo, at: 19)
-            log(basic("Parmesan"), 15, .dinner, daysAgo: daysAgo, at: 19)
-            log(basic("Dark chocolate"), 20, .snack, daysAgo: daysAgo, at: 21)
+            let target = 370 * scale.breakfast + 780 * scale.lunch + 445 * scale.dinner + 120
+
+            let breakfast: [(Food?, Double)] = switch index % 4 {
+            case 0: [(basic("Oats"), 60 * scale.breakfast), (basic("Milk, semi-skimmed"), 200), (basic("Blueberries"), 80)]
+            case 1: [(skyr, 150), (basic("Banana"), 118), (basic("Granola"), 30 * scale.breakfast)]
+            case 2: [(eggBowl, scale.breakfast * 0.9)]
+            default: [(basic("Croissant"), 60), (basic("Coffee, black"), 240), (basic("Orange juice"), 200 * scale.breakfast)]
+            }
+            let lunch: [(Food?, Double)] = switch index % 5 {
+            case 0: [(buddha, 1)]
+            case 1: [(steak, 1)]
+            case 2: [(lunchOut, 1)]
+            case 3: [(saladBowl, 1)]
+            default: [(salmonPlate, 1)]
+            }
+            let dinner: [(Food?, Double)] = switch index % 3 {
+            case 0: [(basic("Pasta, cooked"), 220), (basic("Tomato sauce"), 132), (basic("Parmesan"), 15)]
+            case 1: [(pizza, 1)]
+            default: [(basic("Chicken breast, cooked"), 150), (basic("Rice, cooked"), 180), (basic("Broccoli"), 120)]
+            }
+            let snack: [(Food?, Double)] = index % 2 == 0 ? [(basic("Dark chocolate"), 20)] : [(basic("Almonds"), 28)]
+
+            // Lunch and dinner stretch or shrink so the day lands on its target.
+            func kcal(_ items: [(Food?, Double)]) -> Double {
+                items.reduce(0) { $0 + ($1.0?.nutrients(for: $1.1).kcal ?? 0) }
+            }
+            let fixed = kcal(breakfast) + kcal(snack)
+            let flexible = kcal(lunch) + kcal(dinner)
+            let factor = flexible > 0 ? min(max((target - fixed) / flexible, 0.5), 2) : 1
+
+            for item in breakfast { log(item.0, item.1, .breakfast, daysAgo: daysAgo, at: 8, 5) }
+            for item in lunch { log(item.0, item.1 * factor, .lunch, daysAgo: daysAgo, at: 12, 50) }
+            for item in dinner { log(item.0, item.1 * factor, .dinner, daysAgo: daysAgo, at: 19, 40) }
+            for item in snack { log(item.0, item.1, .snack, daysAgo: daysAgo, at: 21, 15) }
         }
+
         // A shelf of foods you eat often, each looking the way you chose.
         let shake = Food(
             id: "saved:protein-shake",
@@ -173,6 +230,7 @@ enum DemoData {
             (skyr, 120, .breakfast, tr("with honey")),
             (basic("Banana"), 118, nil, nil),
             (shake, 1, .snack, tr("after the gym")),
+            (buddha, 1, .lunch, nil),
             (basic("Coffee, black"), 240, .breakfast, nil),
             (basic("Almonds"), 28, .snack, nil),
         ]

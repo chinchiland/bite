@@ -3,7 +3,7 @@ import UIKit
 
 // MARK: - Containers
 
-/// A card on the page. Everything on a screen lives in one.
+/// A white card on the paper, edged with a hairline so it reads without a shadow.
 struct Card<Content: View>: View {
     var padding: CGFloat = 16
     @ViewBuilder var content: Content
@@ -13,10 +13,14 @@ struct Card<Content: View>: View {
             .padding(padding)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous)
+                    .strokeBorder(Theme.edge, lineWidth: 1)
+            }
     }
 }
 
-/// The soft box inside a card, for the quieter facts that belong together.
+/// The soft box for the quieter facts that belong together.
 struct InsetBox<Content: View>: View {
     var padding: CGFloat = 12
     @ViewBuilder var content: Content
@@ -29,8 +33,7 @@ struct InsetBox<Content: View>: View {
     }
 }
 
-/// A title with an optional quiet detail on the right. 20 pt above a card or shelf, 17 pt as
-/// the header inside a card.
+/// A title with an optional quiet detail on the right. 20 pt for a section, 17 pt inside one.
 struct SectionLabel: View {
     let title: LocalizedStringKey
     var detail: LocalizedStringKey? = nil
@@ -44,11 +47,10 @@ struct SectionLabel: View {
             Spacer()
             if let detail {
                 Text(detail)
-                    .font(.ui(15))
+                    .font(.ui(14))
                     .foregroundStyle(Theme.secondary)
             }
         }
-        .padding(.horizontal, 4)
     }
 }
 
@@ -59,16 +61,16 @@ struct RowDivider: View {
     var body: some View {
         Rectangle()
             .fill(Theme.hairline)
-            .frame(height: 0.5)
+            .frame(height: 1)
             .padding(.leading, leading)
     }
 }
 
 // MARK: - Buttons
 
-/// The one filled button on a screen: ink capsule, page-colored label.
+/// The one filled button on a screen: an ink capsule with paper words.
 struct PrimaryButtonStyle: ButtonStyle {
-    var height: CGFloat = 52
+    var height: CGFloat = 56
 
     func makeBody(configuration: Configuration) -> some View {
         PrimaryLabel(configuration: configuration, height: height)
@@ -81,8 +83,9 @@ struct PrimaryButtonStyle: ButtonStyle {
 
         var body: some View {
             configuration.label
-                .font(.ui(17, .semibold))
+                .font(.ui(17, .medium))
                 .foregroundStyle(Theme.page)
+                .lineLimit(1)
                 .frame(maxWidth: .infinity, minHeight: height)
                 .background(Theme.ink, in: Capsule())
                 .opacity(isEnabled ? (configuration.isPressed ? 0.85 : 1) : 0.3)
@@ -92,7 +95,7 @@ struct PrimaryButtonStyle: ButtonStyle {
     }
 }
 
-/// A quiet button: soft fill, ink label. For everything that is not the main action.
+/// A quiet button: soft fill, ink words. For everything that is not the main action.
 struct SoftButtonStyle: ButtonStyle {
     var height: CGFloat = 44
     var tint: Color = Theme.ink
@@ -119,7 +122,7 @@ struct PressableStyle: ButtonStyle {
     }
 }
 
-/// A selectable pill, used for portion presets and filters.
+/// A selectable pill, for portions and filters: ink when chosen, soft otherwise.
 struct ChipButtonStyle: ButtonStyle {
     var isSelected: Bool
 
@@ -127,8 +130,9 @@ struct ChipButtonStyle: ButtonStyle {
         configuration.label
             .font(.ui(15, .medium))
             .foregroundStyle(isSelected ? Theme.page : Theme.ink)
-            .padding(.horizontal, 14)
-            .frame(height: 34)
+            .lineLimit(1)
+            .padding(.horizontal, 15)
+            .frame(height: 36)
             .background(isSelected ? Theme.ink : Theme.fill, in: Capsule())
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
@@ -154,7 +158,7 @@ struct StepButton: View {
     }
 }
 
-/// A round header button: card circle, outline icon.
+/// A round header button on paper: soft circle, outline icon.
 struct CircleIconButton: View {
     let systemImage: String
     let label: LocalizedStringKey
@@ -163,10 +167,10 @@ struct CircleIconButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: systemImage)
-                .font(.system(size: 18, weight: .regular))
+                .font(.system(size: 17, weight: .regular))
                 .foregroundStyle(Theme.ink)
-                .frame(width: 40, height: 40)
-                .background(Theme.card, in: Circle())
+                .frame(width: 38, height: 38)
+                .background(Theme.fill, in: Circle())
         }
         .buttonStyle(PressableStyle(scale: 0.9))
         .accessibilityLabel(label)
@@ -176,18 +180,20 @@ struct CircleIconButton: View {
 /// The meal picker beside the main button: the meal's name and the up-down chevrons.
 struct MealMenuLabel: View {
     let title: String
-    var height: CGFloat = 52
+    var height: CGFloat = 56
 
     var body: some View {
         HStack(spacing: 6) {
             Text(title)
-                .font(.ui(17, .medium))
+                .font(.ui(16, .medium))
                 .foregroundStyle(Theme.ink)
+                .lineLimit(1)
+                .fixedSize()
             Image(systemName: "chevron.up.chevron.down")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Theme.secondary)
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 18)
         .frame(height: height)
         .background(Theme.fill, in: Capsule())
     }
@@ -197,7 +203,7 @@ struct MealMenuLabel: View {
 struct BookmarkButton: View {
     let isSaved: Bool
     let action: () -> Void
-    var size: CGFloat = 52
+    var size: CGFloat = 56
 
     var body: some View {
         Button(action: action) {
@@ -226,7 +232,7 @@ struct TintChip: View {
 
     let title: String
     var style: Style = .neutral
-    /// An SF Symbol before the words, in `iconColor` or the chip's text color.
+    /// An SF Symbol before the words, in `iconColor` or the chip's own icon color.
     var systemImage: String? = nil
     var iconColor: Color? = nil
 
@@ -235,15 +241,15 @@ struct TintChip: View {
             if let systemImage {
                 Image(systemName: systemImage)
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(iconColor ?? textColor)
+                    .foregroundStyle(iconColor ?? defaultIconColor)
             }
             Text(title)
-                .font(.ui(15, .medium))
+                .font(.ui(13, .medium))
                 .foregroundStyle(textColor)
                 .lineLimit(1)
         }
-        .padding(.horizontal, 12)
-        .frame(height: 30)
+        .padding(.horizontal, 11)
+        .frame(height: 32)
         .background(fillColor, in: Capsule())
     }
 
@@ -254,6 +260,10 @@ struct TintChip: View {
         case .watch: Theme.watchText
         case .info: Theme.infoText
         }
+    }
+
+    private var defaultIconColor: Color {
+        style == .good ? Theme.goodIcon : textColor
     }
 
     private var fillColor: Color {
@@ -273,10 +283,15 @@ extension Highlight.Kind {
         case .watch: .watch
         }
     }
+
+    /// A leaf for good news, nothing for the rest: the words carry it.
+    var chipSymbol: String? {
+        self == .good ? "leaf" : nil
+    }
 }
 
 extension DayVerdict {
-    /// The chip for a past day: on target is good news, over is worth a look, light is a fact.
+    /// The chip for a day: on target is good news, over is worth a look, light is a fact.
     var chipStyle: TintChip.Style {
         switch self {
         case .onTarget: .good
@@ -355,9 +370,9 @@ struct MacroIcon: View {
 
 // MARK: - Food visuals
 
-/// How a food looks everywhere in the app. A product photo is shown whole on a light tile,
-/// its white background melting into the tile. A photo you took fills the tile. A basic food
-/// is its emoji on its pastel. One shape and one corner for all three, so lists read as a set.
+/// How a food looks everywhere in the app. A product photo stands whole on a white tile, its
+/// white background melting into it. A photo you took fills the tile. A basic food is its
+/// emoji on its pastel. One shape for all three, so a row of them reads as a set.
 struct FoodThumb: View {
     let imageData: Data?
     let imageURL: URL?
@@ -377,20 +392,32 @@ struct FoodThumb: View {
         self.init(imageData: food.imageData, imageURL: food.imageURL, emoji: food.emoji, tint: food.displayTint, size: size)
     }
 
+    static func radius(for size: CGFloat) -> CGFloat {
+        size * 0.19
+    }
+
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: size * 0.28, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: Self.radius(for: size), style: .continuous)
         content
             .frame(width: size, height: size)
             .clipShape(shape)
+            .overlay {
+                if imageData == nil, imageURL != nil {
+                    shape.strokeBorder(Theme.edge, lineWidth: 1)
+                }
+            }
             .accessibilityHidden(true)
     }
 
     @ViewBuilder private var content: some View {
         if let data = imageData, let photo = UIImage(data: data) {
-            Image(uiImage: photo)
-                .resizable()
-                .scaledToFill()
-                .frame(width: size, height: size)
+            Color.clear
+                .overlay {
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipped()
         } else if let imageURL {
             ZStack {
                 Theme.photoTile
@@ -399,7 +426,7 @@ struct FoodThumb: View {
                         image
                             .resizable()
                             .scaledToFit()
-                            .padding(size * 0.08)
+                            .padding(size * 0.1)
                             .blendMode(.multiply)
                     } else {
                         emojiFace("🛒")
@@ -418,7 +445,7 @@ struct FoodThumb: View {
 
     private func emojiFace(_ emoji: String) -> some View {
         Text(emoji)
-            .font(.system(size: size * 0.5))
+            .font(.system(size: size * 0.45))
     }
 }
 
@@ -444,95 +471,22 @@ struct ProgressBar: View {
     }
 }
 
-/// One bar split by where the calories come from: protein, carbs, fat.
-struct MacroSplitBar: View {
-    let nutrients: Nutrients
-    var height: CGFloat = 5
-
-    private var parts: [(share: Double, color: Color)] {
-        let split = nutrients.energySplit
-        let all: [(share: Double, color: Color)] = [
-            (share: split.protein, color: Theme.protein),
-            (share: split.carbs, color: Theme.carbs),
-            (share: split.fat, color: Theme.fat),
-        ]
-        return all.filter { $0.share > 0.005 }
-    }
-
-    var body: some View {
-        let segments = parts
-        GeometryReader { geometry in
-            let gaps = CGFloat(max(segments.count - 1, 0)) * 2
-            HStack(spacing: 2) {
-                if segments.isEmpty {
-                    Rectangle().fill(Theme.track)
-                }
-                ForEach(segments.indices, id: \.self) { index in
-                    Rectangle()
-                        .fill(segments[index].color)
-                        .frame(width: max(0, (geometry.size.width - gaps) * segments[index].share))
-                }
-            }
-        }
-        .frame(height: height)
-        .clipShape(Capsule())
-        .animation(.smooth(duration: 0.4), value: nutrients.kcal)
-        .accessibilityHidden(true)
-    }
-}
-
-/// A number with its label above, its unit beside it and, when there is a past to compare,
-/// the move since.
-struct StatTile: View {
-    let label: LocalizedStringKey
-    let value: String
-    var unit: LocalizedStringKey? = nil
-    var change: Double? = nil
-    /// Whether a rise is good news. Nil keeps the change neutral.
-    var higherIsBetter: Bool? = nil
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(label)
-                .font(.ui(13))
-                .foregroundStyle(Theme.secondary)
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(value)
-                    .font(.number(24))
-                    .foregroundStyle(Theme.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                if let unit {
-                    Text(unit)
-                        .font(.ui(15))
-                        .foregroundStyle(Theme.secondary)
-                        .lineLimit(1)
-                }
-                if let change {
-                    ChangeLabel(change: change, higherIsBetter: higherIsBetter)
-                        .padding(.leading, 4)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
 /// "▼ 4%": the move, colored only when its direction is good or bad news.
 struct ChangeLabel: View {
     let change: Double
     var higherIsBetter: Bool? = nil
+    var size: CGFloat = 13
 
     var body: some View {
         let rising = change >= 0
         let color = higherIsBetter.map { $0 == rising ? Theme.goodText : Theme.watchText } ?? Theme.secondary
-        HStack(spacing: 3) {
+        HStack(spacing: 4) {
             Image(systemName: rising ? "arrowtriangle.up.fill" : "arrowtriangle.down.fill")
-                .font(.system(size: 9))
+                .font(.system(size: size * 0.6))
             Text("\((abs(change) * 100).safeInt)%")
                 .monospacedDigit()
         }
-        .font(.ui(15, .medium))
+        .font(.ui(size, .medium))
         .foregroundStyle(color)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(rising ? "Up \((abs(change) * 100).safeInt) percent" : "Down \((abs(change) * 100).safeInt) percent")
@@ -586,8 +540,8 @@ struct FlowLayout: Layout {
 // MARK: - Glass and transitions
 
 extension View {
-    /// Chrome that floats over content (the dock, the toast, pills on a photo): Liquid Glass
-    /// on iOS 26, frosted material with a hairline edge before it. Never a drop shadow.
+    /// Chrome that floats over content (the dock, the toast): Liquid Glass on iOS 26, frosted
+    /// material with a hairline edge before it. Never a drop shadow.
     @ViewBuilder func floatingGlass<S: Shape>(in shape: S) -> some View {
         #if compiler(>=6.2)
         if #available(iOS 26.0, *) {

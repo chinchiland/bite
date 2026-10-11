@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Your saved foods in a row. One tap adds to today; press and hold to edit or remove.
+/// Your saved foods in a row of tiles. One tap adds to today; press and hold to edit or remove.
 struct SavedShelf: View {
     let saved: [SavedFood]
     let onAdd: (SavedFood) -> Void
@@ -9,10 +9,10 @@ struct SavedShelf: View {
     let onNew: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             SectionLabel(title: "Saved", detail: saved.isEmpty ? nil : "Tap to add")
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
+                HStack(alignment: .top, spacing: 10) {
                     ForEach(saved) { item in
                         SavedTile(item: item) { onAdd(item) }
                             .contextMenu {
@@ -22,9 +22,8 @@ struct SavedShelf: View {
                     }
                     NewSavedTile(isFirst: saved.isEmpty, action: onNew)
                 }
-                .padding(.horizontal, Theme.margin)
             }
-            .padding(.horizontal, -Theme.margin)
+            .scrollClipDisabled()
         }
     }
 }
@@ -39,26 +38,22 @@ private struct SavedTile: View {
             taps += 1
             action()
         } label: {
-            VStack(spacing: 6) {
-                FoodThumb(food: item.food, size: 60)
-                    .padding(.bottom, 1)
+            VStack(alignment: .leading, spacing: 0) {
+                FoodThumb(food: item.food, size: 76)
                 Text(item.name)
-                    .font(.ui(15, .medium))
+                    .font(.ui(13, .medium))
                     .foregroundStyle(Theme.ink)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .frame(height: 38, alignment: .top)
+                    .lineLimit(1)
+                    .padding(.top, 7)
                 Text("\(item.totals.kcal.kcalText) kcal")
-                    .font(.ui(13))
+                    .font(.ui(12))
                     .monospacedDigit()
                     .foregroundStyle(Theme.secondary)
+                    .padding(.top, 1)
             }
-            .padding(.horizontal, 8)
-            .frame(width: 102)
-            .padding(.vertical, 12)
-            .background(Theme.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .frame(width: 76, alignment: .leading)
         }
-        .buttonStyle(PressableStyle(scale: 0.9))
+        .buttonStyle(PressableStyle(scale: 0.92))
         .sensoryFeedback(.success, trigger: taps)
         .accessibilityLabel("Add \(item.name), \(item.totals.kcal.kcalText) calories")
     }
@@ -70,29 +65,29 @@ private struct NewSavedTile: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 6) {
+            VStack(alignment: .leading, spacing: 0) {
                 Image(systemName: isFirst ? "bookmark" : "plus")
                     .font(.system(size: 20, weight: .regular))
                     .foregroundStyle(Theme.ink)
-                    .frame(width: 60, height: 60)
-                    .background(Theme.fill, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
-                    .padding(.bottom, 1)
+                    .frame(width: 76, height: 76)
+                    .background {
+                        RoundedRectangle(cornerRadius: FoodThumb.radius(for: 76), style: .continuous)
+                            .strokeBorder(Theme.tertiary, style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    }
                 Text(isFirst ? "Save a food" : "New")
-                    .font(.ui(15, .medium))
+                    .font(.ui(13, .medium))
                     .foregroundStyle(Theme.ink)
-                    .frame(height: 38, alignment: .top)
+                    .lineLimit(1)
+                    .padding(.top, 7)
                 Text(isFirst ? "one tap to add" : " ")
-                    .font(.ui(13))
+                    .font(.ui(12))
                     .foregroundStyle(Theme.secondary)
+                    .lineLimit(1)
+                    .padding(.top, 1)
             }
-            .frame(width: 102)
-            .padding(.vertical, 12)
-            .background {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(Theme.tertiary, style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-            }
+            .frame(width: isFirst ? 120 : 76, alignment: .leading)
         }
-        .buttonStyle(PressableStyle(scale: 0.9))
+        .buttonStyle(PressableStyle(scale: 0.92))
         .accessibilityLabel(isFirst ? "Save a food for one tap adding" : "New saved food")
     }
 }

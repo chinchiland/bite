@@ -28,6 +28,7 @@ NOT_WORDS = re.compile(
       | [A-Z]                                       # Nutri-Score letters
       | %@|%@\ %@|%@\ (g|kcal|ml)|\+%@|\ /\ %@\ g|×%lld|%lld|\#%lld|%@\ ·\ %@|100\ %@
       | (g|kcal|ml|cm|kg)
+      | DMSans(-\w+)?                              # the font file and its PostScript name
     )$""",
     re.X,
 )
@@ -136,7 +137,7 @@ def main() -> int:
                     before = line[:start]
                     if not (re.search(r"\btr\($", before) or re.search(r"String\(localized:\s*$", before) or in_views):
                         continue
-                    if re.search(r"(verbatim|systemImage|systemName|forKey|named|id|comment):\s*$", before):
+                    if re.search(r"(verbatim|systemImage|systemName|forKey|forResource|withExtension|named|id|comment):\s*$", before):
                         continue
                     if re.search(r"(AppStorage|Image)\($", before) or re.search(r"case\s+$", before):
                         continue

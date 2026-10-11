@@ -90,6 +90,10 @@ jobs:
           shoot 19-today-es -onboarded YES -AppleLanguages "(es)" -AppleLocale es_ES
           shoot 20-week-es -onboarded YES -screen week -AppleLanguages "(es)" -AppleLocale es_ES
           shoot 21-estimate-es -onboarded YES -screen estimate -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 22-today-end -onboarded YES -anchor bottom
+          shoot 23-yesterday -onboarded YES -screen yesterday
+          shoot 24-week-end -onboarded YES -screen week -anchor bottom
+          shoot 25-food-plate -onboarded YES -screen plate
 
       - uses: actions/upload-artifact@v4
         with:

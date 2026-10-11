@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The floating dock at the bottom of Today: search on the left, the scan shutter raised in
-/// the middle, quick add on the right. The shutter is the one thing on the screen that moves.
+/// The floating dock at the bottom of home: search on the left, the ink Scan capsule in the
+/// middle with its laser sweeping, quick add on the right.
 struct ScanDock: View {
     let namespace: Namespace.ID
     let onSearch: () -> Void
@@ -10,13 +10,12 @@ struct ScanDock: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            DockButton(systemImage: "magnifyingglass", title: "Search", action: onSearch)
-            ShutterButton(action: onScan)
+            DockButton(systemImage: "magnifyingglass", label: "Search", action: onSearch)
+            ScanCapsule(action: onScan)
                 .zoomSource(id: "scan", in: namespace)
-                .offset(y: -14)
-                .frame(width: 92)
-            DockButton(systemImage: "plus", title: "Quick add", action: onQuickAdd)
+            DockButton(systemImage: "plus", label: "Quick add", action: onQuickAdd)
         }
+        .padding(.horizontal, 7)
         .frame(height: 62)
         .floatingGlass(in: Capsule())
         .padding(.horizontal, 40)
@@ -25,27 +24,24 @@ struct ScanDock: View {
 
 private struct DockButton: View {
     let systemImage: String
-    let title: LocalizedStringKey
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 3) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 20, weight: .regular))
-                Text(title)
-                    .font(.ui(12, .medium))
-            }
-            .foregroundStyle(Theme.ink)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .contentShape(Rectangle())
+            Image(systemName: systemImage)
+                .font(.system(size: 21, weight: .regular))
+                .foregroundStyle(Theme.ink)
+                .frame(maxWidth: .infinity, minHeight: 48)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(PressableStyle(scale: 0.9))
+        .buttonStyle(PressableStyle(scale: 0.88))
+        .accessibilityLabel(label)
     }
 }
 
-/// The big round scan button: a live barcode with a laser sweeping across it.
-struct ShutterButton: View {
+/// The main way in: an ink capsule with a live barcode and its red laser, and the word Scan.
+private struct ScanCapsule: View {
     let action: () -> Void
     @State private var taps = 0
 
@@ -54,15 +50,20 @@ struct ShutterButton: View {
             taps += 1
             action()
         } label: {
-            // The page-colored ring cuts the shutter out of the dock, so it needs no shadow.
-            ScanGlyph(color: Theme.page)
-                .frame(width: 30, height: 26)
-                .frame(width: 66, height: 66)
-                .background(Theme.ink, in: Circle())
-                .padding(5)
-                .background(Theme.page, in: Circle())
+            HStack(spacing: 9) {
+                ScanGlyph(color: Theme.page)
+                    .frame(width: 22, height: 19)
+                Text("Scan")
+                    .font(.ui(16, .semibold))
+                    .foregroundStyle(Theme.page)
+                    .lineLimit(1)
+                    .fixedSize()
+            }
+            .padding(.horizontal, 24)
+            .frame(height: 48)
+            .background(Theme.ink, in: Capsule())
         }
-        .buttonStyle(PressableStyle(scale: 0.9))
+        .buttonStyle(PressableStyle(scale: 0.94))
         .sensoryFeedback(.impact(weight: .medium), trigger: taps)
         .accessibilityLabel("Scan food")
         .accessibilityHint("Opens the camera to scan a barcode or a plate")
