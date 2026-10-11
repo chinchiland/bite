@@ -10,9 +10,9 @@ enum MacroSplit: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .balanced: "Balanced"
-        case .highProtein: "High protein"
-        case .lowCarb: "Low carb"
+        case .balanced: tr("Balanced")
+        case .highProtein: tr("High protein")
+        case .lowCarb: tr("Low carb")
         }
     }
 
@@ -45,7 +45,7 @@ enum Sex: String, CaseIterable, Identifiable {
     case male
 
     var id: String { rawValue }
-    var title: String { self == .female ? "Female" : "Male" }
+    var title: String { self == .female ? tr("Female") : tr("Male") }
 }
 
 enum Activity: String, CaseIterable, Identifiable {
@@ -58,19 +58,19 @@ enum Activity: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .sedentary: "Mostly sitting"
-        case .light: "Lightly active"
-        case .moderate: "Active"
-        case .active: "Very active"
+        case .sedentary: tr("Mostly sitting")
+        case .light: tr("Lightly active")
+        case .moderate: tr("Active")
+        case .active: tr("Very active")
         }
     }
 
     var detail: String {
         switch self {
-        case .sedentary: "Desk job, little exercise"
-        case .light: "Walks, or training 1 to 3 days a week"
-        case .moderate: "Training 3 to 5 days a week"
-        case .active: "Hard training most days"
+        case .sedentary: tr("Desk job, little exercise")
+        case .light: tr("Walks, or training 1 to 3 days a week")
+        case .moderate: tr("Training 3 to 5 days a week")
+        case .active: tr("Hard training most days")
         }
     }
 
@@ -93,9 +93,9 @@ enum WeightGoal: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .lose: "Lose"
-        case .maintain: "Maintain"
-        case .gain: "Gain"
+        case .lose: tr("Lose")
+        case .maintain: tr("Maintain")
+        case .gain: tr("Gain")
         }
     }
 

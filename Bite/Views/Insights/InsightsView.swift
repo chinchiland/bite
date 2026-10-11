@@ -41,7 +41,7 @@ struct InsightsView: View {
         case month
 
         var days: Int { self == .week ? 7 : 30 }
-        var title: String { self == .week ? "Last 7 days" : "Last 30 days" }
+        var title: LocalizedStringKey { self == .week ? "Last 7 days" : "Last 30 days" }
     }
 
     let range: Range
@@ -75,7 +75,7 @@ struct InsightsView: View {
                 Spacer(minLength: 8)
                 let streak = Insights.streak(all, goal: goal, today: .now)
                 if streak >= 2 {
-                    TintChip(title: "\(streak)-day streak", systemImage: "flame.fill", iconColor: Theme.energy)
+                    TintChip(title: String(localized: "\(streak)-day streak"), systemImage: "flame.fill", iconColor: Theme.energy)
                 }
             }
             .padding(.horizontal, 4)
@@ -113,7 +113,7 @@ struct InsightsView: View {
         return Card(padding: 18) {
             VStack(alignment: .leading, spacing: 0) {
                 // The Health app's header: what you are looking at, the number, when.
-                Text(selected.map { $0.day.formatted(.dateTime.weekday(.wide).day().month(.wide)) } ?? "Daily average")
+                Text(selected.map { $0.day.formatted(.dateTime.weekday(.wide).day().month(.wide)) } ?? String(localized: "Daily average"))
                     .font(.ui(13, .semibold))
                     .textCase(.uppercase)
                     .foregroundStyle(Theme.secondary)
@@ -191,13 +191,15 @@ struct InsightsView: View {
     static func span(_ first: Date, _ last: Date, calendar: Calendar = .current) -> String {
         let full = Date.FormatStyle.dateTime.day().month(.wide)
         guard calendar.isDate(first, equalTo: last, toGranularity: .month) else {
-            return "\(first.formatted(full)) to \(last.formatted(full))"
+            return String(localized: "\(first.formatted(full)) to \(last.formatted(full))")
         }
         let dayFirst = DateFormatter.dateFormat(fromTemplate: "dMMMM", options: 0, locale: .current)?.hasPrefix("d") ?? true
         let firstDay = first.formatted(.dateTime.day())
         let lastDay = last.formatted(.dateTime.day())
         let month = last.formatted(.dateTime.month(.wide))
-        return dayFirst ? "\(firstDay) to \(lastDay) \(month)" : "\(month) \(firstDay) to \(lastDay)"
+        return dayFirst
+            ? String(localized: "\(firstDay) to \(lastDay) \(month)")
+            : String(localized: "\(month) \(firstDay) to \(lastDay)")
     }
 
     // MARK: Cards
@@ -256,7 +258,7 @@ struct InsightsView: View {
                                 .lineLimit(1)
                         }
                         Spacer(minLength: 8)
-                        Text("\(item.score)")
+                        Text(verbatim: "\(item.score)")
                             .font(.number(22))
                             .foregroundStyle(Theme.ink)
                     }
@@ -293,7 +295,7 @@ struct InsightsView: View {
                                 .foregroundStyle(Theme.secondary)
                         }
                         Spacer(minLength: 8)
-                        Text("×\(food.times)")
+                        Text(verbatim: "×\(food.times)")
                             .font(.number(20))
                             .foregroundStyle(Theme.ink)
                     }

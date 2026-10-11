@@ -136,9 +136,9 @@ enum Macro: CaseIterable {
 
     var title: String {
         switch self {
-        case .protein: "Protein"
-        case .carbs: "Carbs"
-        case .fat: "Fat"
+        case .protein: String(localized: "Protein")
+        case .carbs: String(localized: "Carbs")
+        case .fat: String(localized: "Fat")
         }
     }
 

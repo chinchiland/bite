@@ -53,7 +53,7 @@ struct AddFoodView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Theme.page.ignoresSafeArea())
-            .navigationTitle(meal.map { "Add to \($0.title)" } ?? "Add food")
+            .navigationTitle(meal.map { String(localized: "Add to \($0.title)") } ?? String(localized: "Add food"))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, isPresented: $searching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search food or brand")
             .autocorrectionDisabled()
@@ -315,7 +315,7 @@ struct FoodRow: View {
 
 /// A list section header, the way iOS draws them: small, in capitals, secondary.
 struct SectionTitle: View {
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         Text(text)

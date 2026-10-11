@@ -35,9 +35,9 @@ enum DayVerdict: Equatable {
     var label: String? {
         switch self {
         case .empty: nil
-        case .light: "Light day"
-        case .onTarget: "On target"
-        case .over(let kcal): "\(kcal.kcalText) kcal over"
+        case .light: tr("Light day")
+        case .onTarget: tr("On target")
+        case .over(let kcal): tr("%@ kcal over", kcal.kcalText)
         }
     }
 

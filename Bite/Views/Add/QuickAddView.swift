@@ -128,7 +128,7 @@ struct QuickAddView: View {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let food = Food(
             id: "manual:\(UUID().uuidString)",
-            name: trimmed.isEmpty ? "Quick add" : trimmed,
+            name: trimmed.isEmpty ? String(localized: "Quick add") : trimmed,
             barcode: draft.barcode,
             emoji: "🍽️",
             source: .manual,

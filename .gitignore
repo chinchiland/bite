@@ -8,3 +8,4 @@ Payload/
 *.ipa
 screenshots/
 _previews/
+__pycache__/

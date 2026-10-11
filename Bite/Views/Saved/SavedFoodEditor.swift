@@ -118,7 +118,7 @@ struct SavedFoodEditor: View {
                 size: 108
             )
             .padding(.bottom, 6)
-            Text(name.isEmpty ? "Name" : name)
+            Text(name.isEmpty ? String(localized: "Name") : name)
                 .font(.ui(24, .semibold))
                 .foregroundStyle(name.isEmpty ? Theme.tertiary : Theme.ink)
                 .multilineTextAlignment(.center)
@@ -285,7 +285,7 @@ struct SavedFoodEditor: View {
                         .padding(.horizontal, 10)
                         .frame(height: 46)
                         .background(Theme.inset, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    Text(unit == .serving ? "serving" : unit.symbol)
+                    Text(unit.symbol)
                         .font(.ui(17))
                         .foregroundStyle(Theme.secondary)
                     Spacer()
@@ -297,7 +297,7 @@ struct SavedFoodEditor: View {
                             }
                         }
                     } label: {
-                        MealMenuLabel(title: meal?.title ?? "By time", height: 44)
+                        MealMenuLabel(title: meal?.title ?? String(localized: "By time"), height: 44)
                     }
                 }
             }
@@ -320,7 +320,7 @@ struct SavedFoodEditor: View {
         }
     }
 
-    private func numberField(_ title: String, unit: String, text: Binding<String>, icon: AnyView) -> some View {
+    private func numberField(_ title: LocalizedStringKey, unit: LocalizedStringKey, text: Binding<String>, icon: AnyView) -> some View {
         HStack(spacing: 10) {
             icon
             Text(title)

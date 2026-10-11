@@ -2,6 +2,10 @@
  {
   "id": 171688,
   "name": "Apple",
+  "names": {
+   "fr": "Pomme",
+   "es": "Manzana"
+  },
   "emoji": "🍎",
   "unit": "g",
   "aliases": [
@@ -18,17 +22,29 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 182
+    "amount": 182,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediana"
+    }
    },
    {
     "label": "1 small",
-    "amount": 149
+    "amount": 149,
+    "labels": {
+     "fr": "1 petite",
+     "es": "1 pequeña"
+    }
    }
   ]
  },
  {
   "id": 173944,
   "name": "Banana",
+  "names": {
+   "fr": "Banane",
+   "es": "Plátano"
+  },
   "emoji": "🍌",
   "unit": "g",
   "aliases": [
@@ -45,17 +61,29 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 118
+    "amount": 118,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediano"
+    }
    },
    {
     "label": "1 large",
-    "amount": 136
+    "amount": 136,
+    "labels": {
+     "fr": "1 grosse",
+     "es": "1 grande"
+    }
    }
   ]
  },
  {
   "id": 169097,
   "name": "Orange",
+  "names": {
+   "fr": "Orange",
+   "es": "Naranja"
+  },
   "emoji": "🍊",
   "unit": "g",
   "aliases": [
@@ -72,13 +100,21 @@
   "portions": [
    {
     "label": "1 orange",
-    "amount": 131
+    "amount": 131,
+    "labels": {
+     "fr": "1 orange",
+     "es": "1 naranja"
+    }
    }
   ]
  },
  {
   "id": 169118,
   "name": "Pear",
+  "names": {
+   "fr": "Poire",
+   "es": "Pera"
+  },
   "emoji": "🍐",
   "unit": "g",
   "aliases": [
@@ -95,13 +131,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 178
+    "amount": 178,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediana"
+    }
    }
   ]
  },
  {
   "id": 167762,
   "name": "Strawberries",
+  "names": {
+   "fr": "Fraises",
+   "es": "Fresas"
+  },
   "emoji": "🍓",
   "unit": "g",
   "aliases": [
@@ -119,13 +163,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 144
+    "amount": 144,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 171711,
   "name": "Blueberries",
+  "names": {
+   "fr": "Myrtilles",
+   "es": "Arándanos"
+  },
   "emoji": "🫐",
   "unit": "g",
   "aliases": [
@@ -143,13 +195,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 148
+    "amount": 148,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 174683,
   "name": "Grapes",
+  "names": {
+   "fr": "Raisin",
+   "es": "Uvas"
+  },
   "emoji": "🍇",
   "unit": "g",
   "aliases": [
@@ -167,17 +227,29 @@
   "portions": [
    {
     "label": "10 grapes",
-    "amount": 49
+    "amount": 49,
+    "labels": {
+     "fr": "10 grains",
+     "es": "10 uvas"
+    }
    },
    {
     "label": "1 bowl",
-    "amount": 151
+    "amount": 151,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 168153,
   "name": "Kiwi",
+  "names": {
+   "fr": "Kiwi",
+   "es": "Kiwi"
+  },
   "emoji": "🥝",
   "unit": "g",
   "aliases": [
@@ -194,13 +266,21 @@
   "portions": [
    {
     "label": "1 kiwi",
-    "amount": 69
+    "amount": 69,
+    "labels": {
+     "fr": "1 kiwi",
+     "es": "1 kiwi"
+    }
    }
   ]
  },
  {
   "id": 169910,
   "name": "Mango",
+  "names": {
+   "fr": "Mangue",
+   "es": "Mango"
+  },
   "emoji": "🥭",
   "unit": "g",
   "aliases": [
@@ -217,17 +297,29 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 165
+    "amount": 165,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    },
    {
     "label": "1 mango",
-    "amount": 336
+    "amount": 336,
+    "labels": {
+     "fr": "1 mangue",
+     "es": "1 mango"
+    }
    }
   ]
  },
  {
   "id": 169124,
   "name": "Pineapple",
+  "names": {
+   "fr": "Ananas",
+   "es": "Piña"
+  },
   "emoji": "🍍",
   "unit": "g",
   "aliases": [
@@ -244,17 +336,29 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 84
+    "amount": 84,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 rodaja"
+    }
    },
    {
     "label": "1 bowl",
-    "amount": 165
+    "amount": 165,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 167765,
   "name": "Watermelon",
+  "names": {
+   "fr": "Pastèque",
+   "es": "Sandía"
+  },
   "emoji": "🍉",
   "unit": "g",
   "aliases": [
@@ -272,17 +376,29 @@
   "portions": [
    {
     "label": "1 wedge",
-    "amount": 286
+    "amount": 286,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 tajada"
+    }
    },
    {
     "label": "1 bowl",
-    "amount": 152
+    "amount": 152,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 171705,
   "name": "Avocado",
+  "names": {
+   "fr": "Avocat",
+   "es": "Aguacate"
+  },
   "emoji": "🥑",
   "unit": "g",
   "aliases": [
@@ -299,17 +415,29 @@
   "portions": [
    {
     "label": "½ avocado",
-    "amount": 100
+    "amount": 100,
+    "labels": {
+     "fr": "½ avocat",
+     "es": "½ aguacate"
+    }
    },
    {
     "label": "1 avocado",
-    "amount": 201
+    "amount": 201,
+    "labels": {
+     "fr": "1 avocat",
+     "es": "1 aguacate"
+    }
    }
   ]
  },
  {
   "id": 169928,
   "name": "Peach",
+  "names": {
+   "fr": "Pêche",
+   "es": "Melocotón"
+  },
   "emoji": "🍑",
   "unit": "g",
   "aliases": [
@@ -326,13 +454,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 150
+    "amount": 150,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediano"
+    }
    }
   ]
  },
  {
   "id": 171719,
   "name": "Cherries",
+  "names": {
+   "fr": "Cerises",
+   "es": "Cerezas"
+  },
   "emoji": "🍒",
   "unit": "g",
   "aliases": [
@@ -350,17 +486,29 @@
   "portions": [
    {
     "label": "10 cherries",
-    "amount": 82
+    "amount": 82,
+    "labels": {
+     "fr": "10 cerises",
+     "es": "10 cerezas"
+    }
    },
    {
     "label": "1 bowl",
-    "amount": 154
+    "amount": 154,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 170379,
   "name": "Broccoli",
+  "names": {
+   "fr": "Brocoli",
+   "es": "Brócoli"
+  },
   "emoji": "🥦",
   "unit": "g",
   "aliases": [
@@ -377,13 +525,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 91
+    "amount": 91,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 170393,
   "name": "Carrot",
+  "names": {
+   "fr": "Carotte",
+   "es": "Zanahoria"
+  },
   "emoji": "🥕",
   "unit": "g",
   "aliases": [
@@ -401,13 +557,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 61
+    "amount": 61,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediana"
+    }
    }
   ]
  },
  {
   "id": 170457,
   "name": "Tomato",
+  "names": {
+   "fr": "Tomate",
+   "es": "Tomate"
+  },
   "emoji": "🍅",
   "unit": "g",
   "aliases": [
@@ -425,17 +589,29 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 123
+    "amount": 123,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediano"
+    }
    },
    {
     "label": "1 cherry tomato",
-    "amount": 17
+    "amount": 17,
+    "labels": {
+     "fr": "1 tomate cerise",
+     "es": "1 tomate cherry"
+    }
    }
   ]
  },
  {
   "id": 168409,
   "name": "Cucumber",
+  "names": {
+   "fr": "Concombre",
+   "es": "Pepino"
+  },
   "emoji": "🥒",
   "unit": "g",
   "aliases": [
@@ -452,13 +628,21 @@
   "portions": [
    {
     "label": "½ cucumber",
-    "amount": 150
+    "amount": 150,
+    "labels": {
+     "fr": "½ concombre",
+     "es": "½ pepino"
+    }
    }
   ]
  },
  {
   "id": 169247,
   "name": "Lettuce",
+  "names": {
+   "fr": "Salade verte",
+   "es": "Lechuga"
+  },
   "emoji": "🥬",
   "unit": "g",
   "aliases": [
@@ -477,13 +661,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 47
+    "amount": 47,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 168462,
   "name": "Spinach",
+  "names": {
+   "fr": "Épinards",
+   "es": "Espinacas"
+  },
   "emoji": "🥬",
   "unit": "g",
   "aliases": [
@@ -501,13 +693,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 30
+    "amount": 30,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 170108,
   "name": "Bell pepper",
+  "names": {
+   "fr": "Poivron",
+   "es": "Pimiento"
+  },
   "emoji": "🫑",
   "unit": "g",
   "aliases": [
@@ -524,13 +724,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 119
+    "amount": 119,
+    "labels": {
+     "fr": "1 moyen",
+     "es": "1 mediano"
+    }
    }
   ]
  },
  {
   "id": 169291,
   "name": "Zucchini",
+  "names": {
+   "fr": "Courgette",
+   "es": "Calabacín"
+  },
   "emoji": "🥒",
   "unit": "g",
   "aliases": [
@@ -548,13 +756,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 196
+    "amount": 196,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediano"
+    }
    }
   ]
  },
  {
   "id": 170000,
   "name": "Onion",
+  "names": {
+   "fr": "Oignon",
+   "es": "Cebolla"
+  },
   "emoji": "🧅",
   "unit": "g",
   "aliases": [
@@ -572,13 +788,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 110
+    "amount": 110,
+    "labels": {
+     "fr": "1 moyen",
+     "es": "1 mediana"
+    }
    }
   ]
  },
  {
   "id": 169251,
   "name": "Mushrooms",
+  "names": {
+   "fr": "Champignons",
+   "es": "Champiñones"
+  },
   "emoji": "🍄",
   "unit": "g",
   "aliases": [
@@ -596,13 +820,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 70
+    "amount": 70,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 169961,
   "name": "Green beans",
+  "names": {
+   "fr": "Haricots verts",
+   "es": "Judías verdes"
+  },
   "emoji": "🫛",
   "unit": "g",
   "aliases": [
@@ -619,13 +851,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 100
+    "amount": 100,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 168483,
   "name": "Sweet potato",
+  "names": {
+   "fr": "Patate douce",
+   "es": "Boniato"
+  },
   "emoji": "🍠",
   "unit": "g",
   "aliases": [
@@ -642,13 +882,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 114
+    "amount": 114,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediano"
+    }
    }
   ]
  },
  {
   "id": 170438,
   "name": "Potato, boiled",
+  "names": {
+   "fr": "Pomme de terre à l'eau",
+   "es": "Patata cocida"
+  },
   "emoji": "🥔",
   "unit": "g",
   "aliases": [
@@ -667,13 +915,21 @@
   "portions": [
    {
     "label": "1 potato",
-    "amount": 136
+    "amount": 136,
+    "labels": {
+     "fr": "1 pomme de terre",
+     "es": "1 patata"
+    }
    }
   ]
  },
  {
   "id": 170093,
   "name": "Potato, baked",
+  "names": {
+   "fr": "Pomme de terre au four",
+   "es": "Patata asada"
+  },
   "emoji": "🥔",
   "unit": "g",
   "aliases": [
@@ -690,13 +946,21 @@
   "portions": [
    {
     "label": "1 medium",
-    "amount": 173
+    "amount": 173,
+    "labels": {
+     "fr": "1 moyenne",
+     "es": "1 mediana"
+    }
    }
   ]
  },
  {
   "id": 169214,
   "name": "Sweet corn",
+  "names": {
+   "fr": "Maïs doux",
+   "es": "Maíz dulce"
+  },
   "emoji": "🌽",
   "unit": "g",
   "aliases": [
@@ -713,13 +977,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 164
+    "amount": 164,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 170419,
   "name": "Peas",
+  "names": {
+   "fr": "Petits pois",
+   "es": "Guisantes"
+  },
   "emoji": "🫛",
   "unit": "g",
   "aliases": [
@@ -736,13 +1008,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 145
+    "amount": 145,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 171287,
   "name": "Egg",
+  "names": {
+   "fr": "Œuf",
+   "es": "Huevo"
+  },
   "emoji": "🥚",
   "unit": "g",
   "aliases": [
@@ -762,17 +1042,29 @@
   "portions": [
    {
     "label": "1 large",
-    "amount": 50
+    "amount": 50,
+    "labels": {
+     "fr": "1 gros",
+     "es": "1 grande"
+    }
    },
    {
     "label": "1 medium",
-    "amount": 44
+    "amount": 44,
+    "labels": {
+     "fr": "1 moyen",
+     "es": "1 mediano"
+    }
    }
   ]
  },
  {
   "id": 172183,
   "name": "Egg white",
+  "names": {
+   "fr": "Blanc d'œuf",
+   "es": "Clara de huevo"
+  },
   "emoji": "🥚",
   "unit": "g",
   "aliases": [
@@ -790,13 +1082,21 @@
   "portions": [
    {
     "label": "1 large",
-    "amount": 33
+    "amount": 33,
+    "labels": {
+     "fr": "1 gros",
+     "es": "1 grande"
+    }
    }
   ]
  },
  {
   "id": 171477,
   "name": "Chicken breast, cooked",
+  "names": {
+   "fr": "Blanc de poulet, cuit",
+   "es": "Pechuga de pollo cocinada"
+  },
   "emoji": "🍗",
   "unit": "g",
   "aliases": [
@@ -814,17 +1114,29 @@
   "portions": [
    {
     "label": "½ breast",
-    "amount": 86
+    "amount": 86,
+    "labels": {
+     "fr": "½ blanc",
+     "es": "½ pechuga"
+    }
    },
    {
     "label": "1 breast",
-    "amount": 172
+    "amount": 172,
+    "labels": {
+     "fr": "1 blanc",
+     "es": "1 pechuga"
+    }
    }
   ]
  },
  {
   "id": 172388,
   "name": "Chicken thigh, cooked",
+  "names": {
+   "fr": "Cuisse de poulet, cuite",
+   "es": "Muslo de pollo cocinado"
+  },
   "emoji": "🍗",
   "unit": "g",
   "aliases": [
@@ -841,13 +1153,21 @@
   "portions": [
    {
     "label": "1 thigh",
-    "amount": 116
+    "amount": 116,
+    "labels": {
+     "fr": "1 cuisse",
+     "es": "1 muslo"
+    }
    }
   ]
  },
  {
   "id": 174034,
   "name": "Ground beef 85%, cooked",
+  "names": {
+   "fr": "Steak haché 15 % MG, cuit",
+   "es": "Carne picada 15 % grasa, cocinada"
+  },
   "emoji": "🥩",
   "unit": "g",
   "aliases": [
@@ -866,13 +1186,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 85
+    "amount": 85,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 173118,
   "name": "Steak, cooked",
+  "names": {
+   "fr": "Steak, cuit",
+   "es": "Filete de ternera a la plancha"
+  },
   "emoji": "🥩",
   "unit": "g",
   "aliases": [
@@ -892,17 +1220,29 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 85
+    "amount": 85,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    },
    {
     "label": "1 steak",
-    "amount": 200
+    "amount": 200,
+    "labels": {
+     "fr": "1 steak",
+     "es": "1 filete"
+    }
    }
   ]
  },
  {
   "id": 175168,
   "name": "Salmon, cooked",
+  "names": {
+   "fr": "Saumon, cuit",
+   "es": "Salmón cocinado"
+  },
   "emoji": "🐟",
   "unit": "g",
   "aliases": [
@@ -919,13 +1259,21 @@
   "portions": [
    {
     "label": "1 fillet",
-    "amount": 178
+    "amount": 178,
+    "labels": {
+     "fr": "1 filet",
+     "es": "1 filete"
+    }
    }
   ]
  },
  {
   "id": 173709,
   "name": "Tuna, canned in water",
+  "names": {
+   "fr": "Thon au naturel",
+   "es": "Atún al natural"
+  },
   "emoji": "🐟",
   "unit": "g",
   "aliases": [
@@ -942,13 +1290,21 @@
   "portions": [
    {
     "label": "1 can",
-    "amount": 165
+    "amount": 165,
+    "labels": {
+     "fr": "1 boîte",
+     "es": "1 lata"
+    }
    }
   ]
  },
  {
   "id": 171956,
   "name": "Cod, cooked",
+  "names": {
+   "fr": "Cabillaud, cuit",
+   "es": "Bacalao cocinado"
+  },
   "emoji": "🐟",
   "unit": "g",
   "aliases": [
@@ -966,13 +1322,21 @@
   "portions": [
    {
     "label": "1 fillet",
-    "amount": 180
+    "amount": 180,
+    "labels": {
+     "fr": "1 filet",
+     "es": "1 filete"
+    }
    }
   ]
  },
  {
   "id": 175180,
   "name": "Shrimp, cooked",
+  "names": {
+   "fr": "Crevettes, cuites",
+   "es": "Gambas cocidas"
+  },
   "emoji": "🦐",
   "unit": "g",
   "aliases": [
@@ -990,13 +1354,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 85
+    "amount": 85,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 168250,
   "name": "Pork tenderloin, cooked",
+  "names": {
+   "fr": "Filet mignon de porc, cuit",
+   "es": "Solomillo de cerdo cocinado"
+  },
   "emoji": "🥩",
   "unit": "g",
   "aliases": [
@@ -1014,13 +1386,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 85
+    "amount": 85,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 171496,
   "name": "Turkey breast, cooked",
+  "names": {
+   "fr": "Blanc de dinde, cuit",
+   "es": "Pechuga de pavo cocinada"
+  },
   "emoji": "🦃",
   "unit": "g",
   "aliases": [
@@ -1038,13 +1418,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 85
+    "amount": 85,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 173864,
   "name": "Ham",
+  "names": {
+   "fr": "Jambon blanc",
+   "es": "Jamón cocido"
+  },
   "emoji": "🍖",
   "unit": "g",
   "aliases": [
@@ -1061,13 +1449,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 loncha"
+    }
    }
   ]
  },
  {
   "id": 167914,
   "name": "Bacon, cooked",
+  "names": {
+   "fr": "Bacon grillé",
+   "es": "Beicon a la plancha"
+  },
   "emoji": "🥓",
   "unit": "g",
   "aliases": [
@@ -1086,13 +1482,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 8.1
+    "amount": 8.1,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 loncha"
+    }
    }
   ]
  },
  {
   "id": 172475,
   "name": "Tofu, firm",
+  "names": {
+   "fr": "Tofu ferme",
+   "es": "Tofu firme"
+  },
   "emoji": "🫘",
   "unit": "g",
   "aliases": [
@@ -1109,13 +1513,21 @@
   "portions": [
    {
     "label": "¼ block",
-    "amount": 81
+    "amount": 81,
+    "labels": {
+     "fr": "¼ de bloc",
+     "es": "¼ de bloque"
+    }
    }
   ]
  },
  {
   "id": 171265,
   "name": "Milk, whole",
+  "names": {
+   "fr": "Lait entier",
+   "es": "Leche entera"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1133,17 +1545,29 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    },
    {
     "label": "1 splash",
-    "amount": 15
+    "amount": 15,
+    "labels": {
+     "fr": "1 nuage",
+     "es": "1 chorrito"
+    }
    }
   ]
  },
  {
   "id": 171267,
   "name": "Milk, semi-skimmed",
+  "names": {
+   "fr": "Lait demi-écrémé",
+   "es": "Leche semidesnatada"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1161,17 +1585,29 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    },
    {
     "label": "1 splash",
-    "amount": 15
+    "amount": 15,
+    "labels": {
+     "fr": "1 nuage",
+     "es": "1 chorrito"
+    }
    }
   ]
  },
  {
   "id": 171269,
   "name": "Milk, skim",
+  "names": {
+   "fr": "Lait écrémé",
+   "es": "Leche desnatada"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1188,13 +1624,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 170894,
   "name": "Greek yogurt, 0%",
+  "names": {
+   "fr": "Yaourt grec 0 %",
+   "es": "Yogur griego 0 %"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1212,13 +1656,21 @@
   "portions": [
    {
     "label": "1 pot",
-    "amount": 170
+    "amount": 170,
+    "labels": {
+     "fr": "1 pot",
+     "es": "1 envase"
+    }
    }
   ]
  },
  {
   "id": 171304,
   "name": "Greek yogurt",
+  "names": {
+   "fr": "Yaourt grec",
+   "es": "Yogur griego"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1236,13 +1688,21 @@
   "portions": [
    {
     "label": "1 pot",
-    "amount": 170
+    "amount": 170,
+    "labels": {
+     "fr": "1 pot",
+     "es": "1 envase"
+    }
    }
   ]
  },
  {
   "id": 171284,
   "name": "Plain yogurt",
+  "names": {
+   "fr": "Yaourt nature",
+   "es": "Yogur natural"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1261,13 +1721,21 @@
   "portions": [
    {
     "label": "1 pot",
-    "amount": 125
+    "amount": 125,
+    "labels": {
+     "fr": "1 pot",
+     "es": "1 envase"
+    }
    }
   ]
  },
  {
   "id": 172182,
   "name": "Cottage cheese",
+  "names": {
+   "fr": "Cottage cheese",
+   "es": "Queso cottage"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1284,13 +1752,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 113
+    "amount": 113,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 173414,
   "name": "Cheddar",
+  "names": {
+   "fr": "Cheddar",
+   "es": "Queso cheddar"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1308,13 +1784,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 loncha"
+    }
    }
   ]
  },
  {
   "id": 170845,
   "name": "Mozzarella",
+  "names": {
+   "fr": "Mozzarella",
+   "es": "Mozzarella"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1331,17 +1815,29 @@
   "portions": [
    {
     "label": "1 ball",
-    "amount": 125
+    "amount": 125,
+    "labels": {
+     "fr": "1 boule",
+     "es": "1 bola"
+    }
    },
    {
     "label": "1 serving",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 171247,
   "name": "Parmesan",
+  "names": {
+   "fr": "Parmesan",
+   "es": "Parmesano"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1358,13 +1854,21 @@
   "portions": [
    {
     "label": "1 tbsp grated",
-    "amount": 5
+    "amount": 5,
+    "labels": {
+     "fr": "1 c. à soupe, râpé",
+     "es": "1 cucharada, rallado"
+    }
    }
   ]
  },
  {
   "id": 173420,
   "name": "Feta",
+  "names": {
+   "fr": "Feta",
+   "es": "Queso feta"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1381,13 +1885,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 38
+    "amount": 38,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 171242,
   "name": "Gruyère",
+  "names": {
+   "fr": "Gruyère",
+   "es": "Queso gruyère"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1406,13 +1918,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 loncha"
+    }
    }
   ]
  },
  {
   "id": 171251,
   "name": "Emmental",
+  "names": {
+   "fr": "Emmental",
+   "es": "Queso emmental"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1431,13 +1951,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 loncha"
+    }
    }
   ]
  },
  {
   "id": 172177,
   "name": "Brie",
+  "names": {
+   "fr": "Brie",
+   "es": "Queso brie"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1454,13 +1982,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 173418,
   "name": "Cream cheese",
+  "names": {
+   "fr": "Fromage frais à tartiner",
+   "es": "Queso crema"
+  },
   "emoji": "🧀",
   "unit": "g",
   "aliases": [
@@ -1478,13 +2014,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 14.5
+    "amount": 14.5,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 173410,
   "name": "Butter",
+  "names": {
+   "fr": "Beurre",
+   "es": "Mantequilla"
+  },
   "emoji": "🧈",
   "unit": "g",
   "aliases": [
@@ -1501,17 +2045,29 @@
   "portions": [
    {
     "label": "1 tsp",
-    "amount": 5
+    "amount": 5,
+    "labels": {
+     "fr": "1 c. à café",
+     "es": "1 cucharadita"
+    }
    },
    {
     "label": "1 tbsp",
-    "amount": 14.2
+    "amount": 14.2,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 170859,
   "name": "Cream",
+  "names": {
+   "fr": "Crème liquide",
+   "es": "Nata líquida"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1529,13 +2085,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 15
+    "amount": 15,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 174832,
   "name": "Almond milk",
+  "names": {
+   "fr": "Lait d'amande",
+   "es": "Bebida de almendra"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1552,13 +2116,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 172446,
   "name": "Soy milk",
+  "names": {
+   "fr": "Lait de soja",
+   "es": "Bebida de soja"
+  },
   "emoji": "🥛",
   "unit": "ml",
   "aliases": [
@@ -1575,13 +2147,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 168878,
   "name": "Rice, cooked",
+  "names": {
+   "fr": "Riz, cuit",
+   "es": "Arroz cocido"
+  },
   "emoji": "🍚",
   "unit": "g",
   "aliases": [
@@ -1598,13 +2178,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 158
+    "amount": 158,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 169704,
   "name": "Brown rice, cooked",
+  "names": {
+   "fr": "Riz complet, cuit",
+   "es": "Arroz integral cocido"
+  },
   "emoji": "🍚",
   "unit": "g",
   "aliases": [
@@ -1621,13 +2209,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 202
+    "amount": 202,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 168877,
   "name": "Rice, dry",
+  "names": {
+   "fr": "Riz, cru",
+   "es": "Arroz crudo"
+  },
   "emoji": "🍚",
   "unit": "g",
   "aliases": [
@@ -1644,13 +2240,21 @@
   "portions": [
    {
     "label": "1 portion",
-    "amount": 75
+    "amount": 75,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 169737,
   "name": "Pasta, cooked",
+  "names": {
+   "fr": "Pâtes, cuites",
+   "es": "Pasta cocida"
+  },
   "emoji": "🍝",
   "unit": "g",
   "aliases": [
@@ -1669,17 +2273,29 @@
   "portions": [
    {
     "label": "1 plate",
-    "amount": 220
+    "amount": 220,
+    "labels": {
+     "fr": "1 assiette",
+     "es": "1 plato"
+    }
    },
    {
     "label": "1 bowl",
-    "amount": 124
+    "amount": 124,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 169736,
   "name": "Pasta, dry",
+  "names": {
+   "fr": "Pâtes, crues",
+   "es": "Pasta cruda"
+  },
   "emoji": "🍝",
   "unit": "g",
   "aliases": [
@@ -1697,13 +2313,21 @@
   "portions": [
    {
     "label": "1 portion",
-    "amount": 100
+    "amount": 100,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 173904,
   "name": "Oats",
+  "names": {
+   "fr": "Flocons d'avoine",
+   "es": "Copos de avena"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1722,13 +2346,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 40
+    "amount": 40,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 171646,
   "name": "Granola",
+  "names": {
+   "fr": "Granola",
+   "es": "Granola"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1746,13 +2378,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 45
+    "amount": 45,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 174924,
   "name": "White bread",
+  "names": {
+   "fr": "Pain de mie",
+   "es": "Pan de molde"
+  },
   "emoji": "🍞",
   "unit": "g",
   "aliases": [
@@ -1771,13 +2411,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 29
+    "amount": 29,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 rebanada"
+    }
    }
   ]
  },
  {
   "id": 172688,
   "name": "Whole wheat bread",
+  "names": {
+   "fr": "Pain complet",
+   "es": "Pan integral"
+  },
   "emoji": "🍞",
   "unit": "g",
   "aliases": [
@@ -1794,13 +2442,21 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 32
+    "amount": 32,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 rebanada"
+    }
    }
   ]
  },
  {
   "id": 172675,
   "name": "Baguette",
+  "names": {
+   "fr": "Baguette",
+   "es": "Barra de pan"
+  },
   "emoji": "🥖",
   "unit": "g",
   "aliases": [
@@ -1818,17 +2474,29 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 30
+    "amount": 30,
+    "labels": {
+     "fr": "1 tranche",
+     "es": "1 rebanada"
+    }
    },
    {
     "label": "¼ baguette",
-    "amount": 62
+    "amount": 62,
+    "labels": {
+     "fr": "¼ de baguette",
+     "es": "¼ de barra"
+    }
    }
   ]
  },
  {
   "id": 174987,
   "name": "Croissant",
+  "names": {
+   "fr": "Croissant",
+   "es": "Cruasán"
+  },
   "emoji": "🥐",
   "unit": "g",
   "aliases": [
@@ -1845,13 +2513,21 @@
   "portions": [
    {
     "label": "1 croissant",
-    "amount": 57
+    "amount": 57,
+    "labels": {
+     "fr": "1 croissant",
+     "es": "1 cruasán"
+    }
    }
   ]
  },
  {
   "id": 174899,
   "name": "Bagel",
+  "names": {
+   "fr": "Bagel",
+   "es": "Bagel"
+  },
   "emoji": "🥯",
   "unit": "g",
   "aliases": [
@@ -1868,13 +2544,21 @@
   "portions": [
    {
     "label": "1 bagel",
-    "amount": 99
+    "amount": 99,
+    "labels": {
+     "fr": "1 bagel",
+     "es": "1 bagel"
+    }
    }
   ]
  },
  {
   "id": 175037,
   "name": "Tortilla wrap",
+  "names": {
+   "fr": "Wrap",
+   "es": "Tortilla de trigo"
+  },
   "emoji": "🫓",
   "unit": "g",
   "aliases": [
@@ -1892,13 +2576,21 @@
   "portions": [
    {
     "label": "1 wrap",
-    "amount": 49
+    "amount": 49,
+    "labels": {
+     "fr": "1 wrap",
+     "es": "1 tortilla"
+    }
    }
   ]
  },
  {
   "id": 168917,
   "name": "Quinoa, cooked",
+  "names": {
+   "fr": "Quinoa, cuit",
+   "es": "Quinoa cocida"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1915,13 +2607,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 185
+    "amount": 185,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 169700,
   "name": "Couscous, cooked",
+  "names": {
+   "fr": "Couscous, cuit",
+   "es": "Cuscús cocido"
+  },
   "emoji": "🥣",
   "unit": "g",
   "aliases": [
@@ -1939,13 +2639,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 157
+    "amount": 157,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 170317,
   "name": "Cheese pizza",
+  "names": {
+   "fr": "Pizza margherita",
+   "es": "Pizza margarita"
+  },
   "emoji": "🍕",
   "unit": "g",
   "aliases": [
@@ -1962,17 +2670,29 @@
   "portions": [
    {
     "label": "1 slice",
-    "amount": 81
+    "amount": 81,
+    "labels": {
+     "fr": "1 part",
+     "es": "1 porción"
+    }
    },
    {
     "label": "1 pizza",
-    "amount": 452
+    "amount": 452,
+    "labels": {
+     "fr": "1 pizza",
+     "es": "1 pizza"
+    }
    }
   ]
  },
  {
   "id": 172421,
   "name": "Lentils, cooked",
+  "names": {
+   "fr": "Lentilles, cuites",
+   "es": "Lentejas cocidas"
+  },
   "emoji": "🫘",
   "unit": "g",
   "aliases": [
@@ -1989,13 +2709,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 198
+    "amount": 198,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 173757,
   "name": "Chickpeas, cooked",
+  "names": {
+   "fr": "Pois chiches, cuits",
+   "es": "Garbanzos cocidos"
+  },
   "emoji": "🫘",
   "unit": "g",
   "aliases": [
@@ -2012,13 +2740,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 164
+    "amount": 164,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 173735,
   "name": "Black beans, cooked",
+  "names": {
+   "fr": "Haricots noirs, cuits",
+   "es": "Alubias negras cocidas"
+  },
   "emoji": "🫘",
   "unit": "g",
   "aliases": [
@@ -2035,13 +2771,21 @@
   "portions": [
    {
     "label": "1 bowl",
-    "amount": 172
+    "amount": 172,
+    "labels": {
+     "fr": "1 bol",
+     "es": "1 bol"
+    }
    }
   ]
  },
  {
   "id": 174289,
   "name": "Hummus",
+  "names": {
+   "fr": "Houmous",
+   "es": "Hummus"
+  },
   "emoji": "🫘",
   "unit": "g",
   "aliases": [
@@ -2059,13 +2803,21 @@
   "portions": [
    {
     "label": "2 tbsp",
-    "amount": 30
+    "amount": 30,
+    "labels": {
+     "fr": "2 c. à soupe",
+     "es": "2 cucharadas"
+    }
    }
   ]
  },
  {
   "id": 170567,
   "name": "Almonds",
+  "names": {
+   "fr": "Amandes",
+   "es": "Almendras"
+  },
   "emoji": "🌰",
   "unit": "g",
   "aliases": [
@@ -2083,13 +2835,21 @@
   "portions": [
    {
     "label": "1 handful",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 poignée",
+     "es": "1 puñado"
+    }
    }
   ]
  },
  {
   "id": 170187,
   "name": "Walnuts",
+  "names": {
+   "fr": "Noix",
+   "es": "Nueces"
+  },
   "emoji": "🌰",
   "unit": "g",
   "aliases": [
@@ -2106,13 +2866,21 @@
   "portions": [
    {
     "label": "1 handful",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 poignée",
+     "es": "1 puñado"
+    }
    }
   ]
  },
  {
   "id": 170162,
   "name": "Cashews",
+  "names": {
+   "fr": "Noix de cajou",
+   "es": "Anacardos"
+  },
   "emoji": "🌰",
   "unit": "g",
   "aliases": [
@@ -2130,13 +2898,21 @@
   "portions": [
    {
     "label": "1 handful",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 poignée",
+     "es": "1 puñado"
+    }
    }
   ]
  },
  {
   "id": 173806,
   "name": "Peanuts",
+  "names": {
+   "fr": "Cacahuètes",
+   "es": "Cacahuetes"
+  },
   "emoji": "🥜",
   "unit": "g",
   "aliases": [
@@ -2155,13 +2931,21 @@
   "portions": [
    {
     "label": "1 handful",
-    "amount": 28
+    "amount": 28,
+    "labels": {
+     "fr": "1 poignée",
+     "es": "1 puñado"
+    }
    }
   ]
  },
  {
   "id": 172470,
   "name": "Peanut butter",
+  "names": {
+   "fr": "Beurre de cacahuète",
+   "es": "Crema de cacahuete"
+  },
   "emoji": "🥜",
   "unit": "g",
   "aliases": [
@@ -2179,13 +2963,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 16
+    "amount": 16,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 170554,
   "name": "Chia seeds",
+  "names": {
+   "fr": "Graines de chia",
+   "es": "Semillas de chía"
+  },
   "emoji": "🌱",
   "unit": "g",
   "aliases": [
@@ -2203,13 +2995,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 12
+    "amount": 12,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 171413,
   "name": "Olive oil",
+  "names": {
+   "fr": "Huile d'olive",
+   "es": "Aceite de oliva"
+  },
   "emoji": "🫒",
   "unit": "g",
   "aliases": [
@@ -2227,17 +3027,29 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 13.5
+    "amount": 13.5,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    },
    {
     "label": "1 tsp",
-    "amount": 4.5
+    "amount": 4.5,
+    "labels": {
+     "fr": "1 c. à café",
+     "es": "1 cucharadita"
+    }
    }
   ]
  },
  {
   "id": 169640,
   "name": "Honey",
+  "names": {
+   "fr": "Miel",
+   "es": "Miel"
+  },
   "emoji": "🍯",
   "unit": "g",
   "aliases": [
@@ -2254,17 +3066,29 @@
   "portions": [
    {
     "label": "1 tsp",
-    "amount": 7
+    "amount": 7,
+    "labels": {
+     "fr": "1 c. à café",
+     "es": "1 cucharadita"
+    }
    },
    {
     "label": "1 tbsp",
-    "amount": 21
+    "amount": 21,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 169655,
   "name": "Sugar",
+  "names": {
+   "fr": "Sucre",
+   "es": "Azúcar"
+  },
   "emoji": "🍬",
   "unit": "g",
   "aliases": [
@@ -2281,17 +3105,29 @@
   "portions": [
    {
     "label": "1 tsp",
-    "amount": 4.2
+    "amount": 4.2,
+    "labels": {
+     "fr": "1 c. à café",
+     "es": "1 cucharadita"
+    }
    },
    {
     "label": "1 cube",
-    "amount": 2.3
+    "amount": 2.3,
+    "labels": {
+     "fr": "1 morceau",
+     "es": "1 terrón"
+    }
    }
   ]
  },
  {
   "id": 170273,
   "name": "Dark chocolate",
+  "names": {
+   "fr": "Chocolat noir",
+   "es": "Chocolate negro"
+  },
   "emoji": "🍫",
   "unit": "g",
   "aliases": [
@@ -2309,17 +3145,29 @@
   "portions": [
    {
     "label": "1 square",
-    "amount": 10
+    "amount": 10,
+    "labels": {
+     "fr": "1 carré",
+     "es": "1 onza"
+    }
    },
    {
     "label": "1 bar",
-    "amount": 100
+    "amount": 100,
+    "labels": {
+     "fr": "1 tablette",
+     "es": "1 tableta"
+    }
    }
   ]
  },
  {
   "id": 169641,
   "name": "Jam",
+  "names": {
+   "fr": "Confiture",
+   "es": "Mermelada"
+  },
   "emoji": "🫙",
   "unit": "g",
   "aliases": [
@@ -2336,13 +3184,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 20
+    "amount": 20,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 171009,
   "name": "Mayonnaise",
+  "names": {
+   "fr": "Mayonnaise",
+   "es": "Mayonesa"
+  },
   "emoji": "🫙",
   "unit": "g",
   "aliases": [
@@ -2360,13 +3216,21 @@
   "portions": [
    {
     "label": "1 tbsp",
-    "amount": 13.8
+    "amount": 13.8,
+    "labels": {
+     "fr": "1 c. à soupe",
+     "es": "1 cucharada"
+    }
    }
   ]
  },
  {
   "id": 171192,
   "name": "Tomato sauce",
+  "names": {
+   "fr": "Sauce tomate",
+   "es": "Salsa de tomate"
+  },
   "emoji": "🍅",
   "unit": "g",
   "aliases": [
@@ -2384,13 +3248,21 @@
   "portions": [
    {
     "label": "1 serving",
-    "amount": 132
+    "amount": 132,
+    "labels": {
+     "fr": "1 portion",
+     "es": "1 ración"
+    }
    }
   ]
  },
  {
   "id": 172716,
   "name": "Chocolate chip cookie",
+  "names": {
+   "fr": "Cookie aux pépites de chocolat",
+   "es": "Galleta con pepitas de chocolate"
+  },
   "emoji": "🍪",
   "unit": "g",
   "aliases": [
@@ -2408,13 +3280,21 @@
   "portions": [
    {
     "label": "1 cookie",
-    "amount": 13
+    "amount": 13,
+    "labels": {
+     "fr": "1 cookie",
+     "es": "1 galleta"
+    }
    }
   ]
  },
  {
   "id": 167575,
   "name": "Vanilla ice cream",
+  "names": {
+   "fr": "Glace à la vanille",
+   "es": "Helado de vainilla"
+  },
   "emoji": "🍦",
   "unit": "g",
   "aliases": [
@@ -2432,13 +3312,21 @@
   "portions": [
    {
     "label": "1 scoop",
-    "amount": 66
+    "amount": 66,
+    "labels": {
+     "fr": "1 boule",
+     "es": "1 bola"
+    }
    }
   ]
  },
  {
   "id": 171890,
   "name": "Coffee, black",
+  "names": {
+   "fr": "Café noir",
+   "es": "Café solo"
+  },
   "emoji": "☕",
   "unit": "ml",
   "aliases": [
@@ -2457,13 +3345,21 @@
   "portions": [
    {
     "label": "1 cup",
-    "amount": 240
+    "amount": 240,
+    "labels": {
+     "fr": "1 tasse",
+     "es": "1 taza"
+    }
    }
   ]
  },
  {
   "id": 169098,
   "name": "Orange juice",
+  "names": {
+   "fr": "Jus d'orange",
+   "es": "Zumo de naranja"
+  },
   "emoji": "🧃",
   "unit": "ml",
   "aliases": [
@@ -2480,13 +3376,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 250
+    "amount": 250,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 168746,
   "name": "Beer",
+  "names": {
+   "fr": "Bière",
+   "es": "Cerveza"
+  },
   "emoji": "🍺",
   "unit": "ml",
   "aliases": [
@@ -2504,17 +3408,29 @@
   "portions": [
    {
     "label": "1 bottle",
-    "amount": 330
+    "amount": 330,
+    "labels": {
+     "fr": "1 bouteille",
+     "es": "1 botellín"
+    }
    },
    {
     "label": "1 pint",
-    "amount": 500
+    "amount": 500,
+    "labels": {
+     "fr": "1 pinte",
+     "es": "1 pinta"
+    }
    }
   ]
  },
  {
   "id": 173190,
   "name": "Red wine",
+  "names": {
+   "fr": "Vin rouge",
+   "es": "Vino tinto"
+  },
   "emoji": "🍷",
   "unit": "ml",
   "aliases": [
@@ -2532,13 +3448,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 150
+    "amount": 150,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 174837,
   "name": "White wine",
+  "names": {
+   "fr": "Vin blanc",
+   "es": "Vino blanco"
+  },
   "emoji": "🥂",
   "unit": "ml",
   "aliases": [
@@ -2556,13 +3480,21 @@
   "portions": [
    {
     "label": "1 glass",
-    "amount": 150
+    "amount": 150,
+    "labels": {
+     "fr": "1 verre",
+     "es": "1 vaso"
+    }
    }
   ]
  },
  {
   "id": 174852,
   "name": "Cola",
+  "names": {
+   "fr": "Cola",
+   "es": "Refresco de cola"
+  },
   "emoji": "🥤",
   "unit": "ml",
   "aliases": [
@@ -2580,7 +3512,11 @@
   "portions": [
    {
     "label": "1 can",
-    "amount": 330
+    "amount": 330,
+    "labels": {
+     "fr": "1 canette",
+     "es": "1 lata"
+    }
    }
   ]
  }

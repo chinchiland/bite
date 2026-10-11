@@ -10,6 +10,14 @@ enum HomeTab: String, CaseIterable, Identifiable {
     case month = "Month"
 
     var id: String { rawValue }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .today: "Day"
+        case .week: "Week"
+        case .month: "Month"
+        }
+    }
 }
 
 /// Every sheet home can open, one at a time.
@@ -117,7 +125,7 @@ struct TodayView: View {
         HStack(spacing: 10) {
             Picker("Show", selection: $tab.animation(.snappy)) {
                 ForEach(HomeTab.allCases) { tab in
-                    Text(tab.rawValue).tag(tab)
+                    Text(tab.title).tag(tab)
                 }
             }
             .pickerStyle(.segmented)
@@ -227,8 +235,8 @@ struct TodayView: View {
 
     private var title: String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(day) { return "Today" }
-        if calendar.isDateInYesterday(day) { return "Yesterday" }
+        if calendar.isDateInToday(day) { return String(localized: "Today") }
+        if calendar.isDateInYesterday(day) { return String(localized: "Yesterday") }
         return day.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
     }
 
@@ -267,7 +275,7 @@ struct TodayView: View {
         if Calendar.current.isDateInToday(day) {
             let streak = Insights.streak(summaries, goal: Double(goalKcal), today: .now)
             guard streak >= 2 else { return nil }
-            return (title: "\(streak)-day streak", style: .neutral, symbol: "flame.fill", iconColor: Theme.energy)
+            return (title: String(localized: "\(streak)-day streak"), style: .neutral, symbol: "flame.fill", iconColor: Theme.energy)
         }
         let verdict = verdicts[day] ?? .empty
         guard let label = verdict.label else { return nil }
@@ -304,7 +312,7 @@ struct TodayView: View {
         let first = items.first?.food
         let food = Food(
             id: "meal:\(UUID().uuidString)",
-            name: "My \(meal.title.lowercased())",
+            name: meal.savedTitle,
             emoji: first?.emoji ?? "🍽️",
             source: .manual,
             unit: .serving,

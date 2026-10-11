@@ -170,7 +170,7 @@ extension OFFProduct {
         result.append(Portion(label: "100 \(unit.symbol)", amount: 100))
         if let pack = productQuantity, pack > 0, pack <= 2000,
            !result.contains(where: { abs($0.amount - pack) < 0.5 }) {
-            result.append(Portion(label: "Whole pack", amount: pack))
+            result.append(Portion(label: tr("Whole pack"), amount: pack))
         }
         return result
     }
@@ -178,22 +178,22 @@ extension OFFProduct {
     /// "1 biscuit (12 g)" becomes "1 biscuit". A bare quantity like "30 g" becomes "1 serving".
     static func servingLabel(_ text: String?) -> String {
         guard var label = text?.trimmingCharacters(in: .whitespacesAndNewlines), !label.isEmpty else {
-            return "1 serving"
+            return tr("1 serving")
         }
         if let parenthesis = label.firstIndex(of: "(") {
             label = String(label[..<parenthesis]).trimmingCharacters(in: .whitespaces)
         }
         let bareQuantity = #"^[\d.,\s]*(g|gr|gram|grams|grammes|ml|cl|l|oz)?$"#
         if label.isEmpty || label.range(of: bareQuantity, options: [.regularExpression, .caseInsensitive]) != nil {
-            return "1 serving"
+            return tr("1 serving")
         }
-        return label.count <= 22 ? label : "1 serving"
+        return label.count <= 22 ? label : tr("1 serving")
     }
 
-    /// "en:milk" becomes "Milk".
+    /// "en:milk" becomes "Milk", in the reader's language.
     static func allergenName(_ tag: String) -> String {
         let name = tag.split(separator: ":").last.map(String.init) ?? tag
         let words = name.replacingOccurrences(of: "-", with: " ")
-        return words.prefix(1).uppercased() + words.dropFirst()
+        return tr(words.prefix(1).uppercased() + words.dropFirst())
     }
 }

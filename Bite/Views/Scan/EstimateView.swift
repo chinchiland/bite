@@ -112,7 +112,7 @@ struct EstimateView: View {
                     case .needsKey:
                         message(
                             "Photo estimates use Claude",
-                            detail: "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds.",
+                            detail: String(localized: "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds."),
                             action: ("Open Settings", { showSettings = true })
                         )
                     case .failed(let text):
@@ -158,7 +158,7 @@ struct EstimateView: View {
         }
     }
 
-    private func message(_ title: String, detail: String, action: (String, () -> Void)) -> some View {
+    private func message(_ title: LocalizedStringKey, detail: String, action: (LocalizedStringKey, () -> Void)) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.ui(22, .semibold))
@@ -174,7 +174,7 @@ struct EstimateView: View {
     }
 
     @ViewBuilder private func ready(_ estimate: MealEstimate) -> some View {
-        Text("\(estimate.emoji) \(estimate.title)")
+        Text(verbatim: "\(estimate.emoji) \(estimate.title)")
             .font(.ui(28, .semibold))
             .foregroundStyle(Theme.ink)
             .fixedSize(horizontal: false, vertical: true)
@@ -182,7 +182,7 @@ struct EstimateView: View {
         FlowLayout(spacing: 8) {
             TintChip(title: estimate.confidence.label, style: estimate.confidence == .low ? .watch : .info)
             if estimate.items.isEmpty {
-                TintChip(title: "No food found", style: .watch)
+                TintChip(title: String(localized: "No food found"), style: .watch)
             }
         }
 
@@ -285,7 +285,7 @@ struct EstimateView: View {
             return
         }
         guard let jpeg = ImageTools.jpeg(image, maxSide: 1024, quality: 0.72) else {
-            phase = .failed("This photo couldn't be read.")
+            phase = .failed(String(localized: "This photo couldn't be read."))
             return
         }
         let language = OpenFoodFacts.languages.first ?? "en"
@@ -296,9 +296,9 @@ struct EstimateView: View {
                 phase = .ready
             }
         } catch let failure as ClaudeVision.Failure {
-            phase = failure == .missingKey ? .needsKey : .failed(failure.errorDescription ?? "Try again.")
+            phase = failure == .missingKey ? .needsKey : .failed(failure.errorDescription ?? String(localized: "Try again."))
         } catch {
-            phase = .failed("Check your connection and try again.")
+            phase = .failed(String(localized: "Check your connection and try again."))
         }
     }
 

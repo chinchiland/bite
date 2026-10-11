@@ -11,9 +11,13 @@ echo "== parse"
 find Bite -name '*.swift' -print0 | xargs -0 swiftc -parse
 echo "all $(find Bite -name '*.swift' | wc -l) files parse"
 
+echo "== translations"
+python3 tools/check_strings.py
+
 echo "== logic tests"
 OUT="$(mktemp -d)"
 swiftc -o "$OUT/logic-tests" \
+  Bite/Model/Localization.swift \
   Bite/Model/Nutrients.swift \
   Bite/Model/Formatting.swift \
   Bite/Model/Food.swift \

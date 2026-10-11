@@ -3,8 +3,11 @@ import Foundation
 /// Everyday whole foods (a banana, an egg, a bowl of rice) from USDA FoodData Central,
 /// bundled so they show up instantly and offline. Rebuild with tools/build_basics.py.
 enum BasicFoods {
-    /// A basic and the phrases it answers to: its English name first, then its French names.
+    /// A basic and the phrases it answers to: its name in the reader's language first, then
+    /// its English name, its names in the other languages and its French aliases.
     struct Entry {
+        /// The English name, the same in every language, for code that looks a basic up.
+        let key: String
         let food: Food
         let phrases: [[String]]
     }
@@ -15,6 +18,8 @@ enum BasicFoods {
     private struct Record: Decodable {
         let id: Int
         let name: String
+        /// The name in French and Spanish, keyed "fr" and "es".
+        let names: [String: String]?
         let emoji: String
         let unit: String
         let aliases: [String]
@@ -26,17 +31,25 @@ enum BasicFoods {
         let fiber: Double?
         let saturatedFat: Double?
         let salt: Double?
-        let portions: [Portion]
+        let portions: [RecordPortion]
     }
 
-    static func load(from url: URL?) -> [Entry] {
+    private struct RecordPortion: Decodable {
+        let label: String
+        let amount: Double
+        let labels: [String: String]?
+    }
+
+    /// The basics with their names and portions in `language` ("en", "fr" or "es").
+    static func load(from url: URL?, language: String = AppLanguage.current) -> [Entry] {
         guard let url,
               let data = try? Data(contentsOf: url),
               let records = try? JSONDecoder().decode([Record].self, from: data) else { return [] }
         return records.map { record in
+            let name = record.names?[language] ?? record.name
             let food = Food(
                 id: "usda:\(record.id)",
-                name: record.name,
+                name: name,
                 emoji: record.emoji,
                 source: .usda,
                 unit: record.unit == "ml" ? .milliliter : .gram,
@@ -51,9 +64,12 @@ enum BasicFoods {
                     saturatedFat: record.saturatedFat,
                     salt: record.salt
                 ),
-                portions: record.portions
+                portions: record.portions.map { Portion(label: $0.labels?[language] ?? $0.label, amount: $0.amount) }
             )
-            return Entry(food: food, phrases: ([record.name] + record.aliases).map(SearchText.words(in:)))
+            var seen = Set<String>()
+            let names = [name, record.name] + (record.names ?? [:]).sorted { $0.key < $1.key }.map(\.value) + record.aliases
+            let phrases = names.filter { seen.insert($0.lowercased()).inserted }.map(SearchText.words(in:))
+            return Entry(key: record.name, food: food, phrases: phrases)
         }
     }
 
@@ -61,8 +77,8 @@ enum BasicFoods {
         search(query, in: index)
     }
 
-    /// Basics where every word of the query starts a word of one phrase. The English name
-    /// beats a French alias, and a phrase with fewer extra words beats a longer one, so
+    /// Basics where every word of the query starts a word of one phrase. The name in your
+    /// language beats the others, and a phrase with fewer extra words beats a longer one, so
     /// "riz" finds cooked rice before "riz cru".
     static func search(_ query: String, in entries: [Entry]) -> [Food] {
         let terms = SearchText.words(in: query)

@@ -81,3 +81,5 @@ The scan laser sweeps, numbers roll, the gauge's ticks light up one by one on a 
 ## Copy
 
 Short and friendly. The first words carry the meaning. No dashes.
+
+**Languages: English, French, Spanish.** Written in each language, never translated word for word. French says *tu*, uses a narrow no-break space before `: ? ! %` and curly apostrophes; Spanish is from Spain and says *tú*. Apple's own words win: Réglages and Ajustes, l'app Santé and la app Salud. Labels next to a number agree with what it counts ("Consommées", "Quemadas": calories). Every key lives in `Bite/Resources/Localizable.xcstrings`; `tools/check_strings.py` fails on any word without both translations.

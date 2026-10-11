@@ -124,7 +124,7 @@ struct GoalCalculatorView: View {
         }
     }
 
-    private func numberRow(_ title: String, unit: String, @ViewBuilder field: () -> some View) -> some View {
+    private func numberRow(_ title: LocalizedStringKey, unit: LocalizedStringKey, @ViewBuilder field: () -> some View) -> some View {
         HStack(spacing: 8) {
             Text(title)
                 .font(.ui(17))

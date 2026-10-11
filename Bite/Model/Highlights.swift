@@ -25,28 +25,28 @@ extension Food {
         var good: [Highlight] = []
         // "High protein" needs 20% of the energy from protein, and enough protein to matter.
         if n.kcal > 0, n.protein * 4 >= n.kcal * 0.2, n.protein >= (drink ? 5 : 8) {
-            good.append(Highlight(title: "High protein", kind: .good))
+            good.append(Highlight(title: tr("High protein"), kind: .good))
         }
         if let fiber = n.fiber, fiber >= 6 {
-            good.append(Highlight(title: "High fiber", kind: .good))
+            good.append(Highlight(title: tr("High fiber"), kind: .good))
         }
         if n.kcal <= (drink ? 20 : 40) {
-            good.append(Highlight(title: "Low calorie", kind: .good))
+            good.append(Highlight(title: tr("Low calorie"), kind: .good))
         }
 
         var watch: [Highlight] = []
         if let sugar = n.sugar, sugar > (drink ? 11.25 : 22.5) {
-            watch.append(Highlight(title: "High sugar", kind: .watch))
+            watch.append(Highlight(title: tr("High sugar"), kind: .watch))
         }
         if let saturated = n.saturatedFat {
             if saturated > (drink ? 2.5 : 5) {
-                watch.append(Highlight(title: "High saturated fat", kind: .watch))
+                watch.append(Highlight(title: tr("High saturated fat"), kind: .watch))
             }
         } else if n.fat > (drink ? 8.75 : 17.5) {
-            watch.append(Highlight(title: "High fat", kind: .watch))
+            watch.append(Highlight(title: tr("High fat"), kind: .watch))
         }
         if let salt = n.salt, salt > (drink ? 0.75 : 1.5) {
-            watch.append(Highlight(title: "High salt", kind: .watch))
+            watch.append(Highlight(title: tr("High salt"), kind: .watch))
         }
 
         return Array((good + watch).prefix(3))
@@ -55,10 +55,10 @@ extension Food {
     /// The NOVA group in words. Only the two ends of the scale are worth a mark.
     var processingLabel: (title: String, kind: Highlight.Kind?)? {
         switch novaGroup {
-        case 1: return (title: "Unprocessed", kind: .good)
-        case 2: return (title: "Culinary ingredient", kind: nil)
-        case 3: return (title: "Processed", kind: nil)
-        case 4: return (title: "Ultra-processed", kind: .watch)
+        case 1: return (title: tr("Unprocessed"), kind: .good)
+        case 2: return (title: tr("Culinary ingredient"), kind: nil)
+        case 3: return (title: tr("Processed"), kind: nil)
+        case 4: return (title: tr("Ultra-processed"), kind: .watch)
         default: return nil
         }
     }

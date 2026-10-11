@@ -41,17 +41,17 @@ enum DemoData {
 
     /// What Claude returns for a salmon bowl (same shape as the API answer).
     static let estimate = MealEstimate(
-        title: "Salmon salad bowl",
+        title: tr("Salmon salad bowl"),
         emoji: "🥗",
         confidence: .medium,
-        note: "The dressing could add 50 kcal if it was poured generously.",
+        note: tr("The dressing could add 50 kcal if it was poured generously."),
         items: [
-            MealEstimate.Item(name: "Salmon", emoji: "🐟", grams: 120, kcal: 250, protein: 25.2, carbs: 0, fat: 16.2),
-            MealEstimate.Item(name: "Egg", emoji: "🥚", grams: 50, kcal: 72, protein: 6.3, carbs: 0.4, fat: 4.8),
-            MealEstimate.Item(name: "Sweet corn", emoji: "🌽", grams: 60, kcal: 52, protein: 1.6, carbs: 11.2, fat: 0.7),
-            MealEstimate.Item(name: "Edamame", emoji: "🫛", grams: 50, kcal: 61, protein: 5.5, carbs: 4.5, fat: 2.6),
-            MealEstimate.Item(name: "Greens", emoji: "🥬", grams: 150, kcal: 38, protein: 2, carbs: 7.2, fat: 0.3),
-            MealEstimate.Item(name: "Sesame dressing", emoji: "🫙", grams: 20, kcal: 90, protein: 0.6, carbs: 3, fat: 8.4),
+            MealEstimate.Item(name: tr("Salmon"), emoji: "🐟", grams: 120, kcal: 250, protein: 25.2, carbs: 0, fat: 16.2),
+            MealEstimate.Item(name: tr("Egg"), emoji: "🥚", grams: 50, kcal: 72, protein: 6.3, carbs: 0.4, fat: 4.8),
+            MealEstimate.Item(name: tr("Sweet corn"), emoji: "🌽", grams: 60, kcal: 52, protein: 1.6, carbs: 11.2, fat: 0.7),
+            MealEstimate.Item(name: tr("Edamame"), emoji: "🫛", grams: 50, kcal: 61, protein: 5.5, carbs: 4.5, fat: 2.6),
+            MealEstimate.Item(name: tr("Greens"), emoji: "🥬", grams: 150, kcal: 38, protein: 2, carbs: 7.2, fat: 0.3),
+            MealEstimate.Item(name: tr("Sesame dressing"), emoji: "🫙", grams: 20, kcal: 90, protein: 0.6, carbs: 3, fat: 8.4),
         ]
     )
 
@@ -100,7 +100,7 @@ enum DemoData {
         let today = calendar.startOfDay(for: .now)
 
         func basic(_ name: String) -> Food? {
-            BasicFoods.all.first { $0.name == name }
+            BasicFoods.index.first { $0.key == name }?.food
         }
 
         func log(_ food: Food?, _ amount: Double, _ meal: Meal, daysAgo: Int, at hour: Int) {
@@ -152,7 +152,7 @@ enum DemoData {
             log(basic("Oats"), 60 * scale.breakfast, .breakfast, daysAgo: daysAgo, at: 8)
             log(basic("Milk, semi-skimmed"), 200, .breakfast, daysAgo: daysAgo, at: 8)
             log(basic("Blueberries"), 80, .breakfast, daysAgo: daysAgo, at: 8)
-            log(quick("Lunch out", kcal: 780 * scale.lunch, protein: 38, carbs: 85, fat: 30), 1, .lunch, daysAgo: daysAgo, at: 12)
+            log(quick(tr("Lunch out"), kcal: 780 * scale.lunch, protein: 38, carbs: 85, fat: 30), 1, .lunch, daysAgo: daysAgo, at: 12)
             log(basic("Pasta, cooked"), 220 * scale.dinner, .dinner, daysAgo: daysAgo, at: 19)
             log(basic("Tomato sauce"), 132, .dinner, daysAgo: daysAgo, at: 19)
             log(basic("Parmesan"), 15, .dinner, daysAgo: daysAgo, at: 19)
@@ -161,7 +161,7 @@ enum DemoData {
         // A shelf of foods you eat often, each looking the way you chose.
         let shake = Food(
             id: "saved:protein-shake",
-            name: "Protein shake",
+            name: tr("Protein shake"),
             emoji: "🥤",
             source: .manual,
             unit: .serving,
@@ -170,9 +170,9 @@ enum DemoData {
             tint: .sky
         )
         let shelf: [(Food?, Double, Meal?, String?)] = [
-            (skyr, 120, .breakfast, "with honey"),
+            (skyr, 120, .breakfast, tr("with honey")),
             (basic("Banana"), 118, nil, nil),
-            (shake, 1, .snack, "after the gym"),
+            (shake, 1, .snack, tr("after the gym")),
             (basic("Coffee, black"), 240, .breakfast, nil),
             (basic("Almonds"), 28, .snack, nil),
         ]
@@ -181,7 +181,7 @@ enum DemoData {
             let saved = SavedFood(food: food, amount: item.1, sortIndex: index)
             saved.meal = item.2
             saved.subtitle = item.3
-            if food.id == skyr.id { saved.name = "Morning skyr" }
+            if food.id == skyr.id { saved.name = tr("Morning skyr") }
             context.insert(saved)
         }
         try? context.save()

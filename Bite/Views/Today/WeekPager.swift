@@ -95,7 +95,7 @@ private struct DayPill: View {
         }
         .buttonStyle(PressableStyle(scale: 0.94))
         .accessibilityLabel(day.formatted(date: .complete, time: .omitted))
-        .accessibilityValue(verdict.label ?? "Nothing logged")
+        .accessibilityValue(verdict.label ?? String(localized: "Nothing logged"))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

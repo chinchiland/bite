@@ -38,9 +38,9 @@ struct MealEstimate: Decodable, Equatable {
 
         var label: String {
             switch self {
-            case .high: "Sure about this one"
-            case .medium: "Good estimate"
-            case .low: "Rough estimate"
+            case .high: tr("Sure about this one")
+            case .medium: tr("Good estimate")
+            case .low: tr("Rough estimate")
             }
         }
     }

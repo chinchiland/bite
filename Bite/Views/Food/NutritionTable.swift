@@ -26,14 +26,14 @@ struct NutritionTable: View {
         }
 
         let all: [Row?] = [
-            row("Energy", unit: "kcal") { $0.kcal },
-            row("Fat") { $0.fat },
-            row("Saturated fat", indent: true) { $0.saturatedFat },
-            row("Carbohydrates") { $0.carbs },
-            row("Sugars", indent: true) { $0.sugar },
-            row("Fiber") { $0.fiber },
-            row("Protein") { $0.protein },
-            row("Salt") { $0.salt },
+            row(String(localized: "Energy"), unit: "kcal") { $0.kcal },
+            row(String(localized: "Fat")) { $0.fat },
+            row(String(localized: "Saturated fat"), indent: true) { $0.saturatedFat },
+            row(String(localized: "Carbohydrates")) { $0.carbs },
+            row(String(localized: "Sugars"), indent: true) { $0.sugar },
+            row(String(localized: "Fiber")) { $0.fiber },
+            row(String(localized: "Protein")) { $0.protein },
+            row(String(localized: "Salt")) { $0.salt },
         ]
         return all.compactMap { $0 }
     }

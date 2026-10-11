@@ -10,10 +10,20 @@ enum Meal: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .breakfast: "Breakfast"
-        case .lunch: "Lunch"
-        case .dinner: "Dinner"
-        case .snack: "Snacks"
+        case .breakfast: tr("Breakfast")
+        case .lunch: tr("Lunch")
+        case .dinner: tr("Dinner")
+        case .snack: tr("Snacks")
+        }
+    }
+
+    /// The name a whole meal gets when you save it to your shelf: "My breakfast".
+    var savedTitle: String {
+        switch self {
+        case .breakfast: tr("My breakfast")
+        case .lunch: tr("My lunch")
+        case .dinner: tr("My dinner")
+        case .snack: tr("My snacks")
         }
     }
 

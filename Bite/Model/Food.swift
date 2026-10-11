@@ -17,7 +17,7 @@ enum FoodUnit: String, Hashable {
         switch self {
         case .gram: "g"
         case .milliliter: "ml"
-        case .serving: "serving"
+        case .serving: tr("serving")
         }
     }
 
@@ -29,7 +29,7 @@ enum FoodUnit: String, Hashable {
         let number = amount.formatted(.number.precision(.fractionLength(0...1)))
         switch self {
         case .gram, .milliliter: return "\(number) \(symbol)"
-        case .serving: return amount == 1 ? "1 serving" : "\(number) servings"
+        case .serving: return amount == 1 ? tr("1 serving") : tr("%@ servings", number)
         }
     }
 }

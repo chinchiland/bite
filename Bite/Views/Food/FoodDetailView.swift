@@ -281,7 +281,7 @@ struct FoodDetailView: View {
     // MARK: Amount
 
     private var unitLabel: String {
-        food.unit == .serving ? (amount == 1 ? "serving" : "servings") : food.unit.symbol
+        food.unit == .serving ? (amount == 1 ? tr("serving") : tr("servings")) : food.unit.symbol
     }
 
     private func chipTitle(_ portion: Portion) -> String {

@@ -32,8 +32,8 @@ struct InsetBox<Content: View>: View {
 /// A title with an optional quiet detail on the right. 20 pt above a card or shelf, 17 pt as
 /// the header inside a card.
 struct SectionLabel: View {
-    let title: String
-    var detail: String? = nil
+    let title: LocalizedStringKey
+    var detail: LocalizedStringKey? = nil
     var size: CGFloat = 20
 
     var body: some View {
@@ -137,7 +137,7 @@ struct ChipButtonStyle: ButtonStyle {
 /// − and + around a number. Holding repeats.
 struct StepButton: View {
     let systemImage: String
-    let label: String
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
@@ -157,7 +157,7 @@ struct StepButton: View {
 /// A round header button: card circle, outline icon.
 struct CircleIconButton: View {
     let systemImage: String
-    let label: String
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
@@ -312,7 +312,7 @@ struct LaurelBadge: View {
                 Image(systemName: "laurel.leading")
                     .font(.system(size: 17))
             }
-            Text(rank <= 3 ? "\(rank)" : "#\(rank)")
+            Text(verbatim: rank <= 3 ? "\(rank)" : "#\(rank)")
                 .font(.number(15))
             if rank <= 3 {
                 Image(systemName: "laurel.trailing")
@@ -484,9 +484,9 @@ struct MacroSplitBar: View {
 /// A number with its label above, its unit beside it and, when there is a past to compare,
 /// the move since.
 struct StatTile: View {
-    let label: String
+    let label: LocalizedStringKey
     let value: String
-    var unit: String? = nil
+    var unit: LocalizedStringKey? = nil
     var change: Double? = nil
     /// Whether a rise is good news. Nil keeps the change neutral.
     var higherIsBetter: Bool? = nil
@@ -535,7 +535,7 @@ struct ChangeLabel: View {
         .font(.ui(15, .medium))
         .foregroundStyle(color)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(rising ? "Up" : "Down") \((abs(change) * 100).safeInt) percent")
+        .accessibilityLabel(rising ? "Up \((abs(change) * 100).safeInt) percent" : "Down \((abs(change) * 100).safeInt) percent")
     }
 }
 

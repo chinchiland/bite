@@ -108,7 +108,7 @@ private struct GaugeTicks: Shape {
 struct DayStat: View {
     let systemImage: String
     let color: Color
-    let label: String
+    let label: LocalizedStringKey
     let value: String
 
     var body: some View {
@@ -154,7 +154,7 @@ struct MacroColumn: View {
                     .font(.number(20))
                     .foregroundStyle(Theme.ink)
                     .contentTransition(.numericText(value: grams))
-                Text(" / \(target.kcalText) g")
+                Text(verbatim: " / \(target.kcalText) g")
                     .font(.ui(15))
                     .monospacedDigit()
                     .foregroundStyle(Theme.secondary)
@@ -205,7 +205,7 @@ struct MacroPill: View {
                 Text(macro.title)
                     .font(.ui(12))
                     .foregroundStyle(Theme.secondary)
-                Text("\(grams.gramsText) g")
+                Text(verbatim: "\(grams.gramsText) g")
                     .font(.number(15))
                     .foregroundStyle(Theme.ink)
                     .contentTransition(.numericText(value: grams))

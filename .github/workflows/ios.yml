@@ -83,6 +83,13 @@ jobs:
           shoot 13-today-dark -onboarded YES
           shoot 14-food-dark -onboarded YES -screen food
           shoot 15-week-dark -onboarded YES -screen week
+          xcrun simctl ui "$UDID" appearance light
+          shoot 16-today-fr -onboarded YES -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 17-food-fr -onboarded YES -screen food -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 18-settings-fr -onboarded YES -screen settings -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 19-today-es -onboarded YES -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 20-week-es -onboarded YES -screen week -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 21-estimate-es -onboarded YES -screen estimate -AppleLanguages "(es)" -AppleLocale es_ES
 
       - uses: actions/upload-artifact@v4
         with:

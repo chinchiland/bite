@@ -13,7 +13,7 @@ enum FoodTint: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String { rawValue.capitalized }
+    var title: String { tr(rawValue.capitalized) }
 
     /// A tint that fits the food: fruit warm, vegetables green, grains golden, dairy and drinks
     /// blue, meat and fish pink, sweets lilac, the rest sand.

@@ -25,7 +25,7 @@ struct ScanDock: View {
 
 private struct DockButton: View {
     let systemImage: String
-    let title: String
+    let title: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
@@ -151,7 +151,7 @@ struct AddedToast: View {
             }
             Spacer(minLength: 8)
             HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("+\(added.kcal.kcalText)")
+                Text(verbatim: "+\(added.kcal.kcalText)")
                     .font(.number(17))
                     .foregroundStyle(Theme.ink)
                 Text("kcal")

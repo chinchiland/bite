@@ -91,6 +91,8 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				es,
 			);
 			mainGroup = B17E00000000000000000004;
 			minimizedProjectReferenceProxies = 1;
@@ -256,7 +258,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bite;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan food barcodes.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps and the calories you burn next to what you eat.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Bite only reads from Apple Health and never writes to it.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -288,7 +290,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bite;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan food barcodes.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps and the calories you burn next to what you eat.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Bite only reads from Apple Health and never writes to it.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

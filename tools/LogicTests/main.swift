@@ -146,7 +146,8 @@ check(OpenFoodFacts.variants(of: "0012345678905") == ["0012345678905", "01234567
 
 // MARK: Basics
 
-let basics = BasicFoods.load(from: root.appendingPathComponent("Bite/Resources/basics.json"))
+let basicsURL = root.appendingPathComponent("Bite/Resources/basics.json")
+let basics = BasicFoods.load(from: basicsURL, language: "en")
 check(basics.count == 105, "105 basics, got \(basics.count)")
 check(basics.allSatisfy { !$0.food.portions.isEmpty && $0.food.emoji != nil }, "every basic has a portion and an emoji")
 check(Set(basics.map { $0.food.id }).count == basics.count, "basic ids are unique")
@@ -182,6 +183,23 @@ if let milk = basics.first(where: { $0.food.name == "Milk, whole" })?.food {
     check(milk.unit == .milliliter, "milk is in ml")
     check(milk.portionText(for: 250) == "1 glass · 250 ml", "milk glass")
 }
+
+// The same basics in French and Spanish: their own names and portions, found in any language.
+let basicsFR = BasicFoods.load(from: basicsURL, language: "fr")
+let basicsES = BasicFoods.load(from: basicsURL, language: "es")
+check(basicsFR.map(\.key) == basics.map(\.key) && basicsES.map(\.key) == basics.map(\.key), "the English key is the same in every language")
+check(basics.allSatisfy { $0.key == $0.food.name }, "in English the name is the key")
+check(basicsFR.first { $0.key == "Banana" }?.food.name == "Banane", "French name")
+check(basicsFR.first { $0.key == "Banana" }?.food.portions.first?.label == "1 moyenne", "French portion agrees with banane")
+check(basicsFR.first { $0.key == "Egg" }?.food.portions.first?.label == "1 gros", "French portion agrees with œuf")
+check(basicsES.first { $0.key == "Coffee, black" }?.food.name == "Café solo", "Spanish name")
+check(basicsES.first { $0.key == "Ham" }?.food.portions.first?.label == "1 loncha", "Spanish slice of ham")
+check(basicsFR.allSatisfy { $0.food.portions.allSatisfy { !$0.label.isEmpty } }, "every French portion has a label")
+check(BasicFoods.search("platano", in: basicsES).first?.name == "Plátano", "Spanish search folds accents")
+check(BasicFoods.search("banana", in: basicsES).first?.name == "Plátano", "English still finds it in Spanish")
+check(BasicFoods.search("zumo", in: basicsES).first?.name == "Zumo de naranja", "Spanish juice")
+check(BasicFoods.search("banane", in: basicsFR).first?.name == "Banane", "French search")
+check(tr("%@ kcal over", "300") == "300 kcal over", "tr fills its value; Linux has no catalog, so English comes back")
 
 // MARK: Units, meals, goals
 

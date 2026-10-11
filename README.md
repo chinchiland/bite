@@ -10,6 +10,7 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, in Apple's own look (sy
 - **Saved foods**: bookmark any food, a whole meal or a photo estimate. Choose its picture (an emoji on a color, the product photo, or your own photo), its name and a line under it, how much one tap adds, and its meal.
 - **Week and Month**: the Health app's kind of chart (touch a bar to see that day), the daily average and how it moved, your best days ranked with laurels, and the foods you come back to.
 - **Settings**: daily goal with a calculator (Mifflin-St Jeor), macro split, Apple Health, and your Claude API key.
+- **English, French and Spanish**: the app follows the phone's language. Every word lives in `Bite/Resources/Localizable.xcstrings` (French uses tu, Spanish is from Spain), the 105 basics carry their French and Spanish names and portions, and Claude answers in your language. `python3 tools/check_strings.py` lists anything left untranslated.
 
 ## Run it
 

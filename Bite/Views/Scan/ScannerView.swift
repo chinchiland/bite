@@ -12,7 +12,7 @@ enum ScanMode: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
         case .food: "Scan food"
         case .barcode: "Barcode"
@@ -28,7 +28,7 @@ enum ScanMode: String, CaseIterable, Identifiable {
         }
     }
 
-    var hint: String {
+    var hint: LocalizedStringKey {
         switch self {
         case .food: "Fit your plate in the frame"
         case .barcode: "Point at a barcode"
@@ -207,7 +207,7 @@ struct ScannerView: View {
         }
     }
 
-    private func pillMessage(_ text: String, action: (String, () -> Void)?) -> some View {
+    private func pillMessage(_ text: LocalizedStringKey, action: (LocalizedStringKey, () -> Void)?) -> some View {
         HStack(spacing: 10) {
             Text(text)
                 .font(.ui(15, .medium))
@@ -225,7 +225,7 @@ struct ScannerView: View {
         .background(.ultraThinMaterial, in: Capsule())
     }
 
-    private func resultPanel(_ text: String, primary: (String, () -> Void)) -> some View {
+    private func resultPanel(_ text: LocalizedStringKey, primary: (LocalizedStringKey, () -> Void)) -> some View {
         VStack(spacing: 12) {
             Text(text)
                 .font(.ui(17, .medium))
@@ -258,6 +258,9 @@ struct ScannerView: View {
                             .font(.system(size: 21, weight: .regular))
                         Text(option.title)
                             .font(.ui(13, .medium))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                            .padding(.horizontal, 6)
                     }
                     .foregroundStyle(selected ? Color.black : Color.white)
                     .frame(maxWidth: .infinity)

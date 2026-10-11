@@ -19,11 +19,11 @@ struct ClaudeVision {
 
         var errorDescription: String? {
             switch self {
-            case .missingKey: "Add your Claude API key in Settings to estimate photos."
-            case .badKey: "Claude didn't accept the API key. Check it in Settings."
-            case .declined: "Claude couldn't estimate this photo."
-            case .unreadable: "Claude's answer came back unreadable. Try again."
-            case .server(let status): "Claude is unavailable right now (\(status)). Try again soon."
+            case .missingKey: tr("Add your Claude API key in Settings to estimate photos.")
+            case .badKey: tr("Claude didn't accept the API key. Check it in Settings.")
+            case .declined: tr("Claude couldn't estimate this photo.")
+            case .unreadable: tr("Claude's answer came back unreadable. Try again.")
+            case .server(let status): tr("Claude is unavailable right now (%@). Try again soon.", String(status))
             }
         }
     }
