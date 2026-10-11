@@ -37,7 +37,7 @@ struct DayCover<Controls: View>: View {
                     Image(uiImage: photo)
                         .resizable()
                         .scaledToFill()
-                        .overlay { Self.scrim }
+                        .overlay { scrim }
                 } else {
                     Theme.coverGradient
                 }
@@ -53,17 +53,19 @@ struct DayCover<Controls: View>: View {
 
     /// Dark at the foot so white numbers read on any photo, a soft shade at the head for the
     /// controls, clear in between so the food shows.
-    private static let scrim = LinearGradient(
-        stops: [
-            .init(color: .black.opacity(0.32), location: 0),
-            .init(color: .black.opacity(0), location: 0.24),
-            .init(color: .black.opacity(0), location: 0.34),
-            .init(color: .black.opacity(0.5), location: 0.62),
-            .init(color: .black.opacity(0.84), location: 1),
-        ],
-        startPoint: .top,
-        endPoint: .bottom
-    )
+    private var scrim: LinearGradient {
+        LinearGradient(
+            stops: [
+                .init(color: .black.opacity(0.32), location: 0),
+                .init(color: .black.opacity(0), location: 0.24),
+                .init(color: .black.opacity(0), location: 0.34),
+                .init(color: .black.opacity(0.5), location: 0.62),
+                .init(color: .black.opacity(0.84), location: 1),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
 
     private var hero: some View {
         VStack(alignment: .leading, spacing: 12) {
