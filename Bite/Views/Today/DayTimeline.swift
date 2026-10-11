@@ -55,14 +55,14 @@ private struct MealMoment: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
-            // "8:10", "12:40": the meal tells morning from evening, so no AM or PM.
-            Text(entries.first?.date.formatted(.dateTime.hour(.defaultDigits(amPM: .omitted)).minute()) ?? "")
+            // The time the way the phone writes it: "8:10 AM", "16:10".
+            Text(entries.first?.date.formatted(date: .omitted, time: .shortened) ?? "")
                 .font(.ui(13))
                 .monospacedDigit()
                 .foregroundStyle(Theme.secondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-                .frame(width: 44, alignment: .trailing)
+                .frame(width: 54, alignment: .trailing)
                 .padding(.top, 2)
 
             VStack(alignment: .leading, spacing: 10) {

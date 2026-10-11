@@ -378,6 +378,8 @@ struct FoodHero: View {
     let food: Food
     let height: CGFloat
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         Color.clear
             .frame(height: height)
@@ -405,10 +407,23 @@ struct FoodHero: View {
                 if let url = food.imageURL {
                     AsyncImage(url: url) { phase in
                         if let image = phase.image {
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .blendMode(.multiply)
+                            if colorScheme == .dark {
+                                // Multiplying onto a dark light would muddy the pack, so at
+                                // night it stands on its own white card.
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding(22)
+                                    .blendMode(.multiply)
+                                    .background(Theme.photoTile)
+                                    .compositingGroup()
+                                    .clipShape(RoundedRectangle(cornerRadius: 36, style: .continuous))
+                            } else {
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .blendMode(.multiply)
+                            }
                         } else {
                             Color.clear
                         }
