@@ -27,6 +27,8 @@ enum HomeSheet: Identifiable, Hashable {
     case settings
     case newSaved
     case editSaved(SavedFood)
+    case place(MealPlace)
+    case dish(CommunityDish)
 
     var id: Self { self }
 }
@@ -41,11 +43,21 @@ struct TodayView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Query private var entries: [FoodEntry]
     @Query(sort: \SavedFood.sortIndex) private var saved: [SavedFood]
+    @Query private var waterDays: [WaterDay]
+    @Query(sort: \CommunityDish.createdAt) private var dishes: [CommunityDish]
 
     @AppStorage("goal.kcal") private var goalKcal = 2000
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @AppStorage("health.asked") private var healthAsked = false
     @AppStorage("health.addBurned") private var addBurned = false
+    @AppStorage("health.weightAsked") private var weightAsked = false
+    @AppStorage("body.sex") private var sexRaw = Sex.female.rawValue
+    @AppStorage("body.age") private var bodyAge = 30
+    @AppStorage("body.height") private var bodyHeight = 170
+    @AppStorage("body.weight") private var bodyWeight = 70.0
+    @AppStorage("body.activity") private var activityRaw = Activity.light.rawValue
+    @AppStorage("body.goal") private var weightGoalRaw = WeightGoal.maintain.rawValue
+    @AppStorage("water.goal") private var waterGoal = 8
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -55,8 +67,11 @@ struct TodayView: View {
     @State private var deleting: FoodEntry?
     @State private var activity: DayActivity?
     @State private var activityRefresh = 0
-    @State private var cover: (id: PersistentIdentifier, image: UIImage)?
+    @State private var coverPhotos: [CoverPhoto] = []
+    @State private var coverIndex = 0
     @State private var coverOnScreen = true
+    @State private var weights: [WeightPoint] = []
+    @State private var placeFinder = PlaceFinder()
     @Namespace private var zoom
 
     /// How far back home reads the log: a month for the ranges, and the month before it so
@@ -67,6 +82,7 @@ struct TodayView: View {
         let calendar = Calendar.current
         let start = calendar.date(byAdding: .day, value: -Self.daysBack, to: calendar.startOfDay(for: .now)) ?? .distantPast
         _entries = Query(filter: #Predicate<FoodEntry> { $0.date >= start }, sort: \FoodEntry.date)
+        _waterDays = Query(filter: #Predicate<WaterDay> { $0.day >= start })
     }
 
     var body: some View {
@@ -91,7 +107,7 @@ struct TodayView: View {
             .animation(.easeOut(duration: 0.2), value: coverOnScreen)
         }
         // A photo cover runs to the top edge, where the time would sit dark on the picture.
-        .statusBarHidden(tab == .today && cover != nil && coverOnScreen && colorScheme == .light)
+        .statusBarHidden(tab == .today && !coverPhotos.isEmpty && coverOnScreen && colorScheme == .light)
         .fullScreenCover(isPresented: $showScanner) {
             ScannerView(day: day)
                 .zoomTransition(id: "scan", in: zoom)
@@ -120,8 +136,17 @@ struct TodayView: View {
         .task(id: "\(day.timeIntervalSince1970) \(activityRefresh) \(healthAsked)") {
             await loadActivity()
         }
-        .task(id: coverEntry?.persistentModelID) {
-            loadCover()
+        .task(id: photoEntries.map(\.persistentModelID)) {
+            loadCoverPhotos()
+        }
+        .task(id: "\(healthAsked) \(weightAsked)") {
+            await loadWeights()
+        }
+        .task {
+            await placeFinder.locateIfAllowed()
+        }
+        .onChange(of: day) { _, _ in
+            coverIndex = 0
         }
         // A tick under the finger when the switcher moves, and a quiet success the moment
         // today lands on target. Nothing else buzzes.
@@ -154,19 +179,22 @@ struct TodayView: View {
     // MARK: Day
 
     private func dayPage(topInset: CGFloat) -> some View {
-        let photo = cover?.image
+        let hasPhoto = !coverPhotos.isEmpty
         return ScrollView {
             VStack(spacing: 0) {
                 DayCover(
-                    photo: photo,
-                    height: topInset + (photo == nil ? 290 : 371),
+                    photos: coverPhotos,
+                    index: $coverIndex,
+                    height: topInset + (hasPhoto ? 404 : 300),
                     topInset: topInset,
                     number: hero.number,
                     unit: hero.unit,
-                    caption: heroCaption,
-                    detail: String(localized: "Goal \(budget.kcalText)")
+                    lastMeal: hasPhoto ? nil : dayEntries.last.map { String(localized: "Last meal: \($0.name)") },
+                    detail: heroDetail.text,
+                    detailIsOver: heroDetail.isOver,
+                    onPlace: { sheet = .place($0) }
                 ) {
-                    coverControls(onPhoto: photo != nil)
+                    coverControls(onPhoto: hasPhoto)
                 }
                 .onGeometryChange(for: Bool.self) { geometry in
                     geometry.frame(in: .scrollView).maxY > 120
@@ -175,7 +203,6 @@ struct TodayView: View {
                 }
 
                 daySheet
-                    .padding(.top, -26)
             }
         }
         .scrollIndicators(.hidden)
@@ -235,10 +262,27 @@ struct TodayView: View {
                 number: totals.kcal,
                 unit: "kcal eaten"
             )
-            ActivityChips(health: healthState, onConnect: connectHealth)
-                .padding(.top, 16)
+            ActivityChips(
+                health: healthState,
+                water: waterGlasses,
+                waterGoal: waterGoal,
+                onWater: addWater,
+                onWaterRemove: removeWater,
+                onConnect: connectHealth
+            )
+            .padding(.top, 16)
 
-            SectionLabel(title: "Your day")
+            if isToday, !entries.isEmpty {
+                WeightTrend(
+                    weights: trendWeights,
+                    forecast: forecast,
+                    goal: WeightGoal(rawValue: weightGoalRaw) ?? .maintain,
+                    onAddWeight: addWeight
+                )
+                .padding(.top, 28)
+            }
+
+            SectionLabel(title: "Your day", symbol: "fork.knife")
                 .padding(.top, 26)
                 .padding(.bottom, 14)
             if dayEntries.isEmpty {
@@ -258,22 +302,32 @@ struct TodayView: View {
             }
 
             SavedShelf(
-                saved: saved,
+                title: shelfTitle,
+                saved: shelfOrder,
                 onAdd: add,
                 onEdit: { sheet = .editSaved($0) },
                 onDelete: removeSaved,
                 onNew: { sheet = .newSaved }
             )
             .padding(.top, 30)
+
+            if !nearby.isEmpty {
+                NearbyDishes(items: nearby) { sheet = .dish($0) }
+                    .padding(.top, 30)
+            }
+
+            WeekStrip(
+                days: weekDays,
+                onOpenWeek: { withAnimation(.snappy) { tab = .week } },
+                onOpenDay: { date in withAnimation(.snappy) { day = date } }
+            )
+            .padding(.top, 32)
         }
         .padding(.horizontal, Theme.margin)
-        .padding(.top, 22)
+        .padding(.top, 10)
         .padding(.bottom, 140)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Theme.page,
-            in: UnevenRoundedRectangle(topLeadingRadius: Theme.sheetRadius, topTrailingRadius: Theme.sheetRadius, style: .continuous)
-        )
+        .background(Theme.page)
     }
 
     // MARK: Week and month
@@ -347,6 +401,12 @@ struct TodayView: View {
             SavedFoodEditor(mode: .new)
         case .editSaved(let item):
             SavedFoodEditor(mode: .edit(item))
+        case .place(let place):
+            PlaceView(place: place) { self.sheet = nil }
+        case .dish(let dish):
+            NavigationStack {
+                DishView(dish: dish, onOpenPlace: { self.sheet = .place($0) }, onDone: { self.sheet = nil })
+            }
         }
     }
 
@@ -400,10 +460,13 @@ struct TodayView: View {
         return entries.filter { calendar.isDate($0.date, inSameDayAs: day) }
     }
 
-    /// The day's latest photo: a plate Claude estimated or a saved food with your picture.
-    private var coverEntry: FoodEntry? {
-        dayEntries.last { $0.imageData != nil }
+    /// The day's photos, latest first: plates Claude estimated, dishes and saved foods with
+    /// your picture.
+    private var photoEntries: [FoodEntry] {
+        dayEntries.filter { $0.imageData != nil }.reversed()
     }
+
+    private var isToday: Bool { Calendar.current.isDateInToday(day) }
 
     private var totals: Nutrients {
         dayEntries.reduce(Nutrients.zero) { $0 + $1.totals }
@@ -429,15 +492,92 @@ struct TodayView: View {
         return (number: budget - totals.kcal, unit: String(localized: "kcal left today"))
     }
 
-    /// Under the number: the photo's meal, or the last thing you ate; a past day's verdict.
-    private var heroCaption: String? {
-        if !Calendar.current.isDateInToday(day) {
-            return verdicts[day]?.label
+    /// Right of the place line: the goal today; a past day's verdict, red when it went over.
+    private var heroDetail: (text: String, isOver: Bool) {
+        if !isToday, let verdict = verdicts[day], let label = verdict.label {
+            if case .over = verdict { return (label, true) }
+            return (label, false)
         }
-        if cover != nil, let name = coverEntry?.name {
-            return name
+        return (String(localized: "Goal \(budget.kcalText)"), false)
+    }
+
+    // MARK: Today's extras
+
+    private var waterDay: WaterDay? {
+        waterDays.first { Calendar.current.isDate($0.day, inSameDayAs: day) }
+    }
+
+    private var waterGlasses: Int { waterDay?.glasses ?? 0 }
+
+    /// "Fits your 967 left" while there is room today; just "Saved" otherwise.
+    private var shelfTitle: LocalizedStringKey {
+        let left = budget - totals.kcal
+        return isToday && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) left" : "Saved"
+    }
+
+    /// Saved foods that fit what is left first; protein-dense first when protein is behind.
+    private var shelfOrder: [SavedFood] {
+        let left = budget - totals.kcal
+        guard isToday, left > 0 else { return saved }
+        let proteinBehind = targets.protein - totals.protein > 20
+        return saved.sorted { a, b in
+            let fitsA = a.totals.kcal <= left
+            let fitsB = b.totals.kcal <= left
+            if fitsA != fitsB { return fitsA }
+            if proteinBehind {
+                return a.totals.protein / max(a.totals.kcal, 1) > b.totals.protein / max(b.totals.kcal, 1)
+            }
+            return a.sortIndex < b.sortIndex
         }
-        return dayEntries.last.map { String(localized: "Last meal: \($0.name)") }
+    }
+
+    /// Dishes people counted nearby, nearest first; without location, the ones at your places.
+    private var nearby: [NearbyDishes.Item] {
+        let items = dishes.map { NearbyDishes.Item(dish: $0, distance: placeFinder.distance(to: $0.place)) }
+        let close = items.filter { ($0.distance ?? 0) < 3000 }
+        let sorted = close.sorted {
+            ($0.distance ?? .infinity, -$0.dish.consensus.accuracy) < ($1.distance ?? .infinity, -$1.dish.consensus.accuracy)
+        }
+        return Array(sorted.prefix(8))
+    }
+
+    /// The last seven days, today last, each with its verdict.
+    private var weekDays: [WeekStrip.Day] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let todays = entries.filter { calendar.isDate($0.date, inSameDayAs: today) }
+        let todayKcal = todays.reduce(0) { $0 + $1.totals.kcal }
+        let todayVerdict = DayVerdict(kcal: todayKcal, entries: todays.count, goal: Double(goalKcal))
+        return (0..<7).reversed().compactMap { offset in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
+            return WeekStrip.Day(date: date, verdict: offset == 0 ? todayVerdict : verdicts[date] ?? .empty)
+        }
+    }
+
+    /// Your weighings from Health; else the weight you gave the goal calculator, as today's.
+    private var trendWeights: [WeightPoint] {
+        if !weights.isEmpty { return weights }
+        guard UserDefaults.standard.object(forKey: "body.weight") != nil else { return [] }
+        return [WeightPoint(date: .now, kilograms: bodyWeight)]
+    }
+
+    /// Where your weight goes at the way you ate over the last week's whole days.
+    private var forecast: WeightForecast? {
+        guard let current = trendWeights.last?.kilograms else { return nil }
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let kcals: [Double] = (1...7).compactMap { offset in
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
+            return entries.filter { calendar.isDate($0.date, inSameDayAs: date) }.reduce(0) { $0 + $1.totals.kcal }
+        }
+        let maintenance = GoalCalculator.maintenance(
+            sex: Sex(rawValue: sexRaw) ?? .female,
+            age: bodyAge,
+            heightCm: Double(bodyHeight),
+            weightKg: current,
+            activity: Activity(rawValue: activityRaw) ?? .light
+        )
+        return WeightForecast.make(currentKg: current, maintenance: maintenance, dayKcals: kcals)
     }
 
     private var summaries: [DaySummary] {
@@ -476,12 +616,44 @@ struct TodayView: View {
         return .connected(activity ?? DayActivity(steps: 0, activeKcal: 0))
     }
 
-    private func loadCover() {
-        guard let entry = coverEntry, let data = entry.imageData, let image = UIImage(data: data) else {
-            cover = nil
+    private func loadCoverPhotos() {
+        let previous = coverPhotos.count
+        coverPhotos = photoEntries.compactMap { entry in
+            guard let data = entry.imageData, let image = UIImage(data: data) else { return nil }
+            return CoverPhoto(id: AnyHashable(entry.persistentModelID), image: image, dish: entry.name, place: entry.place)
+        }
+        // A new photo comes to the front; a removed one never leaves the cover past its end.
+        if coverPhotos.count > previous, previous > 0 { coverIndex = 0 }
+        if coverIndex >= coverPhotos.count { coverIndex = 0 }
+    }
+
+    private func loadWeights() async {
+        #if DEBUG
+        if BiteStore.isDemo {
+            weights = DemoData.weights()
             return
         }
-        cover = (id: entry.persistentModelID, image: image)
+        #endif
+        guard healthAsked, weightAsked, HealthActivity.isAvailable else {
+            weights = []
+            return
+        }
+        weights = await HealthActivity.shared.weights()
+    }
+
+    private func addWater() {
+        if let waterDay {
+            waterDay.glasses += 1
+        } else {
+            context.insert(WaterDay(day: Calendar.current.startOfDay(for: day), glasses: 1))
+        }
+        try? context.save()
+    }
+
+    private func removeWater() {
+        guard let waterDay, waterDay.glasses > 0 else { return }
+        waterDay.glasses -= 1
+        try? context.save()
     }
 
     // MARK: Actions
@@ -575,6 +747,20 @@ struct TodayView: View {
         Task {
             await HealthActivity.shared.requestAccess()
             healthAsked = true
+            weightAsked = true
+        }
+    }
+
+    /// Weight from Apple Health when there is Health; else the goal calculator in Settings.
+    private func addWeight() {
+        guard HealthActivity.isAvailable else {
+            sheet = .settings
+            return
+        }
+        Task {
+            await HealthActivity.shared.requestAccess()
+            healthAsked = true
+            weightAsked = true
         }
     }
 
@@ -610,8 +796,9 @@ struct TodayView: View {
 
     #if DEBUG
     /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday|over`
-    /// opens a screen straight away, for screenshots. `over` is the demo's heaviest day, three
-    /// days back: four digit calories, past the goal, carbs and fat past their targets.
+    /// `|place|dish|addestimate|accuracy|where|cover2` opens a screen straight away, for
+    /// screenshots. `over` is the demo's heaviest day, three days back: four digit calories,
+    /// past the goal, carbs and fat past their targets.
     private func openDemoScreen() {
         switch UserDefaults.standard.string(forKey: "screen") {
         case "food": editing = dayEntries.first { $0.imageURLString != nil } ?? dayEntries.first
@@ -625,6 +812,10 @@ struct TodayView: View {
         case "month": tab = .month
         case "yesterday": day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
         case "over": day = Calendar.current.date(byAdding: .day, value: -3, to: day) ?? day
+        case "place", "dish", "addestimate", "accuracy":
+            if let first = dishes.first { sheet = .place(first.place) }
+        case "where": editing = dayEntries.first { $0.place != nil } ?? dayEntries.last
+        case "cover2": coverIndex = 1
         default: break
         }
     }
@@ -633,10 +824,14 @@ struct TodayView: View {
 
 /// Launch arguments that set screens up for screenshots. Release builds ignore them.
 enum ScreenshotFlags {
-    /// `-anchor bottom` opens a long page scrolled to its end.
+    /// `-anchor bottom` opens a long page scrolled to its end, `-anchor center` halfway.
     static var scrollAnchor: UnitPoint? {
         #if DEBUG
-        return UserDefaults.standard.string(forKey: "anchor") == "bottom" ? .bottom : nil
+        switch UserDefaults.standard.string(forKey: "anchor") {
+        case "bottom": return .bottom
+        case "center": return .center
+        default: return nil
+        }
         #else
         return nil
         #endif

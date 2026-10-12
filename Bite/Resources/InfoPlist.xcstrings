@@ -32,19 +32,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Bite shows your steps and the calories you burn next to what you eat."
+            "value" : "Bite shows your steps, the calories you burn and your weight next to what you eat."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite muestra tus pasos y las calorías que quemas junto a lo que comes."
+            "value" : "Bite muestra tus pasos, las calorías que quemas y tu peso junto a lo que comes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite affiche tes pas et les calories que tu brûles à côté de ce que tu manges."
+            "value" : "Bite affiche tes pas, les calories que tu brûles et ton poids à côté de ce que tu manges."
           }
         }
       }
@@ -69,6 +69,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bite ne fait que lire les données de l’app Santé et n’y écrit jamais."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "Privacy - Location When In Use Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bite uses your location to list the restaurants and cafes around you when you add a meal. It stays on your phone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite usa tu ubicación para listar los restaurantes y cafeterías a tu alrededor cuando añades una comida. Se queda en tu teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite utilise ta position pour lister les restaurants et cafés autour de toi quand tu ajoutes un repas. Elle reste sur ton téléphone."
           }
         }
       }

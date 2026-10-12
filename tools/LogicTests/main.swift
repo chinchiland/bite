@@ -333,5 +333,91 @@ do {
     print("FAIL: request threw \(error)")
 }
 
+// MARK: Community estimates
+
+do {
+    // El Beirout's chicken shawarma: three close counts, one that 23 people agree with.
+    let shawarma = Consensus([
+        .init(kcal: 590, protein: 37, carbs: 54, fat: 24, agrees: 23),
+        .init(kcal: 640, protein: 40, carbs: 58, fat: 26, agrees: 4),
+        .init(kcal: 570, protein: 35, carbs: 52, fat: 23, agrees: 1),
+    ])
+    check(near(shawarma.nutrients.kcal, 596.77, 0.05), "agreed counts weigh more: \(shawarma.nutrients.kcal)")
+    check(shawarma.accuracy == 97, "three close counts and 28 agreements are 97, got \(shawarma.accuracy)")
+    check(shawarma.tier == .veryAccurate, "97 is very accurate")
+    check(shawarma.spreadPercent == 2, "within 2%, got \(shawarma.spreadPercent)")
+    check(shawarma.estimates == 3 && shawarma.agrees == 28, "counts and agreements")
+    check(near(shawarma.nutrients.protein, 37.32, 0.05), "protein is weighted too: \(shawarma.nutrients.protein)")
+
+    // Two close counts but few people behind them: roughly right.
+    let plate = Consensus([
+        .init(kcal: 1240, protein: 52, carbs: 120, fat: 62, agrees: 3),
+        .init(kcal: 1180, protein: 50, carbs: 112, fat: 60, agrees: 1),
+    ])
+    check(near(plate.nutrients.kcal, 1220), "plate average \(plate.nutrients.kcal)")
+    check(plate.accuracy == 62 && plate.tier == .rough, "few people behind two counts: \(plate.accuracy)")
+
+    // One count alone is never sure, however exact it may be.
+    let lone = Consensus([.init(kcal: 430, protein: 14, carbs: 38, fat: 24, agrees: 0)])
+    check(lone.accuracy == 15 && lone.tier == .needsMore, "one count is 15, got \(lone.accuracy)")
+    check(lone.spreadPercent == 1, "a single count reads within 1%")
+
+    let none = Consensus([])
+    check(none.accuracy == 0 && none.nutrients == .zero && none.estimates == 0, "no counts, no numbers")
+
+    // Far apart counts stay rough even with many agreements.
+    let apart = Consensus([
+        .init(kcal: 400, protein: 0, carbs: 0, fat: 0, agrees: 10),
+        .init(kcal: 800, protein: 0, carbs: 0, fat: 0, agrees: 10),
+    ])
+    check(apart.accuracy < 70, "a 2x disagreement is not accurate: \(apart.accuracy)")
+}
+
+// MARK: Places
+
+do {
+    let beirout = MealPlace(name: "El Beirout", area: "Parc de Milan", latitude: 46.51492, longitude: 6.62268, category: .restaurant)
+    check(beirout.line == "El Beirout · Parc de Milan", "place line \(beirout.line)")
+    check(MealPlace(name: "Home").line == "Home", "a place without an area")
+    check(MealPlace(name: "Café", area: "Café").line == "Café", "an area that repeats the name is dropped")
+    check(beirout.key == MealPlace(name: "el beirout", area: "PARC DE MILAN").key, "same place whatever the case")
+    let walk = beirout.distance(fromLatitude: 46.51475, longitude: 6.62230) ?? -1
+    check(walk > 30 && walk < 40, "a few steps from the park: \(walk) m")
+    let geneva = MealPlace.meters(fromLatitude: 46.5197, longitude: 6.6323, toLatitude: 46.2044, longitude: 6.1432)
+    check(geneva > 49_000 && geneva < 53_000, "Lausanne to Geneva is about 51 km: \(geneva)")
+    check(MealPlace(name: "Somewhere").distance(fromLatitude: 0, longitude: 0) == nil, "no coordinates, no distance")
+    let coded = try? JSONEncoder().encode(beirout)
+    check(coded.flatMap { try? JSONDecoder().decode(MealPlace.self, from: $0) } == beirout, "a place survives coding")
+}
+
+// MARK: Weight forecast
+
+do {
+    // 32, 180 cm, 72.6 kg, training 3 to 5 days: about 2,630 kcal a day.
+    let burn = GoalCalculator.maintenance(sex: .male, age: 32, heightCm: 180, weightKg: 72.6, activity: .moderate)
+    check(near(burn, 2628.8, 0.1), "maintenance \(burn)")
+    // The calculator's daily goal is the same body minus 500 for losing, rounded.
+    let goal = GoalCalculator.dailyCalories(sex: .male, age: 32, heightCm: 180, weightKg: 72.6, activity: .moderate, goal: .lose)
+    check(abs(Double(goal) - (burn - 500)) <= 5, "goal is maintenance minus 500: \(goal)")
+
+    let week: [Double] = [1954, 2038, 2242, 1681, 1789, 1522, 2160]
+    let forecast = WeightForecast.make(currentKg: 72.6, maintenance: burn, dayKcals: week)
+    check(forecast != nil, "a week of whole days makes a forecast")
+    if let forecast {
+        check(forecast.days == 7, "seven days count")
+        check(near(forecast.dailyBalance, 1912.29 - burn, 0.1), "balance \(forecast.dailyBalance)")
+        check(forecast.direction == .losing, "a deficit is losing")
+        check(near(forecast.perWeek, -0.6515, 0.001), "about 0.65 kg a week, got \(forecast.perWeek)")
+        check(near(forecast.weight(afterDays: 28), 72.6 - 2.606, 0.01), "four weeks on: \(forecast.weight(afterDays: 28))")
+    }
+
+    // Forgotten days (a coffee and nothing else) never pull the average down.
+    let patchy = WeightForecast.make(currentKg: 70, maintenance: 2000, dayKcals: [2000, 150, 2000, 0, 2000])
+    check(patchy?.days == 3 && near(patchy?.dailyBalance ?? -1, 0), "only whole days count")
+    check(patchy?.direction == .holding, "eating what you burn holds")
+    check(WeightForecast.make(currentKg: 70, maintenance: 2000, dayKcals: [2100, 1900]) == nil, "two days are not enough")
+    check(WeightForecast.make(currentKg: 70, maintenance: 2000, dayKcals: [2300, 2300, 2300])?.direction == .gaining, "a surplus is gaining")
+}
+
 print("\(passes) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)

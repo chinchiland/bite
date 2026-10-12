@@ -161,6 +161,38 @@
         }
       }
     },
+    "%@ less since %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ menos desde el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de moins depuis le %@"
+          }
+        }
+      }
+    },
+    "%@ more since %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ más desde el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de plus depuis le %@"
+          }
+        }
+      }
+    },
     "%@ options" : {
       "localizations" : {
         "es" : {
@@ -321,6 +353,80 @@
         }
       }
     },
+    "%lld estimates" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimate"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimates"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimación"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimaciones"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimation"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estimations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld estimates within %lld%%, agreed by %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld estimaciones con un %lld %% de diferencia, confirmadas por %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld estimations à %lld %% près, confirmées par %lld"
+          }
+        }
+      }
+    },
     "%lld foods" : {
       "localizations" : {
         "en" : {
@@ -372,6 +478,196 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld aliments"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld glasses" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld glass"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld glasses"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld vaso"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld vasos"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld verre"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld verres"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld people agree" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld person agrees"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld people agree"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld persona está de acuerdo"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld personas están de acuerdo"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld personne est d’accord"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld personnes sont d’accord"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld percent accurate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preciso al %lld %%"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précis à %lld %%"
+          }
+        }
+      }
+    },
+    "%lld stars" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld star"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld stars"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estrella"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld estrellas"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld étoile"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld étoiles"
                 }
               }
             }
@@ -469,6 +765,54 @@
         }
       }
     },
+    "50 to 69" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50 a 69"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50 à 69"
+          }
+        }
+      }
+    },
+    "70 to 89" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "70 a 89"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "70 à 89"
+          }
+        }
+      }
+    },
+    "90 to 100" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90 a 100"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90 à 100"
+          }
+        }
+      }
+    },
     "A line under it, like “with honey”" : {
       "localizations" : {
         "es" : {
@@ -481,6 +825,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Une ligne en dessous, comme « avec du miel »"
+          }
+        }
+      }
+    },
+    "Accuracy" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Precisión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précision"
+          }
+        }
+      }
+    },
+    "Accurate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preciso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précis"
           }
         }
       }
@@ -561,6 +937,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouter %@, %@ calories"
+          }
+        }
+      }
+    },
+    "Add a dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir un plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un plat"
+          }
+        }
+      }
+    },
+    "Add a place" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir un sitio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un endroit"
           }
         }
       }
@@ -725,6 +1133,54 @@
         }
       }
     },
+    "Add your estimate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir tu estimación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter ton estimation"
+          }
+        }
+      }
+    },
+    "Add your weight from Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir tu peso desde la app Salud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter ton poids depuis l’app Santé"
+          }
+        }
+      }
+    },
+    "Add your weight to see where it is heading" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade tu peso para ver hacia dónde va"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute ton poids pour voir où il va"
+          }
+        }
+      }
+    },
     "Added" : {
       "localizations" : {
         "es" : {
@@ -769,6 +1225,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouté : %@"
+          }
+        }
+      }
+    },
+    "Adds a glass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade un vaso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute un verre"
           }
         }
       }
@@ -821,6 +1293,22 @@
         }
       }
     },
+    "An estimate from your last %lld logged days." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una estimación a partir de tus últimos %lld días anotados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une estimation d’après tes %lld derniers jours notés."
+          }
+        }
+      }
+    },
     "Another day, or your week" : {
       "localizations" : {
         "es" : {
@@ -853,6 +1341,22 @@
         }
       }
     },
+    "At your places" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tus sitios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans tes endroits"
+          }
+        }
+      }
+    },
     "Back to the camera" : {
       "localizations" : {
         "es" : {
@@ -869,6 +1373,22 @@
         }
       }
     },
+    "Bakery" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panadería"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boulangerie"
+          }
+        }
+      }
+    },
     "Balanced" : {
       "localizations" : {
         "es" : {
@@ -881,6 +1401,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Équilibré"
+          }
+        }
+      }
+    },
+    "Bar" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bar"
           }
         }
       }
@@ -945,6 +1481,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bite a besoin de l’appareil photo. Autorise-le dans Réglages."
+          }
+        }
+      }
+    },
+    "Bite uses your location here, to list the restaurants and cafes nearby. It stays on your phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite usa tu ubicación aquí, para listar los restaurantes y cafeterías cercanos. Se queda en tu teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite utilise ta position ici, pour lister les restaurants et cafés proches. Elle reste sur ton téléphone."
           }
         }
       }
@@ -1029,6 +1581,22 @@
         }
       }
     },
+    "By hand" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A mano"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À la main"
+          }
+        }
+      }
+    },
     "By time" : {
       "localizations" : {
         "es" : {
@@ -1061,6 +1629,38 @@
         }
       }
     },
+    "Cafe" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cafetería"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Café"
+          }
+        }
+      }
+    },
+    "Calorie estimates" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimaciones de calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimations de calories"
+          }
+        }
+      }
+    },
     "Calories" : {
       "localizations" : {
         "es" : {
@@ -1089,6 +1689,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Calories par jour, avec ton objectif de %@"
+          }
+        }
+      }
+    },
+    "Calories from the estimates people shared." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calorías según las estimaciones compartidas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calories d’après les estimations partagées."
           }
         }
       }
@@ -1205,6 +1821,22 @@
         }
       }
     },
+    "Change your estimate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar tu estimación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier ton estimation"
+          }
+        }
+      }
+    },
     "Check your connection and try again." : {
       "localizations" : {
         "es" : {
@@ -1221,6 +1853,22 @@
         }
       }
     },
+    "Chicken shawarma" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shawarma de pollo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shawarma au poulet"
+          }
+        }
+      }
+    },
     "Choose" : {
       "localizations" : {
         "es" : {
@@ -1233,6 +1881,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choisir"
+          }
+        }
+      }
+    },
+    "Choose a photo of your plate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige una foto de tu plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis une photo de ton assiette"
+          }
+        }
+      }
+    },
+    "Choose another photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir otra foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une autre photo"
           }
         }
       }
@@ -1281,6 +1961,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude a refusé la clé API. Vérifie-la dans Réglages."
+          }
+        }
+      }
+    },
+    "Claude estimates it, and you can correct the numbers before saving." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude lo estima y puedes corregir los números antes de guardar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude l’estime, et tu peux corriger les chiffres avant d’enregistrer."
+          }
+        }
+      }
+    },
+    "Claude is counting…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude está contando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude compte…"
           }
         }
       }
@@ -1409,6 +2121,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contient : %@."
+          }
+        }
+      }
+    },
+    "Couldn't find the places around you. Search by name instead." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontraron sitios a tu alrededor. Busca por nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de trouver les endroits autour de toi. Cherche plutôt par nom."
           }
         }
       }
@@ -1605,6 +2333,38 @@
         }
       }
     },
+    "Directions" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo llegar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Itinéraire"
+          }
+        }
+      }
+    },
+    "Dishes here" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Platos de aquí"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les plats ici"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "es" : {
@@ -1781,6 +2541,22 @@
         }
       }
     },
+    "Entered by hand" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introducido a mano"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisi à la main"
+          }
+        }
+      }
+    },
     "Estimated by Claude from your photo." : {
       "localizations" : {
         "es" : {
@@ -1793,6 +2569,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estimé par Claude à partir de ta photo."
+          }
+        }
+      }
+    },
+    "Every estimate counts once, and once more for each person who agreed with it. The calories are the average of all that. Accuracy is how close the estimates sit to each other, times how many people stand behind them, so three close estimates and a few agreements reach 90." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada estimación cuenta una vez, y una vez más por cada persona que la confirmó. Las calorías son la media de todo eso. La precisión indica lo cerca que están las estimaciones entre sí, multiplicado por cuántas personas las respaldan: tres estimaciones cercanas y unas pocas confirmaciones llegan a 90."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque estimation compte une fois, et une fois de plus pour chaque personne qui l’a confirmée. Les calories sont la moyenne de tout ça. La précision dit à quel point les estimations sont proches entre elles, multipliée par le nombre de personnes derrière : trois estimations proches et quelques confirmations atteignent 90."
+          }
+        }
+      }
+    },
+    "Falafel wrap" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrap de falafel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrap falafel"
           }
         }
       }
@@ -1845,6 +2653,22 @@
         }
       }
     },
+    "Filled in from your photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rellenado a partir de tu foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rempli d’après ta photo"
+          }
+        }
+      }
+    },
     "Fish" : {
       "localizations" : {
         "es" : {
@@ -1893,6 +2717,22 @@
         }
       }
     },
+    "Fits your %@ left" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para tus %@ kcal restantes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour tes %@ kcal restantes"
+          }
+        }
+      }
+    },
     "Food" : {
       "localizations" : {
         "es" : {
@@ -1937,6 +2777,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Étiquette"
+          }
+        }
+      }
+    },
+    "From a photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con una foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec une photo"
           }
         }
       }
@@ -2213,6 +3069,70 @@
         }
       }
     },
+    "How" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment"
+          }
+        }
+      }
+    },
+    "How the accuracy is worked out" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo se calcula la precisión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment la précision est calculée"
+          }
+        }
+      }
+    },
+    "Hummus plate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plato de hummus"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assiette de houmous"
+          }
+        }
+      }
+    },
+    "If you keep this up" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si sigues así"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si tu continues comme ça"
+          }
+        }
+      }
+    },
     "Ingredients" : {
       "localizations" : {
         "es" : {
@@ -2373,6 +3293,22 @@
         }
       }
     },
+    "Location is off for Bite. Search by name, or turn it on in Settings." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ubicación está desactivada para Bite. Busca por nombre o actívala en Ajustes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La position est désactivée pour Bite. Cherche par nom, ou active-la dans Réglages."
+          }
+        }
+      }
+    },
     "Log a few days and they show up here, with your best days ranked." : {
       "localizations" : {
         "es" : {
@@ -2385,6 +3321,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note quelques jours et ils apparaîtront ici, avec tes meilleurs jours classés."
+          }
+        }
+      }
+    },
+    "Log a few whole days and Bite shows where your weight is heading." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anota unos cuantos días completos y Bite te muestra hacia dónde va tu peso."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note quelques journées complètes et Bite te montre où va ton poids."
           }
         }
       }
@@ -2417,6 +3369,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rechercher"
+          }
+        }
+      }
+    },
+    "Looking around you…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando a tu alrededor…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche autour de toi…"
           }
         }
       }
@@ -2609,6 +3577,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Homme"
+          }
+        }
+      }
+    },
+    "Market" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mercado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marché"
           }
         }
       }
@@ -2885,6 +3869,54 @@
         }
       }
     },
+    "Name of the dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre del plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du plat"
+          }
+        }
+      }
+    },
+    "Near you" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca de ti"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Près de toi"
+          }
+        }
+      }
+    },
+    "Needs more estimates" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faltan estimaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il faut plus d’estimations"
+          }
+        }
+      }
+    },
     "New" : {
       "localizations" : {
         "es" : {
@@ -2901,6 +3933,22 @@
         }
       }
     },
+    "New dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plato nuevo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau plat"
+          }
+        }
+      }
+    },
     "New saved food" : {
       "localizations" : {
         "es" : {
@@ -2913,6 +3961,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nouvel aliment enregistré"
+          }
+        }
+      }
+    },
+    "Next photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo suivante"
           }
         }
       }
@@ -2961,6 +4025,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aucun aliment trouvé"
+          }
+        }
+      }
+    },
+    "No place" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ningún sitio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun endroit"
+          }
+        }
+      }
+    },
+    "No places found by that name." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay sitios con ese nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun endroit à ce nom."
           }
         }
       }
@@ -3093,6 +4189,54 @@
         }
       }
     },
+    "On target: %lld of %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el objetivo: %lld de %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans l’objectif : %lld sur %lld"
+          }
+        }
+      }
+    },
+    "One estimate so far. Add yours to firm it up." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo una estimación por ahora. Añade la tuya para afinarla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une seule estimation pour l’instant. Ajoute la tienne pour la consolider."
+          }
+        }
+      }
+    },
+    "One serving, the way it comes to the table." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una ración, tal como llega a la mesa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une portion, telle qu’elle arrive à table."
+          }
+        }
+      }
+    },
     "One tap adds" : {
       "localizations" : {
         "es" : {
@@ -3153,6 +4297,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ouvre l’appareil photo pour scanner un code-barres ou une assiette"
+          }
+        }
+      }
+    },
+    "Opens the place in Uber Eats" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre el sitio en Uber Eats"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre l’endroit dans Uber Eats"
+          }
+        }
+      }
+    },
+    "Order" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pedir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commander"
           }
         }
       }
@@ -3313,6 +4489,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pizza"
+          }
+        }
+      }
+    },
+    "Place" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sitio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endroit"
+          }
+        }
+      }
+    },
+    "Place: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sitio: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endroit : %@"
           }
         }
       }
@@ -3541,6 +4749,22 @@
         }
       }
     },
+    "Remove a glass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar un vaso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer un verre"
+          }
+        }
+      }
+    },
     "Remove from shelf" : {
       "localizations" : {
         "es" : {
@@ -3573,6 +4797,22 @@
         }
       }
     },
+    "Restaurant" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurant"
+          }
+        }
+      }
+    },
     "Rough estimate" : {
       "localizations" : {
         "es" : {
@@ -3585,6 +4825,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estimation approximative"
+          }
+        }
+      }
+    },
+    "Roughly right" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aproximado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À peu près juste"
           }
         }
       }
@@ -3845,6 +5101,22 @@
         }
       }
     },
+    "Says this count matches your plate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indica que este recuento coincide con tu plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique que ce compte correspond à ton assiette"
+          }
+        }
+      }
+    },
     "Scan" : {
       "localizations" : {
         "es" : {
@@ -3909,6 +5181,22 @@
         }
       }
     },
+    "Scanned with AI" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escaneado con IA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanné avec l’IA"
+          }
+        }
+      }
+    },
     "Score out of 100" : {
       "localizations" : {
         "es" : {
@@ -3957,6 +5245,22 @@
         }
       }
     },
+    "Search places" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar sitios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher un endroit"
+          }
+        }
+      }
+    },
     "Searching Open Food Facts" : {
       "localizations" : {
         "es" : {
@@ -3969,6 +5273,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recherche dans Open Food Facts"
+          }
+        }
+      }
+    },
+    "See the places around you" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mira los sitios a tu alrededor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vois les endroits autour de toi"
           }
         }
       }
@@ -4053,6 +5373,22 @@
         }
       }
     },
+    "Shawarma plate, fries" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plato de shawarma con patatas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assiette shawarma, frites"
+          }
+        }
+      }
+    },
     "Show" : {
       "localizations" : {
         "es" : {
@@ -4081,6 +5417,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Affiche un autre jour, ou tes 7 ou 30 derniers jours"
+          }
+        }
+      }
+    },
+    "Shows the dishes people counted there" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra los platos contados allí"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montre les plats comptés là-bas"
+          }
+        }
+      }
+    },
+    "Shows your last 7 days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra tus últimos 7 días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montre tes 7 derniers jours"
           }
         }
       }
@@ -4165,6 +5533,22 @@
         }
       }
     },
+    "Somewhere" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En algún sitio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelque part"
+          }
+        }
+      }
+    },
     "Soybeans" : {
       "localizations" : {
         "es" : {
@@ -4209,6 +5593,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "C’est parti"
+          }
+        }
+      }
+    },
+    "Steady since %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estable desde el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stable depuis le %@"
           }
         }
       }
@@ -4341,6 +5741,22 @@
         }
       }
     },
+    "Takes back your agreement" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retira tu acuerdo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retire ton accord"
+          }
+        }
+      }
+    },
     "Taking the photo" : {
       "localizations" : {
         "es" : {
@@ -4437,6 +5853,22 @@
         }
       }
     },
+    "The calories here come from estimates people shared. Each dish shows how sure they are, and yours makes it surer." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las calorías vienen de las estimaciones que la gente ha compartido. Cada plato muestra su precisión, y la tuya la mejora."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les calories viennent des estimations que les gens ont partagées. Chaque plat montre leur précision, et la tienne la renforce."
+          }
+        }
+      }
+    },
     "The dressing could add 50 kcal if it was poured generously." : {
       "localizations" : {
         "es" : {
@@ -4465,6 +5897,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impossible de lire cette photo."
+          }
+        }
+      }
+    },
+    "This week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette semaine"
           }
         }
       }
@@ -4645,6 +6093,22 @@
         }
       }
     },
+    "Under 50" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos de 50"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moins de 50"
+          }
+        }
+      }
+    },
     "Undo" : {
       "localizations" : {
         "es" : {
@@ -4693,6 +6157,22 @@
         }
       }
     },
+    "Use my location" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar mi ubicación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser ma position"
+          }
+        }
+      }
+    },
     "Use this goal" : {
       "localizations" : {
         "es" : {
@@ -4725,6 +6205,22 @@
         }
       }
     },
+    "Very accurate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muy preciso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Très précis"
+          }
+        }
+      }
+    },
     "Very active" : {
       "localizations" : {
         "es" : {
@@ -4753,6 +6249,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "De la marche, ou du sport 1 à 3 jours par semaine"
+          }
+        }
+      }
+    },
+    "Water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eau"
+          }
+        }
+      }
+    },
+    "Water: %lld of %lld glasses" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua: %lld de %lld vasos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eau : %lld verres sur %lld"
           }
         }
       }
@@ -4817,6 +6345,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quand tu as mangé"
+          }
+        }
+      }
+    },
+    "Where did you eat?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Dónde comiste?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Où as-tu mangé ?"
           }
         }
       }
@@ -4901,6 +6445,54 @@
         }
       }
     },
+    "You eat about %@ kcal a day over what you burn, about %@ a week." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comes unas %@ kcal al día más de lo que quemas, unos %@ a la semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu manges environ %@ kcal par jour de plus que ce que tu brûles, soit environ %@ par semaine."
+          }
+        }
+      }
+    },
+    "You eat about %@ kcal a day under what you burn, about %@ a week." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comes unas %@ kcal al día menos de lo que quemas, unos %@ a la semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu manges environ %@ kcal par jour de moins que ce que tu brûles, soit environ %@ par semaine."
+          }
+        }
+      }
+    },
+    "You eat about what you burn, so your weight should hold." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comes más o menos lo que quemas, así que tu peso debería mantenerse."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu manges à peu près ce que tu brûles, ton poids devrait rester stable."
+          }
+        }
+      }
+    },
     "Your day" : {
       "localizations" : {
         "es" : {
@@ -4913,6 +6505,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta journée"
+          }
+        }
+      }
+    },
+    "Your estimate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu estimación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton estimation"
           }
         }
       }
@@ -4965,6 +6573,22 @@
         }
       }
     },
+    "Your rating" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu valoración"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta note"
+          }
+        }
+      }
+    },
     "Your week" : {
       "localizations" : {
         "es" : {
@@ -4997,6 +6621,22 @@
         }
       }
     },
+    "Yours" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La tuya"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La tienne"
+          }
+        }
+      }
+    },
     "after the gym" : {
       "localizations" : {
         "es" : {
@@ -5009,6 +6649,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "après la salle"
+          }
+        }
+      }
+    },
+    "by %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "para el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "d’ici le %@"
           }
         }
       }
@@ -5173,6 +6829,22 @@
         }
       }
     },
+    "nothing logged" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nada anotado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "rien de noté"
+          }
+        }
+      }
+    },
     "of %lld days" : {
       "localizations" : {
         "en" : {
@@ -5275,6 +6947,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "portions"
+          }
+        }
+      }
+    },
+    "the community" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la comunidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la communauté"
           }
         }
       }

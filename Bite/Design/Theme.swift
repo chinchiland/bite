@@ -44,6 +44,13 @@ enum Theme {
     /// Burned calories wear the Move ring's pink, steps wear indigo. Food never uses either.
     static let burned = Color(lightHex: 0xE8335C, darkHex: 0xFF5C7F)
     static let steps = Color(lightHex: 0x5B4FD9, darkHex: 0x8A80F0)
+    /// How sure a dish's calories are, by tier: green, blue, orange, then gray for too few.
+    static let accurate = Color(lightHex: 0x2F7FD8, darkHex: 0x5EA2F0)
+    static let rough = Color(lightHex: 0xE0872B, darkHex: 0xF2A35A)
+    /// A calorie estimate typed in by hand, as the badge on its author.
+    static let entered = Color(lightHex: 0x5E5C57, darkHex: 0x8E8B85)
+    /// Water: the glasses chip. The drop means water only; fat wears the avocado.
+    static let water = Color(lightHex: 0x2E9BD6, darkHex: 0x5AC8FA)
     /// Over the goal: a day's dot, a bar, the ring's last dots.
     static let over = Color(lightHex: 0xD9482B, darkHex: 0xF06A50)
     /// On target and light days, as the dot beside a day.

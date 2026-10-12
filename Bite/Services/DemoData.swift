@@ -4,8 +4,9 @@ import SwiftData
 import UIKit
 
 /// A believable two weeks of logs for previews and screenshots. Launch with `-demo` to use it;
-/// it lives in memory and never touches your real log. The plate photos are from Unsplash and
-/// ship in Debug builds only.
+/// it lives in memory and never touches your real log. The plate photos are from Unsplash, the
+/// two shawarmas are public domain (CC0), and they ship in Debug builds only. Today is a lunch
+/// at El Beirout by the Parc de Milan in Lausanne, where people have counted a few dishes.
 enum DemoData {
     /// Real Open Food Facts data for Danone's skyr, so the demo shows what a scan returns.
     static let skyr = Food(
@@ -98,9 +99,61 @@ enum DemoData {
     }
 
     static func container() -> ModelContainer {
-        let container = try! ModelContainer(for: FoodEntry.self, SavedFood.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let container = try! ModelContainer(
+            for: FoodEntry.self, SavedFood.self, WaterDay.self, CommunityDish.self, DishEstimate.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
         MainActor.assumeIsolated { seed(container.mainContext) }
         return container
+    }
+
+    /// Thirty days of weighings, a slow drift down, for the week strip.
+    static func weights() -> [WeightPoint] {
+        let values: [Double] = [73.4, 73.3, 73.5, 73.2, 73.1, 73.2, 73.0, 72.9, 73.0, 72.8, 72.9, 72.7, 72.8, 72.6, 72.6]
+        return values.enumerated().compactMap { index, kilograms in
+            Calendar.current.date(byAdding: .day, value: -(28 - index * 2), to: .now).map {
+                WeightPoint(date: $0, kilograms: kilograms)
+            }
+        }
+    }
+
+    /// Dishes at El Beirout with the estimates people made: Claude reading their plate or
+    /// typed by hand, and how many agree. Returns the chicken shawarma.
+    @discardableResult
+    @MainActor static func seedCommunity(_ context: ModelContext) -> CommunityDish? {
+        let place = MealPlace(name: "El Beirout", area: "Parc de Milan", latitude: 46.51492, longitude: 6.62268, category: .restaurant)
+        typealias Count = (author: String, source: EstimateSource, nutrients: Nutrients, agrees: Int, tint: FoodTint)
+
+        func dish(_ name: String, emoji: String, photo key: String?, stars: Double, ratings: Int, _ counts: [Count]) -> CommunityDish {
+            let item = CommunityDish(name: name, emoji: emoji, photo: key.flatMap { photo($0) }, place: place)
+            item.ratingSum = stars * Double(ratings)
+            item.ratingCount = ratings
+            context.insert(item)
+            for count in counts {
+                let estimate = DishEstimate(author: count.author, source: count.source, nutrients: count.nutrients, agrees: count.agrees, tint: count.tint)
+                context.insert(estimate)
+                item.estimates.append(estimate)
+            }
+            return item
+        }
+
+        let shawarma = dish(tr("Chicken shawarma"), emoji: "🌯", photo: "shawarma", stars: 4.6, ratings: 26, [
+            ("Tom R.", .ai, Nutrients(kcal: 590, protein: 37, carbs: 54, fat: 24), 23, .sky),
+            ("Léa M.", .entered, Nutrients(kcal: 640, protein: 40, carbs: 58, fat: 26), 4, .peach),
+            ("Sara K.", .ai, Nutrients(kcal: 570, protein: 35, carbs: 52, fat: 23), 1, .mint),
+        ])
+        dish(tr("Shawarma plate, fries"), emoji: "🍟", photo: "shawarma-fries", stars: 4.4, ratings: 12, [
+            ("Tom R.", .ai, Nutrients(kcal: 1240, protein: 52, carbs: 120, fat: 62), 3, .sky),
+            ("Léa M.", .entered, Nutrients(kcal: 1180, protein: 50, carbs: 112, fat: 60), 1, .peach),
+        ])
+        dish(tr("Falafel wrap"), emoji: "🧆", photo: nil, stars: 4.5, ratings: 9, [
+            ("Sara K.", .entered, Nutrients(kcal: 520, protein: 16, carbs: 62, fat: 22), 6, .mint),
+            ("Marc D.", .ai, Nutrients(kcal: 545, protein: 17, carbs: 64, fat: 24), 2, .butter),
+        ])
+        dish(tr("Hummus plate"), emoji: "🫓", photo: nil, stars: 4.2, ratings: 5, [
+            ("Tom R.", .ai, Nutrients(kcal: 430, protein: 14, carbs: 38, fat: 24), 0, .sky),
+        ])
+        return shawarma
     }
 
     /// A plate Claude estimated, with its photo: one serving.
@@ -118,6 +171,16 @@ enum DemoData {
     }
 
     @MainActor static func seed(_ context: ModelContext) {
+        // A body for the goal and the weight forecast: someone losing a little, training a few
+        // times a week.
+        let defaults = UserDefaults.standard
+        defaults.set(Sex.male.rawValue, forKey: "body.sex")
+        defaults.set(32, forKey: "body.age")
+        defaults.set(180, forKey: "body.height")
+        defaults.set(72.6, forKey: "body.weight")
+        defaults.set(Activity.moderate.rawValue, forKey: "body.activity")
+        defaults.set(WeightGoal.lose.rawValue, forKey: "body.goal")
+
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
 
@@ -125,11 +188,11 @@ enum DemoData {
             BasicFoods.index.first { $0.key == name }?.food
         }
 
-        func log(_ food: Food?, _ amount: Double, _ meal: Meal, daysAgo: Int, at hour: Int, _ minute: Int) {
+        func log(_ food: Food?, _ amount: Double, _ meal: Meal, daysAgo: Int, at hour: Int, _ minute: Int, place: MealPlace? = nil) {
             guard let food,
                   let day = calendar.date(byAdding: .day, value: -daysAgo, to: today),
                   let date = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) else { return }
-            context.insert(FoodEntry(food: food, amount: amount, meal: meal, date: date))
+            context.insert(FoodEntry(food: food, amount: amount, meal: meal, date: date, place: place))
         }
 
         func quick(_ name: String, kcal: Double, protein: Double, carbs: Double, fat: Double) -> Food {
@@ -151,13 +214,17 @@ enum DemoData {
         let pizza = plate("pizza", tr("Pizza"), emoji: "🍕", kcal: 780, protein: 30, carbs: 92, fat: 30)
         let lunchOut = quick(tr("Lunch out"), kcal: 780, protein: 38, carbs: 85, fat: 30)
 
-        // Today, early afternoon: breakfast, the salmon bowl for lunch (the cover), a snack.
-        log(skyr, 120, .breakfast, daysAgo: 0, at: 8, 10)
-        log(basic("Banana"), 118, .breakfast, daysAgo: 0, at: 8, 10)
+        // The dishes people counted at El Beirout; today's lunch is the first of them.
+        let shawarma = seedCommunity(context)
+
+        // Today, mid afternoon: eggs at home, a shawarma at El Beirout (the cover, with the
+        // breakfast photo behind it), a skyr and almonds.
+        log(eggBowl, 1, .breakfast, daysAgo: 0, at: 8, 10)
         log(basic("Coffee, black"), 240, .breakfast, daysAgo: 0, at: 8, 10)
-        log(saladBowl, 1, .lunch, daysAgo: 0, at: 12, 40)
+        log(shawarma?.food, 1, .lunch, daysAgo: 0, at: 12, 40, place: shawarma?.place)
+        log(skyr, 120, .snack, daysAgo: 0, at: 16, 10)
         log(basic("Almonds"), 28, .snack, daysAgo: 0, at: 16, 10)
-        log(toblerone, 25, .snack, daysAgo: 0, at: 16, 10)
+        context.insert(WaterDay(day: today, glasses: 5))
 
         // Two weeks before today, each day landing where `scale` puts it: yesterday and the day
         // before on target (a streak), the week before eating a little more, so Week shows moves.

@@ -34,8 +34,14 @@ final class FoodEntry {
     var tintRaw: String?
     /// The meal photo for an AI estimate, or a saved food's own picture.
     @Attribute(.externalStorage) var imageData: Data?
+    /// Where you ate it, when you said so: a place picked from the ones around you.
+    var placeName: String?
+    var placeArea: String?
+    var placeLatitude: Double?
+    var placeLongitude: Double?
+    var placeCategoryRaw: String?
 
-    init(food: Food, amount: Double, meal: Meal, date: Date) {
+    init(food: Food, amount: Double, meal: Meal, date: Date, place: MealPlace? = nil) {
         self.date = date
         self.mealRaw = meal.rawValue
         self.foodID = food.id
@@ -62,6 +68,7 @@ final class FoodEntry {
         self.portionsData = try? JSONEncoder().encode(food.portions)
         self.tintRaw = food.tint?.rawValue
         self.imageData = food.imageData
+        self.place = place
     }
 }
 
@@ -69,6 +76,27 @@ extension FoodEntry {
     var meal: Meal {
         get { Meal(rawValue: mealRaw) ?? .snack }
         set { mealRaw = newValue.rawValue }
+    }
+
+    var place: MealPlace? {
+        get {
+            placeName.map {
+                MealPlace(
+                    name: $0,
+                    area: placeArea,
+                    latitude: placeLatitude,
+                    longitude: placeLongitude,
+                    category: placeCategoryRaw.flatMap(MealPlace.Category.init(rawValue:))
+                )
+            }
+        }
+        set {
+            placeName = newValue?.name
+            placeArea = newValue?.area
+            placeLatitude = newValue?.latitude
+            placeLongitude = newValue?.longitude
+            placeCategoryRaw = newValue?.category?.rawValue
+        }
     }
 
     var food: Food {

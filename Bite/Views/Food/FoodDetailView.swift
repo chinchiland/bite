@@ -22,6 +22,8 @@ struct FoodDetailView: View {
     @State private var meal: Meal
     /// When you ate it: now, or the time on the entry. Logging late? Move it back.
     @State private var time: Date
+    /// Where you ate it: picked from the places around you, or none.
+    @State private var place: MealPlace?
     @State private var showFacts = false
     @State private var saves = 0
     @FocusState private var amountFocused: Bool
@@ -45,6 +47,7 @@ struct FoodDetailView: View {
         _amountText = State(initialValue: Self.format(start))
         _meal = State(initialValue: entry?.meal ?? meal ?? Meal.likely())
         _time = State(initialValue: entry?.date ?? Self.logDate(for: day))
+        _place = State(initialValue: entry?.place)
     }
 
     private var totals: Nutrients { food.nutrients(for: amount) }
@@ -128,6 +131,8 @@ struct FoodDetailView: View {
                 .padding(.top, 22)
             timeRow
                 .padding(.top, 12)
+            PlaceRow(place: $place)
+                .padding(.top, 2)
             facts
                 .padding(.top, 22)
             sourceLink
@@ -286,6 +291,10 @@ struct FoodDetailView: View {
             Text("Estimated by Claude from your photo.")
                 .font(.ui(13))
                 .foregroundStyle(Theme.secondary)
+        } else if food.source == .community {
+            Text("Calories from the estimates people shared.")
+                .font(.ui(13))
+                .foregroundStyle(Theme.secondary)
         }
     }
 
@@ -362,9 +371,10 @@ struct FoodDetailView: View {
             entry.amount = amount
             entry.meal = meal
             entry.date = time
+            entry.place = place
             try? context.save()
         } else {
-            let added = FoodEntry(food: food, amount: amount, meal: meal, date: time)
+            let added = FoodEntry(food: food, amount: amount, meal: meal, date: time, place: place)
             context.insert(added)
             try? context.save()
             events.added(added)

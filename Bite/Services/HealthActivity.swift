@@ -7,7 +7,13 @@ struct DayActivity: Equatable {
     var activeKcal: Double
 }
 
-/// Reads steps and active energy from Apple Health. Read only, nothing is written.
+/// One weighing from Apple Health.
+struct WeightPoint: Equatable {
+    var date: Date
+    var kilograms: Double
+}
+
+/// Reads steps, active energy and weight from Apple Health. Read only, nothing is written.
 @MainActor
 final class HealthActivity {
     static let shared = HealthActivity()
@@ -20,7 +26,7 @@ final class HealthActivity {
     /// so after this we simply read, and a refusal reads as zero.
     func requestAccess() async {
         guard Self.isAvailable else { return }
-        let types: Set<HKObjectType> = [HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned)]
+        let types: Set<HKObjectType> = [HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned), HKQuantityType(.bodyMass)]
         try? await store.requestAuthorization(toShare: [], read: types)
     }
 
@@ -28,6 +34,20 @@ final class HealthActivity {
         let steps = await total(.stepCount, unit: .count(), on: day)
         let active = await total(.activeEnergyBurned, unit: .kilocalorie(), on: day)
         return DayActivity(steps: steps, activeKcal: active)
+    }
+
+    /// Your weighings over the last days, oldest first. Empty when there are none or reading
+    /// weight was not allowed.
+    func weights(days: Int = 30) async -> [WeightPoint] {
+        guard Self.isAvailable,
+              let start = Calendar.current.date(byAdding: .day, value: -days, to: .now) else { return [] }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: .now)
+        let query = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: HKQuantityType(.bodyMass), predicate: predicate)],
+            sortDescriptors: [SortDescriptor(\.startDate)]
+        )
+        guard let samples = try? await query.result(for: store) else { return [] }
+        return samples.map { WeightPoint(date: $0.startDate, kilograms: $0.quantity.doubleValue(for: .gramUnit(with: .kilo))) }
     }
 
     /// The day's sum, with Health merging iPhone and Apple Watch so nothing counts twice.

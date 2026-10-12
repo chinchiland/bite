@@ -38,9 +38,19 @@ struct SectionLabel: View {
     let title: LocalizedStringKey
     var detail: LocalizedStringKey? = nil
     var size: CGFloat = 20
+    /// Apple Health style: the section's symbol before the title, in the color of what it
+    /// counts (the calories flame in amber, a rank in gold), ink otherwise.
+    var symbol: String? = nil
+    var symbolColor: Color = Theme.ink
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .firstTextBaseline, spacing: 7) {
+            if let symbol {
+                Image(systemName: symbol)
+                    .font(.system(size: size * 0.8, weight: .semibold))
+                    .foregroundStyle(symbolColor)
+                    .accessibilityHidden(true)
+            }
             Text(title)
                 .font(.ui(size, .semibold))
                 .foregroundStyle(Theme.ink)
@@ -51,6 +61,27 @@ struct SectionLabel: View {
                     .foregroundStyle(Theme.secondary)
             }
         }
+    }
+}
+
+/// Which of the day's photos shows: a dot for each on a small dark glass, like Photos.
+struct PageDots: View {
+    let count: Int
+    let index: Int
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(0..<count, id: \.self) { dot in
+                Circle()
+                    .fill(Color.white.opacity(dot == index ? 1 : 0.45))
+                    .frame(width: 6, height: 6)
+            }
+        }
+        .padding(.horizontal, 8)
+        .frame(height: 18)
+        .coverGlass(in: Capsule(), onPhoto: true)
+        .animation(.snappy, value: index)
+        .accessibilityHidden(true)
     }
 }
 

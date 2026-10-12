@@ -15,7 +15,7 @@ enum BiteStore {
     static let container: ModelContainer = {
         do {
             return try ModelContainer(
-                for: FoodEntry.self, SavedFood.self,
+                for: FoodEntry.self, SavedFood.self, WaterDay.self, CommunityDish.self, DishEstimate.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: isDemo)
             )
         } catch {

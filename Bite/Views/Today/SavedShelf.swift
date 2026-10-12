@@ -2,6 +2,8 @@ import SwiftUI
 
 /// Your saved foods in a row of tiles. One tap adds to today; press and hold to edit or remove.
 struct SavedShelf: View {
+    /// "Fits your 967 left" while there is room today, "Saved" otherwise.
+    var title: LocalizedStringKey = "Saved"
     let saved: [SavedFood]
     let onAdd: (SavedFood) -> Void
     let onEdit: (SavedFood) -> Void
@@ -10,7 +12,7 @@ struct SavedShelf: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionLabel(title: "Saved", detail: saved.isEmpty ? nil : "Tap to add")
+            SectionLabel(title: title, detail: saved.isEmpty ? nil : "Tap to add", symbol: "bookmark.fill")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 10) {
                     ForEach(saved) { item in

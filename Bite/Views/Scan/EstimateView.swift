@@ -22,6 +22,8 @@ struct EstimateView: View {
     @State private var estimate: MealEstimate?
     @State private var selected: Int?
     @State private var meal = Meal.likely()
+    /// Where you are eating it: picked from the places around you, or none.
+    @State private var place: MealPlace?
     @State private var isSaved = false
     @State private var showSettings = false
     @State private var attempt = 0
@@ -209,12 +211,14 @@ struct EstimateView: View {
                 .accessibilityLabel(
                     "\(totals.kcal.kcalText) calories. Protein \(totals.protein.gramsText) grams, carbs \(totals.carbs.gramsText) grams, fat \(totals.fat.gramsText) grams."
                 )
+                PlaceRow(place: $place)
+                    .padding(.top, 14)
             }
         }
         .padding(.horizontal, Theme.margin)
 
         if !estimate.items.isEmpty {
-            SectionLabel(title: "Ingredients", detail: "Tap one to adjust", size: 17)
+            SectionLabel(title: "Ingredients", detail: "Tap one to adjust", size: 17, symbol: "leaf.fill", symbolColor: Theme.goodIcon)
                 .padding(.horizontal, Theme.margin)
                 .padding(.top, 24)
                 .padding(.bottom, 12)
@@ -337,7 +341,7 @@ struct EstimateView: View {
 
     private func add(_ estimate: MealEstimate) {
         let food = plate(estimate)
-        let entry = FoodEntry(food: food, amount: 1, meal: meal, date: FoodDetailView.logDate(for: day))
+        let entry = FoodEntry(food: food, amount: 1, meal: meal, date: FoodDetailView.logDate(for: day), place: place)
         context.insert(entry)
         try? context.save()
         events.added(entry)

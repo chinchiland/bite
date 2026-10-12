@@ -324,25 +324,30 @@ enum HealthState: Equatable {
     case connected(DayActivity)
 }
 
-/// Burned and steps as two soft chips under the macros, or the way to connect Health.
+/// Burned and steps as soft chips under the macros (or the way to connect Health), and the day's
+/// water: one tap a glass, the chip filling toward the day's glasses.
 struct ActivityChips: View {
     let health: HealthState
+    var water: Int = 0
+    var waterGoal: Int = 8
+    var onWater: (() -> Void)? = nil
+    var onWaterRemove: (() -> Void)? = nil
     let onConnect: () -> Void
 
     var body: some View {
-        switch health {
-        case .unavailable:
-            EmptyView()
-        case .notConnected:
-            Button(action: onConnect) {
-                chip(systemImage: "heart.fill", color: Theme.burned) {
-                    Text("Connect Health")
+        FlowLayout(spacing: 8) {
+            switch health {
+            case .unavailable:
+                EmptyView()
+            case .notConnected:
+                Button(action: onConnect) {
+                    chip(systemImage: "heart.fill", color: Theme.burned) {
+                        Text("Connect Health")
+                    }
                 }
-            }
-            .buttonStyle(PressableStyle(scale: 0.95))
-            .accessibilityHint("Shows your steps and burned calories from Apple Health")
-        case .connected(let activity):
-            HStack(spacing: 8) {
+                .buttonStyle(PressableStyle(scale: 0.95))
+                .accessibilityHint("Shows your steps and burned calories from Apple Health")
+            case .connected(let activity):
                 chip(systemImage: "flame.fill", color: Theme.burned) {
                     Text("\(activity.activeKcal.kcalText) burned")
                 }
@@ -350,7 +355,56 @@ struct ActivityChips: View {
                     Text("\(activity.steps.countText) steps")
                 }
             }
+            if let onWater {
+                waterChip(onWater)
+            }
         }
+    }
+
+    private func waterChip(_ add: @escaping () -> Void) -> some View {
+        let progress = waterGoal > 0 ? min(Double(water) / Double(waterGoal), 1) : 0
+        return Button(action: add) {
+            HStack(spacing: 6) {
+                Image(systemName: "drop.fill")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Theme.water)
+                Group {
+                    if water == 0 {
+                        Text("Water")
+                    } else {
+                        Text("\(water) glasses")
+                    }
+                }
+                .font(.ui(14, .medium))
+                .monospacedDigit()
+                .foregroundStyle(Theme.ink)
+                .lineLimit(1)
+                .contentTransition(.numericText(value: Double(water)))
+            }
+            .padding(.horizontal, 12)
+            .frame(height: 30)
+            .background {
+                // The chip fills with water toward the day's glasses.
+                GeometryReader { proxy in
+                    ZStack(alignment: .leading) {
+                        Theme.fill
+                        Theme.water.opacity(0.2)
+                            .frame(width: proxy.size.width * progress)
+                    }
+                }
+                .clipShape(Capsule())
+            }
+            .animation(.smooth, value: water)
+        }
+        .buttonStyle(PressableStyle(scale: 0.95))
+        .sensoryFeedback(.increase, trigger: water)
+        .contextMenu {
+            if let onWaterRemove, water > 0 {
+                Button("Remove a glass", systemImage: "minus", action: onWaterRemove)
+            }
+        }
+        .accessibilityLabel("Water: \(water) of \(waterGoal) glasses")
+        .accessibilityHint("Adds a glass")
     }
 
     private func chip(systemImage: String, color: Color, @ViewBuilder label: () -> Text) -> some View {

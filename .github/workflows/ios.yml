@@ -102,7 +102,18 @@ jobs:
           shoot 27-today-over-fr -onboarded YES -screen over -AppleLanguages "(fr)" -AppleLocale fr_FR
           xcrun simctl ui "$UDID" appearance dark
           shoot 28-estimate-dark -onboarded YES -screen estimate
+          shoot 29-place-dark -onboarded YES -screen place
           xcrun simctl ui "$UDID" appearance light
+          shoot 30-place -onboarded YES -screen place
+          shoot 31-dish -onboarded YES -screen dish
+          shoot 32-dish-end -onboarded YES -screen dish -anchor bottom
+          shoot 33-add-estimate -onboarded YES -screen addestimate
+          shoot 34-accuracy -onboarded YES -screen accuracy
+          shoot 35-where -onboarded YES -screen where
+          shoot 36-cover-breakfast -onboarded YES -screen cover2
+          shoot 37-today-middle -onboarded YES -anchor center
+          shoot 38-dish-fr -onboarded YES -screen dish -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 39-today-middle-es -onboarded YES -anchor center -AppleLanguages "(es)" -AppleLocale es_ES
 
       - uses: actions/upload-artifact@v4
         with:

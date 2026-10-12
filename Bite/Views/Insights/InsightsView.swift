@@ -98,7 +98,7 @@ struct RangeView<Switcher: View>: View {
                 } else {
                     averageCard(current, start: start, now: now, before: before)
                         .padding(.top, 18)
-                    SectionLabel(title: range.foodTitle)
+                    SectionLabel(title: range.foodTitle, symbol: "fork.knife")
                         .padding(.top, 28)
                         .padding(.bottom, 6)
                     dayRows(current, entries: periodEntries)
@@ -197,7 +197,7 @@ struct RangeView<Switcher: View>: View {
     private func bestDays(_ days: [DaySummary]) -> some View {
         let best = Insights.bestDays(days, goal: goal, proteinTarget: targets.protein)
         return VStack(alignment: .leading, spacing: 0) {
-            SectionLabel(title: "Best days", detail: "Score out of 100")
+            SectionLabel(title: "Best days", detail: "Score out of 100", symbol: "trophy.fill", symbolColor: Theme.gold)
                 .padding(.bottom, 4)
             ForEach(Array(best.enumerated()), id: \.offset) { index, item in
                 HStack(spacing: 10) {
@@ -233,7 +233,7 @@ struct RangeView<Switcher: View>: View {
         let top = Insights.topFoods(logs)
         let latest = Dictionary(periodEntries.map { ($0.foodID, $0) }, uniquingKeysWith: { _, last in last })
         return VStack(alignment: .leading, spacing: 0) {
-            SectionLabel(title: "Most eaten", detail: "Times logged")
+            SectionLabel(title: "Most eaten", detail: "Times logged", symbol: "chart.bar.fill")
                 .padding(.bottom, 4)
             ForEach(Array(top.enumerated()), id: \.offset) { index, food in
                 HStack(spacing: 10) {
