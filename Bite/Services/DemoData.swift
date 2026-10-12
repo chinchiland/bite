@@ -333,16 +333,20 @@ enum DemoData {
     /// The day Bite Demo's story was written around.
     @MainActor private static var seededDay: Date?
 
-    /// Back on a new day, the same story again around it, instead of an empty Today.
-    @MainActor static func reseedIfStale(_ context: ModelContext) {
-        guard let seededDay, !Calendar.current.isDateInToday(seededDay) else { return }
-        try? context.delete(model: DishEstimate.self)
-        try? context.delete(model: CommunityDish.self)
-        try? context.delete(model: FoodEntry.self)
-        try? context.delete(model: SavedFood.self)
-        try? context.delete(model: WaterDay.self)
+    /// Back on a new day, the same story moved to it: every meal and glass of water shifts by
+    /// the days that passed, so nothing a screen still shows is deleted under it.
+    @MainActor static func moveToToday(_ context: ModelContext) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        guard let seededDay, let days = calendar.dateComponents([.day], from: seededDay, to: today).day, days > 0 else { return }
+        for entry in (try? context.fetch(FetchDescriptor<FoodEntry>())) ?? [] {
+            entry.date = calendar.date(byAdding: .day, value: days, to: entry.date) ?? entry.date
+        }
+        for water in (try? context.fetch(FetchDescriptor<WaterDay>())) ?? [] {
+            water.day = calendar.date(byAdding: .day, value: days, to: water.day) ?? water.day
+        }
         try? context.save()
-        seed(context)
+        self.seededDay = today
     }
     #endif
 }

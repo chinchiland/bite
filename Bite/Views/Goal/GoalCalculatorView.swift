@@ -113,15 +113,15 @@ struct GoalCalculatorView: View {
             heightText = String(height)
             weightText = FoodDetailView.format(weight)
         }
-        // Only a changed number is saved, so filling the fields on appear stores nothing.
+        // Only what you type is saved, so filling the fields on appear stores nothing.
         .onChange(of: ageText) { _, text in
-            if let value = FoodDetailView.parse(text), (10...110).contains(value), value.safeInt != age { age = value.safeInt }
+            if editing, let value = FoodDetailView.parse(text), (10...110).contains(value) { age = value.safeInt }
         }
         .onChange(of: heightText) { _, text in
-            if let value = FoodDetailView.parse(text), (100...250).contains(value), value.safeInt != height { height = value.safeInt }
+            if editing, let value = FoodDetailView.parse(text), (100...250).contains(value) { height = value.safeInt }
         }
         .onChange(of: weightText) { _, text in
-            if let value = FoodDetailView.parse(text), (25...400).contains(value), value != weight { weight = value }
+            if editing, let value = FoodDetailView.parse(text), (25...400).contains(value) { weight = value }
         }
     }
 

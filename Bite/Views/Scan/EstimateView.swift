@@ -25,6 +25,8 @@ struct EstimateView: View {
     /// What Claude first saw: every change scales from it, so an ingredient set to nothing can
     /// come back.
     @State private var original: MealEstimate?
+    /// The JPEG sent to Claude, kept as the meal's photo so it is not encoded twice.
+    @State private var sentPhoto: Data?
     @State private var selected: Int?
     @State private var meal = Meal.likely()
     /// Where you are eating it: picked from the places around you, or none.
@@ -86,6 +88,10 @@ struct EstimateView: View {
             }
         }
         .task(id: attempt) { await run() }
+        .onAppear {
+            // Lunch picked from the library at dinner time is still lunch.
+            if let takenAt { meal = Meal.likely(at: takenAt) }
+        }
         .sheet(isPresented: $showSettings, onDismiss: { attempt += 1 }) {
             SettingsView()
         }
@@ -144,7 +150,7 @@ struct EstimateView: View {
             case .keyRejected:
                 message(
                     "Claude didn't take your key",
-                    detail: String(localized: "Paste it again in Settings, or make a new one at console.anthropic.com."),
+                    detail: String(localized: "Paste it again in Settings, or make a new one at platform.claude.com."),
                     action: ("Open Settings", { showSettings = true })
                 )
                 .padding(.horizontal, Theme.margin)
@@ -361,6 +367,7 @@ struct EstimateView: View {
             phase = .failed(String(localized: "This photo couldn't be read."))
             return
         }
+        sentPhoto = jpeg
         let language = OpenFoodFacts.languages.first ?? "en"
         do {
             let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: language, isLabel: isLabel)
@@ -394,7 +401,7 @@ struct EstimateView: View {
 
     /// The plate as one food, keeping the photo sharp enough to be the day's cover.
     private func plate(_ estimate: MealEstimate) -> Food {
-        estimate.food(imageData: ImageTools.jpeg(shownImage, maxSide: 1000, quality: 0.7))
+        estimate.food(imageData: sentPhoto ?? ImageTools.jpeg(shownImage, maxSide: 1000, quality: 0.7))
     }
 
     private func add(_ estimate: MealEstimate) {

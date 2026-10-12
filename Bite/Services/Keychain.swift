@@ -36,4 +36,6 @@ enum Keychain {
     }
 
     static let claudeKey = "claude-api-key"
+    /// How every Anthropic API key starts, to tell a whole key from a stray fragment.
+    static let claudeKeyPrefix = "sk-ant-"
 }

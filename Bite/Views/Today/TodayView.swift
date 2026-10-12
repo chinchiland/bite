@@ -51,6 +51,8 @@ struct TodayView: View {
     @AppStorage("health.asked") private var healthAsked = false
     @AppStorage("health.addBurned") private var addBurned = false
     @AppStorage("health.weightAsked") private var weightAsked = false
+    /// Health refused to ask, as in a copy signed without the Health capability.
+    @AppStorage("health.unavailable") private var healthUnavailable = false
     @AppStorage("body.sex") private var sexRaw = Sex.female.rawValue
     @AppStorage("body.age") private var bodyAge = 30
     @AppStorage("body.height") private var bodyHeight = 170
@@ -143,7 +145,7 @@ struct TodayView: View {
         .task(id: photoEntries.map(\.persistentModelID)) {
             loadCoverPhotos()
         }
-        .task(id: "\(healthAsked) \(weightAsked)") {
+        .task(id: "\(healthAsked) \(weightAsked) \(activityRefresh)") {
             await loadWeights()
         }
         .task {
@@ -718,7 +720,7 @@ struct TodayView: View {
     }
 
     private var healthState: HealthState {
-        guard HealthActivity.isAvailable else { return .unavailable }
+        guard HealthActivity.isAvailable, !healthUnavailable else { return .unavailable }
         guard healthAsked else { return .notConnected }
         return .connected(activity ?? DayActivity(steps: 0, activeKcal: 0))
     }
@@ -795,10 +797,12 @@ struct TodayView: View {
         let parts = calendar.dateComponents([.hour, .minute], from: time)
         guard let target = calendar.date(bySettingHour: parts.hour ?? 12, minute: parts.minute ?? 0, second: 0, of: first.date) else { return }
         let shift = target.timeIntervalSince(first.date)
-        guard abs(shift) >= 60 else { return }
+        guard calendar.dateComponents([.hour, .minute], from: first.date) != parts else { return }
         withAnimation(.snappy) {
             for item in items {
-                item.date = item.date.addingTimeInterval(shift)
+                let day = calendar.startOfDay(for: item.date)
+                let last = calendar.date(byAdding: .minute, value: 24 * 60 - 1, to: day) ?? item.date
+                item.date = min(max(item.date.addingTimeInterval(shift), day), last)
             }
             try? context.save()
         }
@@ -857,7 +861,10 @@ struct TodayView: View {
 
     private func connectHealth() {
         Task {
-            guard await HealthActivity.shared.requestAccess() else { return }
+            guard await HealthActivity.shared.requestAccess() else {
+                healthUnavailable = true
+                return
+            }
             healthAsked = true
             weightAsked = true
         }
@@ -865,12 +872,16 @@ struct TodayView: View {
 
     /// Weight from Apple Health when there is Health; else the goal calculator in Settings.
     private func addWeight() {
-        guard HealthActivity.isAvailable else {
+        guard HealthActivity.isAvailable, !healthUnavailable, !weightAsked else {
             sheet = .settings
             return
         }
         Task {
-            guard await HealthActivity.shared.requestAccess() else { return }
+            guard await HealthActivity.shared.requestAccess() else {
+                healthUnavailable = true
+                sheet = .settings
+                return
+            }
             healthAsked = true
             weightAsked = true
         }

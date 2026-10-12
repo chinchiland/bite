@@ -22,11 +22,11 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, that reads like a food 
 
 **With a Mac:** open `Bite.xcodeproj` in Xcode 16 or later, choose your Apple ID team under Signing & Capabilities, plug in your iPhone and press Run. In the scheme's Arguments, turn on `-demo YES` to start with two weeks of sample data.
 
-**Without a Mac:** push this folder to a GitHub repository. The `Build Bite` workflow builds the app on a cloud Mac and attaches two downloads to the run: `screenshots` (every screen, light and dark) and `Bite-unsigned-ipa`. Install the .ipa with [Sideloadly](https://sideloadly.io) and your Apple ID. A free Apple ID re-signs every 7 days; a paid developer account lasts a year.
+**Without a Mac:** push this folder to a GitHub repository. The `Build Bite` workflow builds the app on a cloud Mac and attaches three downloads to the run: `screenshots` (every screen, light and dark, a fresh install, and Bite Demo), `Bite-unsigned-ipa` (the real app) and `Bite-Demo-unsigned-ipa` (Bite Demo, which opens on two weeks of sample meals and sits next to Bite). Install them with [Sideloadly](https://sideloadly.io) and your Apple ID: the steps, the Apple Health check and the weekly refresh are in [docs/iphone.md](docs/iphone.md). A free Apple ID re-signs every 7 days; a paid developer account lasts a year and allows TestFlight.
 
 ## Photo estimates
 
-Add a Claude API key in Settings (get one at console.anthropic.com). The key stays in the iOS Keychain. Each photo goes to Claude Opus 5.5 with a strict JSON answer format, and costs about two cents on your Anthropic account. If the model declines a photo, the API retries on Anthropic's recommended fallback model.
+Add a Claude API key in Settings (get one at platform.claude.com/settings/keys). The key stays in the iOS Keychain. Each photo goes to Claude Opus 5.5 with a strict JSON answer format, and costs about two cents on your Anthropic account. If the model declines a photo, the API retries on Anthropic's recommended fallback model.
 
 ## Check it without Xcode
 
@@ -45,4 +45,4 @@ It parses every Swift file and runs the logic tests against real Open Food Facts
 - [USDA FoodData Central](https://fdc.nal.usda.gov), SR Legacy (public domain). Rebuild the basics with `python tools/build_basics.py <sr_legacy_csv_folder> Bite/Resources/basics.json`.
 - Apple Health, read only: steps and active energy.
 - Claude, for photo estimates you ask for.
-- [DM Sans](https://github.com/googlefonts/dm-fonts) by Colophon, SIL Open Font License (`Bite/Resources/Fonts`). The demo plate photos in `Bite/Resources/Demo` are from [Unsplash](https://unsplash.com), the two shawarmas are public domain (CC0: Andy Li on [Wikimedia Commons](https://commons.wikimedia.org/w/index.php?curid=130489661), Joan Namunina on [WordPress Photos](https://wordpress.org/photos/photo/8636a6d0de/)), and they ship in Debug builds only.
+- [DM Sans](https://github.com/googlefonts/dm-fonts) by Colophon, SIL Open Font License (`Bite/Resources/Fonts`). The demo plate photos in `Bite/Resources/Demo` are from [Unsplash](https://unsplash.com), the two shawarmas are public domain (CC0: Andy Li on [Wikimedia Commons](https://commons.wikimedia.org/w/index.php?curid=130489661), Joan Namunina on [WordPress Photos](https://wordpress.org/photos/photo/8636a6d0de/)), and they ship in Debug builds and Bite Demo only.

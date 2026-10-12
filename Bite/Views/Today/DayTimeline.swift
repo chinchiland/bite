@@ -176,7 +176,10 @@ private struct MealMoment: View {
         .frame(width: 280)
         .presentationCompactAdaptation(.popover)
         .onDisappear {
-            if abs(time.timeIntervalSince(opened)) >= 60 { onMoveTime(time) }
+            let calendar = Calendar.current
+            if calendar.dateComponents([.hour, .minute], from: time) != calendar.dateComponents([.hour, .minute], from: opened) {
+                onMoveTime(time)
+            }
         }
     }
 

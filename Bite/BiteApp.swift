@@ -37,9 +37,9 @@ struct BiteApp: App {
         }
         .modelContainer(container)
         #if BITE_DEMO
-        // Opened again on a new day, Bite Demo writes its story around the new day.
+        // Opened again on a new day, Bite Demo moves its story to the new day.
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { DemoData.reseedIfStale(container.mainContext) }
+            if phase == .active { DemoData.moveToToday(container.mainContext) }
         }
         #endif
     }

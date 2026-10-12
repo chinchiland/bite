@@ -1,7 +1,10 @@
 # Builds Bite on a Mac in the cloud, so it works from a Windows PC too.
 # Each run uploads:
-#   screenshots          real simulator screenshots of every screen, light and dark
-#   Bite-unsigned-ipa    an .ipa to install on your iPhone with Sideloadly and your Apple ID
+#   screenshots              real simulator screenshots of every screen, light and dark, a fresh
+#                            install, and Bite Demo opened with no arguments
+#   Bite-unsigned-ipa        Bite, to install on your iPhone with Sideloadly and your Apple ID
+#   Bite-Demo-unsigned-ipa   Bite Demo, the same app on two weeks of sample meals, next to Bite
+# How to install them: docs/iphone.md
 name: Build Bite
 
 on:
@@ -157,7 +160,7 @@ jobs:
             INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
             ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
-            EXCLUDED_SOURCE_FILE_NAMES= | tail -3
+            EXCLUDED_SOURCE_FILE_NAMES= -quiet
           xcrun simctl install "$UDID" build-demo-sim/Build/Products/Release-iphonesimulator/Bite.app
           xcrun simctl launch "$UDID" com.dylan.bite.demo
           sleep 10
@@ -169,7 +172,9 @@ jobs:
           name: screenshots
           path: screenshots
 
+      # The IPAs still build when a screenshot or the Bite Demo proof fails: they are what goes on the phone.
       - name: Unsigned IPA for sideloading
+        if: ${{ !cancelled() }}
         run: |
           set -o pipefail
           xcodebuild build \
@@ -188,6 +193,7 @@ jobs:
           zip -qry Bite-unsigned.ipa Payload
 
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
           name: Bite-unsigned-ipa
           path: Bite-unsigned.ipa
@@ -196,6 +202,7 @@ jobs:
       # Release build plus the BITE_DEMO switch, its own id, name and icon, and the demo photos
       # Release normally leaves out. Signed without Health: it never asks for it.
       - name: Bite Demo IPA for sideloading
+        if: ${{ !cancelled() }}
         run: |
           set -euo pipefail
           fail() { echo "::error::$1"; exit 1; }
@@ -210,7 +217,7 @@ jobs:
             INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
             ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
-            EXCLUDED_SOURCE_FILE_NAMES= | tail -3
+            EXCLUDED_SOURCE_FILE_NAMES= -quiet
           APP=build-demo/Build/Products/Release-iphoneos/Bite.app
           [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")" = com.dylan.bite.demo ] || fail "Bite Demo kept Bite's bundle id"
           [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$APP/Info.plist")" = "Bite Demo" ] || fail "Bite Demo is not named Bite Demo"
@@ -223,6 +230,7 @@ jobs:
           (cd DemoIPA && zip -qry ../Bite-Demo-unsigned.ipa Payload)
 
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
           name: Bite-Demo-unsigned-ipa
           path: Bite-Demo-unsigned.ipa

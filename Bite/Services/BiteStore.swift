@@ -28,6 +28,9 @@ enum BiteStore {
                 configurations: ModelConfiguration(isStoredInMemoryOnly: isDemo)
             )
         } catch {
+            if let plain = try? ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: isDemo)) {
+                return plain
+            }
             failedToOpen = true
             do {
                 return try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))

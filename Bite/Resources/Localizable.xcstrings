@@ -4797,18 +4797,18 @@
         }
       }
     },
-    "Paste it again in Settings, or make a new one at console.anthropic.com." : {
+    "Paste it again in Settings, or make a new one at platform.claude.com." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pégala de nuevo en Ajustes o crea una nueva en console.anthropic.com."
+            "value" : "Pégala de nuevo en Ajustes o crea una nueva en platform.claude.com."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Colle-la à nouveau dans Réglages, ou crée-en une nouvelle sur console.anthropic.com."
+            "value" : "Colle-la à nouveau dans Réglages, ou crée-en une nouvelle sur platform.claude.com."
           }
         }
       }
@@ -6409,6 +6409,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La sauce peut ajouter 50 kcal si elle a été versée généreusement."
+          }
+        }
+      }
+    },
+    "This copy of Bite was installed without Apple Health, so steps, burned calories and weighings stay off." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta copia de Bite se instaló sin la app Salud, así que los pasos, las calorías quemadas y los pesajes quedan apagados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette copie de Bite a été installée sans l’app Santé : les pas, les calories brûlées et les pesées restent éteints."
           }
         }
       }

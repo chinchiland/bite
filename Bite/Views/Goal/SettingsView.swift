@@ -10,6 +10,7 @@ struct SettingsView: View {
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @AppStorage("health.asked") private var healthAsked = false
     @AppStorage("health.weightAsked") private var weightAsked = false
+    @AppStorage("health.unavailable") private var healthUnavailable = false
     @AppStorage("health.addBurned") private var addBurned = false
     @State private var apiKey = ""
     @State private var storedKey = ""
@@ -80,7 +81,25 @@ struct SettingsView: View {
 
                     if HealthActivity.isAvailable {
                         Section {
-                            if healthAsked {
+                            if healthUnavailable {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("This copy of Bite was installed without Apple Health, so steps, burned calories and weighings stay off.")
+                                        .font(.ui(15))
+                                        .foregroundStyle(Theme.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    Button("Try again") {
+                                        Task {
+                                            guard await HealthActivity.shared.requestAccess() else { return }
+                                            healthUnavailable = false
+                                            healthAsked = true
+                                            weightAsked = true
+                                        }
+                                    }
+                                    .font(.ui(17))
+                                }
+                                .padding(.vertical, 4)
+                                .listRowBackground(Theme.card)
+                            } else if healthAsked {
                                 Toggle(isOn: $addBurned) {
                                     Text("Add burned calories to my goal")
                                         .font(.ui(17))
@@ -90,7 +109,10 @@ struct SettingsView: View {
                             } else {
                                 Button {
                                     Task {
-                                        guard await HealthActivity.shared.requestAccess() else { return }
+                                        guard await HealthActivity.shared.requestAccess() else {
+                                            healthUnavailable = true
+                                            return
+                                        }
                                         healthAsked = true
                                         weightAsked = true
                                     }
@@ -131,7 +153,7 @@ struct SettingsView: View {
                                 .foregroundStyle(Theme.goodText)
                                 .listRowBackground(Theme.card)
                         }
-                        Link(destination: URL(string: "https://console.anthropic.com/settings/keys")!) {
+                        Link(destination: URL(string: "https://platform.claude.com/settings/keys")!) {
                             Label("Get a key from Anthropic", systemImage: "arrow.up.right")
                                 .font(.ui(17))
                         }
@@ -209,10 +231,12 @@ struct SettingsView: View {
         apiKey = key
     }
 
-    /// Saves a typed key on the way out; an emptied field stays a choice for Remove key.
+    /// Saves a pasted key on the way out. Only a whole Anthropic key: a secure field wipes itself
+    /// on the first keystroke after a refocus, and a fragment must never replace a working key.
+    /// Save key still saves anything.
     private func keepTypedKey() {
         let key = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !key.isEmpty, key != storedKey else { return }
+        guard key != storedKey, key.hasPrefix(Keychain.claudeKeyPrefix), key.count > 40 else { return }
         saveKey()
     }
 }

@@ -189,6 +189,10 @@ struct AddEstimateView: View {
         #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             try? await Task.sleep(for: .seconds(1))
+            if isNewDish {
+                photo = DemoData.estimatePhoto
+                if name.isEmpty { name = DemoData.estimate.title }
+            }
             set(dish?.consensus.nutrients ?? DemoData.estimate.totals)
             fromPhoto = true
             photoState = .done
@@ -208,8 +212,10 @@ struct AddEstimateView: View {
             fromPhoto = true
             photoState = .done
         } catch let failure as ClaudeVision.Failure {
+            guard !Task.isCancelled else { return }
             photoState = .failed(failure.errorDescription ?? String(localized: "Try again."))
         } catch {
+            guard !Task.isCancelled else { return }
             photoState = .failed(String(localized: "Check your connection and try again."))
         }
     }
