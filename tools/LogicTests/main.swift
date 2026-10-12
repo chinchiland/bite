@@ -374,6 +374,37 @@ do {
 }
 
 do {
+    // The doubt: a question whose answers set one ingredient, kept on its item when an
+    // impossible item before it is dropped.
+    let data = try Data(contentsOf: fixtures.appendingPathComponent("claude_meal_doubt.json"))
+    let estimate = try ClaudeVision.parse(data)
+    check(estimate.items.count == 2 && estimate.doubt?.item == 1, "the doubt follows its item: \(String(describing: estimate.doubt))")
+    check(estimate.doubt?.answers.map(\.label) == ["Un peu", "Une cuillère", "Beaucoup"], "answers decode")
+    check(estimate.doubt?.chosen(in: estimate.items) == 1, "the likeliest answer starts chosen")
+    let more = estimate.setting(item: 1, grams: 25, from: estimate)
+    check(near(more.totals.kcal, 314 + 220) && more.doubt?.chosen(in: more.items) == 2, "a lot of oil: \(more.totals.kcal)")
+    let none = more.setting(item: 1, grams: 0, from: estimate)
+    check(near(none.totals.kcal, 314) && none.doubt?.chosen(in: none.items) == nil, "no oil, and no answer matches 0 here")
+    let back = none.setting(item: 1, grams: 10, from: estimate)
+    check(near(back.totals.kcal, 402), "an item set to nothing comes back from the original: \(back.totals.kcal)")
+
+    let older = try ClaudeVision.parse(Data(contentsOf: fixtures.appendingPathComponent("claude_meal.json")))
+    check(older.doubt == nil, "an answer without a doubt still reads")
+    let item = MealEstimate.Item(name: "Oil", emoji: "🫒", grams: 10, kcal: 88, protein: 0, carbs: 0, fat: 10)
+    let answers: [MealEstimate.Doubt.Answer] = [.init(label: "A little", grams: 5), .init(label: "A lot", grams: 25)]
+    check(MealEstimate.Doubt(question: "How much oil?", item: 0, answers: answers).isAskable(about: item), "askable")
+    check(!MealEstimate.Doubt(question: " ", item: 0, answers: answers).isAskable(about: item), "no question, nothing to ask")
+    check(!MealEstimate.Doubt(question: "How much oil?", item: 0, answers: [answers[0]]).isAskable(about: item), "one answer is no choice")
+    check(!MealEstimate.Doubt(question: "How much oil?", item: 0, answers: answers).isAskable(about: item.with(grams: 0)), "an item with no grams cannot scale")
+    let schema = MealEstimate.schema["properties"] as? [String: Any]
+    check((MealEstimate.schema["required"] as? [String])?.contains("doubt") == true && schema?["doubt"] != nil, "the schema asks for the doubt")
+    check(ClaudeVision.prompt(language: "fr").contains("never 0"), "the prompt keeps the likeliest answer above zero")
+} catch {
+    failures += 1
+    print("FAIL: doubt fixture threw \(error)")
+}
+
+do {
     let data = try Data(contentsOf: fixtures.appendingPathComponent("claude_refusal.json"))
     _ = try ClaudeVision.parse(data)
     check(false, "a refusal should throw")

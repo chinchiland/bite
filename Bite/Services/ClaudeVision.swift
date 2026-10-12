@@ -103,9 +103,15 @@ struct ClaudeVision {
         are hidden or hard to judge. Use the note for the one thing most likely to change the \
         number, in one short sentence, or leave it empty.
 
+        Ask about that same thing in doubt, so the person can settle it in one tap: a short \
+        question, and two or three short answers from least to most, each with the grams of one \
+        item for that answer. Set item to that item's index in items, 0 for the first. The grams \
+        you gave the item must be one of the answers, the likeliest, and never 0. When nothing is \
+        in doubt, leave the question empty and give no answers.
+
         If there is no food in the photo, return no items and say so in the note.
 
-        Write the title, item names and note in this language: \(language).
+        Write the title, item names, note, question and answers in this language: \(language).
         """
     }
 
@@ -131,9 +137,17 @@ struct ClaudeVision {
               var estimate = try? JSONDecoder().decode(MealEstimate.self, from: json) else {
             throw Failure.unreadable
         }
-        // Drop anything that cannot be a real amount before it reaches the log.
+        // Drop anything that cannot be a real amount before it reaches the log, and keep the
+        // doubt pointing at its item when items before it go.
+        let doubted = estimate.doubt.flatMap { estimate.items.indices.contains($0.item) ? estimate.items[$0.item] : nil }
         estimate.items = estimate.items.filter { item in
             [item.grams, item.kcal, item.protein, item.carbs, item.fat].allSatisfy { $0.isFinite && $0 >= 0 && $0 < 20_000 }
+        }
+        estimate.doubt = estimate.doubt.flatMap { doubt in
+            guard let doubted, let index = estimate.items.firstIndex(of: doubted) else { return nil }
+            var moved = doubt
+            moved.item = index
+            return moved.isAskable(about: estimate.items[index]) ? moved : nil
         }
         return estimate
     }

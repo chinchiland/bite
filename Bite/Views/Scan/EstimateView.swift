@@ -22,6 +22,9 @@ struct EstimateView: View {
 
     @State private var phase: Phase = .working
     @State private var estimate: MealEstimate?
+    /// What Claude first saw: every change scales from it, so an ingredient set to nothing can
+    /// come back.
+    @State private var original: MealEstimate?
     @State private var selected: Int?
     @State private var meal = Meal.likely()
     /// Where you are eating it: picked from the places around you, or none.
@@ -200,7 +203,12 @@ struct EstimateView: View {
             }
             .padding(.top, 12)
 
-            if !estimate.note.isEmpty {
+            if let doubt = estimate.doubt {
+                DoubtQuestion(doubt: doubt, chosen: doubt.chosen(in: estimate.items)) { answer in
+                    settle(doubt, with: answer)
+                }
+                .padding(.top, 14)
+            } else if !estimate.note.isEmpty {
                 Text(estimate.note)
                     .font(.ui(15))
                     .foregroundStyle(Theme.secondary)
@@ -322,6 +330,7 @@ struct EstimateView: View {
         if ProcessInfo.processInfo.arguments.contains("-demo") {
             try? await Task.sleep(for: .seconds(1.2))
             estimate = DemoData.estimate
+            original = DemoData.estimate
             phase = .ready
             return
         }
@@ -340,6 +349,7 @@ struct EstimateView: View {
             let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: language, isLabel: isLabel)
             withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                 estimate = result
+                original = result
                 phase = .ready
             }
         } catch let failure as ClaudeVision.Failure {
@@ -350,10 +360,15 @@ struct EstimateView: View {
     }
 
     private func change(_ index: Int, by delta: Double) {
-        guard var current = estimate, current.items.indices.contains(index) else { return }
-        let item = current.items[index]
-        current.items[index] = item.with(grams: max(item.grams + delta, 5))
-        withAnimation(.snappy) { estimate = current }
+        guard let current = estimate, let original, current.items.indices.contains(index) else { return }
+        let grams = max(current.items[index].grams + delta, 5)
+        withAnimation(.snappy) { estimate = current.setting(item: index, grams: grams, from: original) }
+    }
+
+    /// One tap on the doubt's answer sets its ingredient to that amount.
+    private func settle(_ doubt: MealEstimate.Doubt, with answer: MealEstimate.Doubt.Answer) {
+        guard let current = estimate, let original else { return }
+        withAnimation(.snappy) { estimate = current.setting(item: doubt.item, grams: answer.grams, from: original) }
     }
 
     /// The plate as one food, keeping the photo sharp enough to be the day's cover.
@@ -378,6 +393,31 @@ struct EstimateView: View {
         try? context.save()
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         isSaved = true
+    }
+}
+
+/// The estimate's biggest doubt as a question, with its answers as pills: the likeliest is
+/// chosen to start, and a tap on another sets that ingredient and the numbers above.
+private struct DoubtQuestion: View {
+    let doubt: MealEstimate.Doubt
+    let chosen: Int?
+    let onAnswer: (MealEstimate.Doubt.Answer) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(doubt.question)
+                .font(.ui(15, .medium))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            FlowLayout(spacing: 8) {
+                ForEach(doubt.answers.indices, id: \.self) { index in
+                    Button(doubt.answers[index].label) { onAnswer(doubt.answers[index]) }
+                        .buttonStyle(ChipButtonStyle(isSelected: chosen == index))
+                        .accessibilityAddTraits(chosen == index ? .isSelected : [])
+                }
+            }
+        }
+        .sensoryFeedback(.selection, trigger: chosen)
     }
 }
 

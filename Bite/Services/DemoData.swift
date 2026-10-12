@@ -54,7 +54,16 @@ enum DemoData {
             MealEstimate.Item(name: tr("Edamame"), emoji: "🫛", grams: 50, kcal: 61, protein: 5.5, carbs: 4.5, fat: 2.6),
             MealEstimate.Item(name: tr("Greens"), emoji: "🥬", grams: 150, kcal: 38, protein: 2, carbs: 7.2, fat: 0.3),
             MealEstimate.Item(name: tr("Sesame dressing"), emoji: "🫙", grams: 20, kcal: 90, protein: 0.6, carbs: 3, fat: 8.4),
-        ]
+        ],
+        doubt: MealEstimate.Doubt(
+            question: tr("How much dressing was on it?"),
+            item: 5,
+            answers: [
+                .init(label: tr("No dressing"), grams: 0),
+                .init(label: tr("A drizzle"), grams: 20),
+                .init(label: tr("Poured on"), grams: 45),
+            ]
+        )
     )
 
     /// A bundled plate photo, as JPEG data.

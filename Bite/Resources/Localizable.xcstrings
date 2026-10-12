@@ -829,6 +829,22 @@
         }
       }
     },
+    "A drizzle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un chorrito"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un filet"
+          }
+        }
+      }
+    },
     "A line under it, like “with honey”" : {
       "localizations" : {
         "es" : {
@@ -3277,6 +3293,22 @@
         }
       }
     },
+    "How much dressing was on it?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuánto aliño llevaba?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il y avait combien de sauce ?"
+          }
+        }
+      }
+    },
     "How the accuracy is worked out" : {
       "localizations" : {
         "es" : {
@@ -4205,6 +4237,22 @@
         }
       }
     },
+    "No dressing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin aliño"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans sauce"
+          }
+        }
+      }
+    },
     "No food found" : {
       "localizations" : {
         "es" : {
@@ -4745,6 +4793,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vise un code-barres"
+          }
+        }
+      }
+    },
+    "Poured on" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bien regado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bien nappé"
           }
         }
       }

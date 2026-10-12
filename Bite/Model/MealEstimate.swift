@@ -45,14 +45,53 @@ struct MealEstimate: Decodable, Equatable {
         }
     }
 
+    /// The one thing most likely to change the number, as a question answered in one tap:
+    /// each answer is how many grams of one item there were.
+    struct Doubt: Decodable, Equatable {
+        struct Answer: Decodable, Equatable {
+            var label: String
+            var grams: Double
+        }
+
+        var question: String
+        /// The item the answers are about, by its place in `items`.
+        var item: Int
+        var answers: [Answer]
+
+        /// A question, two or three answers with real amounts, about an item with grams to
+        /// scale from. Anything less is left as the note.
+        func isAskable(about item: Item) -> Bool {
+            !question.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                && (2...3).contains(answers.count)
+                && item.grams > 0
+                && answers.allSatisfy { !$0.label.isEmpty && $0.grams.isFinite && $0.grams >= 0 && $0.grams < 5000 }
+        }
+
+        /// The answer that matches the item's grams now, if one does.
+        func chosen(in items: [Item]) -> Int? {
+            guard items.indices.contains(item) else { return nil }
+            return answers.firstIndex { abs($0.grams - items[item].grams) < 0.5 }
+        }
+    }
+
     var title: String
     var emoji: String
     var confidence: Confidence
     var note: String
     var items: [Item]
+    var doubt: Doubt? = nil
 
     var totals: Nutrients {
         items.reduce(Nutrients.zero) { $0 + $1.nutrients }
+    }
+
+    /// The plate with one item at another amount, scaled from `original`, what Claude first
+    /// saw, so an item set to nothing can come back.
+    func setting(item index: Int, grams: Double, from original: MealEstimate) -> MealEstimate {
+        guard items.indices.contains(index), original.items.indices.contains(index) else { return self }
+        var copy = self
+        copy.items[index] = original.items[index].with(grams: grams)
+        return copy
     }
 
     /// The whole plate as one food you can log: one serving is everything in the photo.
@@ -86,6 +125,25 @@ struct MealEstimate: Decodable, Equatable {
             "required": ["name", "emoji", "grams", "kcal", "protein", "carbs", "fat"],
             "additionalProperties": false,
         ]
+        let answer: [String: Any] = [
+            "type": "object",
+            "properties": [
+                "label": ["type": "string", "description": "Two or three words, in the requested language."],
+                "grams": ["type": "number", "description": "Grams of the item for this answer."],
+            ],
+            "required": ["label", "grams"],
+            "additionalProperties": false,
+        ]
+        let doubt: [String: Any] = [
+            "type": "object",
+            "properties": [
+                "question": ["type": "string", "description": "A short question about the one thing most likely to change the number, or empty."],
+                "item": ["type": "integer", "description": "Index in items, 0 for the first, of the food the answers are about."],
+                "answers": ["type": "array", "items": answer, "description": "Two or three answers from least to most, or none."],
+            ],
+            "required": ["question", "item", "answers"],
+            "additionalProperties": false,
+        ]
         return [
             "type": "object",
             "properties": [
@@ -94,8 +152,9 @@ struct MealEstimate: Decodable, Equatable {
                 "confidence": ["type": "string", "enum": ["high", "medium", "low"]],
                 "note": ["type": "string", "description": "One short sentence on what could change the estimate, or empty."],
                 "items": ["type": "array", "items": item],
+                "doubt": doubt,
             ],
-            "required": ["title", "emoji", "confidence", "note", "items"],
+            "required": ["title", "emoji", "confidence", "note", "items", "doubt"],
             "additionalProperties": false,
         ]
     }

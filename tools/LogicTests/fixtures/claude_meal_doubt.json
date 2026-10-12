@@ -1,0 +1,11 @@
+{
+  "id": "msg_01FixtureMealDoubt",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-opus-5-5",
+  "content": [
+    {"type": "text", "text": "{\"title\":\"Salade de pâtes\",\"emoji\":\"🥗\",\"confidence\":\"medium\",\"note\":\"La quantité d’huile change tout.\",\"items\":[{\"name\":\"Erreur\",\"emoji\":\"❓\",\"grams\":-5,\"kcal\":10,\"protein\":0,\"carbs\":0,\"fat\":0},{\"name\":\"Pâtes\",\"emoji\":\"🍝\",\"grams\":200,\"kcal\":314,\"protein\":11.6,\"carbs\":61.4,\"fat\":1.8},{\"name\":\"Huile d’olive\",\"emoji\":\"🫒\",\"grams\":10,\"kcal\":88,\"protein\":0,\"carbs\":0,\"fat\":10}],\"doubt\":{\"question\":\"Combien d’huile\u202f?\",\"item\":2,\"answers\":[{\"label\":\"Un peu\",\"grams\":5},{\"label\":\"Une cuillère\",\"grams\":10},{\"label\":\"Beaucoup\",\"grams\":25}]}}"}
+  ],
+  "stop_reason": "end_turn",
+  "usage": {"input_tokens": 1712, "output_tokens": 700}
+}
