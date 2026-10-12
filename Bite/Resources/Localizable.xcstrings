@@ -850,13 +850,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objetivo de %@ kcal encaja con lo que quemas"
+            "value" : "Un objetivo de %@ kcal se ajusta a lo que quemas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objectif de %@ kcal colle à ce que tu brûles"
+            "value" : "Un objectif de %@ kcal correspond à ce que tu brûles"
           }
         }
       }
@@ -882,13 +882,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una subida lenta y constante"
+            "value" : "Un aumento de peso lento y constante"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Une prise lente et régulière"
+            "value" : "Une prise de poids lente et régulière"
           }
         }
       }
@@ -2738,13 +2738,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todo lo que anotaste, en una hoja de cálculo. Tu registro se queda en tu teléfono: Bite no lo vende ni lo comparte con nadie."
+            "value" : "Todo lo que has anotado, en una hoja de cálculo. Tu registro se queda en tu teléfono: Bite no lo vende ni lo comparte con nadie."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout ce que tu as noté, dans un tableur. Ton journal reste sur ton téléphone : Bite ne le vend pas et ne le partage avec personne."
+            "value" : "Tout ce que tu as noté, dans une feuille de calcul. Ton journal reste sur ton téléphone : Bite ne le vend pas et ne le partage avec personne."
           }
         }
       }
@@ -3352,7 +3352,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il y avait combien de sauce ?"
+            "value" : "Combien de sauce y avait-il ?"
           }
         }
       }
@@ -3848,7 +3848,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En fait ton objectif quotidien"
+            "value" : "Remplace ton objectif quotidien"
           }
         }
       }
@@ -4882,13 +4882,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bien regado"
+            "value" : "Abundante"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bien nappé"
+            "value" : "Beaucoup"
           }
         }
       }
@@ -6338,13 +6338,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Para quedarte como estás"
+            "value" : "Para mantener tu peso"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pour rester où tu en es"
+            "value" : "Pour maintenir ton poids"
           }
         }
       }
@@ -6776,7 +6776,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ce que tu brûles, environ %@ kcal par jour, est tiré de %lld jours de pesées et de repas."
+            "value" : "Ce que tu brûles, environ %@ kcal par jour, est calculé à partir de %lld jours de pesées et de repas."
           }
         }
       }
@@ -7106,7 +7106,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Tu snack de siempre?"
+            "value" : "¿Tu tentempié de siempre?"
           }
         },
         "fr" : {
