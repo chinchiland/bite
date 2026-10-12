@@ -48,6 +48,20 @@ Asked of Gemini and GPT separately in October 2026; where they agree, it is here
 - **Community numbers carry their source.** "97% accurate" always comes with how many counts, how close they are and how many people confirmed, with the method one tap away.
 - **What makes it cheap:** solid color tiles everywhere, animating every tap, gradients and glass on everything, every metric shouting at the same size, interrupting a log with a celebration or a prompt, badges with no provenance.
 
+## Places and partners
+
+Asked in October 2026: show where a meal is from, pull in what other services know, and earn from delivery referrals. Gemini and GPT asked separately; where they differ, it says so.
+
+| Topic | What we found | For Bite |
+|---|---|---|
+| Naming the place | GPS alone cannot tell two restaurants side by side apart. Search the points of interest around you and let the person pick: MapKit's `MKLocalSearch` gives each place's name, category (restaurant, cafe, bakery), phone, website and address, free on the device, throttled only when an app searches in the background ([Apple](https://developer.apple.com/documentation/mapkit/mklocalsearch)). Google Places costs per request. Apple's Significant Locations and Google Timeline are closed to apps. | When you log a meal, the 3 to 8 places within about 150 m, nearest first; your pick becomes a visit Bite remembers. The cover and the meal say it: a pin, the place, the dish. |
+| Asking for location | When In Use, at the moment it helps, with one line on why; approximate is enough to start. Never Always at the start. | "Near me" asks the first time it is tapped. Later, only if you want it: suggest the place after a visit. |
+| Uber Eats | A publisher program through Impact or Partnerize, usually paid per new customer (a few dollars), not on every order. Whether Swiss orders count must be confirmed with them. A store opens in the Uber Eats app from its web address, `ubereats.com/ch/store/<name>/<id>`. | On a restaurant meal: Order again, opening the place in the app. Apply first; build it once Swiss orders are confirmed. |
+| Just Eat (eat.ch) | An affiliate program through Awin in other European countries (Gemini: up to 9% of a new customer's order, 2% after; the Spanish program's page). The Swiss one is not confirmed. Links: `just-eat.ch/menu/<restaurant>`. | Same Order again button, the partner the restaurant is on. |
+| Smood, Deliveroo | Smood stopped delivering food in 2024 and sends people to Just Eat ([smood.ch](https://www.smood.ch/fr/end)); GPT did not know and called it Migros-owned with no public program. Deliveroo left Switzerland. | Skip both. |
+| App Store | Food is a physical good, so Apple's in-app purchase rules do not apply to delivery links. Label it as a partner link, keep meal history and location out of what partners receive, and no tracking across apps without the ATT prompt. | "Partner link" under Order again. Nothing about you leaves Bite with the tap. |
+| Other data | Apple Health first: weight, workouts and active energy in; the calories you log written back if you want. Open Food Facts for packaged food (in Bite). Bank or Wallet transactions (FinanceKit) are not a dependable source here. | Write logged calories to Health next, as an opt-in. |
+
 ## What to avoid
 
 - Interruptions after every log (spin wheels, streak pop-ups, forced tips). Users are leaving apps over it.
