@@ -64,7 +64,7 @@ struct WeightTrend: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Group {
                     if let learned {
-                        Text("What you burn, about \(learned.kcal.kcalText) kcal a day, is learned from \(learned.days) days of your weighings and meals.")
+                        Text("What you burn, about \(learned.kcal.roughKcalText) kcal a day, is learned from \(learned.days) days of your weighings and meals.")
                     } else {
                         Text("An estimate from your last \(forecast.days) logged days.")
                     }
@@ -98,7 +98,7 @@ struct WeightTrend: View {
     }
 
     private func sentence(_ forecast: WeightForecast) -> String {
-        let kcal = abs(forecast.dailyBalance).kcalText
+        let kcal = abs(forecast.dailyBalance).roughKcalText
         let week = abs(forecast.perWeek).weeklyWeightText
         switch forecast.direction {
         case .losing: return String(localized: "You eat about \(kcal) kcal a day under what you burn, about \(week) a week.")

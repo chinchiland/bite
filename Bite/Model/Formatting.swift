@@ -9,6 +9,8 @@ extension Double {
 
     /// Whole numbers with grouping, the way calories read best: "1,240".
     var kcalText: String { safeInt.formatted() }
+    /// To the nearest 10, for numbers that are estimates: "about 2,150 kcal".
+    var roughKcalText: String { ((self / 10).rounded() * 10).kcalText }
 
     /// A count with grouping: "8,432" steps.
     var countText: String { safeInt.formatted() }

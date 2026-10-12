@@ -388,6 +388,7 @@ let untinted = basics.filter { FoodTint.suggested(for: $0.food.emoji) == .sand }
 check(Set(untinted).isSubset(of: ["🌰", "🥜", "🌱", "🫘"]), "only nuts, seeds and beans stay sand: \(Set(untinted))")
 check(Double.nan.safeInt == 0 && Double.infinity.safeInt == 0 && (1e300).safeInt == 0 && (12.6).safeInt == 13, "safeInt never traps")
 check(Double.nan.kcalText == "0", "NaN shows as 0")
+check((2149.0).roughKcalText == (2150.0).kcalText && (237.0).roughKcalText == (240.0).kcalText && Double.nan.roughKcalText == "0", "estimates round to 10")
 
 // MARK: Claude photo estimate
 
