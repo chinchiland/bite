@@ -210,7 +210,6 @@ struct MacroList: View {
             HStack(spacing: 8) {
                 MacroTile(macro: macro)
                 name(macro)
-                Spacer(minLength: 6)
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     Text(grams.gramsText)
                         .font(.number(17))
@@ -238,7 +237,6 @@ struct MacroList: View {
         return HStack(spacing: 8) {
             MacroTile(macro: macro)
             name(macro)
-            Spacer(minLength: 6)
             Text(verbatim: "\(grams.gramsText) g")
                 .font(.number(17))
                 .foregroundStyle(Theme.ink)
@@ -257,12 +255,15 @@ struct MacroList: View {
         .accessibilityLabel("\(macro.title): \(grams.gramsText) grams")
     }
 
+    /// The name takes the room the numbers leave (no spacer, whose spacing would eat it), so
+    /// "Protéines" and "Glucides" stay whole beside four-character grams.
     private func name(_ macro: Macro) -> some View {
         Text(macro.title)
             .font(.ui(15))
             .foregroundStyle(Theme.ink)
             .lineLimit(1)
             .minimumScaleFactor(0.85)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
