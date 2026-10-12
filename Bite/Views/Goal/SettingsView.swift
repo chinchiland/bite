@@ -18,157 +18,167 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    VStack(spacing: 4) {
-                        HStack {
-                            StepButton(systemImage: "minus", label: "Lower") { change(by: -50) }
-                            Spacer()
-                            Text(kcal.formatted())
-                                .font(.number(44))
-                                .foregroundStyle(Theme.ink)
-                                .contentTransition(.numericText(value: Double(kcal)))
-                            Spacer()
-                            StepButton(systemImage: "plus", label: "Higher") { change(by: 50) }
-                        }
-                        Text("kcal a day")
-                            .font(.ui(15))
-                            .foregroundStyle(Theme.secondary)
-                    }
-                    .padding(.vertical, 10)
-                    .listRowBackground(Theme.card)
-
-                    NavigationLink {
-                        GoalCalculatorView { kcal = $0 }
-                    } label: {
-                        Label {
-                            Text("Work it out from my body")
-                                .font(.ui(17))
-                                .foregroundStyle(Theme.ink)
-                        } icon: {
-                            Image(systemName: "figure")
-                                .foregroundStyle(Theme.ink)
-                        }
-                    }
-                    .listRowBackground(Theme.card)
-                } header: {
-                    SectionTitle(text: "Daily goal")
-                }
-
-                Section {
-                    Picker(selection: $splitRaw) {
-                        ForEach(MacroSplit.allCases) { split in
-                            Text(split.title).tag(split.rawValue)
-                        }
-                    } label: {
-                        Text("Split")
-                            .font(.ui(17))
-                            .foregroundStyle(Theme.ink)
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Theme.secondary)
-                    .listRowBackground(Theme.card)
-
-                    ForEach(Macro.allCases, id: \.self) { macro in
-                        MacroTargetRow(macro: macro, grams: macro.target(in: targets), share: share(of: macro))
-                    }
-                } header: {
-                    SectionTitle(text: "Macros")
-                }
-
-                if HealthActivity.isAvailable {
+            ScrollViewReader { reader in
+                List {
                     Section {
-                        if healthAsked {
-                            Toggle(isOn: $addBurned) {
-                                Text("Add burned calories to my goal")
+                        VStack(spacing: 4) {
+                            HStack {
+                                StepButton(systemImage: "minus", label: "Lower") { change(by: -50) }
+                                Spacer()
+                                Text(kcal.formatted())
+                                    .font(.number(44))
+                                    .foregroundStyle(Theme.ink)
+                                    .contentTransition(.numericText(value: Double(kcal)))
+                                Spacer()
+                                StepButton(systemImage: "plus", label: "Higher") { change(by: 50) }
+                            }
+                            Text("kcal a day")
+                                .font(.ui(15))
+                                .foregroundStyle(Theme.secondary)
+                        }
+                        .padding(.vertical, 10)
+                        .listRowBackground(Theme.card)
+
+                        NavigationLink {
+                            GoalCalculatorView { kcal = $0 }
+                        } label: {
+                            Label {
+                                Text("Work it out from my body")
                                     .font(.ui(17))
                                     .foregroundStyle(Theme.ink)
+                            } icon: {
+                                Image(systemName: "figure")
+                                    .foregroundStyle(Theme.ink)
                             }
-                            .listRowBackground(Theme.card)
-                        } else {
-                            Button {
-                                Task {
-                                    await HealthActivity.shared.requestAccess()
-                                    healthAsked = true
-                                }
-                            } label: {
-                                Label {
-                                    Text("Connect Apple Health")
-                                        .font(.ui(17))
-                                } icon: {
-                                    Image(systemName: "heart.fill")
-                                        .foregroundStyle(Theme.burned)
-                                }
+                        }
+                        .listRowBackground(Theme.card)
+                    } header: {
+                        SectionTitle(text: "Daily goal")
+                    }
+
+                    Section {
+                        Picker(selection: $splitRaw) {
+                            ForEach(MacroSplit.allCases) { split in
+                                Text(split.title).tag(split.rawValue)
                             }
-                            .listRowBackground(Theme.card)
+                        } label: {
+                            Text("Split")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                        }
+                        .pickerStyle(.menu)
+                        .tint(Theme.secondary)
+                        .listRowBackground(Theme.card)
+
+                        ForEach(Macro.allCases, id: \.self) { macro in
+                            MacroTargetRow(macro: macro, grams: macro.target(in: targets), share: share(of: macro))
                         }
                     } header: {
-                        SectionTitle(text: "Apple Health")
+                        SectionTitle(text: "Macros")
+                    }
+
+                    if HealthActivity.isAvailable {
+                        Section {
+                            if healthAsked {
+                                Toggle(isOn: $addBurned) {
+                                    Text("Add burned calories to my goal")
+                                        .font(.ui(17))
+                                        .foregroundStyle(Theme.ink)
+                                }
+                                .listRowBackground(Theme.card)
+                            } else {
+                                Button {
+                                    Task {
+                                        await HealthActivity.shared.requestAccess()
+                                        healthAsked = true
+                                    }
+                                } label: {
+                                    Label {
+                                        Text("Connect Apple Health")
+                                            .font(.ui(17))
+                                    } icon: {
+                                        Image(systemName: "heart.fill")
+                                            .foregroundStyle(Theme.burned)
+                                    }
+                                }
+                                .listRowBackground(Theme.card)
+                            }
+                        } header: {
+                            SectionTitle(text: "Apple Health")
+                        } footer: {
+                            Text(healthAsked
+                                ? "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more."
+                                : "See your steps and burned calories next to what you eat. Bite only reads.")
+                        }
+                    }
+
+                    Section {
+                        SecureField("Claude API key", text: $apiKey)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .font(.ui(17))
+                            .onSubmit(saveKey)
+                            .listRowBackground(Theme.card)
+                        if apiKey != storedKey {
+                            Button(apiKey.isEmpty ? "Remove key" : "Save key", action: saveKey)
+                                .font(.ui(17, .medium))
+                                .listRowBackground(Theme.card)
+                        } else if !storedKey.isEmpty {
+                            Label("Photo estimates are on", systemImage: "checkmark.circle.fill")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.goodText)
+                                .listRowBackground(Theme.card)
+                        }
+                        Link(destination: URL(string: "https://console.anthropic.com/settings/keys")!) {
+                            Label("Get a key from Anthropic", systemImage: "arrow.up.right")
+                                .font(.ui(17))
+                        }
+                        .listRowBackground(Theme.card)
+                    } header: {
+                        SectionTitle(text: "Photo estimates")
                     } footer: {
-                        Text(healthAsked
-                            ? "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more."
-                            : "See your steps and burned calories next to what you eat. Bite only reads.")
+                        Text("Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone.")
                     }
-                }
 
-                Section {
-                    SecureField("Claude API key", text: $apiKey)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .font(.ui(17))
-                        .onSubmit(saveKey)
-                        .listRowBackground(Theme.card)
-                    if apiKey != storedKey {
-                        Button(apiKey.isEmpty ? "Remove key" : "Save key", action: saveKey)
-                            .font(.ui(17, .medium))
+                    Section {
+                        ExportLogRow()
                             .listRowBackground(Theme.card)
-                    } else if !storedKey.isEmpty {
-                        Label("Photo estimates are on", systemImage: "checkmark.circle.fill")
-                            .font(.ui(17))
-                            .foregroundStyle(Theme.goodText)
-                            .listRowBackground(Theme.card)
+                            .id(ExportLogRow.anchor)
+                    } header: {
+                        SectionTitle(text: "Your data")
+                    } footer: {
+                        Text("Every food you logged, as a spreadsheet. Your log stays on your phone: Bite never sells it or shares it.")
                     }
-                    Link(destination: URL(string: "https://console.anthropic.com/settings/keys")!) {
-                        Label("Get a key from Anthropic", systemImage: "arrow.up.right")
-                            .font(.ui(17))
+
+                    Section {
+                        Text("Food data comes from Open Food Facts, the free and open food database, and from USDA FoodData Central.")
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.secondary)
+                            .listRowBackground(Color.clear)
                     }
-                    .listRowBackground(Theme.card)
-                } header: {
-                    SectionTitle(text: "Photo estimates")
-                } footer: {
-                    Text("Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone.")
                 }
-
-                Section {
-                    ExportLogRow()
-                        .listRowBackground(Theme.card)
-                } header: {
-                    SectionTitle(text: "Your data")
-                } footer: {
-                    Text("Every food you logged, as a spreadsheet. Your log stays on your phone: Bite never sells it or shares it.")
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+                .background(Theme.page.ignoresSafeArea())
+                #if DEBUG
+                .task {
+                    // `-anchor bottom` scrolls to your data, for its screenshot.
+                    guard UserDefaults.standard.string(forKey: "anchor") == "bottom" else { return }
+                    try? await Task.sleep(for: .seconds(1))
+                    reader.scrollTo(ExportLogRow.anchor, anchor: .center)
                 }
-
-                Section {
-                    Text("Food data comes from Open Food Facts, the free and open food database, and from USDA FoodData Central.")
-                        .font(.ui(15))
-                        .foregroundStyle(Theme.secondary)
-                        .listRowBackground(Color.clear)
+                #endif
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { dismiss() }
+                    }
                 }
-            }
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .background(Theme.page.ignoresSafeArea())
-            .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                .onAppear {
+                    storedKey = Keychain.string(for: Keychain.claudeKey) ?? ""
+                    apiKey = storedKey
                 }
-            }
-            .onAppear {
-                storedKey = Keychain.string(for: Keychain.claudeKey) ?? ""
-                apiKey = storedKey
             }
         }
     }
@@ -222,6 +232,9 @@ private struct MacroTargetRow: View {
 
 /// Your whole log as a spreadsheet, written when you share it.
 private struct ExportLogRow: View {
+    /// Its id in the list, for scrolling to it.
+    static let anchor = "export"
+
     @Query(sort: \FoodEntry.date) private var entries: [FoodEntry]
 
     var body: some View {
