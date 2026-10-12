@@ -1,6 +1,9 @@
+import SwiftData
 import SwiftUI
+import UniformTypeIdentifiers
 
-/// Your goal and macros, Apple Health, and the key that turns photos into estimates.
+/// Your goal and macros, Apple Health, the key that turns photos into estimates, and your log
+/// to take with you.
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("goal.kcal") private var kcal = 2000
@@ -137,6 +140,15 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    ExportLogRow()
+                        .listRowBackground(Theme.card)
+                } header: {
+                    SectionTitle(text: "Your data")
+                } footer: {
+                    Text("Every food you logged, as a spreadsheet. Your log stays on your phone: Bite never sells it or shares it.")
+                }
+
+                Section {
                     Text("Food data comes from Open Food Facts, the free and open food database, and from USDA FoodData Central.")
                         .font(.ui(15))
                         .foregroundStyle(Theme.secondary)
@@ -204,6 +216,54 @@ private struct MacroTargetRow: View {
         }
         .animation(.snappy, value: grams)
         .listRowBackground(Theme.card)
+    }
+}
+
+/// Your whole log as a spreadsheet, written when you share it.
+private struct ExportLogRow: View {
+    @Query(sort: \FoodEntry.date) private var entries: [FoodEntry]
+
+    var body: some View {
+        ShareLink(item: LogFile(rows: entries.map(LogExport.Row.init)), preview: SharePreview(LogExport.title)) {
+            Label("Export your log", systemImage: "square.and.arrow.up")
+                .font(.ui(17))
+        }
+        .disabled(entries.isEmpty)
+    }
+}
+
+/// The log as a CSV file for the share sheet: Files, Mail, Numbers or a dietitian.
+struct LogFile: Transferable {
+    let rows: [LogExport.Row]
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(exportedContentType: .commaSeparatedText) { file in
+            let url = FileManager.default.temporaryDirectory.appending(path: LogExport.fileName)
+            try LogExport.file(file.rows).write(to: url, options: .atomic)
+            return SentTransferredFile(url)
+        }
+    }
+}
+
+extension LogExport.Row {
+    init(_ entry: FoodEntry) {
+        let factor = entry.per > 0 ? entry.amount / entry.per : 0
+        let totals = entry.totals
+        self.init(
+            date: entry.date,
+            meal: entry.meal,
+            name: entry.name,
+            brand: entry.brand,
+            amount: entry.amount,
+            unit: FoodUnit(rawValue: entry.unitRaw) ?? .gram,
+            kcal: totals.kcal,
+            protein: totals.protein,
+            carbs: totals.carbs,
+            fat: totals.fat,
+            fiber: entry.fiber.map { $0 * factor },
+            sugar: entry.sugar.map { $0 * factor },
+            place: entry.placeName
+        )
     }
 }
 

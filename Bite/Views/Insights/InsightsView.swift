@@ -369,9 +369,9 @@ private struct DotColumns: View, Animatable {
         Canvas { context, size in
             let count = max(values.count, 1)
             let dense = count > 10
-            let dot: CGFloat = dense ? min(5, max(3, (size.width - CGFloat(count - 1) * 3) / CGFloat(count))) : 7
+            let dot: CGFloat = dense ? min(5, max(3, (size.width - CGFloat(count - 1) * 3) / CGFloat(count))) : 6
             let spacing = count > 1 ? (size.width - dot * CGFloat(count)) / CGFloat(count - 1) : 0
-            let pitch = dot + (dense ? 1.5 : 2.5)
+            let pitch = dot + (dense ? 1.5 : 2)
             let peak = max(values.filter(\.isFinite).max() ?? 0, goal, 1) * 1.06
             let goalY = size.height * (1 - goal / peak)
 
@@ -380,9 +380,14 @@ private struct DotColumns: View, Animatable {
             line.addLine(to: CGPoint(x: size.width, y: goalY))
             context.stroke(line, with: .color(Theme.ink.opacity(0.3)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
 
-            for (index, value) in values.enumerated() where value.isFinite && value > 0 {
-                let top = size.height - max(size.height * value / peak, dot) * progress
+            for (index, value) in values.enumerated() {
                 let x = CGFloat(index) * (dot + spacing)
+                guard value.isFinite, value > 0 else {
+                    let rest = CGRect(x: x, y: size.height - dot, width: dot, height: dot)
+                    context.fill(Path(ellipseIn: rest), with: .color(Theme.ink.opacity(0.12)))
+                    continue
+                }
+                let top = size.height - max(size.height * value / peak, dot) * progress
                 let isOver = value > goal * 1.05
                 var y = size.height - dot
                 while y >= top - 0.5 {

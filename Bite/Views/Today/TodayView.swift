@@ -58,6 +58,8 @@ struct TodayView: View {
     @AppStorage("body.activity") private var activityRaw = Activity.light.rawValue
     @AppStorage("body.goal") private var weightGoalRaw = WeightGoal.maintain.rawValue
     @AppStorage("water.goal") private var waterGoal = 8
+    /// "Not today" on your usual meal: that day and meal, so tomorrow it comes back.
+    @AppStorage("usual.dismissed") private var usualDismissed = ""
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -286,9 +288,10 @@ struct TodayView: View {
             SectionLabel(title: "Your day", symbol: "fork.knife")
                 .padding(.top, 26)
                 .padding(.bottom, 14)
-            if dayEntries.isEmpty {
+            let usual = self.usual
+            if dayEntries.isEmpty, usual == nil {
                 EmptyDay(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
-            } else {
+            } else if !dayEntries.isEmpty {
                 DayTimeline(
                     entries: dayEntries,
                     isToday: Calendar.current.isDateInToday(day),
@@ -300,6 +303,17 @@ struct TodayView: View {
                     onAddToToday: addToToday,
                     onMoveTime: move
                 )
+            }
+            if let usual {
+                UsualMoment(
+                    meal: usual.meal.meal,
+                    entries: usual.entries,
+                    time: usual.meal.time(on: day),
+                    onAdd: { addToToday(usual.entries) },
+                    onDismiss: { withAnimation(.snappy) { usualDismissed = usual.meal.dismissalKey(on: day) } }
+                )
+                .padding(.top, dayEntries.isEmpty ? 0 : 14)
+                .transition(.opacity)
             }
 
             SavedShelf(
@@ -526,11 +540,24 @@ struct TodayView: View {
 
     /// Good morning, afternoon or evening, with the sky of that hour.
     private var greeting: (text: String, symbol: String) {
-        switch Calendar.current.component(.hour, from: .now) {
+        switch Calendar.current.component(.hour, from: ScreenshotFlags.now) {
         case 5..<12: (String(localized: "Good morning"), "sun.horizon.fill")
         case 12..<18: (String(localized: "Good afternoon"), "sun.max.fill")
         default: (String(localized: "Good evening"), "moon.stars.fill")
         }
+    }
+
+    /// The meal you usually have around now, while today has none of it and you haven't said
+    /// "Not today": the foods of the last day you had it.
+    private var usual: (meal: UsualMeal, entries: [FoodEntry])? {
+        guard isToday else { return nil }
+        let now = ScreenshotFlags.now
+        let logged = entries.map { UsualMeal.Logged(date: $0.date, meal: $0.meal, foodID: $0.foodID) }
+        guard let found = UsualMeal.find(in: logged, now: now),
+              found.dismissalKey(on: now) != usualDismissed else { return nil }
+        let calendar = Calendar.current
+        let items = entries.filter { $0.meal == found.meal && calendar.isDate($0.date, inSameDayAs: found.lastDay) }
+        return items.isEmpty ? nil : (meal: found, entries: items)
     }
 
     /// Saved foods that fit what is left first; protein-dense first when protein is behind.
@@ -842,6 +869,20 @@ struct TodayView: View {
 
 /// Launch arguments that set screens up for screenshots. Release builds ignore them.
 enum ScreenshotFlags {
+    /// Now, or today at the time `-clock 19:30` sets, so a card that waits for its hour can be
+    /// shot at any time of day.
+    static var now: Date {
+        #if DEBUG
+        if let text = UserDefaults.standard.string(forKey: "clock") {
+            let parts = text.split(separator: ":").compactMap { Int($0) }
+            if parts.count == 2, let date = Calendar.current.date(bySettingHour: parts[0], minute: parts[1], second: 0, of: .now) {
+                return date
+            }
+        }
+        #endif
+        return .now
+    }
+
     /// `-anchor bottom` opens a long page scrolled to its end, `-anchor center` halfway.
     static var scrollAnchor: UnitPoint? {
         #if DEBUG

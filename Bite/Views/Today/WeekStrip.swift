@@ -112,10 +112,19 @@ struct Sparkline: View {
 }
 
 extension Double {
-    /// "72.4 kg", or pounds where people weigh themselves in pounds.
+    /// "72.4 kg": kilos everywhere, the unit the goal calculator asks for.
     var weightText: String {
         Measurement(value: self, unit: UnitMass.kilograms).formatted(
-            .measurement(width: .abbreviated, usage: .personWeight, numberFormatStyle: .number.precision(.fractionLength(1)))
+            .measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(1)))
+        )
+    }
+
+    /// A week's change in kilos: "650 g" under a kilo, to the nearest 50 g; "1.2 kg" above.
+    var weeklyWeightText: String {
+        guard self < 0.975 else { return weightText }
+        let grams = max((self * 1000 / 50).rounded() * 50, 50)
+        return Measurement(value: grams, unit: UnitMass.grams).formatted(
+            .measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: .number.precision(.fractionLength(0)))
         )
     }
 }

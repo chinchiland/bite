@@ -60,14 +60,17 @@ jobs:
           xcrun simctl bootstatus "$UDID" -b
           xcrun simctl status_bar "$UDID" override --time 9:41 --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
           xcrun simctl install "$UDID" "$APP"
+          # The keyboard's "slide to type" card would cover the search screens.
+          xcrun simctl spawn "$UDID" defaults write com.apple.Preferences DidShowContinuousPathIntroduction -bool true || true
+          xcrun simctl spawn "$UDID" defaults write com.apple.keyboard.ContinuousPath DidShowContinuousPathIntroduction -bool true || true
           mkdir -p screenshots
 
           shoot() {
             name=$1; shift
-            # English screens in British format, metric like the Swiss: kg, m, 24 hour times.
+            # English screens in Irish format, metric like the Swiss: kg, m, 24 hour times.
             case "$*" in
               *AppleLocale*) ;;
-              *) set -- "$@" -AppleLocale en_GB ;;
+              *) set -- "$@" -AppleLocale en_IE ;;
             esac
             xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
             xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "$@"
@@ -119,6 +122,7 @@ jobs:
           shoot 37-today-middle -onboarded YES -anchor center
           shoot 38-dish-fr -onboarded YES -screen dish -AppleLanguages "(fr)" -AppleLocale fr_FR
           shoot 39-today-middle-es -onboarded YES -anchor center -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 40-usual -onboarded YES -clock 19:30 -anchor center
 
       - uses: actions/upload-artifact@v4
         with:

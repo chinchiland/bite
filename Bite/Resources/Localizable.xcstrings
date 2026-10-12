@@ -1485,6 +1485,22 @@
         }
       }
     },
+    "Bite log" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registro de Bite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Journal Bite"
+          }
+        }
+      }
+    },
     "Bite needs the camera. Allow it in Settings." : {
       "localizations" : {
         "es" : {
@@ -1529,6 +1545,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rose"
+          }
+        }
+      }
+    },
+    "Brand" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marca"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marque"
           }
         }
       }
@@ -1769,6 +1801,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Glucides"
+          }
+        }
+      }
+    },
+    "Carbs (g)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hidratos (g)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides (g)"
           }
         }
       }
@@ -2253,6 +2301,22 @@
         }
       }
     },
+    "Date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
+    },
     "Day" : {
       "localizations" : {
         "es" : {
@@ -2605,6 +2669,38 @@
         }
       }
     },
+    "Every food you logged, as a spreadsheet. Your log stays on your phone: Bite never sells it or shares it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo lo que anotaste, en una hoja de cálculo. Tu registro se queda en tu teléfono: Bite no lo vende ni lo comparte con nadie."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout ce que tu as noté, dans un tableur. Ton journal reste sur ton téléphone : Bite ne le vend pas et ne le partage avec personne."
+          }
+        }
+      }
+    },
+    "Export your log" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar tu registro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter ton journal"
+          }
+        }
+      }
+    },
     "Falafel wrap" : {
       "localizations" : {
         "es" : {
@@ -2637,6 +2733,22 @@
         }
       }
     },
+    "Fat (g)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasas (g)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lipides (g)"
+          }
+        }
+      }
+    },
     "Female" : {
       "localizations" : {
         "es" : {
@@ -2665,6 +2777,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fibres"
+          }
+        }
+      }
+    },
+    "Fiber (g)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibra (g)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibres (g)"
           }
         }
       }
@@ -4141,6 +4269,22 @@
         }
       }
     },
+    "Not today" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy no"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas aujourd’hui"
+          }
+        }
+      }
+    },
     "Nothing logged" : {
       "localizations" : {
         "es" : {
@@ -4697,6 +4841,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Protéines %@ grammes, glucides %@, lipides %@"
+          }
+        }
+      }
+    },
+    "Protein (g)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteínas (g)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protéines (g)"
           }
         }
       }
@@ -5709,6 +5869,22 @@
         }
       }
     },
+    "Sugar (g)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azúcares (g)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucres (g)"
+          }
+        }
+      }
+    },
     "Sugars" : {
       "localizations" : {
         "es" : {
@@ -6189,6 +6365,22 @@
         }
       }
     },
+    "Unit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unité"
+          }
+        }
+      }
+    },
     "Unprocessed" : {
       "localizations" : {
         "es" : {
@@ -6557,6 +6749,22 @@
         }
       }
     },
+    "Your data" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes données"
+          }
+        }
+      }
+    },
     "Your day" : {
       "localizations" : {
         "es" : {
@@ -6649,6 +6857,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta note"
+          }
+        }
+      }
+    },
+    "Your usual breakfast?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tu desayuno de siempre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton petit-déjeuner habituel ?"
+          }
+        }
+      }
+    },
+    "Your usual dinner?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tu cena de siempre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton dîner habituel ?"
+          }
+        }
+      }
+    },
+    "Your usual lunch?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tu comida de siempre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton déjeuner habituel ?"
+          }
+        }
+      }
+    },
+    "Your usual snack?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tu snack de siempre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton en-cas habituel ?"
           }
         }
       }

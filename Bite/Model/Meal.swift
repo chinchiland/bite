@@ -27,6 +27,16 @@ enum Meal: String, CaseIterable, Identifiable {
         }
     }
 
+    /// "Your usual dinner?", worded for each meal so every language can agree with it.
+    var usualQuestion: String {
+        switch self {
+        case .breakfast: tr("Your usual breakfast?")
+        case .lunch: tr("Your usual lunch?")
+        case .dinner: tr("Your usual dinner?")
+        case .snack: tr("Your usual snack?")
+        }
+    }
+
     /// The meal you are most likely logging at this time of day.
     static func likely(at date: Date = .now, calendar: Calendar = .current) -> Meal {
         switch calendar.component(.hour, from: date) {

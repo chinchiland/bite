@@ -77,7 +77,7 @@ struct WeightTrend: View {
 
     private func sentence(_ forecast: WeightForecast) -> String {
         let kcal = abs(forecast.dailyBalance).kcalText
-        let week = abs(forecast.perWeek).weightText
+        let week = abs(forecast.perWeek).weeklyWeightText
         switch forecast.direction {
         case .losing: return String(localized: "You eat about \(kcal) kcal a day under what you burn, about \(week) a week.")
         case .gaining: return String(localized: "You eat about \(kcal) kcal a day over what you burn, about \(week) a week.")

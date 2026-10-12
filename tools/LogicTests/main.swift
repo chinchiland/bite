@@ -164,6 +164,22 @@ check(firstMatch("gruyere") == "Gruyère", "accent folding")
 check(firstMatch("chick") == "Chickpeas, cooked" || firstMatch("chick")?.hasPrefix("Chicken") == true, "prefix search")
 check(BasicFoods.search("chicken breast", in: basics).first?.name == "Chicken breast, cooked", "two words")
 check(BasicFoods.search("zzz", in: basics).isEmpty, "no match")
+check(firstMatch("bananna") == "Banana", "a doubled letter: \(firstMatch("bananna") ?? "nil")")
+check(firstMatch("brocolli") == "Broccoli", "a doubled l: \(firstMatch("brocolli") ?? "nil")")
+check(firstMatch("tomatoe") == "Tomato", "an extra letter at the end")
+check(firstMatch("chiken")?.hasPrefix("Chicken") == true, "chiken: \(firstMatch("chiken") ?? "nil")")
+check(firstMatch("yougurt")?.contains("yogurt") == true, "an extra letter: \(firstMatch("yougurt") ?? "nil")")
+check(firstMatch("avocaod") == "Avocado", "two letters swapped")
+check(BasicFoods.search("chiken brest", in: basics).first?.name == "Chicken breast, cooked", "a slip in each word")
+check(!BasicFoods.search("beer", in: basics).contains { $0.name.hasPrefix("Beef") || $0.name.hasPrefix("Ground beef") }, "a word found as typed never pulls in near ones")
+check(BasicFoods.search("vhicken", in: basics).isEmpty, "the first letter has to be right")
+check(BasicFoods.search("rix", in: basics).isEmpty, "three letters stay exact")
+check(firstMatch("rice") == "Rice, cooked" && firstMatch("milk") == "Milk, whole", "the list's own order settles a tie: \(firstMatch("rice") ?? "nil"), \(firstMatch("milk") ?? "nil")")
+check(firstMatch("chicken") == "Chicken breast, cooked", "breast before thigh")
+check(BasicFoods.search("rixe", in: basics).first?.name == "Rice, cooked", "rixe finds rice: \(BasicFoods.search("rixe", in: basics).first?.name ?? "nil")")
+check(SearchText.withinOneEdit(Array("abcd"), Array("abdc")) && SearchText.withinOneEdit(Array("abc"), Array("abc")), "swap and same")
+check(!SearchText.withinOneEdit(Array("abcd"), Array("badc")) && !SearchText.withinOneEdit(Array("ab"), Array("abcd")), "two edits are too many")
+check(SearchText.withinOneEdit(Array(""), Array("a")) && SearchText.withinOneEdit(Array("abc"), Array("xbc")), "edges")
 check(BasicFoods.search("  ", in: basics).isEmpty, "blank query")
 
 if let banana = basics.first(where: { $0.food.name == "Banana" })?.food {
@@ -182,6 +198,62 @@ if let chicken = basics.first(where: { $0.food.name == "Chicken breast, cooked" 
 if let milk = basics.first(where: { $0.food.name == "Milk, whole" })?.food {
     check(milk.unit == .milliliter, "milk is in ml")
     check(milk.portionText(for: 250) == "1 glass · 250 ml", "milk glass")
+}
+
+// Your usual meal: the same foods at the same meal on three days of the last two weeks,
+// offered from an hour before its time to two hours after, while that meal is still empty.
+do {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "Europe/Zurich")!
+    let today = calendar.date(from: DateComponents(year: 2026, month: 10, day: 12))!
+    func on(_ daysAgo: Int, _ hour: Int, _ minute: Int) -> Date {
+        calendar.date(byAdding: DateComponents(day: -daysAgo, hour: hour, minute: minute), to: today)!
+    }
+    func dinner(_ daysAgo: Int, _ foods: [String], at hour: Int = 19, _ minute: Int = 40) -> [UsualMeal.Logged] {
+        foods.map { UsualMeal.Logged(date: on(daysAgo, hour, minute), meal: .dinner, foodID: $0) }
+    }
+    let pasta = ["pasta", "sauce", "parmesan"]
+    var log = dinner(1, pasta) + dinner(4, pasta) + dinner(7, pasta, at: 20, 10) + dinner(2, ["pizza"]) + dinner(5, ["pizza"])
+    let found = UsualMeal.find(in: log, now: on(0, 19, 0), calendar: calendar)
+    check(found?.meal == .dinner && found?.days == 3, "pasta three times is the usual dinner: \(String(describing: found))")
+    check(found?.lastDay == on(1, 0, 0), "it copies yesterday's")
+    check(found?.minute == 19 * 60 + 40, "the middle of its times: \(found?.minute ?? -1)")
+    check(found?.time(on: today, calendar: calendar) == on(0, 19, 40), "its time today")
+    check(UsualMeal.find(in: log, now: on(0, 18, 30), calendar: calendar) == nil, "not more than an hour early")
+    check(UsualMeal.find(in: log, now: on(0, 21, 45), calendar: calendar) == nil, "not more than two hours late")
+    check(UsualMeal.find(in: log + dinner(0, ["soup"], at: 18, 50), now: on(0, 19, 0), calendar: calendar) == nil, "not once dinner is logged")
+    check(UsualMeal.find(in: dinner(1, pasta) + dinner(4, pasta), now: on(0, 19, 0), calendar: calendar) == nil, "twice is not a habit")
+    check(UsualMeal.find(in: dinner(1, pasta) + dinner(4, pasta) + dinner(16, pasta), now: on(0, 19, 0), calendar: calendar) == nil, "only the last two weeks count")
+    check(UsualMeal.find(in: dinner(1, pasta) + dinner(4, ["pasta", "sauce"]) + dinner(7, pasta), now: on(0, 19, 0), calendar: calendar) == nil, "the same foods, not nearly")
+    log += dinner(10, ["pizza"]) + dinner(13, ["pizza"])
+    check(UsualMeal.find(in: log, now: on(0, 19, 0), calendar: calendar)?.days == 4, "the most often wins: pizza four times")
+    let eggs = (1...3).map { UsualMeal.Logged(date: on($0, 8, 5), meal: .breakfast, foodID: "eggs") }
+    check(UsualMeal.find(in: eggs, now: on(0, 7, 30), calendar: calendar)?.meal == .breakfast, "breakfast at breakfast time")
+    check(UsualMeal.find(in: eggs, now: on(0, 13, 0), calendar: calendar) == nil, "not at lunch")
+    check(found?.dismissalKey(on: on(0, 19, 0), calendar: calendar) == found?.dismissalKey(on: on(0, 21, 0), calendar: calendar), "Not today lasts the day")
+    check(found?.dismissalKey(on: on(0, 19, 0), calendar: calendar) != found?.dismissalKey(on: on(-1, 19, 0), calendar: calendar), "and only the day")
+}
+
+// Your log as a spreadsheet: oldest first, points for decimals, quoted when it has to be.
+do {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "Europe/Zurich")!
+    let lunch = calendar.date(from: DateComponents(year: 2026, month: 10, day: 12, hour: 12, minute: 30))!
+    let breakfast = calendar.date(from: DateComponents(year: 2026, month: 10, day: 12, hour: 8, minute: 5))!
+    let rows = [
+        LogExport.Row(date: lunch, meal: .lunch, name: "Shawarma, \"big\"", brand: nil, amount: 1, unit: .serving,
+                      kcal: 612.44, protein: 38.06, carbs: 52, fat: 26.5, fiber: nil, sugar: 4.25, place: "El Beirout"),
+        LogExport.Row(date: breakfast, meal: .breakfast, name: "=cmd", brand: "Migros", amount: 150, unit: .gram,
+                      kcal: 99, protein: 15, carbs: 6, fat: 0.3, fiber: 0, sugar: 6, place: nil),
+    ]
+    let lines = LogExport.csv(rows, calendar: calendar).components(separatedBy: "\r\n")
+    check(lines.count == 4 && lines[3].isEmpty, "header, two rows, a closing line break: \(lines.count)")
+    check(lines[1].hasPrefix("2026-10-12,08:05,") && lines[2].hasPrefix("2026-10-12,12:30,"), "oldest first: \(lines[1])")
+    check(lines[2].contains(",\"Shawarma, \"\"big\"\"\",,1,") , "quotes doubled, commas quoted: \(lines[2])")
+    check(lines[2].contains(",612.4,38.1,52,26.5,,4.3,El Beirout"), "one decimal with a point, empty when unknown: \(lines[2])")
+    check(lines[1].contains(",'=cmd,Migros,150,g,99,15,6,0.3,0,6,"), "a formula is shown, not run: \(lines[1])")
+    check(LogExport.file(rows, calendar: calendar).prefix(3) == Data([0xEF, 0xBB, 0xBF]), "a byte order mark first")
+    check(LogExport.number(2000) == "2000" && LogExport.number(0.04) == "0" && LogExport.number(7.96) == "8", "numbers")
 }
 
 // The same basics in French and Spanish: their own names and portions, found in any language.
