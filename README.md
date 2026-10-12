@@ -4,7 +4,7 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, that reads like a food 
 
 ## What it does
 
-- **Today**: your latest meal photo as the cover with the calories left on it, then the three macros against your targets beside a dotted ring of the day's calories, burned and steps, Your day as a timeline of food tiles, and your saved foods one tap away. The day's name opens a switcher: the last seven days, then the last 7 and 30 days.
+- **Today**: your latest meal photo as the cover with the calories left on it, then a dotted ring of the day's calories beside the three macros against your targets (a drumstick, a wheat ear and an avocado mark them), burned and steps, Your day as a timeline of food tiles, and your saved foods one tap away. The day's name opens a switcher: the last seven days, then the last 7 and 30 days.
 - **Scan**: three modes. Barcode finds the product. Scan food sends a photo of your plate to Claude. Food label reads a nutrition label or a pack. Pick from your gallery too.
 - **Photo estimate**: your photo as the hero, Claude's calories and macros on the sheet under it, each ingredient can be adjusted, then add the meal or save it.
 - **Saved foods**: bookmark any food, a whole meal or a photo estimate. Choose its picture (an emoji on a color, the product photo, or your own photo), its name and a line under it, how much one tap adds, and its meal.

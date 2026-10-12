@@ -187,7 +187,7 @@ private struct MacroTargetRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            MacroIcon(macro: macro)
+            MacroTile(macro: macro)
             Text(macro.title)
                 .font(.ui(17))
                 .foregroundStyle(Theme.ink)

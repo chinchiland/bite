@@ -364,13 +364,23 @@ struct IconCircle: View {
     }
 }
 
-/// A macro's icon in its own color on a wash of that color.
-struct MacroIcon: View {
-    let macro: Macro
+/// A symbol on a tile in its color, the same shape and strength as a macro's tile, for rows
+/// that sit beside the macros (calories in the saved food editor).
+struct SymbolTile: View {
+    let systemImage: String
+    /// The tile's wash.
+    let color: Color
+    /// The symbol, a step deeper than the wash.
+    let glyph: Color
     var size: CGFloat = 28
 
     var body: some View {
-        IconCircle(systemImage: macro.symbol, color: macro.color, fill: macro.color.opacity(0.14), size: size)
+        Image(systemName: systemImage)
+            .font(.system(size: size * 0.5, weight: .medium))
+            .foregroundStyle(glyph)
+            .frame(width: size, height: size)
+            .background(color.opacity(0.24), in: RoundedRectangle(cornerRadius: size * 0.3, style: .continuous))
+            .accessibilityHidden(true)
     }
 }
 

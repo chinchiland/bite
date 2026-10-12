@@ -3,24 +3,30 @@ import SwiftUI
 // MARK: - The dotted ring
 
 /// Calories as rings of dots, a halftone: lit in the colors of where the calories come from
-/// (protein, carbs, fat), quiet gray for what is still to eat. The dots light up round the
-/// ring when it appears. Past the goal, the overflow runs round the outer ring in red.
+/// (protein, carbs, fat), quiet gray for what is still to eat. Each macro wide enough to hold
+/// one carries its glyph on a disc in the middle of its arc. The dots light up round the ring
+/// when it appears, each glyph as the light reaches it. Past the goal, the overflow runs round
+/// the outer ring in red.
 struct DottedRing: View {
     struct Part: Equatable {
         /// Share of the whole ring, 0 to 1.
         var share: Double
         var color: Color
+        /// The macro this part is, for its glyph; nil for calories with no macros.
+        var macro: Macro? = nil
     }
 
     let parts: [Part]
     /// How far past the whole the calories go, as a share of the ring (0 when within it).
     var overflow: Double = 0
+    /// What the ring sits on, so a glyph's disc can cut its dots cleanly.
+    var surface: Color = Theme.page
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var reveal: Double = 0
 
     var body: some View {
-        DotRingCanvas(parts: parts, overflow: overflow, reveal: reveal)
+        DotRingCanvas(parts: parts, overflow: overflow, surface: surface, reveal: reveal)
             .onAppear {
                 guard reveal < 1 else { return }
                 if reduceMotion {
@@ -47,9 +53,9 @@ struct DottedRing: View {
             return nutrients.kcal > 0 ? [Part(share: whole, color: Theme.tertiary)] : []
         }
         return [
-            Part(share: split.protein * whole, color: Theme.protein),
-            Part(share: split.carbs * whole, color: Theme.carbs),
-            Part(share: split.fat * whole, color: Theme.fat),
+            Part(share: split.protein * whole, color: Theme.protein, macro: .protein),
+            Part(share: split.carbs * whole, color: Theme.carbs, macro: .carbs),
+            Part(share: split.fat * whole, color: Theme.fat, macro: .fat),
         ]
     }
 }
@@ -58,6 +64,7 @@ struct DottedRing: View {
 private struct DotRingCanvas: View, Animatable {
     let parts: [DottedRing.Part]
     let overflow: Double
+    let surface: Color
     var reveal: Double
 
     var animatableData: Double {
@@ -71,6 +78,11 @@ private struct DotRingCanvas: View, Animatable {
     private static let ringGap: CGFloat = 6.5
     private static let dot: CGFloat = 4.6
     private static let pitch: CGFloat = 7.4
+    /// A glyph's disc sits across the middle rings and leaves the outer one free for overflow.
+    private static let discRadius: CGFloat = 14
+    private static let glyphSize: CGFloat = 17
+    /// The narrowest arc that carries a glyph.
+    private static let glyphMinimum = 0.08
 
     var body: some View {
         Canvas { context, size in
@@ -96,8 +108,35 @@ private struct DotRingCanvas: View, Animatable {
                     context.fill(Path(ellipseIn: rect), with: .color(lit ?? Theme.ringRest))
                 }
             }
+            drawGlyphs(in: context, center: center, unit: unit, colored: colored)
         }
         .accessibilityHidden(true)
+    }
+
+    /// Each macro's glyph on a disc in the middle of its arc, appearing as the light reaches it.
+    private func drawGlyphs(in context: GraphicsContext, center: CGPoint, unit: CGFloat, colored: Double) {
+        let middle = (Self.inner + Self.ringGap * 2.5) * unit
+        let radius = Self.discRadius * unit
+        let side = Self.glyphSize * unit
+        var start = 0.0
+        for part in parts where part.share > 0 {
+            defer { start += part.share }
+            guard let macro = part.macro, part.share >= Self.glyphMinimum else { continue }
+            let position = start + part.share / 2
+            let shown = min(max((reveal * colored - position) / 0.05, 0), 1)
+            guard shown > 0 else { continue }
+            let angle = position * 2 * .pi - .pi / 2
+            let point = CGPoint(x: center.x + middle * CGFloat(cos(angle)), y: center.y + middle * CGFloat(sin(angle)))
+            var disc = context
+            disc.opacity = shown
+            // A ring of the surface first, so the disc stands clear of the dots around it.
+            let clear = radius + 2 * unit
+            disc.fill(Path(ellipseIn: CGRect(x: point.x - clear, y: point.y - clear, width: clear * 2, height: clear * 2)), with: .color(surface))
+            let face = Path(ellipseIn: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
+            disc.fill(face, with: .color(macro.tileFill))
+            let glyph = CGRect(x: point.x - side / 2, y: point.y - side / 2, width: side, height: side)
+            MacroGlyph.draw(macro, in: &disc, rect: glyph, color: macro.glyphColor)
+        }
     }
 
     /// The part a position falls in, or nil for the part of the ring still to eat.
@@ -137,59 +176,98 @@ private struct DotRingCanvas: View, Animatable {
 
 // MARK: - Macros
 
-/// The three macros stacked: the name, the grams (over the day's target on Today), and a thin
-/// bar filled toward the target in the macro's color.
-struct MacroBars: View {
+/// The three macros as one quiet list beside the ring. Each line is the macro's glyph on its
+/// tile, its name and its grams. On Today the grams sit over the day's target and a rule under
+/// the line fills toward it; on a food the line ends with the macro's share of the calories.
+struct MacroList: View {
     let nutrients: Nutrients
     let targets: MacroTargets
     var showsTarget = true
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 13) {
+        VStack(alignment: .leading, spacing: showsTarget ? 2 : 0) {
             ForEach(Macro.allCases, id: \.self) { macro in
-                row(macro)
+                if showsTarget {
+                    targetRow(macro)
+                } else {
+                    shareRow(macro)
+                        .overlay(alignment: .top) {
+                            if macro != .protein {
+                                Rectangle().fill(Theme.hairline).frame(height: 1)
+                            }
+                        }
+                }
             }
         }
     }
 
-    private func row(_ macro: Macro) -> some View {
+    private func targetRow(_ macro: Macro) -> some View {
         let grams = macro.grams(in: nutrients)
         let target = macro.target(in: targets)
-        return VStack(alignment: .leading, spacing: 0) {
-            Text(macro.title)
-                .font(.ui(13))
-                .foregroundStyle(Theme.secondary)
-            HStack(alignment: .firstTextBaseline, spacing: 0) {
-                Text(verbatim: "\(grams.gramsText) g")
-                    .font(.number(22))
-                    .numberTracking(22)
-                    .foregroundStyle(Theme.ink)
-                    .contentTransition(.numericText(value: grams))
-                if showsTarget {
-                    Text(verbatim: " / \(target.kcalText)")
+        // Past the target is news for carbs and fat; more protein is fine.
+        let over = macro != .protein && target > 0 && grams > target * 1.05
+        return VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                MacroTile(macro: macro)
+                name(macro)
+                Spacer(minLength: 6)
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text(grams.gramsText)
+                        .font(.number(17))
+                        .foregroundStyle(Theme.ink)
+                        .contentTransition(.numericText(value: grams))
+                    Text(verbatim: " / \(target.kcalText) g")
                         .font(.ui(13))
                         .foregroundStyle(Theme.secondary)
                 }
+                .lineLimit(1)
+                .fixedSize()
             }
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
-            ProgressBar(value: target > 0 ? grams / target : 0, color: macro.color)
-                .padding(.top, 5)
+            .frame(height: 47)
+            ProgressBar(value: target > 0 ? grams / target : 0, color: over ? Theme.over : macro.color, height: 3)
+                .padding(.leading, 36)
         }
         .animation(.smooth, value: grams)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(label(macro, grams: grams, target: target))
+        .accessibilityLabel("\(macro.title): \(grams.gramsText) of \(target.kcalText) grams")
     }
 
-    private func label(_ macro: Macro, grams: Double, target: Double) -> LocalizedStringKey {
-        showsTarget
-            ? "\(macro.title): \(grams.gramsText) of \(target.kcalText) grams"
-            : "\(macro.title): \(grams.gramsText) grams"
+    private func shareRow(_ macro: Macro) -> some View {
+        let grams = macro.grams(in: nutrients)
+        let share = macro.share(in: nutrients)
+        return HStack(spacing: 8) {
+            MacroTile(macro: macro)
+            name(macro)
+            Spacer(minLength: 6)
+            Text(verbatim: "\(grams.gramsText) g")
+                .font(.number(17))
+                .foregroundStyle(Theme.ink)
+                .contentTransition(.numericText(value: grams))
+                .lineLimit(1)
+                .fixedSize()
+            Text("\((share * 100).safeInt)%")
+                .font(.ui(13))
+                .foregroundStyle(Theme.secondary)
+                .lineLimit(1)
+                .frame(width: 34, alignment: .trailing)
+        }
+        .frame(height: 46)
+        .animation(.smooth, value: grams)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(macro.title): \(grams.gramsText) grams")
+    }
+
+    private func name(_ macro: Macro) -> some View {
+        Text(macro.title)
+            .font(.ui(15))
+            .foregroundStyle(Theme.ink)
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
     }
 }
 
-/// Macros on the left, the dotted ring on the right with the calories in its middle. The same
-/// block on Today (the day against its goal) and on a food (the food's own calories).
+/// The dotted ring with the calories in its middle, the macros listed beside it. The same block
+/// on Today (the day against its goal) and on a food (the food's own calories).
 struct MacroBlock: View {
     let nutrients: Nutrients
     let targets: MacroTargets
@@ -197,36 +275,39 @@ struct MacroBlock: View {
     var overflow: Double = 0
     let number: Double
     let unit: LocalizedStringKey
-    var numberSize: CGFloat = 28
     var showsTarget = true
+    /// What the block sits on: the paper on Today, a white sheet on a food.
+    var surface: Color = Theme.page
 
     var body: some View {
-        HStack(alignment: .center, spacing: 14) {
-            MacroBars(nutrients: nutrients, targets: targets, showsTarget: showsTarget)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        HStack(alignment: .center, spacing: 16) {
             ZStack {
-                DottedRing(parts: ring, overflow: overflow)
-                // Inside the inner ring, which leaves about 84 pt: the unit takes a second line
-                // when a language needs it ("kcal consommées").
+                DottedRing(parts: ring, overflow: overflow, surface: surface)
+                // Inside the inner ring, which leaves about 76 pt: the number steps down for four
+                // digits, the unit takes a second line when a language needs it ("kcal consommées").
                 VStack(spacing: 3) {
                     Text(number.kcalText)
-                        .font(.number(numberSize))
-                        .numberTracking(numberSize)
+                        .font(.number(30, .medium))
+                        .numberTracking(30)
                         .foregroundStyle(Theme.ink)
                         .contentTransition(.numericText(value: number))
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                     Text(unit)
-                        .font(.ui(numberSize >= 34 ? 13 : 12))
+                        .font(.ui(12))
                         .foregroundStyle(Theme.secondary)
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
+                        .minimumScaleFactor(0.9)
                 }
-                .frame(maxWidth: 84)
+                .frame(maxWidth: 70)
                 .accessibilityElement(children: .combine)
             }
-            .frame(width: 176, height: 176)
+            .frame(width: 140, height: 140)
             .animation(.smooth, value: number)
+
+            MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget)
+                .frame(maxWidth: .infinity)
         }
     }
 }

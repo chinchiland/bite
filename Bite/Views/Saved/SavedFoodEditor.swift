@@ -340,10 +340,10 @@ struct SavedFoodEditor: View {
                 Text("Per serving")
                     .font(.ui(17, .semibold))
                     .foregroundStyle(Theme.ink)
-                numberField("Calories", unit: "kcal", text: $kcalText, icon: AnyView(IconCircle(systemImage: "flame.fill", color: Theme.energy, fill: Theme.energy.opacity(0.14), size: 28)))
-                numberField("Protein", unit: "g", text: $proteinText, icon: AnyView(MacroIcon(macro: .protein)))
-                numberField("Carbs", unit: "g", text: $carbsText, icon: AnyView(MacroIcon(macro: .carbs)))
-                numberField("Fat", unit: "g", text: $fatText, icon: AnyView(MacroIcon(macro: .fat)))
+                numberField("Calories", unit: "kcal", text: $kcalText, icon: AnyView(SymbolTile(systemImage: "flame.fill", color: Theme.energy, glyph: Theme.energyDeep)))
+                numberField("Protein", unit: "g", text: $proteinText, icon: AnyView(MacroTile(macro: .protein)))
+                numberField("Carbs", unit: "g", text: $carbsText, icon: AnyView(MacroTile(macro: .carbs)))
+                numberField("Fat", unit: "g", text: $fatText, icon: AnyView(MacroTile(macro: .fat)))
             }
         }
     }

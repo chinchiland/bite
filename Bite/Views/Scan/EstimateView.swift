@@ -201,8 +201,8 @@ struct EstimateView: View {
                     ring: DottedRing.food(totals),
                     number: totals.kcal,
                     unit: "kcal",
-                    numberSize: 40,
-                    showsTarget: false
+                    showsTarget: false,
+                    surface: Theme.card
                 )
                 .padding(.top, 20)
                 .accessibilityElement(children: .ignore)

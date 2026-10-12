@@ -39,6 +39,8 @@ enum Theme {
     static let fat = Color(lightHex: 0x3E9A76, darkHex: 0x3E9A76)
     /// The streak flame and the calories flame.
     static let energy = Color(lightHex: 0xF2A93B, darkHex: 0xFFC24D)
+    /// The calories flame on its tile, a step deeper so it reads on the amber wash.
+    static let energyDeep = Color(lightHex: 0xC47A12, darkHex: 0xFFC24D)
     /// Burned calories wear the Move ring's pink, steps wear indigo. Food never uses either.
     static let burned = Color(lightHex: 0xE8335C, darkHex: 0xFF5C7F)
     static let steps = Color(lightHex: 0x5B4FD9, darkHex: 0x8A80F0)
@@ -173,7 +175,7 @@ extension Meal {
     }
 }
 
-/// The three macros, each with its color and icon, so every screen draws them the same way.
+/// The three macros, each with its color and glyph, so every screen draws them the same way.
 enum Macro: CaseIterable {
     case protein
     case carbs
@@ -195,14 +197,18 @@ enum Macro: CaseIterable {
         }
     }
 
-    /// Muscle, energy, oil.
-    var symbol: String {
+    /// The glyph on the macro's tile and on the ring (a drumstick, a wheat ear, half an
+    /// avocado): a step deeper than the macro's color on paper, a step lighter at night.
+    var glyphColor: Color {
         switch self {
-        case .protein: "dumbbell.fill"
-        case .carbs: "bolt.fill"
-        case .fat: "drop.fill"
+        case .protein: Color(lightHex: 0xB5532B, darkHex: 0xE58D63)
+        case .carbs: Color(lightHex: 0x3A69A8, darkHex: 0x86AADD)
+        case .fat: Color(lightHex: 0x2B7F5F, darkHex: 0x64BF98)
         }
     }
+
+    /// The tile behind the glyph.
+    var tileFill: Color { color.opacity(0.24) }
 
     /// Calories in a gram.
     var kcalPerGram: Double { self == .fat ? 9 : 4 }
@@ -212,6 +218,16 @@ enum Macro: CaseIterable {
         case .protein: nutrients.protein
         case .carbs: nutrients.carbs
         case .fat: nutrients.fat
+        }
+    }
+
+    /// The macro's share of the calories, 0 to 1.
+    func share(in nutrients: Nutrients) -> Double {
+        let split = nutrients.energySplit
+        return switch self {
+        case .protein: split.protein
+        case .carbs: split.carbs
+        case .fat: split.fat
         }
     }
 

@@ -83,7 +83,7 @@ struct QuickAddView: View {
 
     private func macroField(_ macro: Macro, text: Binding<String>, field: Field) -> some View {
         HStack(spacing: 10) {
-            MacroIcon(macro: macro, size: 28)
+            MacroTile(macro: macro)
             Text(macro.title)
                 .font(.ui(17))
                 .foregroundStyle(Theme.ink)

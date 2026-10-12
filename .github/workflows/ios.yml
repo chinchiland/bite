@@ -98,6 +98,11 @@ jobs:
           shoot 23-yesterday -onboarded YES -screen yesterday
           shoot 24-week-end -onboarded YES -screen week -anchor bottom
           shoot 25-food-plate -onboarded YES -screen plate
+          shoot 26-today-over -onboarded YES -screen over
+          shoot 27-today-over-fr -onboarded YES -screen over -AppleLanguages "(fr)" -AppleLocale fr_FR
+          xcrun simctl ui "$UDID" appearance dark
+          shoot 28-estimate-dark -onboarded YES -screen estimate
+          xcrun simctl ui "$UDID" appearance light
 
       - uses: actions/upload-artifact@v4
         with:

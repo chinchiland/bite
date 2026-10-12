@@ -16,26 +16,25 @@ DM Sans only, bundled (SIL Open Font License), one variable font: weight and opt
 | Use | Size | Weight |
 |---|---|---|
 | The day's number on the cover | 66 | medium, tracking −4% |
-| A food's calories in its ring | 40 | medium |
 | Range average | 36 | medium |
 | Screen title (Last 7 days) | 30 | semibold |
+| Calories in the ring | 30 | medium |
 | A food's name, a meal's name on its page | 27 | medium |
-| Calories in Today's ring | 28 | semibold |
-| Macro grams | 22 | semibold |
+| Macro grams | 17 | semibold |
 | Section title (Your day, Saved) | 20 | semibold |
 | Meal and day names | 16 | semibold |
 | Body, list rows | 15 to 17 | regular or medium |
 | Chips, captions, times | 13 to 14 | regular or medium |
 | Smallest labels | 12 | regular |
 
-- A number is the biggest thing in its block. Its unit sits beside it, smaller and in the secondary color: `967 kcal left today`, `62 g / 125`.
+- A number is the biggest thing in its block. Its unit sits beside it, smaller and in the secondary color: `967 kcal left today`, `62 / 125 g`.
 - Nothing smaller than 12 pt.
 
 ## Color: one job each
 
 | Job | Color | Where |
 |---|---|---|
-| Protein, carbs, fat | #D2693C, #4C7FC0, #3E9A76 | the ring's dots and the macro bars, always with their names. The trio passes the color-vision checks on paper and on the dark page. |
+| Protein, carbs, fat | #D2693C, #4C7FC0, #3E9A76 | the ring's dots, the glyph tiles and the rules under the macros, always with their names. The trio passes the color-vision checks on paper and on the dark page. |
 | Still to eat | warm gray dots | the rest of the ring |
 | Over the goal | red #D9482B | the ring's outer dots, a day's dot and number, a bar |
 | A day's verdict | green on target, gray light, red over | the dot beside a day |
@@ -58,12 +57,14 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 ## Icons and emoji
 
 - **SF Symbols** for everything that is not a food: actions, chips (flame, shoe prints, leaf), the streak flame, the settings gear. Outline for actions, filled for data and to show state (`bookmark.fill` means saved). Never bold.
+- **Macro glyphs**, drawn in `MacroGlyph` on a 24 point grid like SF Symbols: a drumstick for protein, a wheat ear for carbs, half an avocado for fat (a drop read as water). Foods people know at a glance, so the glyph says the macro before the color does. In a list they lead the row on a tile, Settings style: the macro's color at 24%, the glyph a step deeper (a step lighter at night). On the ring they sit on a disc in the middle of their arc. Rows beside them that are not macros (calories in the editor) get a `SymbolTile` of the same shape and strength.
 - **Emoji** only as food pictures: tiles, ingredients, the meal an estimate found.
 
 ## Charts
 
 - **The dotted ring**: six rings of fine dots, a halftone. On Today the lit dots are the day's calories against its goal, in the colors of where they came from (protein, carbs, fat), with a one-dot gap between parts; gray dots are still to eat; past the goal, the overflow runs round the outer ring in red. On a food the ring is that food's calories, all lit. The dots light up round the ring when it appears.
-- **Macro bars**: name, grams (over the target on Today), a 4 pt bar toward the day's target.
+- **Each macro's glyph rides its arc** on a disc, when the arc is at least 8% of the ring, and appears as the light reaches it.
+- **The macro list** beside the ring, one line per macro: the glyph tile, the name, the grams. On Today the grams sit over the target (`62 / 125 g`) and a 3 pt rule under the line fills toward it, red when carbs or fat pass it (more protein is fine). On a food the line ends with the macro's share of the calories, and hairlines part the lines. One block, `MacroBlock`, on Today, a food and a photo estimate: the 140 pt ring on the left, the list on the right.
 - **Range bars**: one thin bar per day against the goal's dashed line, ink when fine, red when over; they grow from the baseline when they appear. Seven on the right of the week's average, thirty under the month's.
 - Labels wear text colors, never the series color.
 
@@ -77,14 +78,14 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 ## Screens
 
-- **Today**: the cover (switcher, streak, settings; the number left or over; the photo's meal and the goal), then the sheet: macros and ring, burned and steps, Your day as a timeline (time, meal, calories, tiles), Saved. The dock floats at the bottom: search, Scan, quick add.
+- **Today**: the cover (switcher, streak, settings; the number left or over; the photo's meal and the goal), then the sheet: the ring and the macros, burned and steps, Your day as a timeline (time, meal, calories, tiles), Saved. The dock floats at the bottom: search, Scan, quick add.
 - **The switcher** behind the day's name: today and the six days before it, then the last 7 and 30 days.
 - **Last 7 days, last 30 days**: the daily average and its bars, the days as a food diary (dot, calories, up to four foods, photos first; tap one to open it), best days, most eaten. Whole days only: today joins tomorrow.
-- **A food, a photo estimate**: the hero, then the sheet: name, brand, chips (Nutri-Score, processing, highlights), the macros and the ring, the amount (portions, then − and +), the label on demand. Meal picker and the ink button at the bottom.
+- **A food, a photo estimate**: the hero, then the sheet: name, brand, chips (Nutri-Score, processing, highlights), the ring and the macros, the amount (portions, then − and +), the label on demand. Meal picker and the ink button at the bottom.
 
 ## Components
 
-`DayCover`, `DottedRing`, `MacroBars`, `MacroBlock`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Bite/Design/Theme.swift`, the typeface in `Bite/Design/Typeface.swift`.
+`DayCover`, `DottedRing`, `MacroList`, `MacroBlock`, `MacroGlyph`, `MacroTile`, `SymbolTile`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Bite/Design/Theme.swift`, the typeface in `Bite/Design/Typeface.swift`.
 
 ## Interactions
 
@@ -98,7 +99,7 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 ## Motion
 
-The scan laser sweeps, numbers roll, the ring's dots light up round from twelve o'clock, the range bars grow, covers stretch when pulled, and "Added to Breakfast" slides up over the dock, then leaves after 2.6 seconds. Reduce Motion stops the laser and lights everything at once.
+The scan laser sweeps, numbers roll, the ring's dots light up round from twelve o'clock and each macro's glyph appears as the light reaches it, the range bars grow, covers stretch when pulled, and "Added to Breakfast" slides up over the dock, then leaves after 2.6 seconds. Reduce Motion stops the laser and lights everything at once.
 
 ## Copy
 

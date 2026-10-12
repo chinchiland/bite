@@ -609,8 +609,9 @@ struct TodayView: View {
     }
 
     #if DEBUG
-    /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday`
-    /// opens a screen straight away, for screenshots.
+    /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday|over`
+    /// opens a screen straight away, for screenshots. `over` is the demo's heaviest day, three
+    /// days back: four digit calories, past the goal, carbs and fat past their targets.
     private func openDemoScreen() {
         switch UserDefaults.standard.string(forKey: "screen") {
         case "food": editing = dayEntries.first { $0.imageURLString != nil } ?? dayEntries.first
@@ -623,6 +624,7 @@ struct TodayView: View {
         case "week": tab = .week
         case "month": tab = .month
         case "yesterday": day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
+        case "over": day = Calendar.current.date(byAdding: .day, value: -3, to: day) ?? day
         default: break
         }
     }
