@@ -158,6 +158,7 @@ struct SettingsView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(Theme.page.ignoresSafeArea())
+            .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -123,6 +123,8 @@ jobs:
           shoot 38-dish-fr -onboarded YES -screen dish -AppleLanguages "(fr)" -AppleLocale fr_FR
           shoot 39-today-middle-es -onboarded YES -anchor center -AppleLanguages "(es)" -AppleLocale es_ES
           shoot 40-usual -onboarded YES -clock 19:30 -anchor usual
+          shoot 41-typo -onboarded YES -screen search -query chiken
+          shoot 42-settings-end -onboarded YES -screen settings -anchor bottom
 
       - uses: actions/upload-artifact@v4
         with:
