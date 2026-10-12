@@ -37,6 +37,17 @@ Research from October 2026: Apple's guidelines and WWDC sessions, what MacroFact
 | Competing answers ranked by the community. | Stack Overflow, Reddit | C3 with D-round's list: the Verified entry leads, the others follow by confirmations. |
 | Votes and confirmations show at once and sync after. | Common practice | Optimistic updates, undone if the server refuses. |
 
+## Alive, with less
+
+Asked of Gemini and GPT separately in October 2026; where they agree, it is here. Apps they name: Things 3, Apple Fitness and Health, Flighty, Copilot Money, Opal, Airbnb's 2025 icons, Google and Apple Maps.
+
+- **Icons on soft tiles, only where they mean something.** A 8 to 15% tint of the icon's own color, one radius everywhere, the same weight for every glyph. Lists and categories get tiles; metadata gets a bare symbol; never a colored box on every row. In Bite: the macro glyphs (a drumstick, a wheat ear, a drop) lead their rows and sit on the ring; Add your count and Your rating lead with theirs.
+- **Motion explains a change, then stops.** Numbers roll, the ring's dots light up once, nothing moves at rest. Springs stay calm (about 0.3 s response, 0.7 to 0.8 damping); a wobble reads as a toy.
+- **Stagger by importance, briefly.** The ring first, the macros 60 to 100 ms later, then the meals, all inside about 250 ms.
+- **Delight is earned and quiet.** When the day lands on target: the ring warms, a small "On target" appears, one soft success haptic. No confetti, no screen to dismiss.
+- **Community numbers carry their source.** "97% accurate" always comes with how many counts, how close they are and how many people confirmed, with the method one tap away.
+- **What makes it cheap:** solid color tiles everywhere, animating every tap, gradients and glass on everything, every metric shouting at the same size, interrupting a log with a celebration or a prompt, badges with no provenance.
+
 ## What to avoid
 
 - Interruptions after every log (spin wheels, streak pop-ups, forced tips). Users are leaving apps over it.
