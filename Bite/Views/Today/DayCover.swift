@@ -26,6 +26,8 @@ struct DayCover<Controls: View>: View {
     var verdict: String? = nil
     /// With no photo: the last thing you ate.
     var lastMeal: String? = nil
+    /// With no photo today: good morning, afternoon or evening, with the sky of that hour.
+    var greeting: (text: String, symbol: String)? = nil
     let detail: String
     /// The detail turns red: a day past its goal.
     var detailIsOver = false
@@ -123,6 +125,12 @@ struct DayCover<Controls: View>: View {
             if photos.count > 1 {
                 PageDots(count: photos.count, index: index)
                     .frame(maxWidth: .infinity)
+                    .padding(.bottom, 2)
+            }
+            if photos.isEmpty, let greeting {
+                Label(greeting.text, systemImage: greeting.symbol)
+                    .font(.ui(17, .medium))
+                    .foregroundStyle(Theme.ink)
                     .padding(.bottom, 2)
             }
             // The words sit beside the number when they fit, under it when they do not.

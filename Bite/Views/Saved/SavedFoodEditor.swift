@@ -454,6 +454,7 @@ struct SavedFoodEditor: View {
 
 /// Shrinks a photo to keep: longest side `maxSide` points, JPEG.
 enum ImageTools {
+
     static func jpeg(_ image: UIImage, maxSide: CGFloat, quality: CGFloat = 0.78) -> Data? {
         let longest = max(image.size.width, image.size.height)
         guard longest > 0 else { return nil }

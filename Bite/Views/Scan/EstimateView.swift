@@ -9,6 +9,8 @@ struct EstimateView: View {
     let image: UIImage
     let isLabel: Bool
     let day: Date
+    /// When the photo was taken, if it came from the library: the meal keeps that time.
+    var takenAt: Date? = nil
     let onDone: () -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -24,6 +26,8 @@ struct EstimateView: View {
     @State private var meal = Meal.likely()
     /// Where you are eating it: picked from the places around you, or none.
     @State private var place: MealPlace?
+    /// When you ate it: the photo's own time when it has one, else now; a tap changes it.
+    @State private var time: Date?
     @State private var isSaved = false
     @State private var showSettings = false
     @State private var attempt = 0
@@ -36,6 +40,14 @@ struct EstimateView: View {
     }
 
     private var totals: Nutrients { estimate?.totals ?? .zero }
+
+    /// The photo's time, else the usual time for this day; yours once you change it.
+    private var timeBinding: Binding<Date> {
+        Binding(
+            get: { time ?? takenAt ?? FoodDetailView.logDate(for: day) },
+            set: { time = $0 }
+        )
+    }
     private var targets: MacroTargets {
         MacroTargets(kcal: Double(goalKcal), split: MacroSplit(rawValue: splitRaw) ?? .balanced)
     }
@@ -211,8 +223,18 @@ struct EstimateView: View {
                 .accessibilityLabel(
                     "\(totals.kcal.kcalText) calories. Protein \(totals.protein.gramsText) grams, carbs \(totals.carbs.gramsText) grams, fat \(totals.fat.gramsText) grams."
                 )
+                HStack {
+                    Text("Time")
+                        .font(.ui(17))
+                        .foregroundStyle(Theme.ink)
+                    Spacer()
+                    DatePicker("Time", selection: timeBinding, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
+                .padding(.vertical, 4)
+                .padding(.top, 14)
                 PlaceRow(place: $place)
-                    .padding(.top, 14)
+                    .padding(.top, 2)
             }
         }
         .padding(.horizontal, Theme.margin)
@@ -341,7 +363,7 @@ struct EstimateView: View {
 
     private func add(_ estimate: MealEstimate) {
         let food = plate(estimate)
-        let entry = FoodEntry(food: food, amount: 1, meal: meal, date: FoodDetailView.logDate(for: day), place: place)
+        let entry = FoodEntry(food: food, amount: 1, meal: meal, date: timeBinding.wrappedValue, place: place)
         context.insert(entry)
         try? context.save()
         events.added(entry)

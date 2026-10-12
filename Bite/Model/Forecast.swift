@@ -44,6 +44,18 @@ struct WeightForecast: Equatable {
     }
 }
 
+extension WeightForecast {
+    /// Your weighings smoothed, oldest first: each day's number pulled a quarter of the way from
+    /// the trend so far, so one salty dinner never moves the line much.
+    static func trend(_ kilograms: [Double], smoothing: Double = 0.25) -> [Double] {
+        var result: [Double] = []
+        for value in kilograms {
+            result.append(result.last.map { $0 + smoothing * (value - $0) } ?? value)
+        }
+        return result
+    }
+}
+
 extension GoalCalculator {
     /// What a body burns in a day: Mifflin-St Jeor resting energy times activity, before any
     /// goal is taken off or added.

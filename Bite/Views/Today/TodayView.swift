@@ -190,6 +190,7 @@ struct TodayView: View {
                     number: hero.number,
                     unit: hero.unit,
                     lastMeal: hasPhoto ? nil : dayEntries.last.map { String(localized: "Last meal: \($0.name)") },
+                    greeting: isToday ? greeting : nil,
                     detail: heroDetail.text,
                     detailIsOver: heroDetail.isOver,
                     onPlace: { sheet = .place($0) }
@@ -303,6 +304,7 @@ struct TodayView: View {
 
             SavedShelf(
                 title: shelfTitle,
+                note: shelfNote,
                 saved: shelfOrder,
                 onAdd: add,
                 onEdit: { sheet = .editSaved($0) },
@@ -515,6 +517,22 @@ struct TodayView: View {
         return isToday && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) left" : "Saved"
     }
 
+    /// One line when protein is well behind today: how much, and that the shelf leads with it.
+    private var shelfNote: String? {
+        let behind = targets.protein - totals.protein
+        guard isToday, behind >= 20, !saved.isEmpty else { return nil }
+        return String(localized: "\(behind.gramsText) g of protein to go: the richest in it come first.")
+    }
+
+    /// Good morning, afternoon or evening, with the sky of that hour.
+    private var greeting: (text: String, symbol: String) {
+        switch Calendar.current.component(.hour, from: .now) {
+        case 5..<12: (String(localized: "Good morning"), "sun.horizon.fill")
+        case 12..<18: (String(localized: "Good afternoon"), "sun.max.fill")
+        default: (String(localized: "Good evening"), "moon.stars.fill")
+        }
+    }
+
     /// Saved foods that fit what is left first; protein-dense first when protein is behind.
     private var shelfOrder: [SavedFood] {
         let left = budget - totals.kcal
@@ -563,7 +581,7 @@ struct TodayView: View {
 
     /// Where your weight goes at the way you ate over the last week's whole days.
     private var forecast: WeightForecast? {
-        guard let current = trendWeights.last?.kilograms else { return nil }
+        guard let current = WeightForecast.trend(trendWeights.map(\.kilograms)).last else { return nil }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
         let kcals: [Double] = (1...7).compactMap { offset in

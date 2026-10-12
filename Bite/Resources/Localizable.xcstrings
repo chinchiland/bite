@@ -81,6 +81,22 @@
         }
       }
     },
+    "%@ g of protein to go: the richest in it come first." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te faltan %@ g de proteína: primero los más ricos en ella."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encore %@ g de protéines : les plus riches passent en premier."
+          }
+        }
+      }
+    },
     "%@ has no nutrition facts yet." : {
       "localizations" : {
         "es" : {
@@ -2893,6 +2909,22 @@
         }
       }
     },
+    "Good afternoon" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buenas tardes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bon après-midi"
+          }
+        }
+      }
+    },
     "Good estimate" : {
       "localizations" : {
         "es" : {
@@ -2905,6 +2937,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bonne estimation"
+          }
+        }
+      }
+    },
+    "Good evening" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buenas noches"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bonsoir"
+          }
+        }
+      }
+    },
+    "Good morning" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buenos días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bonjour"
           }
         }
       }

@@ -256,8 +256,9 @@ check(Insights.score(summary(0, kcal: 0, entries: 0), goal: goal, proteinTarget:
 check(Insights.qualityPoints(grade: "A") == 1 && Insights.qualityPoints(grade: "e") == 0.1 && Insights.qualityPoints(grade: nil) == nil, "Nutri-Score points")
 
 let week = [summary(0, kcal: 900), summary(1, kcal: 2000), summary(2, kcal: 1950), summary(3, kcal: 2050), summary(4, kcal: 1500), summary(5, kcal: 2000)]
-check(Insights.streak(week, goal: goal, today: at(12), calendar: calendar) == 3, "an unfinished today does not break a 3-day streak")
-check(Insights.streak([summary(0, kcal: 2000)] + week.dropFirst(), goal: goal, today: at(12), calendar: calendar) == 4, "today on target extends it")
+check(Insights.streak(week, goal: goal, today: at(12), calendar: calendar) == 6, "light and over days keep a streak going")
+check(Insights.streak(Array(week.dropFirst()), goal: goal, today: at(12), calendar: calendar) == 5, "nothing logged yet today does not break it")
+check(Insights.streak([summary(0, kcal: 2000), summary(1, kcal: 2400), summary(3, kcal: 2000)], goal: goal, today: at(12), calendar: calendar) == 2, "a day with nothing logged ends it")
 let best = Insights.bestDays(week, goal: goal, proteinTarget: 125)
 check(best.count == 3 && best[0].day.kcal == 2000 && best[0].day.day > best[1].day.day, "best days: highest score, newest first on ties")
 
@@ -417,6 +418,10 @@ do {
     check(patchy?.direction == .holding, "eating what you burn holds")
     check(WeightForecast.make(currentKg: 70, maintenance: 2000, dayKcals: [2100, 1900]) == nil, "two days are not enough")
     check(WeightForecast.make(currentKg: 70, maintenance: 2000, dayKcals: [2300, 2300, 2300])?.direction == .gaining, "a surplus is gaining")
+    let smooth = WeightForecast.trend([73.0, 74.2, 73.0, 72.8])
+    check(near(smooth[1], 73.3) && smooth.count == 4, "one heavy morning moves the trend a quarter: \(smooth)")
+    check(smooth.last! > 72.8 && smooth.last! < 73.3, "the trend sits between the noise: \(smooth.last!)")
+    check(WeightForecast.trend([]).isEmpty && WeightForecast.trend([70]) == [70], "trend of nothing and of one")
 }
 
 print("\(passes) passed, \(failures) failed")

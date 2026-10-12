@@ -4,6 +4,8 @@ import SwiftUI
 struct SavedShelf: View {
     /// "Fits your 967 left" while there is room today, "Saved" otherwise.
     var title: LocalizedStringKey = "Saved"
+    /// One line under the title: what is behind today and what the order does about it.
+    var note: String? = nil
     let saved: [SavedFood]
     let onAdd: (SavedFood) -> Void
     let onEdit: (SavedFood) -> Void
@@ -12,7 +14,15 @@ struct SavedShelf: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionLabel(title: title, detail: saved.isEmpty ? nil : "Tap to add", symbol: "bookmark.fill")
+            VStack(alignment: .leading, spacing: 4) {
+                SectionLabel(title: title, detail: saved.isEmpty ? nil : "Tap to add", symbol: "bookmark.fill")
+                if let note {
+                    Text(note)
+                        .font(.ui(14))
+                        .foregroundStyle(Theme.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 10) {
                     ForEach(saved) { item in

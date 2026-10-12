@@ -83,6 +83,8 @@ struct ScannerView: View {
         let id = UUID()
         let image: UIImage
         let isLabel: Bool
+        /// When a photo picked from the library was taken, so lunch logged tonight stays lunch.
+        var takenAt: Date? = nil
     }
 
     private var mode: ScanMode { ScanMode(rawValue: modeRaw) ?? .barcode }
@@ -135,7 +137,7 @@ struct ScannerView: View {
             }
         }
         .fullScreenCover(item: $photo) { captured in
-            EstimateView(image: captured.image, isLabel: captured.isLabel, day: day) { dismiss() }
+            EstimateView(image: captured.image, isLabel: captured.isLabel, day: day, takenAt: captured.takenAt) { dismiss() }
         }
         .alert("Type the barcode", isPresented: $typing) {
             TextField("Barcode", text: $typedCode)
@@ -374,7 +376,7 @@ struct ScannerView: View {
               let data = try? await item.loadTransferable(type: Data.self),
               let image = UIImage(data: data) else { return }
         pickedPhoto = nil
-        photo = CapturedPhoto(image: image, isLabel: mode == .label)
+        photo = CapturedPhoto(image: image, isLabel: mode == .label, takenAt: ImageTools.captureDate(of: data))
     }
 
     private func lookUp(_ raw: String, typed: Bool = false) {

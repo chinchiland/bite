@@ -6,6 +6,10 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, that reads like a food 
 
 - **Today**: your latest meal photo as the cover with the calories left on it, then a dotted ring of the day's calories beside the three macros against your targets (a drumstick, a wheat ear and an avocado mark them), burned and steps, Your day as a timeline of food tiles, and your saved foods one tap away. The day's name opens a switcher: the last seven days, then the last 7 and 30 days.
 - **Scan**: three modes. Barcode finds the product. Scan food sends a photo of your plate to Claude. Food label reads a nutrition label or a pack. Pick from your gallery too.
+- **Where you ate**: pick the restaurant or cafe from the places around you (Apple Maps) when you log; the cover says where, and each place shows the dishes people counted there, with Directions and Order (Uber Eats).
+- **Dishes the community counts**: each dish's calories are what people's estimates add up to (an AI scan of their plate, or typed by hand), weighted by how many agree, with an accuracy score that says how close and how many. Add your own estimate, like the ones that match your plate, rate the dish. Local to the phone until the shared server is set up.
+- **Where your weight is heading**: your weighings from Apple Health and a dotted line to your weight four weeks on at the way you have been eating, with how many calories a day under or over what your body burns.
+- **Water**: one tap a glass, the chip filling toward the day's glasses.
 - **Photo estimate**: your photo as the hero, Claude's calories and macros on the sheet under it, each ingredient can be adjusted, then add the meal or save it.
 - **Saved foods**: bookmark any food, a whole meal or a photo estimate. Choose its picture (an emoji on a color, the product photo, or your own photo), its name and a line under it, how much one tap adds, and its meal.
 - **Last 7 and 30 days**: the daily average, how it moved and a bar for each day; each day as a line of the diary with its verdict and its food (tap it to open the day); your best days ranked with laurels, and the foods you come back to.
@@ -41,4 +45,4 @@ It parses every Swift file and runs the logic tests against real Open Food Facts
 - [USDA FoodData Central](https://fdc.nal.usda.gov), SR Legacy (public domain). Rebuild the basics with `python tools/build_basics.py <sr_legacy_csv_folder> Bite/Resources/basics.json`.
 - Apple Health, read only: steps and active energy.
 - Claude, for photo estimates you ask for.
-- [DM Sans](https://github.com/googlefonts/dm-fonts) by Colophon, SIL Open Font License (`Bite/Resources/Fonts`). The demo plate photos in `Bite/Resources/Demo` are from [Unsplash](https://unsplash.com) and ship in Debug builds only.
+- [DM Sans](https://github.com/googlefonts/dm-fonts) by Colophon, SIL Open Font License (`Bite/Resources/Fonts`). The demo plate photos in `Bite/Resources/Demo` are from [Unsplash](https://unsplash.com), the two shawarmas are public domain (CC0: Andy Li on [Wikimedia Commons](https://commons.wikimedia.org/w/index.php?curid=130489661), Joan Namunina on [WordPress Photos](https://wordpress.org/photos/photo/8636a6d0de/)), and they ship in Debug builds only.

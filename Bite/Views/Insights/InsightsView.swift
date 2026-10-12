@@ -329,49 +329,69 @@ private struct DayRow: View {
     }
 }
 
-/// The days as thin bars against the goal's dashed line: ink when fine, red when over. They
-/// grow from the baseline when they appear.
+/// The days as columns of dots against the goal's dashed line, the ring's halftone: ink up to
+/// the goal, red for the dots past it. They rise from the baseline when they appear.
 private struct DayBars: View {
     let days: [Date]
     let kcal: [Date: Double]
     let goal: Double
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var grown = false
+    @State private var grown: Double = 0
 
     var body: some View {
-        GeometryReader { geometry in
-            let size = geometry.size
-            let count = max(days.count, 1)
-            let barWidth: CGFloat = count > 10 ? max(3, (size.width - CGFloat(count - 1) * 3) / CGFloat(count)) : 6
-            let spacing = count > 1 ? (size.width - barWidth * CGFloat(count)) / CGFloat(count - 1) : 0
-            let peak = max(kcal.values.filter(\.isFinite).max() ?? 0, goal, 1) * 1.06
+        DotColumns(values: days.map { kcal[$0] ?? 0 }, goal: goal, progress: grown)
+            .onAppear {
+                guard grown < 1 else { return }
+                if reduceMotion {
+                    grown = 1
+                } else {
+                    withAnimation(.easeOut(duration: 0.8).delay(0.1)) { grown = 1 }
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText)")
+    }
+}
+
+/// Draws the columns. Animating `progress` raises them from the baseline.
+private struct DotColumns: View, Animatable {
+    let values: [Double]
+    let goal: Double
+    var progress: Double
+
+    var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    var body: some View {
+        Canvas { context, size in
+            let count = max(values.count, 1)
+            let dense = count > 10
+            let dot: CGFloat = dense ? min(5, max(3, (size.width - CGFloat(count - 1) * 3) / CGFloat(count))) : 7
+            let spacing = count > 1 ? (size.width - dot * CGFloat(count)) / CGFloat(count - 1) : 0
+            let pitch = dot + (dense ? 1.5 : 2.5)
+            let peak = max(values.filter(\.isFinite).max() ?? 0, goal, 1) * 1.06
             let goalY = size.height * (1 - goal / peak)
-            ZStack(alignment: .bottomLeading) {
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: goalY))
-                    path.addLine(to: CGPoint(x: size.width, y: goalY))
-                }
-                .stroke(Theme.ink.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
-                ForEach(Array(days.enumerated()), id: \.offset) { index, day in
-                    let value = kcal[day] ?? 0
-                    let height = value > 0 ? max(size.height * value / peak, barWidth) : 0
-                    RoundedRectangle(cornerRadius: barWidth / 2, style: .continuous)
-                        .fill(value > goal * 1.05 ? Theme.over : Theme.ink)
-                        .frame(width: barWidth, height: grown ? height : 0)
-                        .offset(x: CGFloat(index) * (barWidth + spacing))
+
+            var line = Path()
+            line.move(to: CGPoint(x: 0, y: goalY))
+            line.addLine(to: CGPoint(x: size.width, y: goalY))
+            context.stroke(line, with: .color(Theme.ink.opacity(0.3)), style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+
+            for (index, value) in values.enumerated() where value.isFinite && value > 0 {
+                let top = size.height - max(size.height * value / peak, dot) * progress
+                let x = CGFloat(index) * (dot + spacing)
+                let isOver = value > goal * 1.05
+                var y = size.height - dot
+                while y >= top - 0.5 {
+                    // Only the dots past the goal turn red, so the overflow reads at a glance.
+                    let color = isOver && y + dot / 2 < goalY ? Theme.over : Theme.ink
+                    context.fill(Path(ellipseIn: CGRect(x: x, y: y, width: dot, height: dot)), with: .color(color))
+                    y -= pitch
                 }
             }
-            .frame(width: size.width, height: size.height, alignment: .bottomLeading)
         }
-        .onAppear {
-            if reduceMotion {
-                grown = true
-            } else {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.85).delay(0.1)) { grown = true }
-            }
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText)")
     }
 }

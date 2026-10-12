@@ -554,7 +554,7 @@ struct FlowLayout: Layout {
         var widest: CGFloat = 0
         for subview in subviews {
             let size = subview.sizeThatFits(.unspecified)
-            if x > 0, x + size.width > maxWidth {
+            if x > 0, x + size.width > maxWidth + 0.5 {
                 y += rowHeight + spacing
                 x = 0
                 rowHeight = 0
@@ -563,7 +563,8 @@ struct FlowLayout: Layout {
             rowHeight = max(rowHeight, size.height)
             widest = max(widest, x - spacing)
         }
-        return CGSize(width: widest, height: y + rowHeight)
+        // The whole width it was offered, so placing never wraps a row that measuring kept.
+        return CGSize(width: proposal.width ?? widest, height: y + rowHeight)
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
@@ -572,7 +573,7 @@ struct FlowLayout: Layout {
         var rowHeight: CGFloat = 0
         for subview in subviews {
             let size = subview.sizeThatFits(.unspecified)
-            if x > bounds.minX, x + size.width > bounds.maxX {
+            if x > bounds.minX, x + size.width > bounds.maxX + 0.5 {
                 y += rowHeight + spacing
                 x = bounds.minX
                 rowHeight = 0

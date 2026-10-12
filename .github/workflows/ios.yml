@@ -64,8 +64,11 @@ jobs:
 
           shoot() {
             name=$1; shift
+            # English screens in British format, metric like the Swiss: kg, m, 24 hour times.
+            region=(-AppleLocale en_GB)
+            case "$*" in *AppleLocale*) region=();; esac
             xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
-            xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "$@"
+            xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "${region[@]}" "$@"
             sleep 9
             xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
           }

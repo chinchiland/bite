@@ -67,18 +67,19 @@ enum Insights {
         return Int((calories + protein + quality).rounded())
     }
 
-    /// Days on target in a row, counting back from today. Today only counts once it is on
-    /// target, so an unfinished day never breaks a streak.
+    /// Days logged in a row, up to today. Today joins as soon as something is logged, and a
+    /// day over or light keeps the streak going: it counts showing up, and the week's dots say
+    /// how the days went. A day with nothing logged ends it.
     static func streak(_ days: [DaySummary], goal: Double, today: Date, calendar: Calendar = .current) -> Int {
         let byDay = Dictionary(days.map { (calendar.startOfDay(for: $0.day), $0) }, uniquingKeysWith: { a, _ in a })
         var cursor = calendar.startOfDay(for: today)
         var count = 0
-        if let todays = byDay[cursor], DayVerdict(kcal: todays.kcal, entries: todays.entries, goal: goal).isOnTarget {
+        if let todays = byDay[cursor], todays.entries > 0 {
             count = 1
         }
         while let previous = calendar.date(byAdding: .day, value: -1, to: cursor) {
             cursor = previous
-            guard let day = byDay[cursor], DayVerdict(kcal: day.kcal, entries: day.entries, goal: goal).isOnTarget else { break }
+            guard let day = byDay[cursor], day.entries > 0 else { break }
             count += 1
         }
         return count
