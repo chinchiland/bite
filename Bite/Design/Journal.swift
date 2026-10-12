@@ -283,8 +283,9 @@ struct MacroBlock: View {
         HStack(alignment: .center, spacing: 16) {
             ZStack {
                 DottedRing(parts: ring, overflow: overflow, surface: surface)
-                // Inside the inner ring, which leaves about 76 pt: the number steps down for four
-                // digits, the unit takes a second line when a language needs it ("kcal consommées").
+                // Inside the inner ring, which leaves about 81 pt across the middle and less below
+                // it: the number steps down for four digits, the unit takes a second line when a
+                // language needs it ("kcal" over "mangées"), so each word stays short.
                 VStack(spacing: 3) {
                     Text(number.kcalText)
                         .font(.number(30, .medium))
@@ -300,10 +301,10 @@ struct MacroBlock: View {
                         .lineLimit(2)
                         .minimumScaleFactor(0.9)
                 }
-                .frame(maxWidth: 70)
+                .frame(maxWidth: 72)
                 .accessibilityElement(children: .combine)
             }
-            .frame(width: 140, height: 140)
+            .frame(width: 150, height: 150)
             .animation(.smooth, value: number)
 
             MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget)
