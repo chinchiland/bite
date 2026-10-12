@@ -20,7 +20,7 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, that reads like a food 
 
 ## Run it
 
-**With a Mac:** open `Bite.xcodeproj` in Xcode 16 or later, choose your Apple ID team under Signing & Capabilities, plug in your iPhone and press Run. In the scheme's Arguments, turn on `-demo YES` to start with two weeks of sample data.
+**With a Mac:** `tools/install-on-iphone.sh` builds Bite and Bite Demo with your Apple team and installs them on the plugged-in iPhone (Xcode 26 with your Apple ID in Settings › Accounts; details in [docs/mac.md](docs/mac.md)). Or open `Bite.xcodeproj`, choose your team under Signing & Capabilities and press Run; turn on `-demo YES` in the scheme's Arguments for two weeks of sample data.
 
 **Without a Mac:** push this folder to a GitHub repository. The `Build Bite` workflow builds the app on a cloud Mac and attaches three downloads to the run: `screenshots` (every screen, light and dark, a fresh install, and Bite Demo), `Bite-unsigned-ipa` (the real app) and `Bite-Demo-unsigned-ipa` (Bite Demo, which opens on two weeks of sample meals and sits next to Bite). Install them with [Sideloadly](https://sideloadly.io) and your Apple ID: the steps, the Apple Health check and the weekly refresh are in [docs/iphone.md](docs/iphone.md). A free Apple ID re-signs every 7 days; a paid developer account lasts a year and allows TestFlight.
 

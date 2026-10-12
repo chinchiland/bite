@@ -1,5 +1,7 @@
 # Bite on your iPhone, from Windows
 
+With a Mac it is simpler: [docs/mac.md](mac.md), one command.
+
 Two apps come out of every build (GitHub Actions, run "Build Bite"):
 
 - **Bite Demo** (`Bite-Demo-unsigned-ipa`, copied to `_previews/Bite-Demo.ipa`): the app with two weeks of sample meals, El Beirout and the community dishes. It opens straight on the demo day, never touches your log, and moves its story to each new day. Every photo you scan in it reads as the demo's salmon bowl, and what you add is gone at the next launch: it is a demo. Its icon is the inverted cookie.
