@@ -175,7 +175,8 @@ private struct TrendChart: View {
 
     var body: some View {
         let now = Date.now
-        let start = weights.first?.date ?? Calendar.current.date(byAdding: .day, value: -14, to: now) ?? now
+        let lead = Calendar.current.date(byAdding: .day, value: -14, to: now) ?? now
+        let start = min(weights.first?.date ?? lead, lead)
         let end = Calendar.current.date(byAdding: .day, value: horizonDays, to: now) ?? now
         let span = max(end.timeIntervalSince(start), 1)
         let endKg = forecast.weight(afterDays: Double(horizonDays))

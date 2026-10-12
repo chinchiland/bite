@@ -107,7 +107,7 @@ struct ScanGlyph: View {
         }
         .onAppear {
             guard animated, !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) { sweep = true }
+            withAnimation(.easeInOut(duration: 1.4).repeatCount(3, autoreverses: true)) { sweep = true }
         }
         .accessibilityHidden(true)
     }

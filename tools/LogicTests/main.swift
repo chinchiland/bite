@@ -448,6 +448,11 @@ do {
     check(false, "unexpected error \(error)")
 }
 
+// Anthropic's own words when it refuses a request: no credit, no access.
+check(ClaudeVision.errorMessage(in: Data(#"{"type":"error","error":{"type":"billing_error","message":"Your credit balance is too low."}}"#.utf8)) == "Your credit balance is too low.", "API error message")
+check(ClaudeVision.errorMessage(in: Data("<html>Bad gateway</html>".utf8)) == nil, "no message in an HTML page")
+check(ClaudeVision.Failure.refused("No credit.").errorDescription == "Anthropic says: No credit.", "refusal text")
+
 do {
     let request = try ClaudeVision.request(jpeg: Data([0xFF, 0xD8, 0xFF]), language: "fr", apiKey: "test-key")
     check(request.value(forHTTPHeaderField: "x-api-key") == "test-key", "api key header")

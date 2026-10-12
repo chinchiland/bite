@@ -1405,6 +1405,22 @@
         }
       }
     },
+    "Anthropic says: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anthropic responde: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anthropic répond : %@"
+          }
+        }
+      }
+    },
     "Apple Health" : {
       "localizations" : {
         "es" : {
@@ -1549,6 +1565,22 @@
         }
       }
     },
+    "Bite couldn't open your log" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite no ha podido abrir tu registro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite n’a pas pu ouvrir ton journal"
+          }
+        }
+      }
+    },
     "Bite log" : {
       "localizations" : {
         "es" : {
@@ -1593,6 +1625,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bite utilise ta position ici, pour lister les restaurants et cafés proches. Elle reste sur ton téléphone."
+          }
+        }
+      }
+    },
+    "Bite uses your location here, to list the restaurants and cafes nearby. Only Apple Maps sees it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite usa tu ubicación aquí, para listar los restaurantes y cafeterías cercanos. Solo la ve Mapas de Apple."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite utilise ta position ici, pour lister les restaurants et cafés proches. Seule l’app Plans d’Apple la voit."
           }
         }
       }
@@ -2089,6 +2137,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude a refusé la clé API. Vérifie-la dans Réglages."
+          }
+        }
+      }
+    },
+    "Claude didn't take your key" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude no ha aceptado tu clave"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude n’a pas accepté ta clé"
           }
         }
       }
@@ -3421,6 +3485,22 @@
         }
       }
     },
+    "It's still on your phone, and the next update will open it. Until then, what you add isn't kept." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue en tu teléfono y la próxima actualización lo abrirá. Hasta entonces, lo que añadas no se guarda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il est toujours sur ton téléphone, et la prochaine mise à jour l’ouvrira. D’ici là, ce que tu ajoutes n’est pas gardé."
+          }
+        }
+      }
+    },
     "Keep typing to search products." : {
       "localizations" : {
         "es" : {
@@ -4381,6 +4461,22 @@
         }
       }
     },
+    "No restaurants or cafes right around you. Search by name." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay restaurantes ni cafeterías justo a tu alrededor. Busca por nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun restaurant ni café juste autour de toi. Cherche par nom."
+          }
+        }
+      }
+    },
     "Not now" : {
       "localizations" : {
         "es" : {
@@ -4509,6 +4605,22 @@
         }
       }
     },
+    "OK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
     "On target" : {
       "localizations" : {
         "es" : {
@@ -4589,6 +4701,22 @@
         }
       }
     },
+    "Only your estimate so far. Each one people add firms it up." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo tu estimación por ahora. Cada una que se añade la afina."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seulement ton estimation pour l’instant. Chaque estimation ajoutée la consolide."
+          }
+        }
+      }
+    },
     "Open Settings" : {
       "localizations" : {
         "es" : {
@@ -4665,6 +4793,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commander"
+          }
+        }
+      }
+    },
+    "Paste it again in Settings, or make a new one at console.anthropic.com." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pégala de nuevo en Ajustes o crea una nueva en console.anthropic.com."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colle-la à nouveau dans Réglages, ou crée-en une nouvelle sur console.anthropic.com."
           }
         }
       }
@@ -6365,6 +6509,22 @@
         }
       }
     },
+    "Today joins tomorrow, once it's whole." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy se suma mañana, cuando el día haya terminado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui s’y ajoute demain, une fois la journée finie."
+          }
+        }
+      }
+    },
     "Training 3 to 5 days a week" : {
       "localizations" : {
         "es" : {
@@ -7017,6 +7177,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton objectif tient déjà compte d’une semaine normale. Active cette option si tu as choisi « Plutôt assis », pour que tes séances te laissent manger plus."
+          }
+        }
+      }
+    },
+    "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more. What Bite reads is in the iPhone's Settings: Privacy & Security, Health, Bite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu objetivo ya cuenta con una semana normal. Actívalo si elegiste «Casi siempre sentado», así tus entrenamientos te dejan comer más. Lo que lee Bite se cambia en los Ajustes del iPhone: Privacidad y seguridad, Salud, Bite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton objectif tient déjà compte d’une semaine normale. Active cette option si tu as choisi « Plutôt assis », pour que tes séances te laissent manger plus. Ce que Bite lit se règle dans les Réglages de l’iPhone : Confidentialité et sécurité, Santé, Bite."
           }
         }
       }

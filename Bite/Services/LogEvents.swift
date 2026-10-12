@@ -12,12 +12,14 @@ final class LogEvents {
         let amount: Double
         let meal: Meal
         let date: Date
+        let place: MealPlace?
 
         init(_ entry: FoodEntry) {
             food = entry.food
             amount = entry.amount
             meal = entry.meal
             date = entry.date
+            place = entry.place
         }
     }
 

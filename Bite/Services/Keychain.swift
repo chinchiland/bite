@@ -3,7 +3,8 @@ import Security
 
 /// Keeps secrets, like your Claude API key, in the iOS Keychain instead of app storage.
 enum Keychain {
-    private static let service = "com.dylan.bite"
+    /// Bite Demo keeps its own, so it never reads or removes Bite's.
+    private static var service: String { BiteStore.isDemo ? "com.dylan.bite.demo" : "com.dylan.bite" }
 
     static func string(for account: String) -> String? {
         let query: [String: Any] = [

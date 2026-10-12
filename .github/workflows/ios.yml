@@ -126,7 +126,45 @@ jobs:
           shoot 41-typo -onboarded YES -screen search -query chiken
           shoot 42-settings-end -onboarded YES -screen settings -anchor bottom
 
+          shoot_fresh() {
+            name=$1; shift
+            xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
+            xcrun simctl launch "$UDID" com.dylan.bite -AppleLocale en_IE "$@"
+            sleep 9
+            xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
+          }
+          xcrun simctl uninstall "$UDID" com.dylan.bite
+          xcrun simctl install "$UDID" "$APP"
+          shoot_fresh 60-fresh-welcome
+          shoot_fresh 61-fresh-today -onboarded YES
+          shoot_fresh 62-fresh-today-end -onboarded YES -anchor bottom
+          shoot_fresh 63-fresh-week -onboarded YES -screen week
+          shoot_fresh 64-fresh-search -onboarded YES -screen search
+          shoot_fresh 65-fresh-settings -onboarded YES -screen settings
+          xcrun simctl ui "$UDID" appearance dark
+          shoot_fresh 66-fresh-today-dark -onboarded YES
+          xcrun simctl ui "$UDID" appearance light
+
+          # Bite Demo as a phone opens it: its own Release build with BITE_DEMO, no arguments.
+          xcodebuild build \
+            -project Bite.xcodeproj \
+            -scheme Bite \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build-demo-sim \
+            CODE_SIGNING_ALLOWED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER=com.dylan.bite.demo \
+            INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
+            ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
+            'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
+            EXCLUDED_SOURCE_FILE_NAMES= | tail -3
+          xcrun simctl install "$UDID" build-demo-sim/Build/Products/Release-iphonesimulator/Bite.app
+          xcrun simctl launch "$UDID" com.dylan.bite.demo
+          sleep 10
+          xcrun simctl io "$UDID" screenshot screenshots/70-demo-app.png
+
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: screenshots
           path: screenshots
@@ -153,3 +191,38 @@ jobs:
         with:
           name: Bite-unsigned-ipa
           path: Bite-unsigned.ipa
+
+      # Bite Demo: a second app next to Bite that always opens on the seeded two weeks. The same
+      # Release build plus the BITE_DEMO switch, its own id, name and icon, and the demo photos
+      # Release normally leaves out. Signed without Health: it never asks for it.
+      - name: Bite Demo IPA for sideloading
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 1; }
+          xcodebuild build \
+            -project Bite.xcodeproj \
+            -scheme Bite \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build-demo \
+            CODE_SIGNING_ALLOWED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER=com.dylan.bite.demo \
+            INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
+            ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
+            'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
+            EXCLUDED_SOURCE_FILE_NAMES= | tail -3
+          APP=build-demo/Build/Products/Release-iphoneos/Bite.app
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")" = com.dylan.bite.demo ] || fail "Bite Demo kept Bite's bundle id"
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$APP/Info.plist")" = "Bite Demo" ] || fail "Bite Demo is not named Bite Demo"
+          for photo in shawarma shawarma-fries salmon-bowl salmon-plate egg-bowl buddha-bowl steak pizza; do
+            [ -f "$APP/demo-$photo.jpg" ] || fail "demo-$photo.jpg is missing from Bite Demo"
+          done
+          rm -rf DemoIPA && mkdir -p DemoIPA/Payload
+          cp -R "$APP" DemoIPA/Payload/
+          codesign --force --sign - --timestamp=none DemoIPA/Payload/Bite.app
+          (cd DemoIPA && zip -qry ../Bite-Demo-unsigned.ipa Payload)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Bite-Demo-unsigned-ipa
+          path: Bite-Demo-unsigned.ipa

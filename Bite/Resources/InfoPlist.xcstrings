@@ -86,13 +86,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite usa tu ubicación para listar los restaurantes y cafeterías a tu alrededor cuando añades una comida. Se queda en tu teléfono."
+            "value" : "Bite usa tu ubicación para listar los restaurantes y cafeterías a tu alrededor cuando añades una comida. Solo la ve Mapas de Apple."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite utilise ta position pour lister les restaurants et cafés autour de toi quand tu ajoutes un repas. Elle reste sur ton téléphone."
+            "value" : "Bite utilise ta position pour lister les restaurants et cafés autour de toi quand tu ajoutes un repas. Seule l’app Plans d’Apple la voit."
           }
         }
       }

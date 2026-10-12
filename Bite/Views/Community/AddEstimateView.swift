@@ -115,8 +115,9 @@ struct AddEstimateView: View {
                         .disabled(!canSave)
                 }
             }
-            .onChange(of: pickedPhoto) { _, item in
-                Task { await estimate(from: item) }
+            // A new pick, or closing the sheet, cancels the one still being counted.
+            .task(id: pickedPhoto) {
+                await estimate(from: pickedPhoto)
             }
             .onAppear(perform: prefill)
         }
@@ -182,10 +183,10 @@ struct AddEstimateView: View {
     private func estimate(from item: PhotosPickerItem?) async {
         guard let item,
               let data = try? await item.loadTransferable(type: Data.self),
-              let image = UIImage(data: data) else { return }
+              let image = ImageTools.downsample(data, maxPixel: 2048) else { return }
         photo = image
         photoState = .working
-        #if DEBUG
+        #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             try? await Task.sleep(for: .seconds(1))
             set(dish?.consensus.nutrients ?? DemoData.estimate.totals)
@@ -201,6 +202,7 @@ struct AddEstimateView: View {
         }
         do {
             let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: OpenFoodFacts.languages.first ?? "en")
+            guard !Task.isCancelled else { return }
             set(result.totals)
             if isNewDish, name.isEmpty { name = result.title }
             fromPhoto = true

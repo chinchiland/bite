@@ -85,7 +85,7 @@ struct DishView: View {
             SectionLabel(title: "Calorie estimates", symbol: "flame.fill", symbolColor: Theme.energy)
                 .padding(.top, 32)
                 .padding(.bottom, 8)
-            AccuracyRow(consensus: consensus) { showAccuracy = true }
+            AccuracyRow(consensus: consensus, onlyYours: dish.estimates.allSatisfy(\.isMine)) { showAccuracy = true }
             ForEach(dish.rankedEstimates) { estimate in
                 Rectangle().fill(Theme.hairline).frame(height: 1)
                 EstimateRow(estimate: estimate) { toggleAgree(estimate) }

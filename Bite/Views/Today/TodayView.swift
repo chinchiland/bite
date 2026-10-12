@@ -200,7 +200,7 @@ struct TodayView: View {
                         detailIsOver: heroDetail.isOver,
                         onPlace: { sheet = .place($0) }
                     ) {
-                        coverControls(onPhoto: hasPhoto)
+                        coverControls(onPhoto: hasPhoto || colorScheme == .dark)
                     }
                     .onGeometryChange(for: Bool.self) { geometry in
                         geometry.frame(in: .scrollView).maxY > 120
@@ -491,8 +491,24 @@ struct TodayView: View {
     }
 
     private var dayEntries: [FoodEntry] {
+        entries(on: day)
+    }
+
+    /// The entries of one day. The log is sorted by date, so two binary searches find them.
+    private func entries(on date: Date) -> [FoodEntry] {
         let calendar = Calendar.current
-        return entries.filter { calendar.isDate($0.date, inSameDayAs: day) }
+        let start = calendar.startOfDay(for: date)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { return [] }
+        func first(atOrAfter limit: Date) -> Int {
+            var low = 0
+            var high = entries.count
+            while low < high {
+                let middle = (low + high) / 2
+                if entries[middle].date < limit { low = middle + 1 } else { high = middle }
+            }
+            return low
+        }
+        return Array(entries[first(atOrAfter: start)..<first(atOrAfter: end)])
     }
 
     /// The day's photos, latest first: plates Claude estimated, dishes and saved foods with
@@ -609,7 +625,7 @@ struct TodayView: View {
     private var weekDays: [WeekStrip.Day] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
-        let todays = entries.filter { calendar.isDate($0.date, inSameDayAs: today) }
+        let todays = entries(on: today)
         let todayKcal = todays.reduce(0) { $0 + $1.totals.kcal }
         let todayVerdict = DayVerdict(kcal: todayKcal, entries: todays.count, goal: Double(goalKcal))
         return (0..<7).reversed().compactMap { offset in
@@ -659,7 +675,7 @@ struct TodayView: View {
         let today = calendar.startOfDay(for: .now)
         let kcals: [Double] = (1...7).compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
-            return entries.filter { calendar.isDate($0.date, inSameDayAs: date) }.reduce(0) { $0 + $1.totals.kcal }
+            return entries(on: date).reduce(0) { $0 + $1.totals.kcal }
         }
         let maintenance = learned?.kcal ?? GoalCalculator.maintenance(
             sex: Sex(rawValue: sexRaw) ?? .female,
@@ -719,7 +735,7 @@ struct TodayView: View {
     }
 
     private func loadWeights() async {
-        #if DEBUG
+        #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             weights = DemoData.weights()
             return
@@ -771,13 +787,18 @@ struct TodayView: View {
         events.added(copies)
     }
 
-    /// A meal moved to another time on the same day.
+    /// A meal moved to another time on the same day: every entry shifts by the same amount,
+    /// so a snack at 10:30 and one at 16:10 keep their hours apart.
     private func move(_ items: [FoodEntry], to time: Date) {
+        guard let first = items.min(by: { $0.date < $1.date }) else { return }
         let calendar = Calendar.current
         let parts = calendar.dateComponents([.hour, .minute], from: time)
+        guard let target = calendar.date(bySettingHour: parts.hour ?? 12, minute: parts.minute ?? 0, second: 0, of: first.date) else { return }
+        let shift = target.timeIntervalSince(first.date)
+        guard abs(shift) >= 60 else { return }
         withAnimation(.snappy) {
             for item in items {
-                item.date = calendar.date(bySettingHour: parts.hour ?? 12, minute: parts.minute ?? 0, second: 0, of: item.date) ?? item.date
+                item.date = item.date.addingTimeInterval(shift)
             }
             try? context.save()
         }
@@ -793,7 +814,7 @@ struct TodayView: View {
                 }
             case .deleted(let snapshots):
                 for snapshot in snapshots {
-                    context.insert(FoodEntry(food: snapshot.food, amount: snapshot.amount, meal: snapshot.meal, date: snapshot.date))
+                    context.insert(FoodEntry(food: snapshot.food, amount: snapshot.amount, meal: snapshot.meal, date: snapshot.date, place: snapshot.place))
                 }
             }
             try? context.save()
@@ -836,7 +857,7 @@ struct TodayView: View {
 
     private func connectHealth() {
         Task {
-            await HealthActivity.shared.requestAccess()
+            guard await HealthActivity.shared.requestAccess() else { return }
             healthAsked = true
             weightAsked = true
         }
@@ -849,15 +870,15 @@ struct TodayView: View {
             return
         }
         Task {
-            await HealthActivity.shared.requestAccess()
+            guard await HealthActivity.shared.requestAccess() else { return }
             healthAsked = true
             weightAsked = true
         }
     }
 
     private func loadActivity() async {
-        #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-demo") {
+        #if DEBUG || BITE_DEMO
+        if BiteStore.isDemo {
             activity = DemoData.activity(on: day)
             return
         }

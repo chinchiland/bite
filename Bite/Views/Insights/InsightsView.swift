@@ -88,11 +88,17 @@ struct RangeView<Switcher: View>: View {
                 header(start: start, last: last)
                 if now.loggedDays == 0 {
                     Card(padding: 24) {
-                        Text("Log a few days and they show up here, with your best days ranked.")
-                            .font(.ui(15))
-                            .foregroundStyle(Theme.secondary)
-                            .frame(maxWidth: .infinity)
-                            .multilineTextAlignment(.center)
+                        VStack(spacing: 6) {
+                            Text("Log a few days and they show up here, with your best days ranked.")
+                            if all.contains(where: { $0.day == today && $0.entries > 0 }) {
+                                Text("Today joins tomorrow, once it's whole.")
+                                    .foregroundStyle(Theme.ink)
+                            }
+                        }
+                        .font(.ui(15))
+                        .foregroundStyle(Theme.secondary)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
                     }
                     .padding(.top, 18)
                 } else {
@@ -182,7 +188,7 @@ struct RangeView<Switcher: View>: View {
         let calendar = Calendar.current
         let byDay = Dictionary(grouping: entries) { calendar.startOfDay(for: $0.date) }
         let logged = summaries.filter { $0.entries > 0 }.sorted { $0.day > $1.day }
-        return VStack(spacing: 0) {
+        return LazyVStack(spacing: 0) {
             ForEach(logged, id: \.day) { summary in
                 Button { onOpenDay(summary.day) } label: {
                     DayRow(summary: summary, entries: byDay[summary.day] ?? [], goal: goal)

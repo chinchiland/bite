@@ -4,6 +4,7 @@ struct RootView: View {
     @AppStorage("onboarded") private var onboarded = false
     @AppStorage("goal.kcal") private var goalKcal = 2000
     @State private var events = LogEvents()
+    @State private var storeProblem = BiteStore.failedToOpen
 
     var body: some View {
         TodayView()
@@ -21,6 +22,11 @@ struct RootView: View {
                         }
                     }
                 }
+            }
+            .alert("Bite couldn't open your log", isPresented: $storeProblem) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("It's still on your phone, and the next update will open it. Until then, what you add isn't kept.")
             }
     }
 

@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage("goal.kcal") private var kcal = 2000
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @AppStorage("health.asked") private var healthAsked = false
+    @AppStorage("health.weightAsked") private var weightAsked = false
     @AppStorage("health.addBurned") private var addBurned = false
     @State private var apiKey = ""
     @State private var storedKey = ""
@@ -89,8 +90,9 @@ struct SettingsView: View {
                             } else {
                                 Button {
                                     Task {
-                                        await HealthActivity.shared.requestAccess()
+                                        guard await HealthActivity.shared.requestAccess() else { return }
                                         healthAsked = true
+                                        weightAsked = true
                                     }
                                 } label: {
                                     Label {
@@ -107,7 +109,7 @@ struct SettingsView: View {
                             SectionTitle(text: "Apple Health")
                         } footer: {
                             Text(healthAsked
-                                ? "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more."
+                                ? "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more. What Bite reads is in the iPhone's Settings: Privacy & Security, Health, Bite."
                                 : "See your steps and burned calories next to what you eat. Bite only reads.")
                         }
                     }
@@ -172,13 +174,18 @@ struct SettingsView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Done") { dismiss() }
+                        Button("Done") {
+                            keepTypedKey()
+                            dismiss()
+                        }
                     }
                 }
                 .onAppear {
                     storedKey = Keychain.string(for: Keychain.claudeKey) ?? ""
                     apiKey = storedKey
                 }
+                // A key pasted and left without Save, or a swipe down, is kept all the same.
+                .onDisappear(perform: keepTypedKey)
             }
         }
     }
@@ -200,6 +207,13 @@ struct SettingsView: View {
         Keychain.set(key, for: Keychain.claudeKey)
         storedKey = key
         apiKey = key
+    }
+
+    /// Saves a typed key on the way out; an emptied field stays a choice for Remove key.
+    private func keepTypedKey() {
+        let key = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !key.isEmpty, key != storedKey else { return }
+        saveKey()
     }
 }
 
@@ -235,25 +249,35 @@ private struct ExportLogRow: View {
     /// Its id in the list, for scrolling to it.
     static let anchor = "export"
 
-    @Query(sort: \FoodEntry.date) private var entries: [FoodEntry]
+    /// One entry is enough to know there is something to export.
+    static var anyEntry: FetchDescriptor<FoodEntry> {
+        var descriptor = FetchDescriptor<FoodEntry>()
+        descriptor.fetchLimit = 1
+        return descriptor
+    }
+
+    @Environment(\.modelContext) private var context
+    @Query(ExportLogRow.anyEntry) private var first: [FoodEntry]
 
     var body: some View {
-        ShareLink(item: LogFile(rows: entries.map(LogExport.Row.init)), preview: SharePreview(LogExport.title)) {
+        ShareLink(item: LogFile(container: context.container), preview: SharePreview(LogExport.title)) {
             Label("Export your log", systemImage: "square.and.arrow.up")
                 .font(.ui(17))
         }
-        .disabled(entries.isEmpty)
+        .disabled(first.isEmpty)
     }
 }
 
-/// The log as a CSV file for the share sheet: Files, Mail, Numbers or a dietitian.
+/// The log as a CSV file for the share sheet: Files, Mail, Numbers or a dietitian. It reads
+/// the log only when the file is asked for.
 struct LogFile: Transferable {
-    let rows: [LogExport.Row]
+    let container: ModelContainer
 
     static var transferRepresentation: some TransferRepresentation {
         FileRepresentation(exportedContentType: .commaSeparatedText) { file in
+            let entries = try ModelContext(file.container).fetch(FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.date)]))
             let url = FileManager.default.temporaryDirectory.appending(path: LogExport.fileName)
-            try LogExport.file(file.rows).write(to: url, options: .atomic)
+            try LogExport.file(entries.map(LogExport.Row.init)).write(to: url, options: .atomic)
             return SentTransferredFile(url)
         }
     }

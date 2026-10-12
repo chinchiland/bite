@@ -40,7 +40,7 @@ final class PlaceFinder: NSObject, CLLocationManagerDelegate {
 
     /// The places within a few minutes' walk, nearest first, asking for location the first time.
     func findNearby() async {
-        #if DEBUG
+        #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             here = CLLocation(latitude: Self.demoHere.latitude, longitude: Self.demoHere.longitude)
             nearby = Self.demoPlaces.map { Nearby(place: $0, distance: distance(to: $0)) }
@@ -58,7 +58,7 @@ final class PlaceFinder: NSObject, CLLocationManagerDelegate {
     /// Finds where you are without asking: only when location is already allowed, to say how
     /// far places are.
     func locateIfAllowed() async {
-        #if DEBUG
+        #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             here = CLLocation(latitude: Self.demoHere.latitude, longitude: Self.demoHere.longitude)
             return
@@ -81,11 +81,13 @@ final class PlaceFinder: NSObject, CLLocationManagerDelegate {
     func search(_ text: String) async -> [Nearby] {
         let query = text.trimmingCharacters(in: .whitespaces)
         guard !query.isEmpty else { return [] }
-        #if DEBUG
+        #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
-            return Self.demoPlaces
+            let matches = Self.demoPlaces
                 .filter { $0.name.localizedCaseInsensitiveContains(query) }
                 .map { Nearby(place: $0, distance: distance(to: $0)) }
+            if !matches.isEmpty { return matches }
+            here = here ?? CLLocation(latitude: Self.demoHere.latitude, longitude: Self.demoHere.longitude)
         }
         #endif
         let request = MKLocalSearch.Request()
@@ -192,8 +194,8 @@ final class PlaceFinder: NSObject, CLLocationManagerDelegate {
         return nil
     }
 
-    #if DEBUG
-    /// The screenshots stand by the Parc de Milan in Lausanne.
+    #if DEBUG || BITE_DEMO
+    /// The screenshots and Bite Demo stand by the Parc de Milan in Lausanne.
     static let demoHere = (latitude: 46.51475, longitude: 6.62230)
 
     static let demoPlaces: [MealPlace] = [

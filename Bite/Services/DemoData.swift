@@ -1,12 +1,13 @@
-#if DEBUG
+#if DEBUG || BITE_DEMO
 import Foundation
 import SwiftData
 import UIKit
 
-/// A believable two weeks of logs for previews and screenshots. Launch with `-demo` to use it;
-/// it lives in memory and never touches your real log. The plate photos are from Unsplash, the
-/// two shawarmas are public domain (CC0), and they ship in Debug builds only. Today is a lunch
-/// at El Beirout by the Parc de Milan in Lausanne, where people have counted a few dishes.
+/// A believable two weeks of logs for previews, screenshots and Bite Demo. Launch a Debug build
+/// with `-demo`, or open Bite Demo, to use it; it lives in memory and never touches your real
+/// log. The plate photos are from Unsplash, the two shawarmas are public domain (CC0), and they
+/// ship in Debug builds and Bite Demo only. Today is a lunch at El Beirout by the Parc de Milan
+/// in Lausanne, where people have counted a few dishes.
 enum DemoData {
     /// Real Open Food Facts data for Danone's skyr, so the demo shows what a scan returns.
     static let skyr = Food(
@@ -76,6 +77,10 @@ enum DemoData {
     static func plateImage() -> UIImage {
         photo("salmon-bowl").flatMap(UIImage.init(data:)) ?? platePhoto()
     }
+
+    /// The salmon bowl, decoded once: the photo behind every demo estimate, so the demo never
+    /// shows your plate under the bowl's numbers.
+    static let estimatePhoto = plateImage()
 
     /// A stand-in plate photo drawn in code, for when the bundled photos are missing.
     static func platePhoto(size: CGSize = CGSize(width: 900, height: 900)) -> UIImage {
@@ -319,6 +324,26 @@ enum DemoData {
             context.insert(saved)
         }
         try? context.save()
+        #if BITE_DEMO
+        seededDay = today
+        #endif
     }
+
+    #if BITE_DEMO
+    /// The day Bite Demo's story was written around.
+    @MainActor private static var seededDay: Date?
+
+    /// Back on a new day, the same story again around it, instead of an empty Today.
+    @MainActor static func reseedIfStale(_ context: ModelContext) {
+        guard let seededDay, !Calendar.current.isDateInToday(seededDay) else { return }
+        try? context.delete(model: DishEstimate.self)
+        try? context.delete(model: CommunityDish.self)
+        try? context.delete(model: FoodEntry.self)
+        try? context.delete(model: SavedFood.self)
+        try? context.delete(model: WaterDay.self)
+        try? context.save()
+        seed(context)
+    }
+    #endif
 }
 #endif

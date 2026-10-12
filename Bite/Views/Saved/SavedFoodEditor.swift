@@ -407,7 +407,7 @@ struct SavedFoodEditor: View {
     private func loadPhoto(_ item: PhotosPickerItem?) async {
         guard let item,
               let data = try? await item.loadTransferable(type: Data.self),
-              let image = UIImage(data: data) else { return }
+              let image = ImageTools.downsample(data, maxPixel: 2048) else { return }
         photoData = ImageTools.jpeg(image, maxSide: 1000, quality: 0.7)
         usesPhoto = photoData != nil
     }

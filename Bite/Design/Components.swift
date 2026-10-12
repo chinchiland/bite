@@ -457,7 +457,7 @@ struct FoodThumb: View {
     }
 
     @ViewBuilder private var content: some View {
-        if let data = imageData, let photo = UIImage(data: data) {
+        if let data = imageData, let photo = ImageTools.thumbnail(data, points: size) {
             Color.clear
                 .overlay {
                     Image(uiImage: photo)

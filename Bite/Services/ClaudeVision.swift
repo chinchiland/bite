@@ -16,6 +16,8 @@ struct ClaudeVision {
         case declined
         case unreadable
         case server(Int)
+        /// Anthropic refused the request and said why, like an account out of credit.
+        case refused(String)
 
         var errorDescription: String? {
             switch self {
@@ -24,6 +26,7 @@ struct ClaudeVision {
             case .declined: tr("Claude couldn't estimate this photo.")
             case .unreadable: tr("Claude's answer came back unreadable. Try again.")
             case .server(let status): tr("Claude is unavailable right now (%@). Try again soon.", String(status))
+            case .refused(let message): tr("Anthropic says: %@", message)
             }
         }
     }
@@ -41,6 +44,8 @@ struct ClaudeVision {
         switch status {
         case 200..<300: return try Self.parse(data)
         case 401, 403: throw Failure.badKey
+        case 400..<500 where status != 429:
+            throw Self.errorMessage(in: data).map(Failure.refused) ?? Failure.server(status)
         default: throw Failure.server(status)
         }
     }
@@ -113,6 +118,17 @@ struct ClaudeVision {
 
         Write the title, item names, note, question and answers in this language: \(language).
         """
+    }
+
+    /// The message of an API error answer: {"type":"error","error":{"message":"..."}}.
+    static func errorMessage(in data: Data) -> String? {
+        struct Answer: Decodable {
+            struct Detail: Decodable { let message: String? }
+            let error: Detail?
+        }
+        guard let message = (try? JSONDecoder().decode(Answer.self, from: data))?.error?.message?
+            .trimmingCharacters(in: .whitespacesAndNewlines), !message.isEmpty else { return nil }
+        return String(message.prefix(200))
     }
 
     /// Reads the Messages API response: the JSON lives in the first text block.

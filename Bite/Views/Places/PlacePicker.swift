@@ -11,7 +11,8 @@ struct PlacePicker: View {
     @Environment(\.openURL) private var openURL
     @State private var finder = PlaceFinder()
     @State private var query = ""
-    @State private var results: [PlaceFinder.Nearby] = []
+    /// Nil while a search runs, so "No places found" waits for an answer.
+    @State private var results: [PlaceFinder.Nearby]? = nil
 
     var body: some View {
         NavigationStack {
@@ -20,12 +21,17 @@ struct PlacePicker: View {
                     nearbySection
                 } else {
                     Section {
-                        if results.isEmpty {
-                            Text("No places found by that name.")
-                                .font(.ui(15))
-                                .foregroundStyle(Theme.secondary)
+                        if let results {
+                            if results.isEmpty {
+                                Text("No places found by that name.")
+                                    .font(.ui(15))
+                                    .foregroundStyle(Theme.secondary)
+                            }
+                            ForEach(results) { row($0) }
+                        } else {
+                            ProgressView()
+                                .frame(maxWidth: .infinity)
                         }
-                        ForEach(results) { row($0) }
                     }
                     .listRowBackground(Theme.card)
                 }
@@ -41,8 +47,11 @@ struct PlacePicker: View {
             .background(Theme.page.ignoresSafeArea())
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Search places"))
             .task(id: query) {
-                try? await Task.sleep(for: .milliseconds(300))
-                results = await finder.search(query)
+                results = nil
+                do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
+                let found = await finder.search(query)
+                guard !Task.isCancelled else { return }
+                results = found
             }
             .navigationTitle("Where did you eat?")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,7 +74,7 @@ struct PlacePicker: View {
                     Text("See the places around you")
                         .font(.ui(17, .semibold))
                         .foregroundStyle(Theme.ink)
-                    Text("Bite uses your location here, to list the restaurants and cafes nearby. It stays on your phone.")
+                    Text("Bite uses your location here, to list the restaurants and cafes nearby. Only Apple Maps sees it.")
                         .font(.ui(15))
                         .foregroundStyle(Theme.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -110,6 +119,11 @@ struct PlacePicker: View {
             .listRowBackground(Theme.card)
         case .found:
             Section {
+                if finder.nearby.isEmpty {
+                    Text("No restaurants or cafes right around you. Search by name.")
+                        .font(.ui(15))
+                        .foregroundStyle(Theme.secondary)
+                }
                 ForEach(finder.nearby) { row($0) }
             } header: {
                 Text("Near you")

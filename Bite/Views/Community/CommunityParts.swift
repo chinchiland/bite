@@ -23,7 +23,7 @@ struct DishThumb: View {
     var body: some View {
         let side = height ?? width
         Group {
-            if let data = dish.photo, let image = UIImage(data: data) {
+            if let data = dish.photo, let image = ImageTools.thumbnail(data, points: max(width, side)) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -72,6 +72,8 @@ struct AccuracyGauge: View {
 /// it explains how it is worked out.
 struct AccuracyRow: View {
     let consensus: Consensus
+    /// The one estimate so far is yours: it asks others, not you, to add theirs.
+    var onlyYours = false
     let action: () -> Void
 
     var body: some View {
@@ -101,7 +103,9 @@ struct AccuracyRow: View {
 
     private var detail: String {
         if consensus.estimates <= 1 {
-            return String(localized: "One estimate so far. Add yours to firm it up.")
+            return onlyYours
+                ? String(localized: "Only your estimate so far. Each one people add firms it up.")
+                : String(localized: "One estimate so far. Add yours to firm it up.")
         }
         return String(localized: "\(consensus.estimates) estimates within \(consensus.spreadPercent)%, agreed by \(consensus.agrees)")
     }

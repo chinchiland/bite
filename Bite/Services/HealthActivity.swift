@@ -22,12 +22,20 @@ final class HealthActivity {
 
     static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
-    /// Shows the Health permission sheet. Health never tells an app whether reading was allowed,
-    /// so after this we simply read, and a refusal reads as zero.
-    func requestAccess() async {
-        guard Self.isAvailable else { return }
+    /// Shows the Health permission sheet. True once Health has asked; false when there is no
+    /// Health or it would not ask, as in a copy of Bite signed without the Health capability.
+    /// Health never tells an app whether reading was allowed, so after this we simply read, and
+    /// a refusal reads as zero.
+    @discardableResult
+    func requestAccess() async -> Bool {
+        guard Self.isAvailable else { return false }
         let types: Set<HKObjectType> = [HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned), HKQuantityType(.bodyMass)]
-        try? await store.requestAuthorization(toShare: [], read: types)
+        do {
+            try await store.requestAuthorization(toShare: [], read: types)
+            return true
+        } catch {
+            return false
+        }
     }
 
     func activity(on day: Date) async -> DayActivity {

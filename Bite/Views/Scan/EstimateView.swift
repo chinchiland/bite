@@ -39,6 +39,7 @@ struct EstimateView: View {
         case working
         case ready
         case needsKey
+        case keyRejected
         case failed(String)
     }
 
@@ -55,6 +56,15 @@ struct EstimateView: View {
         MacroTargets(kcal: Double(goalKcal), split: MacroSplit(rawValue: splitRaw) ?? .balanced)
     }
     private static let skeleton: [CGFloat] = [220, 170, 250]
+
+    /// The photo on the screen and in the log. The demo reads every photo as its salmon bowl,
+    /// so it shows that bowl, never your plate under the bowl's numbers.
+    private var shownImage: UIImage {
+        #if DEBUG || BITE_DEMO
+        if BiteStore.isDemo { return DemoData.estimatePhoto }
+        #endif
+        return image
+    }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -88,7 +98,7 @@ struct EstimateView: View {
             .frame(height: 400)
             .frame(maxWidth: .infinity)
             .overlay {
-                Image(uiImage: image)
+                Image(uiImage: shownImage)
                     .resizable()
                     .scaledToFill()
                     .overlay {
@@ -128,6 +138,13 @@ struct EstimateView: View {
                 message(
                     "Photo estimates use Claude",
                     detail: String(localized: "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds."),
+                    action: ("Open Settings", { showSettings = true })
+                )
+                .padding(.horizontal, Theme.margin)
+            case .keyRejected:
+                message(
+                    "Claude didn't take your key",
+                    detail: String(localized: "Paste it again in Settings, or make a new one at console.anthropic.com."),
                     action: ("Open Settings", { showSettings = true })
                 )
                 .padding(.horizontal, Theme.margin)
@@ -326,8 +343,8 @@ struct EstimateView: View {
 
     private func run() async {
         phase = .working
-        #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-demo") {
+        #if DEBUG || BITE_DEMO
+        if BiteStore.isDemo {
             try? await Task.sleep(for: .seconds(1.2))
             estimate = DemoData.estimate
             original = DemoData.estimate
@@ -353,7 +370,11 @@ struct EstimateView: View {
                 phase = .ready
             }
         } catch let failure as ClaudeVision.Failure {
-            phase = failure == .missingKey ? .needsKey : .failed(failure.errorDescription ?? String(localized: "Try again."))
+            switch failure {
+            case .missingKey: phase = .needsKey
+            case .badKey: phase = .keyRejected
+            default: phase = .failed(failure.errorDescription ?? String(localized: "Try again."))
+            }
         } catch {
             phase = .failed(String(localized: "Check your connection and try again."))
         }
@@ -373,7 +394,7 @@ struct EstimateView: View {
 
     /// The plate as one food, keeping the photo sharp enough to be the day's cover.
     private func plate(_ estimate: MealEstimate) -> Food {
-        estimate.food(imageData: ImageTools.jpeg(image, maxSide: 1000, quality: 0.7))
+        estimate.food(imageData: ImageTools.jpeg(shownImage, maxSide: 1000, quality: 0.7))
     }
 
     private func add(_ estimate: MealEstimate) {

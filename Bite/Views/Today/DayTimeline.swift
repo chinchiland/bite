@@ -66,6 +66,8 @@ private struct MealMoment: View {
 
     @State private var editingTime = false
     @State private var time = Date.now
+    /// The time the wheel opened on, so closing it unturned moves nothing.
+    @State private var opened = Date.now
 
     private var total: Double { entries.reduce(0) { $0 + $1.totals.kcal } }
     /// The time the way the phone writes it: "8:10 AM", "16:10".
@@ -74,8 +76,7 @@ private struct MealMoment: View {
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
             Button {
-                time = entries.first?.date ?? .now
-                editingTime = true
+                openTimeEditor()
             } label: {
                 Text(timeText)
                     .font(.ui(13))
@@ -112,8 +113,7 @@ private struct MealMoment: View {
                     }
                     Button("Add food here", systemImage: "plus", action: onAddHere)
                     Button("Change the time", systemImage: "clock") {
-                        time = entries.first?.date ?? .now
-                        editingTime = true
+                        openTimeEditor()
                     }
                     Button("Save meal to shelf", systemImage: "bookmark", action: onSaveMeal)
                 }
@@ -175,6 +175,14 @@ private struct MealMoment: View {
         .padding(16)
         .frame(width: 280)
         .presentationCompactAdaptation(.popover)
-        .onDisappear { onMoveTime(time) }
+        .onDisappear {
+            if abs(time.timeIntervalSince(opened)) >= 60 { onMoveTime(time) }
+        }
+    }
+
+    private func openTimeEditor() {
+        time = entries.first?.date ?? .now
+        opened = time
+        editingTime = true
     }
 }

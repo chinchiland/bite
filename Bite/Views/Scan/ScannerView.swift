@@ -330,7 +330,7 @@ struct ScannerView: View {
                         .frame(width: 66, height: 66)
                         .padding(5)
                         .overlay { Circle().strokeBorder(.white, lineWidth: 3) }
-                        .opacity(capturing ? 0.5 : 1)
+                        .opacity(capturing || camera != .ready ? 0.4 : 1)
                 }
                 .buttonStyle(PressableStyle(scale: 0.9))
                 .disabled(capturing || camera != .ready)
@@ -374,9 +374,11 @@ struct ScannerView: View {
     private func usePicked(_ item: PhotosPickerItem?) async {
         guard let item,
               let data = try? await item.loadTransferable(type: Data.self),
-              let image = UIImage(data: data) else { return }
+              let image = ImageTools.downsample(data, maxPixel: 2048) else { return }
         pickedPhoto = nil
-        photo = CapturedPhoto(image: image, isLabel: mode == .label, takenAt: ImageTools.captureDate(of: data))
+        // Last night's dinner picked this morning goes on today, at today's time.
+        let takenAt = ImageTools.captureDate(of: data).flatMap { Calendar.current.isDate($0, inSameDayAs: day) ? $0 : nil }
+        photo = CapturedPhoto(image: image, isLabel: mode == .label, takenAt: takenAt)
     }
 
     private func lookUp(_ raw: String, typed: Bool = false) {
