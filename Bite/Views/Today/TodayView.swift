@@ -801,7 +801,8 @@ struct TodayView: View {
         withAnimation(.snappy) {
             for item in items {
                 let day = calendar.startOfDay(for: item.date)
-                let last = calendar.date(byAdding: .minute, value: 24 * 60 - 1, to: day) ?? item.date
+                // The day's last minute, right on the days the clocks change too.
+                let last = calendar.date(byAdding: .day, value: 1, to: day)?.addingTimeInterval(-60) ?? item.date
                 item.date = min(max(item.date.addingTimeInterval(shift), day), last)
             }
             try? context.save()
