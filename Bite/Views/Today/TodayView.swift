@@ -276,10 +276,15 @@ struct TodayView: View {
             .padding(.top, 16)
 
             if isToday, !entries.isEmpty {
+                let learned = self.learned
+                let suggested = suggestedGoal(from: learned)
                 WeightTrend(
                     weights: trendWeights,
-                    forecast: forecast,
+                    forecast: forecast(learned: learned),
                     goal: WeightGoal(rawValue: weightGoalRaw) ?? .maintain,
+                    learned: learned,
+                    suggestedGoal: suggested,
+                    onUseGoal: { if let suggested { useGoal(suggested) } },
                     onAddWeight: addWeight
                 )
                 .padding(.top, 28)
@@ -606,8 +611,30 @@ struct TodayView: View {
         return [WeightPoint(date: .now, kilograms: bodyWeight)]
     }
 
-    /// Where your weight goes at the way you ate over the last week's whole days.
-    private var forecast: WeightForecast? {
+    /// What your body really burns, once two weeks of weighings and meals can say.
+    private var learned: LearnedMaintenance? {
+        let kcals = Dictionary(summaries.map { ($0.day, $0.kcal) }, uniquingKeysWith: { a, _ in a })
+        return LearnedMaintenance.learn(
+            weighings: weights.map { LearnedMaintenance.Weighing(date: $0.date, kilograms: $0.kilograms) },
+            dayKcals: kcals,
+            now: .now
+        )
+    }
+
+    /// A daily goal from what you really burn, offered when it is 50 kcal or more from yours.
+    private func suggestedGoal(from learned: LearnedMaintenance?) -> Int? {
+        guard let learned else { return nil }
+        let goal = learned.goal(for: WeightGoal(rawValue: weightGoalRaw) ?? .maintain, sex: Sex(rawValue: sexRaw) ?? .female)
+        return abs(goal - goalKcal) >= 50 ? goal : nil
+    }
+
+    private func useGoal(_ kcal: Int) {
+        withAnimation(.snappy) { goalKcal = kcal }
+    }
+
+    /// Where your weight goes at the way you ate over the last week's whole days, against what
+    /// your body burns: learned when it can be, else worked out from your body.
+    private func forecast(learned: LearnedMaintenance?) -> WeightForecast? {
         guard let current = WeightForecast.trend(trendWeights.map(\.kilograms)).last else { return nil }
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
@@ -615,7 +642,7 @@ struct TodayView: View {
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return entries.filter { calendar.isDate($0.date, inSameDayAs: date) }.reduce(0) { $0 + $1.totals.kcal }
         }
-        let maintenance = GoalCalculator.maintenance(
+        let maintenance = learned?.kcal ?? GoalCalculator.maintenance(
             sex: Sex(rawValue: sexRaw) ?? .female,
             age: bodyAge,
             heightCm: Double(bodyHeight),

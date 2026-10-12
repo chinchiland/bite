@@ -234,6 +234,39 @@ do {
     check(found?.dismissalKey(on: on(0, 19, 0), calendar: calendar) != found?.dismissalKey(on: on(-1, 19, 0), calendar: calendar), "and only the day")
 }
 
+// What your body really burns, from your weighings and your meals.
+do {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "Europe/Zurich")!
+    let now = calendar.date(from: DateComponents(year: 2026, month: 10, day: 12, hour: 19))!
+    let today = calendar.startOfDay(for: now)
+    func day(_ daysAgo: Int) -> Date { calendar.date(byAdding: .day, value: -daysAgo, to: today)! }
+    // Losing 0.04 kg a day while eating 2,000: the body burns 2,000 + 0.04 x 7,700 = 2,308.
+    let weighings = stride(from: 21, through: 0, by: -3).map {
+        LearnedMaintenance.Weighing(date: calendar.date(byAdding: .hour, value: 7, to: day($0))!, kilograms: 80 - 0.04 * Double(21 - $0))
+    }
+    var kcals: [Date: Double] = [:]
+    for daysAgo in 1...21 { kcals[day(daysAgo)] = 2000 }
+    let learned = LearnedMaintenance.learn(weighings: weighings, dayKcals: kcals, now: now, calendar: calendar)
+    check(learned.map { near($0.kcal, 2308, 1) } == true && learned?.days == 21, "2,000 eaten, 0.28 kg a week down: \(String(describing: learned))")
+    check(learned?.goal(for: .lose, sex: .male) == 1810 && learned?.goal(for: .maintain, sex: .male) == 2310, "goals from it")
+    check(LearnedMaintenance(kcal: 1500, days: 14).goal(for: .lose, sex: .female) == 1200, "never under the floor")
+    var noisy = weighings
+    noisy[3] = LearnedMaintenance.Weighing(date: noisy[3].date, kilograms: noisy[3].kilograms + 1.2)
+    let calm = LearnedMaintenance.learn(weighings: noisy, dayKcals: kcals, now: now, calendar: calendar)
+    check(calm.map { abs($0.kcal - 2308) < 150 } == true, "one heavy morning moves it little: \(calm?.kcal ?? 0)")
+    check(LearnedMaintenance.learn(weighings: Array(weighings.suffix(4)), dayKcals: kcals, now: now, calendar: calendar) == nil, "too few weighings")
+    var halfLogged: [Date: Double] = [:]
+    for daysAgo in stride(from: 1, through: 21, by: 3) { halfLogged[day(daysAgo)] = 2000 }
+    check(LearnedMaintenance.learn(weighings: weighings, dayKcals: halfLogged, now: now, calendar: calendar) == nil, "most days have to be logged")
+    var light = kcals
+    for daysAgo in 1...21 where daysAgo % 2 == 0 { light[day(daysAgo)] = 400 }
+    check(LearnedMaintenance.learn(weighings: weighings, dayKcals: light, now: now, calendar: calendar) == nil, "forgotten days do not count as eaten")
+    var recentOnly: [Date: Double] = [:]
+    for daysAgo in 1...10 { recentOnly[day(daysAgo)] = 2000 }
+    check(LearnedMaintenance.learn(weighings: weighings, dayKcals: recentOnly, now: now, calendar: calendar) == nil, "ten days of meals are not two weeks")
+}
+
 // Your log as a spreadsheet: oldest first, points for decimals, quoted when it has to be.
 do {
     var calendar = Calendar(identifier: .gregorian)

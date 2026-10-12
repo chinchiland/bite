@@ -845,6 +845,22 @@
         }
       }
     },
+    "A goal of %@ kcal fits what you burn" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un objetivo de %@ kcal encaja con lo que quemas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un objectif de %@ kcal colle à ce que tu brûles"
+          }
+        }
+      }
+    },
     "A line under it, like “with honey”" : {
       "localizations" : {
         "es" : {
@@ -857,6 +873,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Une ligne en dessous, comme « avec du miel »"
+          }
+        }
+      }
+    },
+    "A slow, steady gain" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una subida lenta y constante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une prise lente et régulière"
+          }
+        }
+      }
+    },
+    "About half a kilo a week down" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alrededor de medio kilo menos por semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ un demi-kilo de moins par semaine"
           }
         }
       }
@@ -3789,6 +3837,22 @@
         }
       }
     },
+    "Makes it your daily goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo convierte en tu objetivo diario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En fait ton objectif quotidien"
+          }
+        }
+      }
+    },
     "Male" : {
       "localizations" : {
         "es" : {
@@ -6253,6 +6317,22 @@
         }
       }
     },
+    "To stay where you are" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para quedarte como estás"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour rester où tu en es"
+          }
+        }
+      }
+    },
     "Today" : {
       "localizations" : {
         "es" : {
@@ -6477,6 +6557,22 @@
         }
       }
     },
+    "Use it" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usarlo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’utiliser"
+          }
+        }
+      }
+    },
     "Use my location" : {
       "localizations" : {
         "es" : {
@@ -6649,6 +6745,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "C’était quoi ?"
+          }
+        }
+      }
+    },
+    "What you burn, about %@ kcal a day, is learned from %lld days of your weighings and meals." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que quemas, unas %@ kcal al día, se calcula con %lld días de pesajes y comidas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que tu brûles, environ %@ kcal par jour, est tiré de %lld jours de pesées et de repas."
           }
         }
       }

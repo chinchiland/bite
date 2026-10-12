@@ -9,6 +9,11 @@ struct WeightTrend: View {
     let forecast: WeightForecast?
     /// Where you are going: a forecast toward it draws in green.
     let goal: WeightGoal
+    /// What your body really burns, when your weighings and meals have said.
+    var learned: LearnedMaintenance? = nil
+    /// A daily goal that fits what you burn, when it differs from yours.
+    var suggestedGoal: Int? = nil
+    var onUseGoal: () -> Void = {}
     let onAddWeight: () -> Void
     var horizonDays = 28
 
@@ -26,6 +31,16 @@ struct WeightTrend: View {
     }
 
     var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            content
+                .accessibilityElement(children: .combine)
+            if let suggestedGoal, forecast != nil {
+                GoalOffer(kcal: suggestedGoal, goal: goal, onUse: onUseGoal)
+            }
+        }
+    }
+
+    private var content: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionLabel(title: "If you keep this up", symbol: "chart.line.downtrend.xyaxis")
             if let forecast {
@@ -46,9 +61,16 @@ struct WeightTrend: View {
                     .font(.ui(15))
                     .foregroundStyle(Theme.ink)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("An estimate from your last \(forecast.days) logged days.")
-                    .font(.ui(13))
-                    .foregroundStyle(Theme.secondary)
+                Group {
+                    if let learned {
+                        Text("What you burn, about \(learned.kcal.kcalText) kcal a day, is learned from \(learned.days) days of your weighings and meals.")
+                    } else {
+                        Text("An estimate from your last \(forecast.days) logged days.")
+                    }
+                }
+                .font(.ui(13))
+                .foregroundStyle(Theme.secondary)
+                .fixedSize(horizontal: false, vertical: true)
             } else if weights.isEmpty {
                 Button(action: onAddWeight) {
                     HStack(spacing: 10) {
@@ -72,7 +94,6 @@ struct WeightTrend: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .accessibilityElement(children: .combine)
     }
 
     private func sentence(_ forecast: WeightForecast) -> String {
@@ -83,6 +104,56 @@ struct WeightTrend: View {
         case .gaining: return String(localized: "You eat about \(kcal) kcal a day over what you burn, about \(week) a week.")
         case .holding: return String(localized: "You eat about what you burn, so your weight should hold.")
         }
+    }
+}
+
+/// A goal that fits what your body really burns, one tap from being yours.
+private struct GoalOffer: View {
+    let kcal: Int
+    let goal: WeightGoal
+    let onUse: () -> Void
+
+    @State private var taps = 0
+
+    private var detail: LocalizedStringKey {
+        switch goal {
+        case .lose: "About half a kilo a week down"
+        case .maintain: "To stay where you are"
+        case .gain: "A slow, steady gain"
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("A goal of \(Double(kcal).kcalText) kcal fits what you burn")
+                    .font(.ui(15, .medium))
+                    .foregroundStyle(Theme.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(detail)
+                    .font(.ui(13))
+                    .foregroundStyle(Theme.secondary)
+            }
+            Spacer(minLength: 8)
+            Button {
+                taps += 1
+                onUse()
+            } label: {
+                Text("Use it")
+                    .font(.ui(15, .semibold))
+                    .foregroundStyle(Theme.page)
+                    .padding(.horizontal, 16)
+                    .frame(height: 36)
+                    .background(Theme.ink, in: Capsule())
+            }
+            .buttonStyle(PressableStyle(scale: 0.94))
+            .accessibilityHint("Makes it your daily goal")
+        }
+        .padding(.leading, 14)
+        .padding(.trailing, 10)
+        .padding(.vertical, 10)
+        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .sensoryFeedback(.success, trigger: taps)
     }
 }
 

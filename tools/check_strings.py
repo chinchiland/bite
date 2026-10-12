@@ -18,7 +18,7 @@ INTEGERS = {
     "streak", "rank", "now.loggedDays", "now.daysOnTarget", "range.days", "item.score",
     "food.times", "status", "(abs(change) * 100).safeInt", "(share * 100).safeInt", "event.count",
     "water", "waterGoal", "tally.onTarget", "tally.logged", "consensus.estimates", "consensus.spreadPercent",
-    "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days",
+    "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days", "learned.days",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.
