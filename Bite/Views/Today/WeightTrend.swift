@@ -14,6 +14,7 @@ struct WeightTrend: View {
     /// A daily goal that fits what you burn, when it differs from yours.
     var suggestedGoal: Int? = nil
     var onUseGoal: () -> Void = {}
+    var onHideGoal: () -> Void = {}
     let onAddWeight: () -> Void
     var horizonDays = 28
 
@@ -35,7 +36,7 @@ struct WeightTrend: View {
             content
                 .accessibilityElement(children: .combine)
             if let suggestedGoal, forecast != nil {
-                GoalOffer(kcal: suggestedGoal, goal: goal, onUse: onUseGoal)
+                GoalOffer(kcal: suggestedGoal, goal: goal, onUse: onUseGoal, onHide: onHideGoal)
             }
         }
     }
@@ -107,11 +108,13 @@ struct WeightTrend: View {
     }
 }
 
-/// A goal that fits what your body really burns, one tap from being yours.
+/// A goal that fits what your body really burns, one tap from being yours; "Not now" puts it
+/// away for a week. Laid out like your usual meal: the line, then the ink button and the quiet one.
 private struct GoalOffer: View {
     let kcal: Int
     let goal: WeightGoal
     let onUse: () -> Void
+    let onHide: () -> Void
 
     @State private var taps = 0
 
@@ -124,7 +127,7 @@ private struct GoalOffer: View {
     }
 
     var body: some View {
-        HStack(spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("A goal of \(Double(kcal).kcalText) kcal fits what you burn")
                     .font(.ui(15, .medium))
@@ -133,25 +136,31 @@ private struct GoalOffer: View {
                 Text(detail)
                     .font(.ui(13))
                     .foregroundStyle(Theme.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer(minLength: 8)
-            Button {
-                taps += 1
-                onUse()
-            } label: {
-                Text("Use it")
-                    .font(.ui(15, .semibold))
-                    .foregroundStyle(Theme.page)
-                    .padding(.horizontal, 16)
-                    .frame(height: 36)
-                    .background(Theme.ink, in: Capsule())
+            .accessibilityElement(children: .combine)
+            HStack(spacing: 18) {
+                Button {
+                    taps += 1
+                    onUse()
+                } label: {
+                    Text("Use it")
+                        .font(.ui(15, .semibold))
+                        .foregroundStyle(Theme.page)
+                        .padding(.horizontal, 16)
+                        .frame(height: 36)
+                        .background(Theme.ink, in: Capsule())
+                }
+                .buttonStyle(PressableStyle(scale: 0.94))
+                .accessibilityHint("Makes it your daily goal")
+
+                Button("Not now", action: onHide)
+                    .font(.ui(15, .medium))
+                    .foregroundStyle(Theme.secondary)
             }
-            .buttonStyle(PressableStyle(scale: 0.94))
-            .accessibilityHint("Makes it your daily goal")
         }
-        .padding(.leading, 14)
-        .padding(.trailing, 10)
-        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
         .background(Theme.fill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .sensoryFeedback(.success, trigger: taps)
     }

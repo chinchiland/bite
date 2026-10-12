@@ -60,6 +60,8 @@ struct TodayView: View {
     @AppStorage("water.goal") private var waterGoal = 8
     /// "Not today" on your usual meal: that day and meal, so tomorrow it comes back.
     @AppStorage("usual.dismissed") private var usualDismissed = ""
+    /// "Not now" on the learned goal: hidden for a week, then offered again if it still differs.
+    @AppStorage("goal.offerHiddenUntil") private var goalOfferHiddenUntil = 0.0
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -295,6 +297,7 @@ struct TodayView: View {
                     learned: learned,
                     suggestedGoal: suggested,
                     onUseGoal: { if let suggested { useGoal(suggested) } },
+                    onHideGoal: hideGoalOffer,
                     onAddWeight: addWeight
                 )
                 .padding(.top, 28)
@@ -632,15 +635,20 @@ struct TodayView: View {
         )
     }
 
-    /// A daily goal from what you really burn, offered when it is 50 kcal or more from yours.
+    /// A daily goal from what you really burn, offered when it is 50 kcal or more from yours
+    /// and you haven't said "Not now" this week.
     private func suggestedGoal(from learned: LearnedMaintenance?) -> Int? {
-        guard let learned else { return nil }
+        guard let learned, Date.now.timeIntervalSince1970 >= goalOfferHiddenUntil else { return nil }
         let goal = learned.goal(for: WeightGoal(rawValue: weightGoalRaw) ?? .maintain, sex: Sex(rawValue: sexRaw) ?? .female)
         return abs(goal - goalKcal) >= 50 ? goal : nil
     }
 
     private func useGoal(_ kcal: Int) {
         withAnimation(.snappy) { goalKcal = kcal }
+    }
+
+    private func hideGoalOffer() {
+        withAnimation(.snappy) { goalOfferHiddenUntil = Date.now.addingTimeInterval(7 * 86_400).timeIntervalSince1970 }
     }
 
     /// Where your weight goes at the way you ate over the last week's whole days, against what
