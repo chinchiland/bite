@@ -6,6 +6,10 @@ name: Build Bite
 
 on:
   push:
+    # Words alone don't need a cloud Mac.
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
