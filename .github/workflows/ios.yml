@@ -122,7 +122,7 @@ jobs:
           shoot 37-today-middle -onboarded YES -anchor center
           shoot 38-dish-fr -onboarded YES -screen dish -AppleLanguages "(fr)" -AppleLocale fr_FR
           shoot 39-today-middle-es -onboarded YES -anchor center -AppleLanguages "(es)" -AppleLocale es_ES
-          shoot 40-usual -onboarded YES -clock 19:30 -anchor center
+          shoot 40-usual -onboarded YES -clock 19:30 -anchor usual
 
       - uses: actions/upload-artifact@v4
         with:

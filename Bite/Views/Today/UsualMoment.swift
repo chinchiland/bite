@@ -4,6 +4,9 @@ import SwiftUI
 /// Its foods sit faded until you add them; one tap logs the same foods at the same amounts,
 /// and "Not today" puts it away until tomorrow.
 struct UsualMoment: View {
+    /// Its id on the page, for scrolling to it.
+    static let anchor = "usual"
+
     let meal: Meal
     let entries: [FoodEntry]
     let time: Date

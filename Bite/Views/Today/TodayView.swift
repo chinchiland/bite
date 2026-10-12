@@ -182,35 +182,45 @@ struct TodayView: View {
 
     private func dayPage(topInset: CGFloat) -> some View {
         let hasPhoto = !coverPhotos.isEmpty
-        return ScrollView {
-            VStack(spacing: 0) {
-                DayCover(
-                    photos: coverPhotos,
-                    index: $coverIndex,
-                    height: topInset + (hasPhoto ? 404 : 300),
-                    topInset: topInset,
-                    number: hero.number,
-                    unit: hero.unit,
-                    lastMeal: hasPhoto ? nil : dayEntries.last.map { String(localized: "Last meal: \($0.name)") },
-                    greeting: isToday ? greeting : nil,
-                    detail: heroDetail.text,
-                    detailIsOver: heroDetail.isOver,
-                    onPlace: { sheet = .place($0) }
-                ) {
-                    coverControls(onPhoto: hasPhoto)
-                }
-                .onGeometryChange(for: Bool.self) { geometry in
-                    geometry.frame(in: .scrollView).maxY > 120
-                } action: { onScreen in
-                    coverOnScreen = onScreen
-                }
+        return ScrollViewReader { reader in
+            ScrollView {
+                VStack(spacing: 0) {
+                    DayCover(
+                        photos: coverPhotos,
+                        index: $coverIndex,
+                        height: topInset + (hasPhoto ? 404 : 300),
+                        topInset: topInset,
+                        number: hero.number,
+                        unit: hero.unit,
+                        lastMeal: hasPhoto ? nil : dayEntries.last.map { String(localized: "Last meal: \($0.name)") },
+                        greeting: isToday ? greeting : nil,
+                        detail: heroDetail.text,
+                        detailIsOver: heroDetail.isOver,
+                        onPlace: { sheet = .place($0) }
+                    ) {
+                        coverControls(onPhoto: hasPhoto)
+                    }
+                    .onGeometryChange(for: Bool.self) { geometry in
+                        geometry.frame(in: .scrollView).maxY > 120
+                    } action: { onScreen in
+                        coverOnScreen = onScreen
+                    }
 
-                daySheet
+                    daySheet
+                }
             }
+            .scrollIndicators(.hidden)
+            .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
+            .ignoresSafeArea(edges: .top)
+            #if DEBUG
+            .task {
+                // `-anchor usual` scrolls your usual meal into the middle, for its screenshot.
+                guard UserDefaults.standard.string(forKey: "anchor") == "usual" else { return }
+                try? await Task.sleep(for: .seconds(1))
+                reader.scrollTo(UsualMoment.anchor, anchor: .center)
+            }
+            #endif
         }
-        .scrollIndicators(.hidden)
-        .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
-        .ignoresSafeArea(edges: .top)
     }
 
     private func coverControls(onPhoto: Bool) -> some View {
@@ -319,6 +329,7 @@ struct TodayView: View {
                 )
                 .padding(.top, dayEntries.isEmpty ? 0 : 14)
                 .transition(.opacity)
+                .id(UsualMoment.anchor)
             }
 
             SavedShelf(

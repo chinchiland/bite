@@ -79,6 +79,7 @@ struct AddFoodView: View {
                 query = demoQuery
                 return
             }
+            if ProcessInfo.processInfo.arguments.contains("-demo") { return }
             #endif
             // You tapped search, so the keyboard is ready. The search field has to be on screen first.
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { searching = true }
