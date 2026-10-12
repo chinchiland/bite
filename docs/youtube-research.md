@@ -7,7 +7,7 @@ Fourteen YouTube reviews and tests, their transcripts read in full (October 2026
 - AI photo apps are judged on how fast you can fix the estimate. Bite already edits each ingredient in grams and counts hidden fat; next, the note that names the biggest doubt becomes a one-tap question (#1).
 - The most praised feature in the category is MacroFactor's target that learns from your weight trend. Bite's "If you keep this up" forecast is one step from it (#2, #3).
 - People quit over paywalled basics, nags, long setup, streaks that punish and AI results they can't edit. Bite avoids most of these; its streak was the exception (#4).
-- Shipped on 12 October 2026: the doubt as a one-tap question (#1, without the range yet), trend weight (#3), the forgiving streak (#4), your usual meal (#6), the photo's own time (#7), export (#14), and a search that forgives a typo (punished #13).
+- Shipped on 12 October 2026: the doubt as a one-tap question (#1, without the range yet), a goal that learns from your weighings (#2, offered on the forecast card, not yet weekly), trend weight (#3), the forgiving streak (#4), your usual meal (#6), the photo's own time (#7), export (#14), and a search that forgives a typo (punished #13).
 
 ## The videos
 
