@@ -84,12 +84,12 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 ## Screens
 
-- **Today**: the cover (switcher, streak, settings; the number left or over; the place or the meal, and the goal), then the ring and the macros; burned, steps and water as chips (the water chip fills toward the day's glasses, one tap a glass); If you keep this up; Your day as a timeline (time, meal, calories, tiles); the saved shelf, titled "Fits your 967 left" while there is room, foods that fit first, protein-dense first when protein is behind, with one line saying so; Near you, the dishes people counted around you; This week, a dot a day (tap one to open it). The dock floats at the bottom: search, Scan, quick add.
+- **Today**: the cover (switcher, streak, settings; the number left or over; the place or the meal, and the goal), then the ring and the macros; burned, steps and water as chips (the water chip fills toward the day's glasses, one tap a glass); If you keep this up; Your day as a timeline (time, meal, calories, tiles), and after it your usual meal when its hour comes (the same foods at the same meal on three days of the last two weeks, from an hour before its time to two hours after, its tiles faded until you add it, Not today to put it away); the saved shelf, titled "Fits your 967 left" while there is room, foods that fit first, protein-dense first when protein is behind, with one line saying so; Near you, the dishes people counted around you; This week, a dot a day (tap one to open it). The dock floats at the bottom: search, Scan, quick add.
 - **Where you ate**: a Place row beside the time on every log. It opens the places around you (Apple Maps, nearest first, a search by name), asking for location the first time, While Using, with a line on why.
 - **A place**: its name, kind, area and distance, Directions (Apple Maps, walking) and Order (Uber Eats), then its dishes, each with its picture, calories, how many estimates, and the accuracy gauge; Add a dish.
 - **A dish**: the hero, the name and its place, stars and estimates in one line, the ring and the macros the estimates add up to, then Calorie estimates: the accuracy row (gauge, tier, what it rests on; it opens how it is worked out), each estimate (avatar with a sparkle badge for an AI scan or a pencil for one typed by hand, the calories, and a like that says it matches your plate), Add your estimate (by hand or from a photo), your stars, and Add to today. Accuracy is agreement times coverage: how close the counts are, times how many people stand behind them (each count weighs one plus its likes). Very accurate from 90, Accurate from 70, Roughly right from 50.
 - **The switcher** behind the day's name: today and the six days before it, then the last 7 and 30 days.
-- **Last 7 days, last 30 days**: the daily average and its bars, the days as a food diary (dot, calories, up to four foods, photos first; tap one to open it), best days, most eaten. Whole days only: today joins tomorrow.
+- **Last 7 days, last 30 days**: the daily average and its dot columns (a faint dot for a day with nothing logged), the days as a food diary (dot, calories, up to four foods, photos first; tap one to open it), best days, most eaten. Whole days only: today joins tomorrow.
 - **A food, a photo estimate**: the hero, then the sheet: name, brand, chips (Nutri-Score, processing, highlights), the ring and the macros, the amount (portions, then − and +), the label on demand. Meal picker and the ink button at the bottom.
 
 ## Components
@@ -104,7 +104,8 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 - **Haptics only where they mean something:** a tick when the switcher changes day, a rising or falling tick on − and +, a success on add and the moment today lands on target. Navigation taps stay silent.
 - **Teach once, in place.** Two tips, never a tour: hold a food (on the first tile), and the switcher (from the third visit). Each disappears once you have used the gesture.
 - **Beyond the app.** Scan food (opens the camera, for the Action button, Siri, Spotlight and Shortcuts) and Log a saved food ("Log Morning skyr in Bite", without opening the app).
-- **No dead ends.** A barcode with no data offers Snap the label first, then Type it in.
+- **No dead ends.** A barcode with no data offers Snap the label first, then Type it in. A typo still finds its food: when nothing matches as typed, one slip per word of four letters or more is forgiven (a letter wrong, missing, added or swapped; the first letter has to be right).
+- **Your data is yours.** Settings exports the whole log as a spreadsheet (CSV, a point for decimals, accents kept), and says the log stays on the phone.
 
 ## Motion
 

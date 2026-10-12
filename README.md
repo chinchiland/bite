@@ -15,7 +15,7 @@ A calm, friendly calorie tracker for iPhone, in SwiftUI, that reads like a food 
 - **Last 7 and 30 days**: the daily average, how it moved and a bar for each day; each day as a line of the diary with its verdict and its food (tap it to open the day); your best days ranked with laurels, and the foods you come back to.
 - **Quick to fix**: every add and delete has Undo, a meal's time is a tap away, and holding a food adds it again (or yesterday's meal to today).
 - **Siri, Shortcuts and the Action button**: "Scan food with Bite" opens the camera, "Log Morning skyr in Bite" adds a saved food without opening the app.
-- **Settings**: daily goal with a calculator (Mifflin-St Jeor), macro split, Apple Health, and your Claude API key.
+- **Settings**: daily goal with a calculator (Mifflin-St Jeor), macro split, Apple Health, your Claude API key, and your whole log as a spreadsheet.
 - **English, French and Spanish**: the app follows the phone's language. Every word lives in `Bite/Resources/Localizable.xcstrings` (French uses tu, Spanish is from Spain), the 105 basics carry their French and Spanish names and portions, and Claude answers in your language. `python3 tools/check_strings.py` lists anything left untranslated.
 
 ## Run it
