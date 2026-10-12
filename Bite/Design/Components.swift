@@ -376,7 +376,7 @@ struct SymbolTile: View {
 
     var body: some View {
         Image(systemName: systemImage)
-            .font(.system(size: size * 0.5, weight: .medium))
+            .font(.system(size: size * 0.6, weight: .medium))
             .foregroundStyle(glyph)
             .frame(width: size, height: size)
             .background(color.opacity(0.24), in: RoundedRectangle(cornerRadius: size * 0.3, style: .continuous))

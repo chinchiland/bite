@@ -48,44 +48,54 @@ enum MacroGlyph {
         Layer(path: Path(ellipseIn: CGRect(x: 4.4, y: 17.4, width: 4, height: 4))),
     ]
 
+    /// An upright ear: tapered kernels angled up a sturdy stem, like an almond on each side.
     private static let wheat: [Layer] = {
         var layers = [
-            Layer(path: Path(roundedRect: CGRect(x: 11.3, y: 6, width: 1.4, height: 16), cornerRadius: 0.7)),
-            Layer(path: ellipse(x: 12, y: 4.6, rx: 1.6, ry: 2.6, degrees: 0)),
+            Layer(path: Path(roundedRect: CGRect(x: 11.15, y: 9.5, width: 1.7, height: 13.1), cornerRadius: 0.85)),
+            Layer(path: kernel(x: 12, y: 3.9, degrees: 0)),
         ]
-        for y in [8.6, 12.8, 17] as [CGFloat] {
-            layers.append(Layer(path: ellipse(x: 9.4, y: y, rx: 1.5, ry: 2.7, degrees: -38)))
-            layers.append(Layer(path: ellipse(x: 14.6, y: y, rx: 1.5, ry: 2.7, degrees: 38)))
+        for y in [8.4, 12.7, 17] as [CGFloat] {
+            layers.append(Layer(path: kernel(x: 9.2, y: y, degrees: -30)))
+            layers.append(Layer(path: kernel(x: 14.8, y: y, degrees: 30)))
         }
         return layers
     }()
 
+    /// Half an avocado: skin and stone at full strength, the flesh between them at half.
     private static let avocado: [Layer] = {
-        let skin = closedCurve(from: CGPoint(x: 12, y: 2.2), [
-            [15.4, 2.2, 17, 5.4, 17.7, 8.2],
-            [18.2, 10.2, 19.9, 12, 19.9, 15],
-            [19.9, 19, 16.5, 21.8, 12, 21.8],
-            [7.5, 21.8, 4.1, 19, 4.1, 15],
-            [4.1, 12, 5.8, 10.2, 6.3, 8.2],
-            [7, 5.4, 8.6, 2.2, 12, 2.2],
+        let skin = closedCurve(from: CGPoint(x: 12, y: 1.6), [
+            [15.2, 1.6, 16.6, 4.6, 17.3, 7.4],
+            [17.8, 9.5, 20.4, 11.6, 20.4, 15.4],
+            [20.4, 19.7, 16.7, 22.6, 12, 22.6],
+            [7.3, 22.6, 3.6, 19.7, 3.6, 15.4],
+            [3.6, 11.6, 6.2, 9.5, 6.7, 7.4],
+            [7.4, 4.6, 8.8, 1.6, 12, 1.6],
         ])
-        let flesh = closedCurve(from: CGPoint(x: 12, y: 5.1), [
-            [13.8, 5.1, 14.6, 7.1, 15.1, 9.1],
-            [15.6, 11.1, 17, 12.7, 17, 15],
-            [17, 17.5, 14.9, 19, 12, 19],
-            [9.1, 19, 7, 17.5, 7, 15],
-            [7, 12.7, 8.4, 11.1, 8.9, 9.1],
-            [9.4, 7.1, 10.2, 5.1, 12, 5.1],
+        let flesh = closedCurve(from: CGPoint(x: 12, y: 4.3), [
+            [13.9, 4.3, 14.7, 6.4, 15.2, 8.4],
+            [15.7, 10.5, 18, 12.4, 18, 15.4],
+            [18, 18.4, 15.4, 20.2, 12, 20.2],
+            [8.6, 20.2, 6, 18.4, 6, 15.4],
+            [6, 12.4, 8.3, 10.5, 8.8, 8.4],
+            [9.3, 6.4, 10.1, 4.3, 12, 4.3],
         ])
-        let stone = Path(ellipseIn: CGRect(x: 8, y: 10.8, width: 8, height: 8))
+        let stone = Path(ellipseIn: CGRect(x: 7.5, y: 10.7, width: 9, height: 9))
         var whole = skin
         whole.addPath(flesh)
         whole.addPath(stone)
         var lighter = flesh
         lighter.addPath(stone)
-        // Skin and stone at full strength; the flesh between them, lighter.
-        return [Layer(path: whole, evenOdd: true), Layer(path: lighter, opacity: 0.34, evenOdd: true)]
+        return [Layer(path: whole, evenOdd: true), Layer(path: lighter, opacity: 0.5, evenOdd: true)]
     }()
+
+    /// One wheat kernel, pointed at the tip, drawn around its center and turned outward.
+    private static func kernel(x: CGFloat, y: CGFloat, degrees: CGFloat) -> Path {
+        let almond = closedCurve(from: CGPoint(x: 0, y: -3.9), [
+            [2.15, -2.3, 2.25, 1.4, 0, 3.3],
+            [-2.25, 1.4, -2.15, -2.3, 0, -3.9],
+        ])
+        return almond.applying(CGAffineTransform(translationX: x, y: y).rotated(by: degrees * .pi / 180))
+    }
 
     private static func ellipse(x: CGFloat, y: CGFloat, rx: CGFloat, ry: CGFloat, degrees: CGFloat) -> Path {
         let oval = Path(ellipseIn: CGRect(x: x - rx, y: y - ry, width: rx * 2, height: ry * 2))
@@ -113,14 +123,14 @@ enum MacroGlyph {
 }
 
 /// A macro's glyph on its tile, the way iOS Settings leads a row: the macro's color as a soft
-/// fill, the glyph a step deeper so it reads.
+/// fill, the glyph a step deeper so it reads, filling about three quarters of the tile.
 struct MacroTile: View {
     let macro: Macro
     var size: CGFloat = 28
 
     var body: some View {
         Canvas { context, canvas in
-            let side = canvas.width * 0.64
+            let side = canvas.width * 0.76
             let rect = CGRect(x: (canvas.width - side) / 2, y: (canvas.height - side) / 2, width: side, height: side)
             MacroGlyph.draw(macro, in: &context, rect: rect, color: macro.glyphColor)
         }

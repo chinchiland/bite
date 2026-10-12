@@ -80,7 +80,8 @@ private struct DotRingCanvas: View, Animatable {
     private static let pitch: CGFloat = 7.4
     /// A glyph's disc sits across the middle rings and leaves the outer one free for overflow.
     private static let discRadius: CGFloat = 14
-    private static let glyphSize: CGFloat = 17
+    /// About three quarters of the disc, so the glyph reads without the disc growing.
+    private static let glyphSize: CGFloat = 21
     /// The narrowest arc that carries a glyph.
     private static let glyphMinimum = 0.08
 

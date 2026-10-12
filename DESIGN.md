@@ -57,7 +57,7 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 ## Icons and emoji
 
 - **SF Symbols** for everything that is not a food: actions, chips (flame, shoe prints, leaf), the streak flame, the settings gear. Outline for actions, filled for data and to show state (`bookmark.fill` means saved). Never bold.
-- **Macro glyphs**, drawn in `MacroGlyph` on a 24 point grid like SF Symbols: a drumstick for protein, a wheat ear for carbs, half an avocado for fat (a drop read as water). Foods people know at a glance, so the glyph says the macro before the color does. In a list they lead the row on a tile, Settings style: the macro's color at 24%, the glyph a step deeper (a step lighter at night). On the ring they sit on a disc in the middle of their arc. Rows beside them that are not macros (calories in the editor) get a `SymbolTile` of the same shape and strength.
+- **Macro glyphs**, drawn in `MacroGlyph` on a 24 point grid like SF Symbols: a drumstick for protein, a wheat ear of tapered kernels for carbs, half an avocado with its stone for fat (a drop read as water). Foods people know at a glance, so the glyph says the macro before the color does. In a list they lead the row on a tile, Settings style: the macro's color at 24%, the glyph a step deeper (a step lighter at night). On the ring they sit on a disc in the middle of their arc. The glyph fills about three quarters of its tile or disc: bigger glyphs, never bigger discs. Rows beside them that are not macros (calories in the editor) get a `SymbolTile` of the same shape and strength.
 - **Emoji** only as food pictures: tiles, ingredients, the meal an estimate found.
 
 ## Charts
