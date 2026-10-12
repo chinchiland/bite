@@ -141,9 +141,10 @@ struct QuickAddView: View {
                 fat: Self.number(fat) ?? 0
             )
         )
-        context.insert(FoodEntry(food: food, amount: 1, meal: selectedMeal, date: FoodDetailView.logDate(for: day)))
+        let entry = FoodEntry(food: food, amount: 1, meal: selectedMeal, date: FoodDetailView.logDate(for: day))
+        context.insert(entry)
         try? context.save()
-        events.added(food, amount: 1, meal: selectedMeal)
+        events.added(entry)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         onDone()
     }

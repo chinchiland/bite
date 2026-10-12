@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import Combine
 import UIKit
+import TipKit
 
 /// The three views of home: the day you are logging, and your week and month in numbers.
 enum HomeTab: String, CaseIterable, Identifiable {
@@ -35,6 +36,7 @@ enum HomeSheet: Identifiable, Hashable {
 struct TodayView: View {
     @Environment(\.modelContext) private var context
     @Environment(LogEvents.self) private var events
+    @Environment(AppActions.self) private var actions
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
     @Query private var entries: [FoodEntry]
@@ -121,6 +123,25 @@ struct TodayView: View {
         .task(id: coverEntry?.persistentModelID) {
             loadCover()
         }
+        // A tick under the finger when the switcher moves, and a quiet success the moment
+        // today lands on target. Nothing else buzzes.
+        .sensoryFeedback(.selection, trigger: selectionKey)
+        .sensoryFeedback(.success, trigger: isOnTargetToday) { old, new in !old && new }
+        .onChange(of: selectionKey) { _, _ in
+            DaySwitcherTip().invalidate(reason: .actionPerformed)
+        }
+        // Siri, Spotlight or the Action button asked to scan.
+        .onChange(of: actions.pendingScan, initial: true) { _, pending in
+            guard pending else { return }
+            actions.pendingScan = false
+            showScanner = true
+        }
+        .task {
+            await DaySwitcherTip.opened.donate()
+        }
+        .task(id: saved.map(\.foodID)) {
+            BiteShortcuts.updateAppShortcutParameters()
+        }
         .onChange(of: scenePhase) { _, phase in
             // Back from a walk: pick up the new steps.
             if phase == .active { activityRefresh += 1 }
@@ -178,12 +199,14 @@ struct TodayView: View {
                 .frame(height: 38)
                 .coverGlass(in: Capsule(), onPhoto: onPhoto)
             }
+            .popoverTip(DaySwitcherTip(), arrowEdge: .top)
             Spacer(minLength: 8)
             if let streak = streakToShow {
                 HStack(spacing: 6) {
                     Image(systemName: "flame.fill")
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.energy)
+                        .symbolEffect(.bounce, value: streak)
                     Text("\(streak)-day streak")
                         .font(.ui(14, .semibold))
                         .lineLimit(1)
@@ -223,11 +246,14 @@ struct TodayView: View {
             } else {
                 DayTimeline(
                     entries: dayEntries,
+                    isToday: Calendar.current.isDateInToday(day),
                     onSelect: { editing = $0 },
                     onSave: { save($0.food, amount: $0.amount, meal: $0.meal) },
                     onDelete: delete,
                     onAddHere: { sheet = .search($0) },
-                    onSaveMeal: saveMeal
+                    onSaveMeal: saveMeal,
+                    onAddToToday: addToToday,
+                    onMoveTime: move
                 )
             }
 
@@ -287,13 +313,13 @@ struct TodayView: View {
 
     private var bottomStack: some View {
         VStack(spacing: 12) {
-            if let added = events.lastAdded {
-                AddedToast(added: added)
+            if let event = events.last {
+                EventToast(event: event) { undo(event) }
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .onTapGesture { events.dismiss() }
-                    .task(id: added.id) {
-                        try? await Task.sleep(for: .seconds(2.6))
-                        if events.lastAdded?.id == added.id { events.dismiss() }
+                    .task(id: event.id) {
+                        // Long enough to reach Undo, short enough to stay out of the way.
+                        try? await Task.sleep(for: .seconds(4))
+                        if events.last?.id == event.id { events.dismiss() }
                     }
             }
             ScanDock(
@@ -304,7 +330,7 @@ struct TodayView: View {
             )
         }
         .padding(.bottom, 4)
-        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: events.lastAdded)
+        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: events.last)
     }
 
     @ViewBuilder private func sheetContent(_ sheet: HomeSheet) -> some View {
@@ -426,6 +452,17 @@ struct TodayView: View {
         return result
     }
 
+    /// What the switcher shows, as one value the haptic can watch.
+    private var selectionKey: String {
+        "\(tab.rawValue) \(day.timeIntervalSince1970)"
+    }
+
+    /// Today, inside 90 to 105% of the goal.
+    private var isOnTargetToday: Bool {
+        Calendar.current.isDateInToday(day)
+            && DayVerdict(kcal: totals.kcal, entries: dayEntries.count, goal: budget).isOnTarget
+    }
+
     /// The streak, on today only and from two days.
     private var streakToShow: Int? {
         guard Calendar.current.isDateInToday(day) else { return nil }
@@ -451,11 +488,54 @@ struct TodayView: View {
 
     private func add(_ item: SavedFood) {
         let meal = item.meal ?? Meal.likely()
-        let food = item.food
-        context.insert(FoodEntry(food: food, amount: item.amount, meal: meal, date: FoodDetailView.logDate(for: day)))
+        let entry = FoodEntry(food: item.food, amount: item.amount, meal: meal, date: FoodDetailView.logDate(for: day))
+        context.insert(entry)
         item.timesAdded += 1
         try? context.save()
-        events.added(food, amount: item.amount, meal: meal)
+        events.added(entry)
+    }
+
+    /// The same foods again, now, in the same meals: yesterday's lunch as today's.
+    private func addToToday(_ items: [FoodEntry]) {
+        let now = Date.now
+        let copies = items.map { FoodEntry(food: $0.food, amount: $0.amount, meal: $0.meal, date: now) }
+        withAnimation(.snappy) {
+            for copy in copies {
+                context.insert(copy)
+            }
+            try? context.save()
+        }
+        events.added(copies)
+    }
+
+    /// A meal moved to another time on the same day.
+    private func move(_ items: [FoodEntry], to time: Date) {
+        let calendar = Calendar.current
+        let parts = calendar.dateComponents([.hour, .minute], from: time)
+        withAnimation(.snappy) {
+            for item in items {
+                item.date = calendar.date(bySettingHour: parts.hour ?? 12, minute: parts.minute ?? 0, second: 0, of: item.date) ?? item.date
+            }
+            try? context.save()
+        }
+    }
+
+    /// Takes the last change back: an add is removed, a delete comes back as it was.
+    private func undo(_ event: LogEvents.Event) {
+        withAnimation(.snappy) {
+            switch event.change {
+            case .added(let entries):
+                for entry in entries where !entry.isDeleted {
+                    context.delete(entry)
+                }
+            case .deleted(let snapshots):
+                for snapshot in snapshots {
+                    context.insert(FoodEntry(food: snapshot.food, amount: snapshot.amount, meal: snapshot.meal, date: snapshot.date))
+                }
+            }
+            try? context.save()
+        }
+        events.dismiss()
     }
 
     private func save(_ food: Food, amount: Double, meal: Meal?) {
@@ -512,8 +592,14 @@ struct TodayView: View {
         activity = await HealthActivity.shared.activity(on: day)
     }
 
+    /// Gone at once, with Undo in the toast instead of an "are you sure?".
     private func delete(_ entry: FoodEntry) {
-        withAnimation(.snappy) { context.delete(entry) }
+        let snapshot = LogEvents.Snapshot(entry)
+        withAnimation(.snappy) {
+            context.delete(entry)
+            try? context.save()
+        }
+        events.deleted([snapshot])
     }
 
     private func deletePending() {
@@ -640,5 +726,6 @@ private struct EmptyDay: View {
     TodayView()
         .modelContainer(DemoData.container())
         .environment(LogEvents())
+        .environment(AppActions.shared)
 }
 #endif

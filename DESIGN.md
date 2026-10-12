@@ -86,6 +86,16 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 `DayCover`, `DottedRing`, `MacroBars`, `MacroBlock`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Bite/Design/Theme.swift`, the typeface in `Bite/Design/Typeface.swift`.
 
+## Interactions
+
+- **Do, then offer Undo; never "are you sure?".** An add or a delete happens at once and a toast slides up over the dock for 4 seconds with Undo. A delete keeps a copy of the entry until the toast leaves.
+- **Edit in place.** Tap a meal's time to move it with a wheel in a small popover. A food's page has its own Time, set to now on its own, so logging late never needs a form.
+- **Repeat without retyping.** Press and hold a food for Add again (Add to today on a past day); hold a past meal for Add to today. Most people eat the same few meals.
+- **Haptics only where they mean something:** a tick when the switcher changes day, a rising or falling tick on − and +, a success on add and the moment today lands on target. Navigation taps stay silent.
+- **Teach once, in place.** Two tips, never a tour: hold a food (on the first tile), and the switcher (from the third visit). Each disappears once you have used the gesture.
+- **Beyond the app.** Scan food (opens the camera, for the Action button, Siri, Spotlight and Shortcuts) and Log a saved food ("Log Morning skyr in Bite", without opening the app).
+- **No dead ends.** A barcode with no data offers Snap the label first, then Type it in.
+
 ## Motion
 
 The scan laser sweeps, numbers roll, the ring's dots light up round from twelve o'clock, the range bars grow, covers stretch when pulled, and "Added to Breakfast" slides up over the dock, then leaves after 2.6 seconds. Reduce Motion stops the laser and lights everything at once.

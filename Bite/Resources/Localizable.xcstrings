@@ -321,6 +321,64 @@
         }
       }
     },
+    "%lld foods" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld food"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foods"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alimento"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alimentos"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld aliment"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld aliments"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld%%" : {
       "localizations" : {
         "es" : {
@@ -507,6 +565,22 @@
         }
       }
     },
+    "Add again" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir otra vez"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter encore"
+          }
+        }
+      }
+    },
     "Add burned calories to my goal" : {
       "localizations" : {
         "es" : {
@@ -667,6 +741,22 @@
         }
       }
     },
+    "Added %@ to %@, %@ kcal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ añadido: %@, %@ kcal."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ajouté : %@, %@ kcal."
+          }
+        }
+      }
+    },
     "Added to %@" : {
       "localizations" : {
         "es" : {
@@ -679,6 +769,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouté : %@"
+          }
+        }
+      }
+    },
+    "Adds one of your saved foods to today, with its usual amount." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade uno de tus alimentos guardados a hoy, con su cantidad de siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute un de tes aliments enregistrés à aujourd’hui, avec sa quantité habituelle."
           }
         }
       }
@@ -711,6 +817,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quantité"
+          }
+        }
+      }
+    },
+    "Another day, or your week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otro día, o tu semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un autre jour, ou ta semaine"
           }
         }
       }
@@ -1031,6 +1153,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Céleri"
+          }
+        }
+      }
+    },
+    "Change it, add it again, save it or delete it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para cambiarlo, añadirlo otra vez, guardarlo o eliminarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour le modifier, l’ajouter encore, l’enregistrer ou le supprimer."
+          }
+        }
+      }
+    },
+    "Change the time" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar la hora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer l’heure"
+          }
+        }
+      }
+    },
+    "Change when you ate this meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia la hora de esta comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change l’heure de ce repas"
           }
         }
       }
@@ -1387,6 +1557,22 @@
         }
       }
     },
+    "Deleted" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimé"
+          }
+        }
+      }
+    },
     "Desk job, little exercise" : {
       "localizations" : {
         "es" : {
@@ -1703,6 +1889,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cadre ton assiette"
+          }
+        }
+      }
+    },
+    "Food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alimento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aliment"
           }
         }
       }
@@ -2183,6 +2385,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note quelques jours et ils apparaîtront ici, avec tes meilleurs jours classés."
+          }
+        }
+      }
+    },
+    "Log a saved food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anotar un alimento guardado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noter un aliment enregistré"
           }
         }
       }
@@ -2907,6 +3125,22 @@
         }
       }
     },
+    "Opens Bite on the camera, ready for a barcode or your plate." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Bite en la cámara, lista para un código de barras o tu plato."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre Bite sur l’appareil photo, prêt pour un code-barres ou ton assiette."
+          }
+        }
+      }
+    },
     "Opens the camera to scan a barcode or a plate" : {
       "localizations" : {
         "es" : {
@@ -3095,6 +3329,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vise un code-barres"
+          }
+        }
+      }
+    },
+    "Press and hold a food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsado un alimento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appuie longuement sur un aliment"
           }
         }
       }
@@ -3899,6 +4149,22 @@
         }
       }
     },
+    "Snap the label" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto de la etiqueta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photographier l’étiquette"
+          }
+        }
+      }
+    },
     "Soybeans" : {
       "localizations" : {
         "es" : {
@@ -4091,6 +4357,22 @@
         }
       }
     },
+    "Tap here for yesterday, or your last 7 and 30 days." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para ver ayer, o tus últimos 7 y 30 días."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touche ici pour hier, ou tes 7 et 30 derniers jours."
+          }
+        }
+      }
+    },
     "Tap one to adjust" : {
       "localizations" : {
         "es" : {
@@ -4139,6 +4421,22 @@
         }
       }
     },
+    "That saved food isn't on your shelf any more." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ese alimento ya no está en tus guardados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cet aliment n’est plus dans tes enregistrés."
+          }
+        }
+      }
+    },
     "The dressing could add 50 kcal if it was poured generously." : {
       "localizations" : {
         "es" : {
@@ -4167,6 +4465,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impossible de lire cette photo."
+          }
+        }
+      }
+    },
+    "Time" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heure"
           }
         }
       }
@@ -4283,6 +4597,22 @@
         }
       }
     },
+    "Type it in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribirlo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le saisir"
+          }
+        }
+      }
+    },
     "Type the barcode" : {
       "localizations" : {
         "es" : {
@@ -4311,6 +4641,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ultra-transformé"
+          }
+        }
+      }
+    },
+    "Undo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshacer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
       }
@@ -4455,6 +4801,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "C’était quoi ?"
+          }
+        }
+      }
+    },
+    "When you ate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuándo comiste"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand tu as mangé"
           }
         }
       }

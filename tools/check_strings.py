@@ -16,7 +16,7 @@ LANGUAGES = ("fr", "es")
 # Interpolated values that are whole numbers in the code, so SwiftUI keys them as %lld.
 INTEGERS = {
     "streak", "rank", "now.loggedDays", "now.daysOnTarget", "range.days", "item.score",
-    "food.times", "status", "(abs(change) * 100).safeInt", "(share * 100).safeInt",
+    "food.times", "status", "(abs(change) * 100).safeInt", "(share * 100).safeInt", "event.count",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.

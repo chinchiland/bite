@@ -138,14 +138,19 @@ struct ChipButtonStyle: ButtonStyle {
     }
 }
 
-/// − and + around a number. Holding repeats.
+/// − and + around a number. Holding repeats, and each step ticks up or down under the finger.
 struct StepButton: View {
     let systemImage: String
     let label: LocalizedStringKey
     let action: () -> Void
 
+    @State private var steps = 0
+
     var body: some View {
-        Button(action: action) {
+        Button {
+            steps += 1
+            action()
+        } label: {
             Image(systemName: systemImage)
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(Theme.ink)
@@ -154,6 +159,7 @@ struct StepButton: View {
         }
         .buttonStyle(.plain)
         .buttonRepeatBehavior(.enabled)
+        .sensoryFeedback(systemImage.contains("plus") ? .increase : .decrease, trigger: steps)
         .accessibilityLabel(label)
     }
 }

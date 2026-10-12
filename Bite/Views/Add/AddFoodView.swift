@@ -217,9 +217,10 @@ struct AddFoodView: View {
 
     private func log(_ food: Food, amount: Double, key: String, preferred: Meal?) {
         let target = meal ?? preferred ?? Meal.likely()
-        context.insert(FoodEntry(food: food, amount: amount, meal: target, date: FoodDetailView.logDate(for: day)))
+        let entry = FoodEntry(food: food, amount: amount, meal: target, date: FoodDetailView.logDate(for: day))
+        context.insert(entry)
         try? context.save()
-        events.added(food, amount: amount, meal: target)
+        events.added(entry)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         withAnimation(.snappy) { _ = added.insert(key) }
     }

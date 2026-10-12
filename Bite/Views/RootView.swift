@@ -8,6 +8,7 @@ struct RootView: View {
     var body: some View {
         TodayView()
             .environment(events)
+            .environment(AppActions.shared)
             .fullScreenCover(isPresented: needsGoal) {
                 NavigationStack {
                     GoalCalculatorView(isWelcome: true) { kcal in

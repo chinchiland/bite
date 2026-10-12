@@ -337,9 +337,10 @@ struct EstimateView: View {
 
     private func add(_ estimate: MealEstimate) {
         let food = plate(estimate)
-        context.insert(FoodEntry(food: food, amount: 1, meal: meal, date: FoodDetailView.logDate(for: day)))
+        let entry = FoodEntry(food: food, amount: 1, meal: meal, date: FoodDetailView.logDate(for: day))
+        context.insert(entry)
         try? context.save()
-        events.added(food, amount: 1, meal: meal)
+        events.added(entry)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         onDone()
     }

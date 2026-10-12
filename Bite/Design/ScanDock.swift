@@ -137,37 +137,54 @@ struct ScanCorners: Shape {
     }
 }
 
-/// "Added to Breakfast": slides up over the dock when something lands in today, then leaves.
-struct AddedToast: View {
-    let added: LogEvents.Added
+/// "Added to Breakfast" or "Deleted": slides up over the dock after a change to the day, with
+/// Undo, then leaves on its own.
+struct EventToast: View {
+    let event: LogEvents.Event
+    let onUndo: () -> Void
 
     var body: some View {
         HStack(spacing: 10) {
-            FoodThumb(food: added.food, size: 38)
+            FoodThumb(food: event.food, size: 38)
             VStack(alignment: .leading, spacing: 0) {
-                Text("Added to \(added.meal.title)")
+                Text(title)
                     .font(.ui(15, .semibold))
                     .foregroundStyle(Theme.ink)
-                Text(added.food.name)
+                    .lineLimit(1)
+                Text(verbatim: "\(name) · \(event.kcal.kcalText) kcal")
                     .font(.ui(13))
+                    .monospacedDigit()
                     .foregroundStyle(Theme.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(verbatim: "+\(added.kcal.kcalText)")
-                    .font(.number(17))
+            Button(action: onUndo) {
+                Text("Undo")
+                    .font(.ui(15, .semibold))
                     .foregroundStyle(Theme.ink)
-                Text("kcal")
-                    .font(.ui(13))
-                    .foregroundStyle(Theme.secondary)
+                    .padding(.horizontal, 14)
+                    .frame(height: 34)
+                    .background(Theme.fill, in: Capsule())
             }
+            .buttonStyle(PressableStyle(scale: 0.92))
         }
         .padding(.leading, 8)
-        .padding(.trailing, 16)
+        .padding(.trailing, 8)
         .padding(.vertical, 8)
         .floatingGlass(in: Capsule())
         .padding(.horizontal, Theme.margin)
         .accessibilityElement(children: .combine)
+        .accessibilityAction(named: Text("Undo"), onUndo)
+    }
+
+    private var title: String {
+        switch event.change {
+        case .added: String(localized: "Added to \(event.meal.title)")
+        case .deleted: String(localized: "Deleted")
+        }
+    }
+
+    private var name: String {
+        event.count > 1 ? String(localized: "\(event.count) foods") : event.food.name
     }
 }

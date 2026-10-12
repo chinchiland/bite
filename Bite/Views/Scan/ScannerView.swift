@@ -195,9 +195,17 @@ struct ScannerView: View {
             .frame(height: 40)
             .background(.ultraThinMaterial, in: Capsule())
         case (_, .notFound(let code)):
-            resultPanel("\(code) isn't in Open Food Facts yet.", primary: ("Add calories", { quickAdd = QuickAddDraft(barcode: code) }))
+            resultPanel(
+                "\(code) isn't in Open Food Facts yet.",
+                primary: ("Snap the label", snapLabel),
+                secondary: ("Type it in", { quickAdd = QuickAddDraft(barcode: code) })
+            )
         case (_, .noNutrition(let code, let name)):
-            resultPanel("\(name) has no nutrition facts yet.", primary: ("Add calories", { quickAdd = QuickAddDraft(name: name, barcode: code) }))
+            resultPanel(
+                "\(name) has no nutrition facts yet.",
+                primary: ("Snap the label", snapLabel),
+                secondary: ("Type it in", { quickAdd = QuickAddDraft(name: name, barcode: code) })
+            )
         case (_, .failed(let code)):
             resultPanel("Couldn't reach Open Food Facts.", primary: ("Try again", {
                 phase = .scanning
@@ -224,21 +232,39 @@ struct ScannerView: View {
         .background(.ultraThinMaterial, in: Capsule())
     }
 
-    private func resultPanel(_ text: LocalizedStringKey, primary: (LocalizedStringKey, () -> Void)) -> some View {
+    /// What happened, the best next step in ink, the other one quiet, and Scan again under them.
+    private func resultPanel(
+        _ text: LocalizedStringKey,
+        primary: (LocalizedStringKey, () -> Void),
+        secondary: (LocalizedStringKey, () -> Void)? = nil
+    ) -> some View {
         VStack(spacing: 12) {
             Text(text)
                 .font(.ui(17, .medium))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
             HStack(spacing: 10) {
-                Button("Scan again", action: resume)
-                    .buttonStyle(SoftButtonStyle(tint: .white))
+                if let secondary {
+                    Button(secondary.0, action: secondary.1)
+                        .buttonStyle(SoftButtonStyle(tint: .white))
+                }
                 Button(primary.0, action: primary.1)
                     .buttonStyle(PrimaryButtonStyle(height: 44))
             }
+            Button("Scan again", action: resume)
+                .font(.ui(15, .medium))
+                .foregroundStyle(.white.opacity(0.85))
         }
         .padding(16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
+    /// No data for this barcode: read the nutrition label off the pack instead.
+    private func snapLabel() {
+        withAnimation(.snappy) {
+            modeRaw = ScanMode.label.rawValue
+            phase = .scanning
+        }
     }
 
     /// Scan food, Barcode, Food label: glass tiles, the chosen one white.

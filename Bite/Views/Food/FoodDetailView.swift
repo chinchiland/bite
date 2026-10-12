@@ -20,6 +20,8 @@ struct FoodDetailView: View {
     @State private var amount: Double
     @State private var amountText: String
     @State private var meal: Meal
+    /// When you ate it: now, or the time on the entry. Logging late? Move it back.
+    @State private var time: Date
     @State private var showFacts = false
     @State private var saves = 0
     @FocusState private var amountFocused: Bool
@@ -42,6 +44,7 @@ struct FoodDetailView: View {
         _amount = State(initialValue: start)
         _amountText = State(initialValue: Self.format(start))
         _meal = State(initialValue: entry?.meal ?? meal ?? Meal.likely())
+        _time = State(initialValue: entry?.date ?? Self.logDate(for: day))
     }
 
     private var totals: Nutrients { food.nutrients(for: amount) }
@@ -82,6 +85,7 @@ struct FoodDetailView: View {
                 Button(action: toggleSaved) {
                     Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
                         .contentTransition(.symbolEffect(.replace))
+                        .symbolEffect(.bounce, value: saves)
                 }
                 .sensoryFeedback(.success, trigger: saves)
                 .accessibilityLabel(isSaved ? "Saved to your shelf" : "Save to your shelf")
@@ -122,6 +126,8 @@ struct FoodDetailView: View {
             )
             amountPicker
                 .padding(.top, 22)
+            timeRow
+                .padding(.top, 12)
             facts
                 .padding(.top, 22)
             sourceLink
@@ -214,6 +220,19 @@ struct FoodDetailView: View {
             .padding(10)
             .background(Theme.inset, in: RoundedRectangle(cornerRadius: Theme.insetRadius, style: .continuous))
         }
+    }
+
+    /// The time, set to now on its own; a tap on it opens Apple's compact time picker.
+    private var timeRow: some View {
+        HStack {
+            Text("Time")
+                .font(.ui(17))
+                .foregroundStyle(Theme.ink)
+            Spacer()
+            DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
+                .labelsHidden()
+        }
+        .padding(.vertical, 4)
     }
 
     private var facts: some View {
@@ -342,11 +361,13 @@ struct FoodDetailView: View {
         if let entry {
             entry.amount = amount
             entry.meal = meal
+            entry.date = time
             try? context.save()
         } else {
-            context.insert(FoodEntry(food: food, amount: amount, meal: meal, date: Self.logDate(for: day)))
+            let added = FoodEntry(food: food, amount: amount, meal: meal, date: time)
+            context.insert(added)
             try? context.save()
-            events.added(food, amount: amount, meal: meal)
+            events.added(added)
         }
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         onDone()
