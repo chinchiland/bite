@@ -50,6 +50,12 @@ final class DishEstimate {
     var tintRaw: String = FoodTint.sky.rawValue
     var createdAt: Date = Date.now
     var dish: CommunityDish?
+    /// The estimate's id on the community server, once shared there or read from it.
+    var remoteID: String?
+    /// Who wrote it on the server, for hiding a person's counts.
+    var authorID: String?
+    /// Yours only: kept on this phone, being shared, or shared.
+    var shareStateRaw: String?
 
     init(author: String, source: EstimateSource, nutrients: Nutrients, agrees: Int = 0, isMine: Bool = false, tint: FoodTint = .sky) {
         self.author = author
@@ -117,7 +123,22 @@ extension CommunityDish {
     }
 }
 
+/// Where your estimate is: on this phone only, on its way, or shared with people eating there.
+enum ShareState: String {
+    case local
+    case sharing
+    case shared
+}
+
 extension DishEstimate {
+    var shareState: ShareState {
+        get { shareStateRaw.flatMap(ShareState.init(rawValue:)) ?? .local }
+        set { shareStateRaw = newValue.rawValue }
+    }
+
+    /// Someone else's estimate that came from the server, so it can be reported or hidden.
+    var isRemote: Bool { !isMine && remoteID != nil }
+
     var source: EstimateSource { EstimateSource(rawValue: sourceRaw) ?? .entered }
     var tint: FoodTint { FoodTint(rawValue: tintRaw) ?? .sky }
 

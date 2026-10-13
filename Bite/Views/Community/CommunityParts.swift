@@ -193,7 +193,7 @@ struct EstimateRow: View {
                 .foregroundStyle(Theme.ink)
                 .fixedSize()
             if estimate.isMine {
-                Text("Yours")
+                Text(estimate.shareState == .shared ? LocalizedStringKey("Shared") : LocalizedStringKey("Yours"))
                     .font(.ui(13))
                     .foregroundStyle(Theme.secondary)
                     .frame(minWidth: 58)

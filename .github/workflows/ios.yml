@@ -128,6 +128,8 @@ jobs:
           shoot 40-usual -onboarded YES -clock 19:30 -anchor usual
           shoot 41-typo -onboarded YES -screen search -query chiken
           shoot 42-settings-end -onboarded YES -screen settings -anchor bottom
+          shoot 43-share -onboarded YES -screen share
+          shoot 44-share-fr -onboarded YES -screen share -AppleLanguages "(fr)" -AppleLocale fr_FR
 
           shoot_fresh() {
             name=$1; shift

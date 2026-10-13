@@ -74,7 +74,7 @@ struct PlaceView: View {
         #if DEBUG
         .onAppear {
             let screen = UserDefaults.standard.string(forKey: "screen") ?? ""
-            if ["dish", "addestimate", "accuracy"].contains(screen), let first = ranked.first {
+            if ["dish", "addestimate", "accuracy", "share"].contains(screen), let first = ranked.first {
                 path = [first]
             }
         }

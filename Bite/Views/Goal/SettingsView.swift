@@ -18,6 +18,10 @@ struct SettingsView: View {
     @State private var savingRefused = false
     @State private var removing = false
     @State private var apiKey = ""
+    @State private var account = CommunityAccount.shared
+    @State private var communityName = ""
+    @State private var confirmDelete = false
+    @State private var deleteFailed = false
     @State private var storedKey = ""
 
     private var split: MacroSplit { MacroSplit(rawValue: splitRaw) ?? .balanced }
@@ -202,6 +206,50 @@ struct SettingsView: View {
                         }
                     }
 
+                    if CommunityServer.isConfigured && account.isSignedIn {
+                        Section {
+                            HStack {
+                                Text("Your name")
+                                    .font(.ui(17))
+                                    .foregroundStyle(Theme.ink)
+                                Spacer()
+                                TextField("Your name", text: $communityName)
+                                    .multilineTextAlignment(.trailing)
+                                    .font(.ui(17))
+                                    .submitLabel(.done)
+                                    .onSubmit { Task { await account.rename(to: communityName) } }
+                            }
+                            .listRowBackground(Theme.card)
+                            Button("Sign out") { account.signOut() }
+                                .font(.ui(17))
+                                .listRowBackground(Theme.card)
+                            Button("Delete my shared counts and account", role: .destructive) { confirmDelete = true }
+                                .font(.ui(17))
+                                .listRowBackground(Theme.card)
+                        } header: {
+                            SectionTitle(text: "Community")
+                        } footer: {
+                            Text(deleteFailed
+                                ? LocalizedStringKey("That didn't work. Try again in a moment.")
+                                : LocalizedStringKey("People see your estimates under this name. Your food log stays on this phone."))
+                        }
+                        .onAppear { communityName = account.displayName }
+                        .confirmationDialog("Delete my shared counts and account", isPresented: $confirmDelete, titleVisibility: .visible) {
+                            Button("Delete", role: .destructive) {
+                                Task {
+                                    do {
+                                        try await account.deleteAccount()
+                                        deleteFailed = false
+                                    } catch {
+                                        deleteFailed = true
+                                    }
+                                }
+                            }
+                        } message: {
+                            Text("Your shared counts and your account go from the server. Your food log stays on this phone.")
+                        }
+                    }
+
                     Section {
                         SecureField("Claude API key", text: $apiKey)
                             .textInputAutocapitalization(.never)
@@ -292,7 +340,11 @@ struct SettingsView: View {
 
     private func saveKey() {
         let key = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
-        Keychain.set(key, for: Keychain.claudeKey)
+        // Only a key the Keychain really kept shows as saved.
+        guard Keychain.set(key, for: Keychain.claudeKey) else {
+            apiKey = storedKey
+            return
+        }
         storedKey = key
         apiKey = key
     }

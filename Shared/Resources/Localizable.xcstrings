@@ -241,6 +241,22 @@
         }
       }
     },
+    "%@ kcal, your count" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal, tu cálculo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal, ton estimation"
+          }
+        }
+      }
+    },
     "%@ less since %@" : {
       "localizations" : {
         "es" : {
@@ -1645,6 +1661,38 @@
         }
       }
     },
+    "Agree with this count" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coincidir con este cálculo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approuver cette estimation"
+          }
+        }
+      }
+    },
+    "Agrees and stars come from people who sign in, so nobody can fake them." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los votos y las estrellas vienen de personas con sesión iniciada, así nadie puede falsearlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les approbations et les étoiles viennent de personnes connectées, pour que personne ne puisse les truquer."
+          }
+        }
+      }
+    },
     "Almonds" : {
       "localizations" : {
         "es" : {
@@ -2093,6 +2141,22 @@
         }
       }
     },
+    "By sharing you accept the community rules." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al compartir aceptas las normas de la comunidad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En partageant, tu acceptes les règles de la communauté."
+          }
+        }
+      }
+    },
     "By time" : {
       "localizations" : {
         "es" : {
@@ -2345,6 +2409,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Modifier ton estimation"
+          }
+        }
+      }
+    },
+    "Changes the name people see" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia el nombre que ve la gente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change le nom que les gens voient"
           }
         }
       }
@@ -2621,6 +2701,22 @@
         }
       }
     },
+    "Community" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunidad"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Communauté"
+          }
+        }
+      }
+    },
     "Connect Apple Health" : {
       "localizations" : {
         "es" : {
@@ -2665,6 +2761,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contient : %@."
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
           }
         }
       }
@@ -2841,6 +2953,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supprimer du journal"
+          }
+        }
+      }
+    },
+    "Delete my shared counts and account" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar mis cálculos compartidos y mi cuenta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer mes estimations partagées et mon compte"
           }
         }
       }
@@ -3769,6 +3897,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Taille"
+          }
+        }
+      }
+    },
+    "Hide this person's counts" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar los cálculos de esta persona"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquer les estimations de cette personne"
           }
         }
       }
@@ -5549,6 +5693,54 @@
         }
       }
     },
+    "People eating here will see it" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quien coma aquí lo verá"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les gens qui mangent ici la verront"
+          }
+        }
+      }
+    },
+    "People eating here will see it as" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quien coma aquí lo verá como"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les gens qui mangent ici le verront au nom de"
+          }
+        }
+      }
+    },
+    "People see your estimates under this name. Your food log stays on this phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La gente ve tus cálculos con este nombre. Tu diario se queda en este teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les gens voient tes estimations sous ce nom. Ton journal reste sur ce téléphone."
+          }
+        }
+      }
+    },
     "Per serving" : {
       "localizations" : {
         "es" : {
@@ -5933,6 +6125,22 @@
         }
       }
     },
+    "Rate this dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valora este plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note ce plat"
+          }
+        }
+      }
+    },
     "Recent" : {
       "localizations" : {
         "es" : {
@@ -6041,6 +6249,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retrait…"
+          }
+        }
+      }
+    },
+    "Report" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denunciar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaler"
           }
         }
       }
@@ -6701,6 +6925,54 @@
         }
       }
     },
+    "Share" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
+          }
+        }
+      }
+    },
+    "Share your count" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte tu cálculo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partage ton estimation"
+          }
+        }
+      }
+    },
+    "Shared" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partagée"
+          }
+        }
+      }
+    },
     "Shawarma plate, fries" : {
       "localizations" : {
         "es" : {
@@ -6797,6 +7069,22 @@
         }
       }
     },
+    "Sign out" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar sesión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se déconnecter"
+          }
+        }
+      }
+    },
     "Skip" : {
       "localizations" : {
         "es" : {
@@ -6857,6 +7145,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photographier l’étiquette"
+          }
+        }
+      }
+    },
+    "Someone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguien"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelqu’un"
           }
         }
       }
@@ -7305,6 +7609,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ça n’a pas marché"
+          }
+        }
+      }
+    },
+    "That didn't work. Try again in a moment." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No ha funcionado. Vuelve a intentarlo en un momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ça n’a pas marché. Réessaie dans un instant."
           }
         }
       }
@@ -8349,6 +8669,22 @@
         }
       }
     },
+    "Your first name" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu nombre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton prénom"
+          }
+        }
+      }
+    },
     "Your first page" : {
       "localizations" : {
         "es" : {
@@ -8361,6 +8697,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta première page"
+          }
+        }
+      }
+    },
+    "Your food log stays on this phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu diario se queda en este teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton journal reste sur ce téléphone."
           }
         }
       }
@@ -8477,6 +8829,22 @@
         }
       }
     },
+    "Your name" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu nombre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton nom"
+          }
+        }
+      }
+    },
     "Your numbers" : {
       "localizations" : {
         "es" : {
@@ -8505,6 +8873,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta note"
+          }
+        }
+      }
+    },
+    "Your shared counts and your account go from the server. Your food log stays on this phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus cálculos compartidos y tu cuenta se borran del servidor. Tu diario se queda en este teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes estimations partagées et ton compte quittent le serveur. Ton journal reste sur ce téléphone."
           }
         }
       }

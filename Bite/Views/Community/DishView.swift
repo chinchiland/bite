@@ -18,6 +18,11 @@ struct DishView: View {
     @State private var meal = Meal.likely()
     @State private var showAccuracy = false
     @State private var showAddEstimate = false
+    /// The share sheet, for sharing your count, or for signing in before an agree or stars.
+    @State private var shareReason: ShareCountSheet.Reason?
+    @State private var pendingAgree: DishEstimate?
+    @State private var pendingStars: Int?
+    @State private var account = CommunityAccount.shared
     /// The photo has scrolled up under the bar: the bar gets its background back.
     @State private var heroGone = false
 
@@ -48,11 +53,22 @@ struct DishView: View {
         .sheet(isPresented: $showAddEstimate) {
             AddEstimateView(dish: dish)
         }
+        .sheet(item: $shareReason) { reason in
+            ShareCountSheet(dish: dish, estimate: myEstimate, reason: reason) { signedIn in
+                shareReason = nil
+                guard signedIn else { return }
+                if let estimate = pendingAgree { agree(estimate) }
+                if let stars = pendingStars { rate(stars) }
+                pendingAgree = nil
+                pendingStars = nil
+            }
+        }
         #if DEBUG
         .onAppear {
             switch UserDefaults.standard.string(forKey: "screen") {
             case "addestimate": showAddEstimate = true
             case "accuracy": showAccuracy = true
+            case "share": shareReason = .share
             default: break
             }
         }
@@ -92,9 +108,23 @@ struct DishView: View {
             ForEach(dish.rankedEstimates) { estimate in
                 Rectangle().fill(Theme.hairline).frame(height: 1)
                 EstimateRow(estimate: estimate) { toggleAgree(estimate) }
+                    .contextMenu {
+                        if estimate.isRemote && CommunityServer.isConfigured && account.isSignedIn {
+                            Button("Report", systemImage: "flag") {
+                                Task { try? await CommunitySync.report(estimate) }
+                            }
+                            Button("Hide this person's counts", systemImage: "eye.slash", role: .destructive) {
+                                Task { try? await CommunitySync.hide(authorOf: estimate, context: context) }
+                            }
+                        }
+                    }
             }
             Rectangle().fill(Theme.hairline).frame(height: 1)
             addEstimateRow
+            if CommunityServer.isConfigured, let mine = myEstimate, mine.shareState != .shared {
+                Rectangle().fill(Theme.hairline).frame(height: 1)
+                shareRow(mine)
+            }
 
             Rectangle().fill(Theme.hairline).frame(height: 1)
                 .padding(.top, 14)
@@ -178,6 +208,39 @@ struct DishView: View {
         .buttonStyle(.plain)
     }
 
+    /// Yours, when you counted this dish.
+    private var myEstimate: DishEstimate? {
+        dish.estimates.first(where: \.isMine)
+    }
+
+    /// Share your count with people eating here: shown once you have one, until it is shared.
+    private func shareRow(_ estimate: DishEstimate) -> some View {
+        Button {
+            shareReason = .share
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: estimate.shareState == .sharing ? "arrow.triangle.2.circlepath" : "square.and.arrow.up")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Theme.link)
+                    .frame(width: 32, height: 32)
+                    .background(Theme.link.opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Share your count")
+                        .font(.ui(15))
+                        .foregroundStyle(Theme.link)
+                    Text("People eating here will see it")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
+                }
+                Spacer()
+            }
+            .padding(.vertical, 12)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(estimate.shareState == .sharing)
+    }
+
     private var ratingRow: some View {
         HStack {
             HStack(spacing: 12) {
@@ -188,9 +251,12 @@ struct DishView: View {
             }
             Spacer()
             StarRating(rating: dish.myRating) { stars in
-                withAnimation(.snappy) {
-                    dish.myRating = dish.myRating == stars ? nil : stars
-                    try? context.save()
+                // Stars on a shared dish count once you are signed in.
+                if needsAccount(remote: dish.estimates.contains { $0.remoteID != nil }) {
+                    pendingStars = stars
+                    shareReason = .rate
+                } else {
+                    rate(stars)
                 }
             }
         }
@@ -222,11 +288,34 @@ struct DishView: View {
     // MARK: Actions
 
     private func toggleAgree(_ estimate: DishEstimate) {
+        // An agree on a shared count counts once you are signed in.
+        if needsAccount(remote: estimate.isRemote) {
+            pendingAgree = estimate
+            shareReason = .agree
+            return
+        }
+        agree(estimate)
+    }
+
+    private func agree(_ estimate: DishEstimate) {
         withAnimation(.snappy) {
             estimate.agreedByMe.toggle()
             estimate.agrees = max(0, estimate.agrees + (estimate.agreedByMe ? 1 : -1))
             try? context.save()
         }
+        CommunitySync.agree(estimate)
+    }
+
+    private func rate(_ stars: Int) {
+        withAnimation(.snappy) {
+            dish.myRating = dish.myRating == stars ? nil : stars
+            try? context.save()
+        }
+        CommunitySync.rate(dish)
+    }
+
+    private func needsAccount(remote: Bool) -> Bool {
+        remote && CommunityServer.isConfigured && !account.isSignedIn
     }
 
     private func addToToday() {

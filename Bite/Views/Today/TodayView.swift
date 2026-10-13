@@ -190,6 +190,9 @@ struct TodayView: View {
         }
         .task {
             await placeFinder.locateIfAllowed()
+            if let here = placeFinder.here {
+                await CommunitySync.pullNear(here, context: context)
+            }
         }
         .onChange(of: day) { _, _ in
             quietly { coverIndex = 0 }
@@ -1210,7 +1213,7 @@ struct TodayView: View {
         case "month": tab = .month
         case "yesterday": day = Calendar.current.date(byAdding: .day, value: -1, to: day) ?? day
         case "over": day = Calendar.current.date(byAdding: .day, value: -3, to: day) ?? day
-        case "place", "dish", "addestimate", "accuracy":
+        case "place", "dish", "addestimate", "accuracy", "share":
             if let first = dishes.first { sheet = .place(first.place) }
         case "where": editing = dayEntries.first { $0.place != nil } ?? dayEntries.last
         case "cover2": coverIndex = 1

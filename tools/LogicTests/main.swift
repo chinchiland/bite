@@ -657,6 +657,30 @@ do {
     check(doubled.isEmpty, "the newest copy is the one compared")
 }
 
+// MARK: Community server
+
+do {
+    let json = """
+    [{"id":"7a1c","name":"Chicken shawarma","emoji":"🌯","photo_path":null,"rating_sum":119,"rating_count":26,"my_rating":4,
+      "place":{"id":"p1","name":"El Beirout","area":"Parc de Milan","category":"restaurant","latitude":46.51492,"longitude":6.62268},
+      "estimates":[{"id":"e1","author_id":"u1","author":"Tom R.","source":"ai","kcal":590,"protein":38,"carbs":55,"fat":24,
+                    "agrees":23,"agreed_by_me":true,"is_mine":false}]}]
+    """
+    let dishes = try CommunityRemote.dishes(from: Data(json.utf8))
+    check(dishes.count == 1 && dishes[0].place.name == "El Beirout" && dishes[0].myRating == 4, "a dish near you decodes")
+    check(dishes[0].estimates.first?.authorId == "u1" && dishes[0].estimates.first?.agreedByMe == true, "snake case becomes camel case")
+    let share = CommunityRemote.Share(
+        pPlace: .init(id: "p1", mapkitId: nil, name: "El Beirout", area: "Parc de Milan", category: "restaurant", latitude: 46.5, longitude: 6.6),
+        pDish: .init(id: "d1", name: "Chicken shawarma", emoji: "🌯"),
+        pEstimate: .init(id: "e9", source: "ai", kcal: 590, protein: 38, carbs: 55, fat: 24)
+    )
+    let body = String(decoding: try CommunityRemote.encoder.encode(share), as: UTF8.self)
+    check(body.contains("\"p_place\"") && body.contains("\"mapkit_id\"") == false && body.contains("\"p_estimate\""), "the share's arguments are named as the function's: \(body.prefix(80))")
+    check(CommunityRemote.shortName(given: "Dylan", family: "Trigos") == "Dylan T.", "first name and initial")
+    check(CommunityRemote.shortName(given: "Léa", family: nil) == "Léa", "no family name, no initial")
+    check(CommunityRemote.shortName(given: nil, family: nil).isEmpty, "no name at all")
+}
+
 // MARK: Widgets
 
 do {

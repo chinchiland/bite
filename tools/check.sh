@@ -27,7 +27,7 @@ swiftc -o "$OUT/logic-tests" \
   Shared/Model/Goals.swift \
   Shared/Model/SearchText.swift \
   Shared/Model/Insights.swift \
-  Shared/Model/MealEstimate.swift   Shared/Model/HealthMeal.swift   Shared/Model/CheckIn.swift   Shared/Model/FirstRun.swift   Shared/Model/WidgetSnapshot.swift   Shared/Model/MealPlace.swift   Shared/Model/Consensus.swift   Shared/Model/Forecast.swift   Shared/Model/Usual.swift   Shared/Model/LogExport.swift \
+  Shared/Model/MealEstimate.swift   Shared/Model/HealthMeal.swift   Shared/Model/CheckIn.swift   Shared/Model/FirstRun.swift   Shared/Model/WidgetSnapshot.swift   Shared/Model/CommunityRemote.swift   Shared/Model/MealPlace.swift   Shared/Model/Consensus.swift   Shared/Model/Forecast.swift   Shared/Model/Usual.swift   Shared/Model/LogExport.swift \
   Bite/Services/OFFModels.swift \
   Bite/Services/OpenFoodFacts.swift \
   Bite/Services/BasicFoods.swift \
