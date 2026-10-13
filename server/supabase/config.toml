@@ -417,3 +417,13 @@ enabled = true
 # The database calls moderate with its shared secret, not a person's token.
 [functions.moderate]
 verify_jwt = false
+
+# These check the person's token themselves (auth.getUser), whatever key signed it.
+[functions.estimate]
+verify_jwt = false
+
+[functions.apple-token]
+verify_jwt = false
+
+[functions.delete-account]
+verify_jwt = false

@@ -9,9 +9,10 @@ The app ships with sharing switched off: `CommunityServer.url` in `Bite/Services
 - **bite**, ref `aknoyqzppszoztngtgfr`, Zurich (eu-central-2), free plan, in the organization "Bite". New tables start private and get row level security automatically (set at creation).
 - Both migrations are applied and recorded, so `supabase db push` starts after them.
 - Sign in with Apple is on for `com.dylan.bite` and `com.dylan.bite.demo` (native sign-in, no secret needed).
-- The three functions are deployed; `moderate` has `GEMINI_API_KEY` and `MODERATION_SECRET`, and Vault holds `moderation_url` and `moderation_secret`. Checked end to end: a real dish name became visible, a spam name was rejected.
+- The functions are deployed; `moderate` has `GEMINI_API_KEY` and `MODERATION_SECRET`, and Vault holds `moderation_url` and `moderation_secret`. Checked end to end: a real dish name became visible, a spam name was rejected.
 - The app points at it (`CommunityServer`), the rules page is https://chinchiland.github.io/bite/, and the repo has the keep-awake secrets.
 - Still to do: the Sign in with Apple key on developer.apple.com (`APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_CLIENT_ID`, `APPLE_PRIVATE_KEY` secrets), which lets deleting an account revoke Apple's token. Sign-in works without it.
+- Photo estimates without a key: the `estimate` function asks Gemini 3.1 Flash-Lite (fallback Gemini 3.8 Flash) for any session, the anonymous one the app makes on first use included. Every scan passes `private.take_scan` first: 12 a minute and 80 a day per person, 400 a day per network, 20,000 a day for everyone, all in the one row of `private.scan_limits`; set `paused` there to stop every photo estimate at once. No photo is kept, only who, when, the model and the tokens (`private.scans`).
 - On this PC the CLI reads `SUPABASE_ACCESS_TOKEN` (a 30-day token for this project only) and `SUPABASE_DB_PASSWORD` from the user environment.
 
 ## Set it up (about an hour, once)
