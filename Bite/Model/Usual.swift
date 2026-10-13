@@ -11,6 +11,18 @@ struct UsualMeal: Equatable {
     let minute: Int
     /// On how many of the last two weeks' days you had it.
     let days: Int
+    /// A learned habit, or day two's yesterday, offered until a habit is learned.
+    var kind: Kind = .usual
+
+    enum Kind: Equatable {
+        case usual
+        case yesterday
+    }
+
+    /// The line's question: "Your usual dinner?" or "Same as yesterday?".
+    var question: String {
+        kind == .yesterday ? tr("Same as yesterday?") : meal.usualQuestion
+    }
 
     /// One food in the log, as much of it as this needs.
     struct Logged {
@@ -63,6 +75,39 @@ struct UsualMeal: Equatable {
         }
         // The one you have most often, then the one you had last.
         return found.max { ($0.days, $0.lastDay) < ($1.days, $1.lastDay) }
+    }
+
+    /// Day two's version, while there is under a week of log: yesterday's meal, waiting at the
+    /// hour you had it, from an hour before until two after, while that meal is still empty
+    /// today. The earliest such meal first.
+    static func yesterday(in logged: [Logged], now: Date, calendar: Calendar = .current) -> UsualMeal? {
+        let today = calendar.startOfDay(for: now)
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today),
+              let start = calendar.date(byAdding: .day, value: -lookbackDays, to: today),
+              let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) else { return nil }
+        var loggedDays = Set<Date>()
+        var eatenToday = Set<Meal>()
+        var firsts: [Meal: Date] = [:]
+        for item in logged {
+            if item.date >= today && item.date < tomorrow {
+                eatenToday.insert(item.meal)
+                continue
+            }
+            guard item.date >= start && item.date < today else { continue }
+            loggedDays.insert(calendar.startOfDay(for: item.date))
+            if item.date >= yesterday {
+                firsts[item.meal] = min(firsts[item.meal] ?? item.date, item.date)
+            }
+        }
+        guard loggedDays.count < 7 else { return nil }
+        let minuteNow = minutes(of: now, calendar: calendar)
+        let offers = firsts.compactMap { meal, first -> UsualMeal? in
+            guard !eatenToday.contains(meal) else { return nil }
+            let minute = minutes(of: first, calendar: calendar)
+            guard minuteNow >= minute - minutesBefore, minuteNow <= minute + minutesAfter else { return nil }
+            return UsualMeal(meal: meal, lastDay: yesterday, minute: minute, days: 1, kind: .yesterday)
+        }
+        return offers.min { $0.minute < $1.minute }
     }
 
     /// The usual time today, for the time column.

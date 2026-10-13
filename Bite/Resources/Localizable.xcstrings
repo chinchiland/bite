@@ -305,6 +305,22 @@
         }
       }
     },
+    "%@ · %@ kcal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@ kcal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@ kcal"
+          }
+        }
+      }
+    },
     "%@, %@ grams, %@ calories" : {
       "localizations" : {
         "es" : {
@@ -877,6 +893,38 @@
         }
       }
     },
+    "A goal of %@ kcal fits, %@ kcal less" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal menos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de moins"
+          }
+        }
+      }
+    },
+    "A goal of %@ kcal fits, %@ kcal more" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de plus"
+          }
+        }
+      }
+    },
     "A line under it, like “with honey”" : {
       "localizations" : {
         "es" : {
@@ -905,6 +953,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Une prise de poids lente et régulière"
+          }
+        }
+      }
+    },
+    "About %@ kcal a day on %lld days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unas %1$@ kcal al día en %2$lld días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ %1$@ kcal par jour sur %2$lld jours"
           }
         }
       }
@@ -3565,6 +3629,22 @@
         }
       }
     },
+    "Keep %@ kcal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantener %@ kcal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder %@ kcal"
+          }
+        }
+      }
+    },
     "Keep typing to search products." : {
       "localizations" : {
         "es" : {
@@ -5517,6 +5597,22 @@
         }
       }
     },
+    "Same as yesterday?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Lo mismo que ayer?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comme hier ?"
+          }
+        }
+      }
+    },
     "Sand" : {
       "localizations" : {
         "es" : {
@@ -6685,6 +6781,54 @@
         }
       }
     },
+    "Trend down %@ this week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendencia: %@ menos esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendance en baisse de %@ cette semaine"
+          }
+        }
+      }
+    },
+    "Trend steady this week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendencia estable esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendance stable cette semaine"
+          }
+        }
+      }
+    },
+    "Trend up %@ this week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendencia: %@ más esta semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendance en hausse de %@ cette semaine"
+          }
+        }
+      }
+    },
     "Try again" : {
       "localizations" : {
         "es" : {
@@ -7213,6 +7357,54 @@
         }
       }
     },
+    "You burn about %@ kcal a day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quemas unas %@ kcal al día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu brûles environ %@ kcal par jour"
+          }
+        }
+      }
+    },
+    "You burn about %@ kcal a day, %@ kcal less than last week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal menos que la semana pasada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de moins que la semaine dernière"
+          }
+        }
+      }
+    },
+    "You burn about %@ kcal a day, %@ kcal more than last week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal más que la semana pasada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de plus que la semaine dernière"
+          }
+        }
+      }
+    },
     "You eat about %@ kcal a day over what you burn, about %@ a week." : {
       "localizations" : {
         "es" : {
@@ -7353,6 +7545,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton objectif tient déjà compte d’une semaine normale. Active cette option si tu as choisi « Plutôt assis », pour que tes séances te laissent manger plus. Ce que Bite lit se règle dans les Réglages de l’iPhone : Confidentialité et sécurité, Santé, Bite."
+          }
+        }
+      }
+    },
+    "Your goal is now %@ kcal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu objetivo ahora es de %@ kcal."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton objectif est maintenant de %@ kcal."
           }
         }
       }

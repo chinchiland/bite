@@ -16,7 +16,7 @@ struct BiteApp: App {
         defaults.set(true, forKey: "onboarded")
         defaults.set(true, forKey: "health.asked")
         defaults.set(2000, forKey: "goal.kcal")
-        for key in ["usual.dismissed", "goal.offerHiddenUntil", "water.goal", "goal.split", "health.addBurned"] {
+        for key in ["usual.dismissed", "checkin.history", "water.goal", "goal.split", "health.addBurned"] {
             defaults.removeObject(forKey: key)
         }
         #endif

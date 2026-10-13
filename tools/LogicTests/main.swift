@@ -232,6 +232,20 @@ do {
     check(UsualMeal.find(in: eggs, now: on(0, 13, 0), calendar: calendar) == nil, "not at lunch")
     check(found?.dismissalKey(on: on(0, 19, 0), calendar: calendar) == found?.dismissalKey(on: on(0, 21, 0), calendar: calendar), "Not today lasts the day")
     check(found?.dismissalKey(on: on(0, 19, 0), calendar: calendar) != found?.dismissalKey(on: on(-1, 19, 0), calendar: calendar), "and only the day")
+
+    // Day two: yesterday's breakfast waits at its hour until a usual is learned.
+    let dayOne = [UsualMeal.Logged(date: on(1, 8, 10), meal: .breakfast, foodID: "croissant"),
+                  UsualMeal.Logged(date: on(1, 8, 12), meal: .breakfast, foodID: "coffee"),
+                  UsualMeal.Logged(date: on(1, 12, 40), meal: .lunch, foodID: "shawarma")]
+    let again = UsualMeal.yesterday(in: dayOne, now: on(0, 8, 30), calendar: calendar)
+    check(again?.meal == .breakfast && again?.kind == .yesterday && again?.minute == 8 * 60 + 10, "yesterday's breakfast at 8:10: \(String(describing: again))")
+    check(again?.question == "Same as yesterday?", "asked as the same as yesterday")
+    check(UsualMeal.yesterday(in: dayOne, now: on(0, 12, 0), calendar: calendar)?.meal == .lunch, "at noon, yesterday's lunch")
+    check(UsualMeal.yesterday(in: dayOne, now: on(0, 16, 0), calendar: calendar) == nil, "nothing between meals")
+    check(UsualMeal.yesterday(in: dayOne + [.init(date: on(0, 7, 50), meal: .breakfast, foodID: "skyr")], now: on(0, 8, 30), calendar: calendar) == nil,
+          "not once breakfast is in")
+    let week = (1...7).map { UsualMeal.Logged(date: on($0, 8, 10), meal: .breakfast, foodID: "food\($0)") }
+    check(UsualMeal.yesterday(in: week, now: on(0, 8, 30), calendar: calendar) == nil, "after a week of log, only a learned usual is offered")
 }
 
 // What your body really burns, from your weighings and your meals.
@@ -641,6 +655,72 @@ do {
         HealthWritten(syncID: shawarma.syncID, version: 2, signature: shawarma.signature),
     ])
     check(doubled.isEmpty, "the newest copy is the one compared")
+}
+
+// MARK: Weekly check-in
+
+do {
+    var utc = Calendar(identifier: .gregorian)
+    utc.timeZone = TimeZone(identifier: "UTC")!
+    let now = Date(timeIntervalSince1970: 1_760_270_400) // a Sunday, 12:00 UTC
+    let today = utc.startOfDay(for: now)
+    func day(_ offset: Int) -> Date { utc.date(byAdding: .day, value: offset, to: today)! }
+    var kcals: [Date: Double] = [:]
+    for offset in -21...(-1) { kcals[day(offset)] = 2000 }
+    // Down 0.05 kg a day while eating 2,000: about 2,385 burned.
+    let weighings = stride(from: -20, through: -1, by: 3).map { offset in
+        LearnedMaintenance.Weighing(date: day(offset).addingTimeInterval(7 * 3600), kilograms: 80 - 0.05 * Double(offset))
+    }
+
+    check(CheckIn.step(gap: 400) == 150 && CheckIn.step(gap: -400) == -150, "a big gap moves 150 a week")
+    check(CheckIn.step(gap: 120) == 60 && CheckIn.step(gap: -60) == -50, "half the gap, at least 50")
+    check(CheckIn.step(gap: 40) == 0, "under 50, nothing to offer")
+
+    let up = CheckIn.make(now: now, dayKcals: kcals, weighings: weighings, currentGoal: 2000, weightGoal: .maintain, sex: .female, calendar: utc)
+    check(up?.offeredGoal == 2150 && up?.delta == 150, "maintaining on 2,000 while burning 2,385: 150 up: \(String(describing: up))")
+    check(up?.wholeDays == 7 && near(up?.averageEaten ?? 0, 2000), "the week's whole days")
+    check(up.map { $0.burned > 2300 && $0.burned < 2450 } == true, "about 2,385 burned: \(up?.burned ?? 0)")
+    check(up?.trendChange.map { $0 < -0.2 && $0 > -0.5 } == true, "the trend fell about 0.35 kg: \(String(describing: up?.trendChange))")
+
+    let down = CheckIn.make(now: now, dayKcals: kcals, weighings: weighings, currentGoal: 2000, weightGoal: .lose, sex: .female, calendar: utc)
+    check(down?.delta == -60, "losing: half of a 110 kcal gap: \(String(describing: down?.delta))")
+    check(CheckIn.make(now: now, dayKcals: kcals, weighings: weighings, currentGoal: 2370, weightGoal: .maintain, sex: .female, calendar: utc) == nil,
+          "a goal close to what you burn gets no check-in")
+
+    var patchy = kcals
+    for offset in -4...(-1) { patchy[day(offset)] = 300 }
+    check(CheckIn.make(now: now, dayKcals: patchy, weighings: weighings, currentGoal: 2000, weightGoal: .maintain, sex: .female, calendar: utc) == nil,
+          "three whole days this week are not enough")
+    let old = weighings.filter { $0.date < day(-7) }
+    check(CheckIn.make(now: now, dayKcals: kcals, weighings: old, currentGoal: 2000, weightGoal: .maintain, sex: .female, calendar: utc) == nil,
+          "no weighing this week, no check-in")
+
+    // When it shows.
+    var history = CheckInHistory()
+    check(!history.isDue(now: now, gap: 385, calendar: utc), "no check-in day yet")
+    history.start(now: now, calendar: utc)
+    check(history.isDue(now: now, gap: 385, calendar: utc), "the first day it has something to say is the check-in day")
+    check(history.isDue(now: now.addingTimeInterval(2 * 86_400), gap: 385, calendar: utc), "still there two days later")
+    check(!history.isDue(now: now.addingTimeInterval(3 * 86_400), gap: 385, calendar: utc), "gone after three days, without asking again")
+    history.used(previousGoal: 2000, now: now, calendar: utc)
+    check(!history.isDue(now: now.addingTimeInterval(3600), gap: 235, calendar: utc), "answered this week")
+    check(history.canUndo(now: now.addingTimeInterval(3600), calendar: utc), "Undo stays for the week")
+    check(history.isDue(now: now.addingTimeInterval(7 * 86_400), gap: 235, calendar: utc), "back next week")
+    check(!history.canUndo(now: now.addingTimeInterval(7 * 86_400), calendar: utc), "Undo ends with the week")
+
+    var keeper = CheckInHistory()
+    keeper.start(now: now, calendar: utc)
+    keeper.kept(gap: 385, now: now, calendar: utc)
+    let week1 = now.addingTimeInterval(7 * 86_400)
+    check(keeper.isDue(now: week1, gap: 385, calendar: utc), "one Keep: asks again next week")
+    keeper.kept(gap: 385, now: week1, calendar: utc)
+    check(!keeper.isDue(now: week1.addingTimeInterval(7 * 86_400), gap: 385, calendar: utc), "two Keeps: skips a week")
+    let week3 = week1.addingTimeInterval(14 * 86_400)
+    check(keeper.isDue(now: week3, gap: 385, calendar: utc), "two Keeps: asks every other week")
+    keeper.kept(gap: 385, now: week3, calendar: utc)
+    let week4 = week3.addingTimeInterval(7 * 86_400)
+    check(!keeper.isDue(now: week4, gap: 400, calendar: utc), "three Keeps: waits for the gap to grow")
+    check(keeper.isDue(now: week4, gap: 540, calendar: utc), "three Keeps: asks once it grew by 150")
 }
 
 print("\(passes) passed, \(failures) failed")

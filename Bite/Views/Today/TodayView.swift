@@ -63,7 +63,10 @@ struct TodayView: View {
     /// "Not today" on your usual meal: that day and meal, so tomorrow it comes back.
     @AppStorage("usual.dismissed") private var usualDismissed = ""
     /// "Not now" on the learned goal: hidden for a week, then offered again if it still differs.
-    @AppStorage("goal.offerHiddenUntil") private var goalOfferHiddenUntil = 0.0
+    /// When the weekly check-in shows and what you answered, as JSON.
+    @AppStorage("checkin.history") private var checkInHistoryData = Data()
+    /// "No target": Bite counts and shows the pattern, with no budget to stay under.
+    @AppStorage("goal.noTarget") private var noTarget = false
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -174,6 +177,7 @@ struct TodayView: View {
         }
         .task(id: "\(healthAsked) \(weightAsked) \(activityRefresh)") {
             await loadWeights()
+            startCheckInDayIfNeeded()
         }
         .task {
             await placeFinder.locateIfAllowed()
@@ -336,15 +340,17 @@ struct TodayView: View {
 
             if isToday, !entries.isEmpty {
                 let learned = self.learned
-                let suggested = suggestedGoal(from: learned)
+                let checkIn = dueCheckIn
                 WeightTrend(
                     weights: trendWeights,
                     forecast: forecast(learned: learned),
                     goal: WeightGoal(rawValue: weightGoalRaw) ?? .maintain,
                     learned: learned,
-                    suggestedGoal: suggested,
-                    onUseGoal: { if let suggested { useGoal(suggested) } },
-                    onHideGoal: hideGoalOffer,
+                    checkIn: checkIn,
+                    onUseCheckIn: { if let checkIn { useCheckIn(checkIn) } },
+                    onKeepCheckIn: { if let checkIn { keepCheckIn(checkIn) } },
+                    goalSet: checkInHistory.canUndo(now: .now) ? goalKcal : nil,
+                    onUndoGoal: undoCheckIn,
                     onAddWeight: addWeight
                 )
                 .padding(.top, 28)
@@ -377,7 +383,7 @@ struct TodayView: View {
                 }
                 if let usual {
                     UsualMoment(
-                        meal: usual.meal.meal,
+                        question: usual.meal.question,
                         entries: usual.entries,
                         time: usual.meal.time(on: day),
                         onAdd: { addToToday(usual.entries) },
@@ -647,7 +653,7 @@ struct TodayView: View {
         guard isToday else { return nil }
         let now = ScreenshotFlags.now
         let logged = entries.map { UsualMeal.Logged(date: $0.date, meal: $0.meal, foodID: $0.foodID) }
-        guard let found = UsualMeal.find(in: logged, now: now),
+        guard let found = UsualMeal.find(in: logged, now: now) ?? UsualMeal.yesterday(in: logged, now: now),
               found.dismissalKey(on: now) != usualDismissed else { return nil }
         let calendar = Calendar.current
         let items = entries.filter { $0.meal == found.meal && calendar.isDate($0.date, inSameDayAs: found.lastDay) }
@@ -711,20 +717,69 @@ struct TodayView: View {
         )
     }
 
-    /// A daily goal from what you really burn, offered when it is 50 kcal or more from yours
-    /// and you haven't said "Not now" this week.
-    private func suggestedGoal(from learned: LearnedMaintenance?) -> Int? {
-        guard let learned, Date.now.timeIntervalSince1970 >= goalOfferHiddenUntil else { return nil }
-        let goal = learned.goal(for: WeightGoal(rawValue: weightGoalRaw) ?? .maintain, sex: Sex(rawValue: sexRaw) ?? .female)
-        return abs(goal - goalKcal) >= 50 ? goal : nil
+    private var checkInHistory: CheckInHistory {
+        (try? JSONDecoder().decode(CheckInHistory.self, from: checkInHistoryData)) ?? CheckInHistory()
     }
 
-    private func useGoal(_ kcal: Int) {
-        withAnimation(.snappy) { goalKcal = kcal }
+    private func saveCheckInHistory(_ history: CheckInHistory) {
+        checkInHistoryData = (try? JSONEncoder().encode(history)) ?? Data()
     }
 
-    private func hideGoalOffer() {
-        withAnimation(.snappy) { goalOfferHiddenUntil = Date.now.addingTimeInterval(7 * 86_400).timeIntervalSince1970 }
+    /// This week's check-in, when it has something to say and it is its day. The first time it
+    /// has something to say, that weekday becomes the check-in day.
+    private var weekCheckIn: CheckIn? {
+        guard !noTarget else { return nil }
+        let kcals = Dictionary(summaries.map { ($0.day, $0.kcal) }, uniquingKeysWith: { a, _ in a })
+        return CheckIn.make(
+            now: .now,
+            dayKcals: kcals,
+            weighings: weights.map { LearnedMaintenance.Weighing(date: $0.date, kilograms: $0.kilograms) },
+            currentGoal: goalKcal,
+            weightGoal: WeightGoal(rawValue: weightGoalRaw) ?? .maintain,
+            sex: Sex(rawValue: sexRaw) ?? .female
+        )
+    }
+
+    private var dueCheckIn: CheckIn? {
+        guard let checkIn = weekCheckIn else { return nil }
+        var history = checkInHistory
+        if history.weekday == nil { history.start(now: .now) }
+        return history.isDue(now: .now, gap: checkIn.gap) ? checkIn : nil
+    }
+
+    /// The check-in day is set the first time there is something to say, never in body.
+    private func startCheckInDayIfNeeded() {
+        guard checkInHistory.weekday == nil, weekCheckIn != nil else { return }
+        var history = checkInHistory
+        history.start(now: .now)
+        saveCheckInHistory(history)
+    }
+
+    private func useCheckIn(_ checkIn: CheckIn) {
+        var history = checkInHistory
+        history.start(now: .now)
+        history.used(previousGoal: goalKcal, now: .now)
+        withAnimation(Motion.settle) {
+            saveCheckInHistory(history)
+            goalKcal = checkIn.offeredGoal
+        }
+    }
+
+    private func keepCheckIn(_ checkIn: CheckIn) {
+        var history = checkInHistory
+        history.start(now: .now)
+        history.kept(gap: checkIn.gap, now: .now)
+        withAnimation(Motion.settle) { saveCheckInHistory(history) }
+    }
+
+    private func undoCheckIn() {
+        var history = checkInHistory
+        guard let previous = history.undoGoal else { return }
+        history.undoGoal = nil
+        withAnimation(Motion.settle) {
+            saveCheckInHistory(history)
+            goalKcal = previous
+        }
     }
 
     /// Where your weight goes at the way you ate over the last week's whole days, against what

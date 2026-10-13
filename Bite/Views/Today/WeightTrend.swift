@@ -11,10 +11,13 @@ struct WeightTrend: View {
     let goal: WeightGoal
     /// What your body really burns, when your weighings and meals have said.
     var learned: LearnedMaintenance? = nil
-    /// A daily goal that fits what you burn, when it differs from yours.
-    var suggestedGoal: Int? = nil
-    var onUseGoal: () -> Void = {}
-    var onHideGoal: () -> Void = {}
+    /// This week's check-in, on its day, while it has something to say.
+    var checkIn: CheckIn? = nil
+    var onUseCheckIn: () -> Void = {}
+    var onKeepCheckIn: () -> Void = {}
+    /// The goal the check-in just set, while Undo is offered.
+    var goalSet: Int? = nil
+    var onUndoGoal: () -> Void = {}
     let onAddWeight: () -> Void
     var horizonDays = 28
 
@@ -35,8 +38,12 @@ struct WeightTrend: View {
         VStack(alignment: .leading, spacing: 14) {
             content
                 .accessibilityElement(children: .combine)
-            if let suggestedGoal, forecast != nil {
-                GoalOffer(kcal: suggestedGoal, goal: goal, onUse: onUseGoal, onHide: onHideGoal)
+            if let goalSet {
+                GoalSetLine(goal: goalSet, onUndo: onUndoGoal)
+                    .transition(.opacity)
+            } else if let checkIn {
+                WeekCheckIn(checkIn: checkIn, onUse: onUseCheckIn, onKeep: onKeepCheckIn)
+                    .transition(.opacity)
             }
         }
     }
@@ -108,37 +115,63 @@ struct WeightTrend: View {
     }
 }
 
-/// A goal that fits what your body really burns, one tap from being yours; "Not now" puts it
-/// away for a week. Laid out like your usual meal: the line, then the ink button and the quiet one.
-private struct GoalOffer: View {
-    let kcal: Int
-    let goal: WeightGoal
+/// Your week, once a week: three lines of why in your own numbers, then a goal one capped step
+/// toward what you burn, with both choices named by their numbers. Laid out like your usual
+/// meal: the lines, then the ink button and the quiet one.
+private struct WeekCheckIn: View {
+    let checkIn: CheckIn
     let onUse: () -> Void
-    let onHide: () -> Void
+    let onKeep: () -> Void
 
     @State private var taps = 0
 
-    private var detail: LocalizedStringKey {
-        switch goal {
-        case .lose: "About half a kilo a week down"
-        case .maintain: "To stay where you are"
-        case .gain: "A slow, steady gain"
+    private var trendLine: String? {
+        guard let change = checkIn.trendChange else { return nil }
+        let amount = abs(change).weightText
+        if abs(change) < 0.1 { return String(localized: "Trend steady this week") }
+        return change < 0
+            ? String(localized: "Trend down \(amount) this week")
+            : String(localized: "Trend up \(amount) this week")
+    }
+
+    private var burnedLine: String {
+        let burned = checkIn.burned.roughKcalText
+        guard let change = checkIn.burnedChange, abs(change) >= 10 else {
+            return String(localized: "You burn about \(burned) kcal a day")
         }
+        let moved = abs(change).roughKcalText
+        return change < 0
+            ? String(localized: "You burn about \(burned) kcal a day, \(moved) kcal less than last week")
+            : String(localized: "You burn about \(burned) kcal a day, \(moved) kcal more than last week")
+    }
+
+    private var offerLine: String {
+        let goal = Double(checkIn.offeredGoal).kcalText
+        let delta = Double(abs(checkIn.delta)).kcalText
+        return checkIn.delta < 0
+            ? String(localized: "A goal of \(goal) kcal fits, \(delta) kcal less")
+            : String(localized: "A goal of \(goal) kcal fits, \(delta) kcal more")
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("A goal of \(Double(kcal).kcalText) kcal fits what you burn")
-                    .font(.ui(15, .medium))
-                    .foregroundStyle(Theme.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(detail)
-                    .font(.ui(13))
-                    .foregroundStyle(Theme.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Your week")
+                .font(.ui(16, .semibold))
+                .foregroundStyle(Theme.ink)
+            VStack(alignment: .leading, spacing: 6) {
+                if let trendLine { line(trendLine) }
+                line(String(localized: "About \(checkIn.averageEaten.roughKcalText) kcal a day on \(checkIn.wholeDays) days"))
+                line(burnedLine)
             }
-            .accessibilityElement(children: .combine)
+            .padding(.top, 8)
+            Rectangle()
+                .fill(Theme.ink.opacity(0.07))
+                .frame(height: 1)
+                .padding(.vertical, 12)
+            Text(offerLine)
+                .font(.ui(16, .medium))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 18) {
                 Button {
                     taps += 1
@@ -148,21 +181,63 @@ private struct GoalOffer: View {
                         .font(.ui(15, .semibold))
                         .foregroundStyle(Theme.page)
                         .padding(.horizontal, 16)
-                        .frame(height: 36)
+                        .frame(height: 38)
                         .background(Theme.ink, in: Capsule())
                 }
                 .buttonStyle(PressableStyle(scale: 0.94))
                 .accessibilityHint("Makes it your daily goal")
 
-                Button("Not now", action: onHide)
+                Button("Keep \(Double(checkIn.currentGoal).kcalText) kcal", action: onKeep)
                     .font(.ui(15, .medium))
                     .foregroundStyle(Theme.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
             }
+            .padding(.top, 12)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .padding(16)
+        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         .sensoryFeedback(Feel.click, trigger: taps)
+    }
+
+    private func line(_ text: String) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 9) {
+            Circle()
+                .fill(Theme.tertiary)
+                .frame(width: 5, height: 5)
+                .alignmentGuide(.firstTextBaseline) { $0[.bottom] + 4 }
+            Text(text)
+                .font(.ui(15))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// After "Use it": the new goal said once, with the way back for the rest of the week.
+private struct GoalSetLine: View {
+    let goal: Int
+    let onUndo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 16))
+                .foregroundStyle(Theme.onTarget)
+            Text("Your goal is now \(Double(goal).kcalText) kcal.")
+                .font(.ui(15))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Button("Undo", action: onUndo)
+                .font(.ui(15, .semibold))
+                .foregroundStyle(Theme.ink)
+        }
+        .padding(.horizontal, 16)
+        .frame(minHeight: 50)
+        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 }
 

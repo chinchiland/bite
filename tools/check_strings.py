@@ -19,7 +19,7 @@ INTEGERS = {
     "food.times", "status", "(abs(change) * 100).safeInt", "(share * 100).safeInt", "event.count",
     "water", "waterGoal", "tally.onTarget", "tally.logged", "consensus.estimates", "consensus.spreadPercent",
     "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days", "learned.days",
-    "day.known", "day.counted",
+    "day.known", "day.counted", "checkIn.wholeDays",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.
