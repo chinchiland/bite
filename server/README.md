@@ -30,7 +30,7 @@ The app ships with sharing switched off: `CommunityServer.url` in `Bite/Services
    ```
    - `apple-token` keeps Apple's refresh token after sign-in, so deleting an account can revoke it (Apple requires that).
    - `delete-account` is Settings › Community › Delete my shared counts and account.
-   - `moderate` asks Gemini (flash lite, a fraction of a cent a name) whether a new dish's name is fit to show, before others see it.
+   - `moderate` asks Gemini 3.1 Flash-Lite (a fraction of a cent a name) whether a new dish's name is fit to show, before others see it.
 5. **Moderation.** The database calls `moderate` itself on every new dish (`20261013020000_moderation.sql`). Give it the address and the secret, once, in the SQL editor:
    ```sql
    select vault.create_secret('https://<ref>.supabase.co/functions/v1/moderate', 'moderation_url');

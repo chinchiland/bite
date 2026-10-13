@@ -5,7 +5,7 @@
 // the database, so they need no review. Three reports still hide anything that slips through.
 import postgres from "https://deno.land/x/postgresjs@v3.4.4/mod.js";
 
-const MODEL = "gemini-3.1-flash-lite-preview";
+const MODEL = "gemini-3.1-flash-lite";
 // Straight to the database as its owner, like the other functions: the API roles get no rights
 // on these tables, the service role included.
 const sql = postgres(Deno.env.get("SUPABASE_DB_URL")!, { prepare: false });
