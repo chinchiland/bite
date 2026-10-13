@@ -40,7 +40,7 @@ struct DishView: View {
         .ignoresSafeArea(edges: .top)
         .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .modifier(HeroBar(heroGone: heroGone))
+        .modifier(HeroBar(heroGone: heroGone, title: dish.name))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAccuracy) {
             AccuracyExplainer(consensus: consensus)

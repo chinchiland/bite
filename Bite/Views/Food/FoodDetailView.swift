@@ -73,7 +73,7 @@ struct FoodDetailView: View {
         .ignoresSafeArea(edges: .top)
         .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .modifier(HeroBar(heroGone: heroGone))
+        .modifier(HeroBar(heroGone: heroGone, title: food.name))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -416,16 +416,34 @@ struct FoodDetailView: View {
     }
 }
 
-/// The bar over a hero photo: clear while the photo is under it, then the system's edge effect
-/// (iOS 26) or the white sheet's own color (before), so the buttons never sit on words.
+/// The bar over a hero photo: clear while the photo is under it. Once the photo has gone, the
+/// bar takes the page's name and a background of its own: iOS 26's hard edge effect, or the
+/// white sheet's color before it, so the page's words never run under the bar's buttons.
 struct HeroBar: ViewModifier {
     let heroGone: Bool
+    let title: String
 
     func body(content: Content) -> some View {
+        styled(content)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title)
+                        .font(.ui(16, .semibold))
+                        .foregroundStyle(Theme.ink)
+                        .lineLimit(1)
+                        .opacity(heroGone ? 1 : 0)
+                        .animation(.easeOut(duration: 0.2), value: heroGone)
+                        .accessibilityHidden(!heroGone)
+                }
+            }
+    }
+
+    @ViewBuilder private func styled(_ content: Content) -> some View {
         #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             content
                 .toolbarBackground(.hidden, for: .navigationBar)
+                .scrollEdgeEffectStyle(.hard, for: .top)
                 .scrollEdgeEffectHidden(!heroGone, for: .top)
         } else {
             legacy(content)
