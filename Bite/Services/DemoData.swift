@@ -179,7 +179,7 @@ enum DemoData {
             source: .ai,
             unit: .serving,
             per: 1,
-            nutrients: Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat),
+            nutrients: Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat, fiber: (carbs * 1.2).rounded() / 10),
             imageData: photo(key)
         )
     }

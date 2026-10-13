@@ -62,13 +62,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite solo lee los datos de la app Salud y nunca escribe en ella."
+            "value" : "Si lo activas, Bite guarda en la app Salud las comidas que anotas, con sus calorías y nutrientes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bite ne fait que lire les données de l’app Santé et n’y écrit jamais."
+            "value" : "Si tu l’actives, Bite enregistre les repas que tu notes dans l’app Santé, avec leurs calories et nutriments."
           }
         }
       }

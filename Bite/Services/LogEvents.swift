@@ -13,6 +13,8 @@ final class LogEvents {
         let meal: Meal
         let date: Date
         let place: MealPlace?
+        /// Kept, so Undo puts back the same entry and Apple Health sees nothing change.
+        let entryID: UUID?
 
         init(_ entry: FoodEntry) {
             food = entry.food
@@ -20,6 +22,7 @@ final class LogEvents {
             meal = entry.meal
             date = entry.date
             place = entry.place
+            entryID = entry.entryID
         }
     }
 

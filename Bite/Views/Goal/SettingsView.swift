@@ -12,10 +12,34 @@ struct SettingsView: View {
     @AppStorage("health.weightAsked") private var weightAsked = false
     @AppStorage("health.unavailable") private var healthUnavailable = false
     @AppStorage("health.addBurned") private var addBurned = false
+    @AppStorage(HealthSync.enabledKey) private var saveMeals = false
+    /// Health said no when saving was turned on, or it was turned off in the Health app.
+    @State private var savingRefused = false
+    @State private var removing = false
     @State private var apiKey = ""
     @State private var storedKey = ""
 
     private var split: MacroSplit { MacroSplit(rawValue: splitRaw) ?? .balanced }
+
+    /// Turning it on asks Health first, then writes the last month; turning it off keeps what
+    /// is already there, which belongs to Health now.
+    private var saveMealsBinding: Binding<Bool> {
+        Binding(
+            get: { saveMeals },
+            set: { on in
+                guard on else {
+                    saveMeals = false
+                    return
+                }
+                Task {
+                    let allowed = await HealthMeals.shared.requestAccess()
+                    savingRefused = !allowed
+                    saveMeals = allowed
+                    if allowed { await HealthSync.shared.run(days: HealthSync.firstWindow) }
+                }
+            }
+        )
+    }
     private var targets: MacroTargets { MacroTargets(kcal: Double(kcal), split: split) }
 
     var body: some View {
@@ -132,7 +156,37 @@ struct SettingsView: View {
                         } footer: {
                             Text(healthAsked
                                 ? "Your goal already counts a normal week. Turn this on if you picked Mostly sitting, so workouts give you room to eat more. What Bite reads is in the iPhone's Settings: Privacy & Security, Health, Bite."
-                                : "See your steps and burned calories next to what you eat. Bite only reads.")
+                                : "See your steps and burned calories next to what you eat.")
+                        }
+
+                        if !healthUnavailable {
+                            Section {
+                                Toggle(isOn: saveMealsBinding) {
+                                    Text("Save meals to Apple Health")
+                                        .font(.ui(17))
+                                        .foregroundStyle(Theme.ink)
+                                }
+                                .listRowBackground(Theme.card)
+                                if saveMeals || removing {
+                                    Button(role: .destructive) {
+                                        removing = true
+                                        Task {
+                                            saveMeals = false
+                                            await HealthMeals.shared.removeAll()
+                                            removing = false
+                                        }
+                                    } label: {
+                                        Text(removing ? "Removing…" : "Remove Bite's meals from Health")
+                                            .font(.ui(17))
+                                    }
+                                    .disabled(removing)
+                                    .listRowBackground(Theme.card)
+                                }
+                            } footer: {
+                                Text(savingRefused
+                                    ? "Turned off in Health. To turn it on: Settings, Health, Data Access & Devices, Bite."
+                                    : "Each food goes in at the time you ate it. If another app saves your meals too, keep only one on, so nothing counts twice.")
+                            }
                         }
                     }
 

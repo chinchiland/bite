@@ -100,7 +100,7 @@ struct ClaudeVision {
         \(task)
 
         List each food or drink you can see as its own item, with the grams on the plate and the \
-        kcal, protein, carbs and fat in grams for that amount. Count cooking oil, butter, sauces and \
+        kcal, and the protein, carbs, fat, fiber and sugar in grams for that amount. Count cooking oil, butter, sauces and \
         dressings you can see or that the dish normally contains. If the photo shows a nutrition \
         label or a packaged product, use what it says.
 
@@ -158,6 +158,13 @@ struct ClaudeVision {
         let doubted = estimate.doubt.flatMap { estimate.items.indices.contains($0.item) ? estimate.items[$0.item] : nil }
         estimate.items = estimate.items.filter { item in
             [item.grams, item.kcal, item.protein, item.carbs, item.fat].allSatisfy { $0.isFinite && $0 >= 0 && $0 < 20_000 }
+        }
+        .map { item in
+            // A fiber or sugar that cannot be real is unknown, not zero.
+            var item = item
+            if let fiber = item.fiber, !(fiber.isFinite && fiber >= 0 && fiber <= item.carbs + 1) { item.fiber = nil }
+            if let sugar = item.sugar, !(sugar.isFinite && sugar >= 0 && sugar <= item.carbs + 1) { item.sugar = nil }
+            return item
         }
         estimate.doubt = estimate.doubt.flatMap { doubt in
             guard let doubted, let index = estimate.items.firstIndex(of: doubted) else { return nil }

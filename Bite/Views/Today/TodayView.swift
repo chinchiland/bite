@@ -320,7 +320,9 @@ struct TodayView: View {
                 overflow: ring.overflow,
                 number: totals.kcal,
                 unit: "kcal eaten",
-                glint: celebrations
+                glint: celebrations,
+                fiber: fiberToShow,
+                fiberTarget: FiberTarget.grams(forGoal: Double(goalKcal))
             )
             ActivityChips(
                 health: healthState,
@@ -598,6 +600,15 @@ struct TodayView: View {
             return (label, false)
         }
         return (String(localized: "Goal \(budget.kcalText) kcal"), false)
+    }
+
+    /// The day's fiber, once enough of what was eaten has it on record.
+    private var fiberToShow: FiberDay? {
+        let day = FiberDay.make(dayEntries.map { entry in
+            let totals = entry.totals
+            return FiberDay.Item(fiber: totals.fiber, carbs: totals.carbs)
+        })
+        return day.isShown ? day : nil
     }
 
     // MARK: Today's extras
@@ -902,7 +913,9 @@ struct TodayView: View {
                 }
             case .deleted(let snapshots):
                 for snapshot in snapshots {
-                    context.insert(FoodEntry(food: snapshot.food, amount: snapshot.amount, meal: snapshot.meal, date: snapshot.date, place: snapshot.place))
+                    let entry = FoodEntry(food: snapshot.food, amount: snapshot.amount, meal: snapshot.meal, date: snapshot.date, place: snapshot.place)
+                    entry.entryID = snapshot.entryID
+                    context.insert(entry)
                 }
             }
             try? context.save()

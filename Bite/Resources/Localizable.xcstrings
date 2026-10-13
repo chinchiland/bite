@@ -2637,6 +2637,22 @@
         }
       }
     },
+    "Each food goes in at the time you ate it. If another app saves your meals too, keep only one on, so nothing counts twice." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada alimento entra a la hora en que lo comiste. Si otra app también guarda tus comidas, deja solo una, para no contar nada dos veces."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque aliment y entre à l’heure du repas. Si une autre app y enregistre aussi tes repas, n’en garde qu’une, pour ne rien compter deux fois."
+          }
+        }
+      }
+    },
     "Eaten" : {
       "localizations" : {
         "es" : {
@@ -2953,6 +2969,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fibres (g)"
+          }
+        }
+      }
+    },
+    "Fiber: %@ of at least %@ grams" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibra: %1$@ de al menos %2$@ gramos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fibres : %1$@ sur au moins %2$@ grammes"
           }
         }
       }
@@ -5293,6 +5325,22 @@
         }
       }
     },
+    "Remove Bite's meals from Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar de Salud las comidas de Bite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer de Santé les repas de Bite"
+          }
+        }
+      }
+    },
     "Remove a glass" : {
       "localizations" : {
         "es" : {
@@ -5337,6 +5385,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supprimer la clé"
+          }
+        }
+      }
+    },
+    "Removing…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retrait…"
           }
         }
       }
@@ -5561,6 +5625,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enregistrer le repas"
+          }
+        }
+      }
+    },
+    "Save meals to Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar las comidas en Salud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer les repas dans Santé"
           }
         }
       }
@@ -5837,18 +5917,18 @@
         }
       }
     },
-    "See your steps and burned calories next to what you eat. Bite only reads." : {
+    "See your steps and burned calories next to what you eat." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ve tus pasos y calorías quemadas junto a lo que comes. Bite solo lee."
+            "value" : "Ve tus pasos y calorías quemadas junto a lo que comes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vois tes pas et tes calories brûlées à côté de ce que tu manges. Bite ne fait que lire."
+            "value" : "Vois tes pas et tes calories brûlées à côté de ce que tu manges."
           }
         }
       }
@@ -6669,6 +6749,22 @@
         }
       }
     },
+    "Turned off in Health. To turn it on: Settings, Health, Data Access & Devices, Bite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivado en Salud. Para activarlo: Ajustes, Salud, Acceso a datos y dispositivos, Bite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé dans Santé. Pour l’activer : Réglages, Santé, Accès aux données et appareils, Bite."
+          }
+        }
+      }
+    },
     "Type it in" : {
       "localizations" : {
         "es" : {
@@ -7449,6 +7545,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "cm"
+          }
+        }
+      }
+    },
+    "from %lld of %lld foods" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "según %1$lld de %2$lld alimentos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "d’après %1$lld aliments sur %2$lld"
           }
         }
       }

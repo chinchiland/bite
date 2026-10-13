@@ -261,7 +261,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps, the calories you burn and your weight next to what you eat.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bite uses your location to list the restaurants and cafes around you when you add a meal. Only Apple Maps sees it.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Bite only reads from Apple Health and never writes to it.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "When you turn it on, Bite saves the meals you log to Apple Health, with their calories and nutrients.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -295,7 +295,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps, the calories you burn and your weight next to what you eat.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bite uses your location to list the restaurants and cafes around you when you add a meal. Only Apple Maps sees it.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Bite only reads from Apple Health and never writes to it.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "When you turn it on, Bite saves the meals you log to Apple Health, with their calories and nutrients.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

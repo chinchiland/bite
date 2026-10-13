@@ -13,7 +13,8 @@ struct WeightPoint: Equatable {
     var kilograms: Double
 }
 
-/// Reads steps, active energy and weight from Apple Health. Read only, nothing is written.
+/// Reads steps, active energy and weight from Apple Health. Saving meals, when you turn it
+/// on, is `HealthMeals`.
 @MainActor
 final class HealthActivity {
     static let shared = HealthActivity()

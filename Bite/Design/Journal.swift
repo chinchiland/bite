@@ -277,6 +277,9 @@ struct MacroList: View {
     let nutrients: Nutrients
     let targets: MacroTargets
     var showsTarget = true
+    /// The day's fiber, when enough of the day has it on record, and its target.
+    var fiber: FiberDay? = nil
+    var fiberTarget: Double = 28
 
     var body: some View {
         VStack(alignment: .leading, spacing: showsTarget ? 2 : 0) {
@@ -292,7 +295,50 @@ struct MacroList: View {
                         }
                 }
             }
+            if showsTarget, let fiber {
+                fiberRow(fiber)
+                    .transition(.opacity)
+            }
         }
+    }
+
+    /// Fiber, quieter than the macros: its name in gray, a thin ink rule that fills toward
+    /// the target and simply stays full past it.
+    private func fiberRow(_ day: FiberDay) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 8) {
+                Text("Fiber")
+                    .font(.ui(15))
+                    .foregroundStyle(Theme.secondary)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text(day.grams.gramsText)
+                        .font(.number(15))
+                        .foregroundStyle(Theme.ink)
+                        .contentTransition(.numericText(value: day.grams))
+                    Text(verbatim: " / \(fiberTarget.kcalText) g")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
+                }
+                .lineLimit(1)
+                .fixedSize()
+            }
+            .frame(height: 34)
+            ProgressBar(value: fiberTarget > 0 ? day.grams / fiberTarget : 0, color: Theme.ink.opacity(0.45), height: 2)
+            if day.isPartial {
+                Text("from \(day.known) of \(day.counted) foods")
+                    .font(.ui(12))
+                    .foregroundStyle(Theme.tertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                    .padding(.top, 4)
+            }
+        }
+        .padding(.leading, 36)
+        .animation(.smooth, value: day.grams)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Fiber: \(day.grams.gramsText) of at least \(fiberTarget.kcalText) grams")
     }
 
     private func targetRow(_ macro: Macro) -> some View {
@@ -375,6 +421,9 @@ struct MacroBlock: View {
     var surface: Color = Theme.page
     /// Bumped when a log lands today on target: the ring warms once.
     var glint = 0
+    /// The day's fiber line, on Today only.
+    var fiber: FiberDay? = nil
+    var fiberTarget: Double = 28
 
     /// Under 345 pt across (a 375 pt phone, or Display Zoom), the ring steps down to 124.
     @State private var narrow = false
@@ -387,7 +436,9 @@ struct MacroBlock: View {
                 // Inside the inner ring, which leaves about 81 pt across the middle and less below
                 // it: the number steps down for four digits, the unit takes a second line when a
                 // language needs it ("kcal" over "mangées"), so each word stays short.
-                VStack(spacing: 3) {
+                // The number's line leaves room under its digits; a negative gap sets the unit
+                // right under them, as one label.
+                VStack(spacing: -3) {
                     Text(number.kcalText)
                         .font(.number(30, .medium))
                         .numberTracking(30)
@@ -408,7 +459,7 @@ struct MacroBlock: View {
             .frame(width: side, height: side)
             .animation(Motion.count, value: number)
 
-            MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget)
+            MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget, fiber: fiber, fiberTarget: fiberTarget)
                 .frame(maxWidth: .infinity)
         }
         .onGeometryChange(for: Bool.self) { $0.size.width < 345 } action: { narrow = $0 }

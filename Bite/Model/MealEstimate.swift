@@ -10,9 +10,11 @@ struct MealEstimate: Decodable, Equatable {
         var protein: Double
         var carbs: Double
         var fat: Double
+        var fiber: Double? = nil
+        var sugar: Double? = nil
 
         var nutrients: Nutrients {
-            Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat)
+            Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat, sugar: sugar, fiber: fiber)
         }
 
         /// The same food at a different amount, nutrition scaled to match.
@@ -26,7 +28,9 @@ struct MealEstimate: Decodable, Equatable {
                 kcal: kcal * factor,
                 protein: protein * factor,
                 carbs: carbs * factor,
-                fat: fat * factor
+                fat: fat * factor,
+                fiber: fiber.map { $0 * factor },
+                sugar: sugar.map { $0 * factor }
             )
         }
     }
@@ -121,8 +125,10 @@ struct MealEstimate: Decodable, Equatable {
                 "protein": ["type": "number"],
                 "carbs": ["type": "number"],
                 "fat": ["type": "number"],
+                "fiber": ["type": "number"],
+                "sugar": ["type": "number"],
             ],
-            "required": ["name", "emoji", "grams", "kcal", "protein", "carbs", "fat"],
+            "required": ["name", "emoji", "grams", "kcal", "protein", "carbs", "fat", "fiber", "sugar"],
             "additionalProperties": false,
         ]
         let answer: [String: Any] = [

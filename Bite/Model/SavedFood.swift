@@ -112,6 +112,16 @@ extension SavedFood {
 
     /// What one tap adds to the day.
     var totals: Nutrients {
-        Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat).scaled(by: per > 0 ? amount / per : 0)
+        Nutrients(
+            kcal: kcal,
+            protein: protein,
+            carbs: carbs,
+            fat: fat,
+            sugar: sugar,
+            fiber: fiber,
+            saturatedFat: saturatedFat,
+            salt: salt
+        )
+        .scaled(by: per > 0 ? amount / per : 0)
     }
 }

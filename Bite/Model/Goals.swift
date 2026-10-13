@@ -109,6 +109,61 @@ enum WeightGoal: String, CaseIterable, Identifiable {
     }
 }
 
+/// Fiber to reach in a day: 14 g for each 1,000 kcal of the goal, the US guidelines' ratio,
+/// which follows sex, age and activity through the goal. Never under 25 g (EFSA and the WHO's
+/// floor for adults) or over 38 g. It is a floor, not a limit: more is never "over".
+enum FiberTarget {
+    static func grams(forGoal kcal: Double) -> Double {
+        min(max(kcal / 1000 * 14, 25), 38).rounded()
+    }
+}
+
+/// The day's fiber, and how much of the day it can see. Fiber is optional on European labels,
+/// so a food with carbs and no fiber on record is a gap; meat, eggs or oil with none on record
+/// have none to speak of and leave no gap.
+struct FiberDay: Equatable {
+    struct Item: Equatable {
+        var fiber: Double?
+        var carbs: Double
+    }
+
+    let grams: Double
+    /// Foods with fiber on record.
+    let known: Int
+    /// Foods that matter for fiber: those with fiber on record, and those with carbs.
+    let counted: Int
+    /// The share of the day's carbs that comes from foods with fiber on record.
+    let knownCarbShare: Double
+
+    static func make(_ items: [Item]) -> FiberDay {
+        var grams = 0.0
+        var known = 0
+        var counted = 0
+        var carbs = 0.0
+        var knownCarbs = 0.0
+        for item in items {
+            let itemCarbs = max(item.carbs, 0)
+            carbs += itemCarbs
+            if let fiber = item.fiber {
+                grams += max(fiber, 0)
+                known += 1
+                counted += 1
+                knownCarbs += itemCarbs
+            } else if itemCarbs >= 1 {
+                counted += 1
+            }
+        }
+        let share = carbs > 0 ? knownCarbs / carbs : (known > 0 ? 1 : 0)
+        return FiberDay(grams: grams, known: known, counted: counted, knownCarbShare: share)
+    }
+
+    /// Worth a line once at least half the day's carbs come from foods with fiber on record;
+    /// below that the total would read as "you eat no fiber".
+    var isShown: Bool { known > 0 && knownCarbShare >= 0.5 }
+    /// Foods without fiber carry more than 15% of the day's carbs: say how many were counted.
+    var isPartial: Bool { knownCarbShare < 0.85 }
+}
+
 enum GoalCalculator {
     /// Mifflin-St Jeor resting energy, times activity, plus the goal adjustment.
     /// Rounded to 10 kcal and never below a safe floor.

@@ -40,6 +40,9 @@ final class FoodEntry {
     var placeLatitude: Double?
     var placeLongitude: Double?
     var placeCategoryRaw: String?
+    /// Apple Health's name for this entry, given the first time it is written there. Optional,
+    /// so entries from before it existed simply get one later.
+    var entryID: UUID?
 
     init(food: Food, amount: Double, meal: Meal, date: Date, place: MealPlace? = nil) {
         self.date = date
@@ -129,9 +132,19 @@ extension FoodEntry {
         )
     }
 
-    /// What this entry adds to the day.
+    /// What this entry adds to the day, every nutrient it knows.
     var totals: Nutrients {
-        Nutrients(kcal: kcal, protein: protein, carbs: carbs, fat: fat).scaled(by: per > 0 ? amount / per : 0)
+        Nutrients(
+            kcal: kcal,
+            protein: protein,
+            carbs: carbs,
+            fat: fat,
+            sugar: sugar,
+            fiber: fiber,
+            saturatedFat: saturatedFat,
+            salt: salt
+        )
+        .scaled(by: per > 0 ? amount / per : 0)
     }
 
     /// "Danone · 120 g" for a product, "1 medium · 118 g" for a basic.

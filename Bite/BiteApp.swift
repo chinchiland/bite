@@ -5,9 +5,7 @@ import TipKit
 @main
 struct BiteApp: App {
     let container = BiteStore.container
-    #if BITE_DEMO
     @Environment(\.scenePhase) private var scenePhase
-    #endif
 
     init() {
         Typeface.setUp()
@@ -34,6 +32,7 @@ struct BiteApp: App {
             try? Tips.configure([.displayFrequency(.daily)])
         }
         #endif
+        HealthSync.shared.start(container)
     }
 
     var body: some Scene {
@@ -41,11 +40,15 @@ struct BiteApp: App {
             RootView()
         }
         .modelContainer(container)
-        #if BITE_DEMO
-        // Opened again on a new day, Bite Demo moves its story to the new day.
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { DemoData.moveToToday(container.mainContext) }
+            guard phase == .active else { return }
+            #if BITE_DEMO
+            // Opened again on a new day, Bite Demo moves its story to the new day.
+            DemoData.moveToToday(container.mainContext)
+            #endif
+            // Back in front: Health catches up with anything logged from Siri, or written
+            // while the phone was locked.
+            HealthSync.shared.soon()
         }
-        #endif
     }
 }

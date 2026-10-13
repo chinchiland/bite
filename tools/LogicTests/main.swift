@@ -566,5 +566,75 @@ do {
     check(WeightForecast.trend([]).isEmpty && WeightForecast.trend([70]) == [70], "trend of nothing and of one")
 }
 
+// MARK: Fiber
+
+do {
+    check(FiberTarget.grams(forGoal: 1500) == 25, "a 1,500 kcal cut still aims for 25 g")
+    check(FiberTarget.grams(forGoal: 1800) == 25, "1,800 kcal: 25 g")
+    check(FiberTarget.grams(forGoal: 2000) == 28, "2,000 kcal: 28 g")
+    check(FiberTarget.grams(forGoal: 2500) == 35, "2,500 kcal: 35 g")
+    check(FiberTarget.grams(forGoal: 3500) == 38, "3,500 kcal stops at 38 g")
+
+    // Pasta with its fiber and an egg with none on record: the egg leaves no gap.
+    let clear = FiberDay.make([.init(fiber: 4, carbs: 68), .init(fiber: nil, carbs: 0.4)])
+    check(clear.known == 1 && clear.counted == 1, "an egg without fiber is not counted: \(clear)")
+    check(clear.isShown && !clear.isPartial, "a day it can see whole shows, without small print")
+    check(near(clear.grams, 4), "fiber adds up: \(clear.grams)")
+
+    // Granola from a label without fiber carries a quarter of the carbs: shown, with small print.
+    let partial = FiberDay.make([.init(fiber: nil, carbs: 29), .init(fiber: 3, carbs: 27), .init(fiber: 4, carbs: 68)])
+    check(partial.known == 2 && partial.counted == 3, "two of three foods: \(partial)")
+    check(partial.isShown && partial.isPartial, "a quarter unknown shows the small print")
+
+    // Most of the carbs from a product without fiber: hidden, rather than a total far too low.
+    let blind = FiberDay.make([.init(fiber: nil, carbs: 60), .init(fiber: 4.4, carbs: 25)])
+    check(!blind.isShown, "under half the carbs known hides the line: \(blind.knownCarbShare)")
+    check(!FiberDay.make([]).isShown, "an empty day has no fiber line")
+    check(FiberDay.make([.init(fiber: 0, carbs: 0)]).isShown, "a known zero is a real zero")
+
+    // A photo estimate's item scales its fiber with its grams.
+    let rice = MealEstimate.Item(name: "Rice", emoji: "🍚", grams: 150, kcal: 195, protein: 4, carbs: 42, fat: 0.4, fiber: 0.6, sugar: 0.1)
+    check(near(rice.with(grams: 300).fiber ?? -1, 1.2), "fiber doubles with the rice")
+    check(near(rice.nutrients.fiber ?? -1, 0.6), "an item's nutrients carry its fiber")
+}
+
+// MARK: Apple Health
+
+do {
+    let lunch = Date(timeIntervalSince1970: 1_760_000_000)
+    let id = UUID()
+    let shawarma = HealthMeal(id: id, date: lunch, name: "Chicken shawarma",
+                              nutrients: Nutrients(kcal: 597, protein: 38, carbs: 55, fat: 24, fiber: nil, salt: 1.25))
+    check(HealthMeal.sodiumMilligrams(fromSaltGrams: 1.25) == 500, "1.25 g of salt is 500 mg of sodium")
+    check(shawarma.samples.contains { $0.nutrient == .sodium && $0.value == 500 }, "sodium is written in milligrams")
+    check(!shawarma.samples.contains { $0.nutrient == .fiber }, "no fiber on record writes no fiber")
+    let coffee = HealthMeal(id: UUID(), date: lunch, name: "Coffee", nutrients: Nutrients(kcal: 2, protein: 0.3, carbs: 0, fat: 0))
+    check(coffee.samples.map(\.nutrient) == [.energy, .protein], "a black coffee is not six zeros: \(coffee.samples.map(\.nutrient))")
+
+    // New: written at version 1.
+    let first = HealthPlan.make(desired: [shawarma], written: [])
+    check(first.saves == [.init(meal: shawarma, version: 1)] && first.deletes.isEmpty, "a new meal is saved at version 1")
+    // Unchanged: nothing to do, however often it runs.
+    let same = HealthPlan.make(desired: [shawarma], written: [HealthWritten(syncID: shawarma.syncID, version: 1, signature: shawarma.signature)])
+    check(same.isEmpty, "running again changes nothing")
+    // An edit bumps the version so Health replaces its copy.
+    let bigger = HealthMeal(id: id, date: lunch, name: "Chicken shawarma", nutrients: Nutrients(kcal: 790, protein: 50, carbs: 70, fat: 32))
+    let edit = HealthPlan.make(desired: [bigger], written: [HealthWritten(syncID: shawarma.syncID, version: 3, signature: shawarma.signature)])
+    check(edit.saves == [.init(meal: bigger, version: 4)], "an edit is written one version up")
+    // A move in time is an edit too.
+    let later = HealthMeal(id: id, date: lunch.addingTimeInterval(1800), name: "Chicken shawarma", nutrients: shawarma.nutrients)
+    check(HealthPlan.make(desired: [later], written: [HealthWritten(syncID: shawarma.syncID, version: 1, signature: shawarma.signature)]).saves.count == 1,
+          "moving a meal rewrites it")
+    // Deleted from the log: deleted from Health. Undo brings the same id back, so nothing changes.
+    let gone = HealthPlan.make(desired: [], written: [HealthWritten(syncID: shawarma.syncID, version: 2, signature: shawarma.signature)])
+    check(gone.deletes == [shawarma.syncID] && gone.saves.isEmpty, "a deleted meal leaves Health")
+    // Two copies of the same meal in Health: the newest version counts.
+    let doubled = HealthPlan.make(desired: [shawarma], written: [
+        HealthWritten(syncID: shawarma.syncID, version: 1, signature: "old"),
+        HealthWritten(syncID: shawarma.syncID, version: 2, signature: shawarma.signature),
+    ])
+    check(doubled.isEmpty, "the newest copy is the one compared")
+}
+
 print("\(passes) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)
