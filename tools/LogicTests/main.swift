@@ -422,6 +422,13 @@ do {
     let back = none.setting(item: 1, grams: 10, from: estimate)
     check(near(back.totals.kcal, 402), "an item set to nothing comes back from the original: \(back.totals.kcal)")
 
+    // An impossible fiber on the doubted item becomes unknown, and the doubt stays on it.
+    let oily = String(decoding: data, as: UTF8.self).replacingOccurrences(
+        of: #"\"carbs\":0,\"fat\":10}"#, with: #"\"carbs\":0,\"fat\":10,\"fiber\":40,\"sugar\":0}"#)
+    let cleaned = try ClaudeVision.parse(Data(oily.utf8))
+    check(cleaned.doubt?.item == 1, "cleaning the oil's fiber keeps its question: \(String(describing: cleaned.doubt))")
+    check(cleaned.items.last?.fiber == nil && cleaned.items.last?.sugar == 0, "40 g of fiber in oil is unknown; its sugar stays")
+
     let older = try ClaudeVision.parse(Data(contentsOf: fixtures.appendingPathComponent("claude_meal.json")))
     check(older.doubt == nil, "an answer without a doubt still reads")
     let item = MealEstimate.Item(name: "Oil", emoji: "🫒", grams: 10, kcal: 88, protein: 0, carbs: 0, fat: 10)

@@ -153,18 +153,19 @@ struct ClaudeVision {
               var estimate = try? JSONDecoder().decode(MealEstimate.self, from: json) else {
             throw Failure.unreadable
         }
+        // A fiber or sugar that cannot be real is unknown, not zero. Cleaned first, so the doubt
+        // below still finds its item by equality.
+        estimate.items = estimate.items.map { item in
+            var item = item
+            if let fiber = item.fiber, !(fiber.isFinite && fiber >= 0 && fiber <= item.carbs + 1) { item.fiber = nil }
+            if let sugar = item.sugar, !(sugar.isFinite && sugar >= 0 && sugar <= item.carbs + 1) { item.sugar = nil }
+            return item
+        }
         // Drop anything that cannot be a real amount before it reaches the log, and keep the
         // doubt pointing at its item when items before it go.
         let doubted = estimate.doubt.flatMap { estimate.items.indices.contains($0.item) ? estimate.items[$0.item] : nil }
         estimate.items = estimate.items.filter { item in
             [item.grams, item.kcal, item.protein, item.carbs, item.fat].allSatisfy { $0.isFinite && $0 >= 0 && $0 < 20_000 }
-        }
-        .map { item in
-            // A fiber or sugar that cannot be real is unknown, not zero.
-            var item = item
-            if let fiber = item.fiber, !(fiber.isFinite && fiber >= 0 && fiber <= item.carbs + 1) { item.fiber = nil }
-            if let sugar = item.sugar, !(sugar.isFinite && sugar >= 0 && sugar <= item.carbs + 1) { item.sugar = nil }
-            return item
         }
         estimate.doubt = estimate.doubt.flatMap { doubt in
             guard let doubted, let index = estimate.items.firstIndex(of: doubted) else { return nil }
