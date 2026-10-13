@@ -23,8 +23,27 @@ struct FirstRunSheet: View {
     @Environment(\.modelContext) private var context
     @Environment(LogEvents.self) private var events
     @AppStorage("firstRun.startsOn") private var startsOn = 0.0
-    @State private var step: Step = .firstBite
-    @State private var detent: PresentationDetent = .medium
+    @State private var step: Step
+    @State private var detent: PresentationDetent
+
+    init(
+        startAt: Step,
+        day: Date,
+        onScan: @escaping () -> Void,
+        onSearch: @escaping () -> Void,
+        onGoal: @escaping () -> Void,
+        onFinished: @escaping () -> Void
+    ) {
+        self.startAt = startAt
+        self.day = day
+        self.onScan = onScan
+        self.onSearch = onSearch
+        self.onGoal = onGoal
+        self.onFinished = onFinished
+        // The sheet opens on its step at once, never on the first bite for a frame.
+        _step = State(initialValue: startAt)
+        _detent = State(initialValue: startAt == .goal ? .large : .medium)
+    }
 
     var body: some View {
         Group {
@@ -42,10 +61,6 @@ struct FirstRunSheet: View {
         .presentationBackgroundInteraction(.disabled)
         .presentationDragIndicator(.visible)
         .presentationBackground(Theme.card)
-        .onAppear {
-            step = startAt
-            detent = startAt == .goal ? .large : .medium
-        }
     }
 
     /// The first food goes in like any other, with its toast and Undo, and the ring lights
