@@ -18,7 +18,7 @@ A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 langua
 
 ## CI
 
-Every push to main runs `.github/workflows/ios.yml` on a macOS runner: a Debug build, about 50 simulator screenshots (light, dark, French, Spanish, a fresh install, Bite Demo), and two IPAs for sideloading (`Bite-unsigned-ipa`, `Bite-Demo-unsigned-ipa`). Markdown and `docs/` changes don't trigger it. macOS minutes are billed 10x, so batch pushes.
+Every push to main runs `.github/workflows/ios.yml` on a macOS runner: a Debug build, about 50 simulator screenshots (light, dark, French, Spanish, a fresh install, Bite Demo), and two IPAs for sideloading (`Bite-unsigned-ipa`, `Bite-Demo-unsigned-ipa`). Markdown and `docs/` changes don't trigger it. The repo is public, so the minutes are free, but a run takes about 25 minutes: batch pushes. Everything pushed is public: never commit a key or private data.
 
 ## Rules for the code
 

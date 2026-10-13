@@ -6,7 +6,7 @@ The easy way: Xcode signs with your Apple team, so Apple Health works and nothin
 
 1. **Xcode 26 or later** from the App Store. Open it once and let it install its components.
 2. **Your Apple ID in Xcode**: Xcode › Settings › Accounts › + › Apple ID, the account of team **CKPJMS3P4U**.
-3. **The code**: `gh repo clone chinchiland/bite` (the repo is private, so `gh auth login` first), or `git pull` in an existing copy.
+3. **The code**: `gh repo clone chinchiland/bite` (the repo is public; `gh auth login` first if you will push), or `git pull` in an existing copy.
 
 ## Once per iPhone
 

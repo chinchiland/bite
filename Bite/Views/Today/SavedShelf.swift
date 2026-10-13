@@ -88,7 +88,9 @@ private struct NewSavedTile: View {
                     .font(.ui(13, .medium))
                     .foregroundStyle(Theme.ink)
                     .lineLimit(2)
-                    .frame(height: 34, alignment: .topLeading)
+                    // Beside other tiles the title keeps two lines so the rows line up; alone,
+                    // its caption sits right under it.
+                    .frame(height: isFirst ? nil : 34, alignment: .topLeading)
                     .padding(.top, 7)
                 Text(isFirst ? "one tap to add" : " ")
                     .font(.ui(12))

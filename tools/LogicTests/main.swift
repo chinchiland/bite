@@ -742,6 +742,11 @@ do {
     check(HourFoods.foodIDs(at: at(8), calendar: zurich).first == "usda:171890", "coffee first in the morning")
     check(HourFoods.question(at: at(8), calendar: zurich) == "What did you have this morning?", "the morning question")
     check(HourFoods.isLate(at(22), calendar: zurich) && !HourFoods.isLate(at(20), calendar: zurich), "late is after nine")
+    for moment in [HourFoods.Moment.morning, .noon, .afternoon, .evening] {
+        let unlabeled = HourFoods.ids(for: moment).filter { HourFoods.label(for: "usda:\($0)") == nil }
+        check(unlabeled.isEmpty, "every food for \(moment) has a tile label: \(unlabeled)")
+    }
+    check(HourFoods.label(for: "usda:171477") == "Chicken breast" && HourFoods.label(for: "off:123") == nil, "tile labels by id")
 }
 
 // MARK: Weekly check-in

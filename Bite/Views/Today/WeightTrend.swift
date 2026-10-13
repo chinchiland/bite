@@ -134,11 +134,10 @@ private struct WeekCheckIn: View {
             : String(localized: "Trend up \(amount) this week")
     }
 
-    private var burnedLine: String {
+    /// What you burn, only when it moved: the line above the card already gives the number.
+    private var burnedLine: String? {
         let burned = checkIn.burned.roughKcalText
-        guard let change = checkIn.burnedChange, abs(change) >= 10 else {
-            return String(localized: "You burn about \(burned) kcal a day")
-        }
+        guard let change = checkIn.burnedChange, abs(change) >= 10 else { return nil }
         let moved = abs(change).roughKcalText
         return change < 0
             ? String(localized: "You burn about \(burned) kcal a day, \(moved) kcal less than last week")
@@ -161,7 +160,7 @@ private struct WeekCheckIn: View {
             VStack(alignment: .leading, spacing: 6) {
                 if let trendLine { line(trendLine) }
                 line(String(localized: "About \(checkIn.averageEaten.roughKcalText) kcal a day on \(checkIn.wholeDays) days"))
-                line(burnedLine)
+                if let burnedLine { line(burnedLine) }
             }
             .padding(.top, 8)
             Rectangle()

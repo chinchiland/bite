@@ -47,6 +47,37 @@ enum HourFoods {
         }
     }
 
+    /// The short name a food tile shows ("Chicken breast", not "Chicken breast, cooked"), so
+    /// every tile reads in one or two lines at the same size. Nil for any other food.
+    static func label(for foodID: String) -> String? {
+        guard foodID.hasPrefix("usda:"), let id = Int(foodID.dropFirst(5)) else { return nil }
+        return switch id {
+        case 171890: tr("Coffee")
+        case 174987: tr("Croissant")
+        case 171304: tr("Greek yogurt")
+        case 173944: tr("Banana")
+        case 171287: tr("Egg")
+        case 174924: tr("White bread")
+        case 169098: tr("Orange juice")
+        case 171646: tr("Granola")
+        case 169737: tr("Pasta")
+        case 171477: tr("Chicken breast")
+        case 168878: tr("Rice")
+        case 170317: tr("Pizza")
+        case 175168: tr("Salmon")
+        case 175037: tr("Wrap")
+        case 171688: tr("Apple")
+        case 170567: tr("Almonds")
+        case 170273: tr("Dark chocolate")
+        case 172716: tr("Cookie")
+        case 173806: tr("Peanuts")
+        case 173190: tr("Red wine")
+        case 168746: tr("Beer")
+        case 167575: tr("Ice cream")
+        default: nil
+        }
+    }
+
     static func foodIDs(at date: Date, calendar: Calendar = .current) -> [String] {
         ids(for: moment(at: date, calendar: calendar)).map { "usda:\($0)" }
     }

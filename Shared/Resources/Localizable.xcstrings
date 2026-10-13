@@ -67,32 +67,22 @@
     },
     "%@ g of protein to go: the richest in it come first." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ g of protein to go: the richest in it come first."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Te faltan %@ g de proteína: primero los más ricos en ella."
+            "value" : "Te faltan %@ g de proteína: primero los más ricos en ella."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Encore %@ g de protéines : les plus riches passent en premier."
-          }
-        }
-      }
-    },
-    "%@ g to aim for" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ g de meta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ g à viser"
+            "value" : "Encore %@ g de protéines : les plus riches passent en premier."
           }
         }
       }
@@ -131,128 +121,176 @@
     },
     "%@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal"
+            "value" : "%@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal"
+            "value" : "%@ kcal"
           }
         }
       }
     },
     "%@ kcal burned" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal burned"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal quemadas"
+            "value" : "%@ kcal quemadas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal brûlées"
+            "value" : "%@ kcal brûlées"
           }
         }
       }
     },
     "%@ kcal eaten" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal eaten"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal ingeridas"
+            "value" : "%@ kcal ingeridas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal mangées"
+            "value" : "%@ kcal mangées"
           }
         }
       }
     },
     "%@ kcal in total" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal in total"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal en total"
+            "value" : "%@ kcal en total"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal au total"
+            "value" : "%@ kcal au total"
           }
         }
       }
     },
     "%@ kcal left" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal left"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Te quedan %@ kcal"
+            "value" : "Te quedan %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Encore %@ kcal"
+            "value" : "Encore %@ kcal"
           }
         }
       }
     },
     "%@ kcal over" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal over"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal de más"
+            "value" : "%@ kcal de más"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal en trop"
+            "value" : "%@ kcal en trop"
           }
         }
       }
     },
     "%@ kcal · %@ g protein" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal · %@ g protein"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal · %@ g de proteína"
+            "value" : "%@ kcal · %@ g de proteína"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal · %@ g de protéines"
+            "value" : "%@ kcal · %@ g de protéines"
           }
         }
       }
     },
     "%@ kcal, your count" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal, your count"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal, tu cálculo"
+            "value" : "%@ kcal, tu cálculo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal, ton estimation"
+            "value" : "%@ kcal, ton estimation"
           }
         }
       }
@@ -371,16 +409,22 @@
     },
     "%@ · %@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · %2$@ kcal"
+            "value" : "%1$@ · %2$@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ · %2$@ kcal"
+            "value" : "%1$@ · %2$@ kcal"
           }
         }
       }
@@ -403,16 +447,22 @@
     },
     "%@, %@ kcal, %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@ kcal, %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@, %@ kcal, %@"
+            "value" : "%@, %@ kcal, %@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@, %@ kcal, %@"
+            "value" : "%@, %@ kcal, %@"
           }
         }
       }
@@ -1023,48 +1073,66 @@
     },
     "A goal of %@ kcal fits what you burn" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A goal of %@ kcal fits what you burn"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objetivo de %@ kcal se ajusta a lo que quemas"
+            "value" : "Un objetivo de %@ kcal se ajusta a lo que quemas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objectif de %@ kcal correspond à ce que tu brûles"
+            "value" : "Un objectif de %@ kcal correspond à ce que tu brûles"
           }
         }
       }
     },
     "A goal of %@ kcal fits, %@ kcal less" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A goal of %@ kcal fits, %@ kcal less"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal menos"
+            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal menos"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de moins"
+            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de moins"
           }
         }
       }
     },
     "A goal of %@ kcal fits, %@ kcal more" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A goal of %@ kcal fits, %@ kcal more"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal más"
+            "value" : "Te va un objetivo de %1$@ kcal, %2$@ kcal más"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de plus"
+            "value" : "Un objectif de %1$@ kcal te va, %2$@ kcal de plus"
           }
         }
       }
@@ -1151,16 +1219,22 @@
     },
     "About %@ kcal a day on %lld days" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About %@ kcal a day on %lld days"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unas %1$@ kcal al día en %2$lld días"
+            "value" : "Unas %1$@ kcal al día en %2$lld días"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Environ %1$@ kcal par jour sur %2$lld jours"
+            "value" : "Environ %1$@ kcal par jour sur %2$lld jours"
           }
         }
       }
@@ -1631,16 +1705,22 @@
     },
     "Added %@ to %@, %@ kcal." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added %@ to %@, %@ kcal."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ añadido: %@, %@ kcal."
+            "value" : "%@ añadido: %@, %@ kcal."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ajouté : %@, %@ kcal."
+            "value" : "%@ ajouté : %@, %@ kcal."
           }
         }
       }
@@ -1757,6 +1837,28 @@
         }
       }
     },
+    "Aim for %@ g" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aim for %@ g"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ g de meta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ g à viser"
+          }
+        }
+      }
+    },
     "Almonds" : {
       "localizations" : {
         "es" : {
@@ -1833,6 +1935,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anthropic répond : %@"
+          }
+        }
+      }
+    },
+    "Apple" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pomme"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manzana"
           }
         }
       }
@@ -1933,6 +2051,22 @@
         }
       }
     },
+    "Banana" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Banane"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plátano"
+          }
+        }
+      }
+    },
     "Bar" : {
       "localizations" : {
         "es" : {
@@ -1977,6 +2111,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aliments de base"
+          }
+        }
+      }
+    },
+    "Beer" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bière"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerveza"
           }
         }
       }
@@ -2319,16 +2469,22 @@
     },
     "Calories each day, with your goal of %@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calories each day, with your goal of %@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calorías por día, con tu objetivo de %@ kcal"
+            "value" : "Calorías por día, con tu objetivo de %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calories par jour, avec ton objectif de %@ kcal"
+            "value" : "Calories par jour, avec ton objectif de %@ kcal"
           }
         }
       }
@@ -2521,6 +2677,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vérifie ta connexion et réessaie."
+          }
+        }
+      }
+    },
+    "Chicken breast" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blanc de poulet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pechuga de pollo"
           }
         }
       }
@@ -2765,6 +2937,22 @@
         }
       }
     },
+    "Coffee" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Café"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Café"
+          }
+        }
+      }
+    },
     "Coffee, black" : {
       "localizations" : {
         "es" : {
@@ -2861,6 +3049,22 @@
         }
       }
     },
+    "Cookie" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cookie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Galleta"
+          }
+        }
+      }
+    },
     "Couldn't find the places around you. Search by name instead." : {
       "localizations" : {
         "es" : {
@@ -2889,6 +3093,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impossible de joindre Open Food Facts."
+          }
+        }
+      }
+    },
+    "Croissant" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Croissant"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cruasán"
           }
         }
       }
@@ -2953,6 +3173,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Objectif quotidien"
+          }
+        }
+      }
+    },
+    "Dark chocolate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chocolat noir"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chocolate negro"
           }
         }
       }
@@ -3679,16 +3915,22 @@
     },
     "Fits your %@ kcal left" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fits your %@ kcal left"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Para tus %@ kcal restantes"
+            "value" : "Para tus %@ kcal restantes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pour tes %@ kcal restantes"
+            "value" : "Pour tes %@ kcal restantes"
           }
         }
       }
@@ -3871,16 +4113,22 @@
     },
     "Goal %@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal %@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Objetivo %@ kcal"
+            "value" : "Objetivo %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Objectif %@ kcal"
+            "value" : "Objectif %@ kcal"
           }
         }
       }
@@ -3945,6 +4193,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bonjour"
+          }
+        }
+      }
+    },
+    "Granola" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Granola"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Granola"
+          }
+        }
+      }
+    },
+    "Greek yogurt" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yaourt grec"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yogur griego"
           }
         }
       }
@@ -4221,6 +4501,22 @@
         }
       }
     },
+    "Ice cream" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glace"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helado"
+          }
+        }
+      }
+    },
     "If you keep this up" : {
       "localizations" : {
         "es" : {
@@ -4255,16 +4551,22 @@
     },
     "Is %@ kcal right for you?" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is %@ kcal right for you?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Te van bien %@ kcal?"
+            "value" : "¿Te van bien %@ kcal?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ kcal, ça te va ?"
+            "value" : "%@ kcal, ça te va ?"
           }
         }
       }
@@ -4287,16 +4589,22 @@
     },
     "Keep %@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep %@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantener %@ kcal"
+            "value" : "Mantener %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Garder %@ kcal"
+            "value" : "Garder %@ kcal"
           }
         }
       }
@@ -5821,6 +6129,22 @@
         }
       }
     },
+    "Orange juice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jus d’orange"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zumo de naranja"
+          }
+        }
+      }
+    },
     "Order" : {
       "localizations" : {
         "es" : {
@@ -5833,6 +6157,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commander"
+          }
+        }
+      }
+    },
+    "Pasta" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pâtes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasta"
           }
         }
       }
@@ -6349,6 +6689,22 @@
         }
       }
     },
+    "Red wine" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vin rouge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vino tinto"
+          }
+        }
+      }
+    },
     "Remind me" : {
       "localizations" : {
         "es" : {
@@ -6505,6 +6861,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restaurant"
+          }
+        }
+      }
+    },
+    "Rice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arroz"
           }
         }
       }
@@ -6873,22 +7245,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scanner"
-          }
-        }
-      }
-    },
-    "Scan a barcode" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Escanear un código"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scanner un code-barres"
           }
         }
       }
@@ -8335,16 +8691,22 @@
     },
     "Use %@ kcal" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use %@ kcal"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Usar %@ kcal"
+            "value" : "Usar %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utiliser %@ kcal"
+            "value" : "Utiliser %@ kcal"
           }
         }
       }
@@ -8623,16 +8985,22 @@
     },
     "What you burn, about %@ kcal a day, is learned from %lld days of your weighings and meals." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What you burn, about %@ kcal a day, is learned from %lld days of your weighings and meals."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lo que quemas, unas %@ kcal al día, se calcula con %lld días de pesajes y comidas."
+            "value" : "Lo que quemas, unas %@ kcal al día, se calcula con %lld días de pesajes y comidas."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ce que tu brûles, environ %@ kcal par jour, est calculé à partir de %lld jours de pesées et de repas."
+            "value" : "Ce que tu brûles, environ %@ kcal par jour, est calculé à partir de %lld jours de pesées et de repas."
           }
         }
       }
@@ -8665,6 +9033,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Où as-tu mangé ?"
+          }
+        }
+      }
+    },
+    "White bread" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pain de mie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pan de molde"
           }
         }
       }
@@ -8717,6 +9101,22 @@
         }
       }
     },
+    "Wrap" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrap"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrap"
+          }
+        }
+      }
+    },
     "Yesterday" : {
       "localizations" : {
         "es" : {
@@ -8749,82 +9149,90 @@
         }
       }
     },
-    "You burn about %@ kcal a day" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quemas unas %@ kcal al día"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu brûles environ %@ kcal par jour"
-          }
-        }
-      }
-    },
     "You burn about %@ kcal a day, %@ kcal less than last week" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You burn about %@ kcal a day, %@ kcal less than last week"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal menos que la semana pasada"
+            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal menos que la semana pasada"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de moins que la semaine dernière"
+            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de moins que la semaine dernière"
           }
         }
       }
     },
     "You burn about %@ kcal a day, %@ kcal more than last week" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You burn about %@ kcal a day, %@ kcal more than last week"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal más que la semana pasada"
+            "value" : "Quemas unas %1$@ kcal al día, %2$@ kcal más que la semana pasada"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de plus que la semaine dernière"
+            "value" : "Tu brûles environ %1$@ kcal par jour, %2$@ kcal de plus que la semaine dernière"
           }
         }
       }
     },
     "You eat about %@ kcal a day over what you burn, about %@ a week." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You eat about %@ kcal a day over what you burn, about %@ a week."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comes unas %@ kcal al día más de lo que quemas, unos %@ a la semana."
+            "value" : "Comes unas %@ kcal al día más de lo que quemas, unos %@ a la semana."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu manges environ %@ kcal par jour de plus que ce que tu brûles, soit environ %@ par semaine."
+            "value" : "Tu manges environ %@ kcal par jour de plus que ce que tu brûles, soit environ %@ par semaine."
           }
         }
       }
     },
     "You eat about %@ kcal a day under what you burn, about %@ a week." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You eat about %@ kcal a day under what you burn, about %@ a week."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comes unas %@ kcal al día menos de lo que quemas, unos %@ a la semana."
+            "value" : "Comes unas %@ kcal al día menos de lo que quemas, unos %@ a la semana."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu manges environ %@ kcal par jour de moins que ce que tu brûles, soit environ %@ par semaine."
+            "value" : "Tu manges environ %@ kcal par jour de moins que ce que tu brûles, soit environ %@ par semaine."
           }
         }
       }
@@ -9007,16 +9415,22 @@
     },
     "Your goal is now %@ kcal." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your goal is now %@ kcal."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tu objetivo ahora es de %@ kcal."
+            "value" : "Tu objetivo ahora es de %@ kcal."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ton objectif est maintenant de %@ kcal."
+            "value" : "Ton objectif est maintenant de %@ kcal."
           }
         }
       }

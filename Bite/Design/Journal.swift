@@ -351,12 +351,13 @@ struct MacroList: View {
             HStack(spacing: 8) {
                 MacroTile(macro: macro)
                 name(macro)
-                Text("\(target.kcalText) g to aim for")
+                Text("Aim for \(target.kcalText) g")
                     .font(.ui(14))
                     .monospacedDigit()
                     .foregroundStyle(Theme.secondary)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .minimumScaleFactor(0.85)
+                    .layoutPriority(1)
             }
             .frame(height: 47)
             ProgressBar(value: 0, color: macro.color, height: 3)

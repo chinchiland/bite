@@ -149,7 +149,7 @@ private struct FirstBiteStep: View {
                 } else {
                     HStack(spacing: 10) {
                         Button(action: onScan) {
-                            Label("Scan a barcode", systemImage: "barcode.viewfinder")
+                            Label("Scan", systemImage: "barcode.viewfinder")
                                 .frame(maxWidth: .infinity)
                         }
                         Button(action: onSearch) {
@@ -233,11 +233,12 @@ private struct FoodChoice: View {
                             .strokeBorder(Theme.ink, lineWidth: isPicked ? 2 : 0)
                     }
                 VStack(spacing: 1) {
-                    Text(food.name)
+                    Text(HourFoods.label(for: food.id) ?? food.name)
                         .font(.ui(13))
                         .foregroundStyle(Theme.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     Text("\(food.nutrients(for: food.defaultAmount).kcal.kcalText) kcal")
                         .font(.ui(12))
                         .monospacedDigit()

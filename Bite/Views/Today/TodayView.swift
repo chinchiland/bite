@@ -393,9 +393,7 @@ struct TodayView: View {
                         isToday: Calendar.current.isDateInToday(day),
                         startsTomorrow: startsTomorrow,
                         foods: hourFoods,
-                        onFood: { sheet = .food($0) },
-                        onScan: { showScanner = true },
-                        onSearch: { sheet = .search(nil) }
+                        onFood: { sheet = .food($0) }
                     )
                     .transition(.opacity)
                 } else if !dayEntries.isEmpty {
@@ -1412,15 +1410,14 @@ private struct ReminderOffer: View {
     }
 }
 
-/// Nothing logged yet. Today: four foods for the hour, one tap from their page, then Scan and
-/// Search; tonight after "Start tomorrow", a line for the morning. A past day: one line.
+/// Nothing logged yet. Today: four foods for the hour, one tap from their page (Scan and Search
+/// are in the dock right under it); tonight after "Start tomorrow", a line for the morning. A
+/// past day: one line.
 private struct EmptyDay: View {
     let isToday: Bool
     var startsTomorrow = false
     var foods: [Food] = []
     var onFood: (Food) -> Void = { _ in }
-    let onScan: () -> Void
-    var onSearch: () -> Void = {}
 
     var body: some View {
         if !isToday {
@@ -1450,11 +1447,11 @@ private struct EmptyDay: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 FoodThumb(food: food, size: 70)
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text(food.name)
+                                    Text(HourFoods.label(for: food.id) ?? food.name)
                                         .font(.ui(13))
                                         .foregroundStyle(Theme.ink)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.8)
+                                        .lineLimit(2)
+                                        .fixedSize(horizontal: false, vertical: true)
                                     Text("\(food.nutrients(for: food.defaultAmount).kcal.kcalText) kcal")
                                         .font(.ui(12))
                                         .monospacedDigit()
@@ -1468,18 +1465,6 @@ private struct EmptyDay: View {
                     }
                 }
                 .padding(.top, 14)
-                HStack(spacing: 10) {
-                    Button(action: onScan) {
-                        Label("Scan", systemImage: "barcode.viewfinder")
-                            .frame(maxWidth: .infinity)
-                    }
-                    Button(action: onSearch) {
-                        Label("Search", systemImage: "magnifyingglass")
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-                .buttonStyle(SoftButtonStyle(height: 44))
-                .padding(.top, 16)
             }
         }
     }
