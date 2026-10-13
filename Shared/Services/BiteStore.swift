@@ -21,7 +21,7 @@ enum BiteStore {
 
     static let container: ModelContainer = {
         let schema = Schema(versionedSchema: BiteSchemaV1.self)
-        let configuration = configuration(for: schema)
+        let configuration = BiteStore.configuration(for: schema)
         do {
             return try ModelContainer(
                 for: schema,
