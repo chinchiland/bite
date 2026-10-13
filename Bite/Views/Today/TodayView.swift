@@ -597,7 +597,7 @@ struct TodayView: View {
             if case .over = verdict { return (label, true) }
             return (label, false)
         }
-        return (String(localized: "Goal \(budget.kcalText)"), false)
+        return (String(localized: "Goal \(budget.kcalText) kcal"), false)
     }
 
     // MARK: Today's extras
@@ -608,10 +608,10 @@ struct TodayView: View {
 
     private var waterGlasses: Int { waterDay?.glasses ?? 0 }
 
-    /// "Fits your 967 left" while there is room today; just "Saved" otherwise.
+    /// "Fits your 967 kcal left" while there is room today; just "Saved" otherwise.
     private var shelfTitle: LocalizedStringKey {
         let left = budget - totals.kcal
-        return isToday && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) left" : "Saved"
+        return isToday && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) kcal left" : "Saved"
     }
 
     /// One line when protein is well behind today: how much, and that the shelf leads with it.

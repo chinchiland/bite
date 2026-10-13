@@ -17,22 +17,6 @@
         }
       }
     },
-    "%@ burned" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ quemadas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ brûlées"
-          }
-        }
-      }
-    },
     "%@ calories left" : {
       "localizations" : {
         "es" : {
@@ -125,6 +109,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ n’est pas encore dans Open Food Facts."
+          }
+        }
+      }
+    },
+    "%@ kcal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal"
+          }
+        }
+      }
+    },
+    "%@ kcal burned" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal quemadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal brûlées"
           }
         }
       }
@@ -1853,18 +1869,18 @@
         }
       }
     },
-    "Calories each day, with your goal of %@" : {
+    "Calories each day, with your goal of %@ kcal" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calorías por día, con tu objetivo de %@"
+            "value" : "Calorías por día, con tu objetivo de %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calories par jour, avec ton objectif de %@"
+            "value" : "Calories par jour, avec ton objectif de %@ kcal"
           }
         }
       }
@@ -3005,7 +3021,7 @@
         }
       }
     },
-    "Fits your %@ left" : {
+    "Fits your %@ kcal left" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -3165,18 +3181,18 @@
         }
       }
     },
-    "Goal %@" : {
+    "Goal %@ kcal" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Objetivo %@"
+            "value" : "Objetivo %@ kcal"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Objectif %@"
+            "value" : "Objectif %@ kcal"
           }
         }
       }

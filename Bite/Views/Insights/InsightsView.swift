@@ -320,13 +320,15 @@ private struct DayRow: View {
                     Circle()
                         .fill(verdict.dotColor)
                         .frame(width: 7, height: 7)
-                    Text(summary.kcal.kcalText)
+                    Text("\(summary.kcal.kcalText) kcal")
                         .font(.ui(13))
                         .monospacedDigit()
                         .foregroundStyle(isOver ? Theme.over : Theme.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
             }
-            .frame(width: 74, alignment: .leading)
+            .frame(width: 86, alignment: .leading)
             ViewThatFits(in: .horizontal) {
                 thumbs(4)
                 thumbs(3)
@@ -365,7 +367,7 @@ private struct DayBars: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText)")
+            .accessibilityLabel("Calories each day, with your goal of \(goal.kcalText) kcal")
     }
 }
 

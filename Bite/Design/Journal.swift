@@ -29,11 +29,12 @@ struct DottedRing: View {
 
     var body: some View {
         let shares = Shares(parts)
+        let still = reduceMotion
         DotRingCanvas(shares: shares, overflow: overflow, surface: surface, reveal: reveal)
             .animation(reduceMotion ? nil : Motion.count, value: shares)
             .animation(reduceMotion ? nil : Motion.count, value: overflow)
             .keyframeAnimator(initialValue: -1.0, trigger: glint) { ring, sweep in
-                ring.environment(\.ringGlint, reduceMotion ? -1 : sweep)
+                ring.environment(\.ringGlint, still ? -1 : sweep)
             } keyframes: { _ in
                 // Starts just before twelve and ends past the last lit dot, then rests unseen.
                 LinearKeyframe(-0.1, duration: 0.01)
@@ -451,7 +452,7 @@ struct ActivityChips: View {
                 .accessibilityHint("Shows your steps and burned calories from Apple Health")
             case .connected(let activity):
                 chip(systemImage: "flame.fill", color: Theme.burned) {
-                    Text("\(activity.activeKcal.kcalText) burned")
+                    Text("\(activity.activeKcal.kcalText) kcal burned")
                 }
                 chip(systemImage: "shoeprints.fill", color: Theme.steps) {
                     Text("\(activity.steps.countText) steps")

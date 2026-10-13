@@ -4,7 +4,7 @@ import TipKit
 /// Press and hold a food: shown once you logged again, by search or scan, a food already in
 /// your last two weeks, the long way round. Gone once you use the hold menu.
 struct FoodTileTip: Tip {
-    @Parameter static var relogged = false
+    @Parameter static var relogged: Bool = false
 
     var title: Text { Text("Press and hold a food") }
     var message: Text? { Text("Change it, add it again, save it or delete it.") }
@@ -29,7 +29,7 @@ struct DaySwitcherTip: Tip {
 /// Tap a meal's time: shown once you changed a logged food's time on its page instead. Gone
 /// once you open the time from the timeline.
 struct MealTimeTip: Tip {
-    @Parameter static var movedTheLongWay = false
+    @Parameter static var movedTheLongWay: Bool = false
 
     var title: Text { Text("Ate it earlier?") }
     var message: Text? { Text("Tap a meal's time to change when you ate it.") }

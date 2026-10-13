@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Your saved foods in a row of tiles. One tap adds to today; press and hold to edit or remove.
 struct SavedShelf: View {
-    /// "Fits your 967 left" while there is room today, "Saved" otherwise.
+    /// "Fits your 967 kcal left" while there is room today, "Saved" otherwise.
     var title: LocalizedStringKey = "Saved"
     /// One line under the title: what is behind today and what the order does about it.
     var note: String? = nil
