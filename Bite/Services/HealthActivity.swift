@@ -31,7 +31,7 @@ final class HealthActivity {
 
     private let store = HKHealthStore()
 
-    static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
+    nonisolated static var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
     /// Shows the Health permission sheet. True once Health has asked; false when there is no
     /// Health or it would not ask, as in a copy of Bite signed without the Health capability.

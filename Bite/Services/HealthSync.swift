@@ -17,22 +17,27 @@ final class HealthSync {
     private var container: ModelContainer?
     private var watching: Task<Void, Never>?
     private var pending: Task<Void, Never>?
-    /// Set while the sync itself saves new ids, so its own save does not start another run.
-    private var savingIDs = false
+    /// The sync's own save of new ids: its notification arrives later and is skipped then.
+    private var skipNextSave = false
 
     func start(_ container: ModelContainer) {
         self.container = container
         guard watching == nil else { return }
         watching = Task { [weak self] in
             for await _ in NotificationCenter.default.notifications(named: ModelContext.didSave) {
-                self?.soon()
+                guard let self else { return }
+                if self.skipNextSave {
+                    self.skipNextSave = false
+                    continue
+                }
+                self.soon()
             }
         }
     }
 
     /// One run a second after the last change, so a burst of edits writes once.
     func soon(days: Int = window) {
-        guard isOn, !savingIDs else { return }
+        guard isOn else { return }
         pending?.cancel()
         pending = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
@@ -54,9 +59,8 @@ final class HealthSync {
             assigned = true
         }
         if assigned {
-            savingIDs = true
+            skipNextSave = true
             try? context.save()
-            savingIDs = false
         }
         let desired = entries.compactMap { entry in
             entry.entryID.map { HealthMeal(id: $0, date: entry.date, name: entry.name, nutrients: entry.totals) }

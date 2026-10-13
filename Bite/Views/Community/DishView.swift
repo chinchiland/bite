@@ -53,7 +53,10 @@ struct DishView: View {
         .sheet(isPresented: $showAddEstimate) {
             AddEstimateView(dish: dish)
         }
-        .sheet(item: $shareReason) { reason in
+        .sheet(item: $shareReason, onDismiss: {
+            pendingAgree = nil
+            pendingStars = nil
+        }) { reason in
             ShareCountSheet(dish: dish, estimate: myEstimate, reason: reason) { signedIn in
                 shareReason = nil
                 guard signedIn else { return }

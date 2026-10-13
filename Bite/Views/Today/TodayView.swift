@@ -101,6 +101,8 @@ struct TodayView: View {
     @State private var steadyTopInset: CGFloat = 0
     /// The first run's own sheet is up, so closing it ends the first run.
     @State private var firstRunSheetUp = false
+    /// Scan was chosen in a sheet: the scanner opens once that sheet has gone.
+    @State private var scanAfterSheet = false
     @State private var weights: [WeightPoint] = []
     @State private var placeFinder = PlaceFinder()
     @Namespace private var zoom
@@ -562,11 +564,9 @@ struct TodayView: View {
                 onScan: {
                     firstRunRaw = FirstRun.awaitingLog.rawValue
                     firstRunSheetUp = false
+                    // The scanner opens once the sheet has gone, in sheetClosed.
+                    scanAfterSheet = true
                     self.sheet = nil
-                    Task {
-                        try? await Task.sleep(for: .milliseconds(450))
-                        showScanner = true
-                    }
                 },
                 onSearch: {
                     firstRunRaw = FirstRun.awaitingLog.rawValue
@@ -621,9 +621,9 @@ struct TodayView: View {
         case .goal: next = .goal
         default: return
         }
+        // Called once whatever was up has gone; a turn of the run loop lets this screen settle.
         Task {
-            // Let the welcome or the scanner finish leaving first.
-            try? await Task.sleep(for: .milliseconds(500))
+            await Task.yield()
             guard sheet == nil, !showScanner else { return }
             sheet = .firstRun(next)
         }
@@ -632,6 +632,11 @@ struct TodayView: View {
     /// A sheet closed. Swiping the first run's sheet away ends the first run; a search sheet
     /// that logged the first food brings the goal.
     private func sheetClosed() {
+        if scanAfterSheet {
+            scanAfterSheet = false
+            showScanner = true
+            return
+        }
         let closedFirstRun = firstRunSheetUp
         firstRunSheetUp = false
         switch firstRun {
@@ -746,11 +751,11 @@ struct TodayView: View {
 
     /// Right of the place line: the goal today; a past day's verdict, red when it went over.
     private var heroDetail: (text: String, isOver: Bool) {
+        if noTarget { return (String(localized: "No target"), false) }
         if !isToday, let verdict = verdicts[day], let label = verdict.label {
             if case .over = verdict { return (label, true) }
             return (label, false)
         }
-        if noTarget { return (String(localized: "No target"), false) }
         return (String(localized: "Goal \(budget.kcalText) kcal"), false)
     }
 
@@ -774,7 +779,7 @@ struct TodayView: View {
     /// "Fits your 967 kcal left" while there is room today; just "Saved" otherwise.
     private var shelfTitle: LocalizedStringKey {
         let left = budget - totals.kcal
-        return isToday && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) kcal left" : "Saved"
+        return isToday && !noTarget && left > 0 && !saved.isEmpty ? "Fits your \(left.kcalText) kcal left" : "Saved"
     }
 
     /// One line when protein is well behind today: how much, and that the shelf leads with it.

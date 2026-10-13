@@ -5,6 +5,7 @@ struct RootView: View {
     @AppStorage("onboarded") private var onboarded = false
     @AppStorage("firstRun.stage") private var firstRunRaw = FirstRun.done.rawValue
     @AppStorage("firstRun.day") private var firstRunDay = 0.0
+    @State private var startTapped = false
     @State private var events = LogEvents()
     @State private var storeProblem = BiteStore.failedToOpen
     @Environment(\.scenePhase) private var scenePhase
@@ -27,10 +28,13 @@ struct RootView: View {
                 fresh.autosaveEnabled = true
                 context = fresh
             }
-            .fullScreenCover(isPresented: needsWelcome) {
+            .fullScreenCover(isPresented: needsWelcome, onDismiss: {
+                // The first bite comes once the welcome has gone.
+                if startTapped { firstRunRaw = FirstRun.firstBite.rawValue }
+            }) {
                 WelcomeView {
                     firstRunDay = Calendar.current.startOfDay(for: .now).timeIntervalSince1970
-                    firstRunRaw = FirstRun.firstBite.rawValue
+                    startTapped = true
                     onboarded = true
                 }
                 .interactiveDismissDisabled()

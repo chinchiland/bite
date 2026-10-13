@@ -85,6 +85,17 @@ final class HealthMeals: @unchecked Sendable {
                 await delete(Self.type(nutrient).0, samples)
             }
         }
+        // A rewritten meal that no longer has a nutrient: its old sample would stay behind.
+        let dropped = plan.saves.filter { $0.version > 1 }.flatMap { save in
+            let kept = Set(save.meal.samples.map(\.nutrient))
+            return HealthMeal.Nutrient.allCases.filter { !kept.contains($0) }.map { "\(save.meal.syncID).\($0.rawValue)" }
+        }
+        if !dropped.isEmpty {
+            let stale = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeySyncIdentifier, allowedValues: dropped)
+            for nutrient in HealthMeal.Nutrient.allCases {
+                await delete(Self.type(nutrient).0, stale)
+            }
+        }
         let objects = plan.saves.map(correlation)
         var start = 0
         while start < objects.count {

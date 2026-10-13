@@ -285,6 +285,20 @@ struct SettingsView: View {
                             Button("Delete my shared counts and account", role: .destructive) { confirmDelete = true }
                                 .font(.ui(17))
                                 .listRowBackground(Theme.card)
+                                .confirmationDialog("Delete my shared counts and account", isPresented: $confirmDelete, titleVisibility: .visible) {
+                                    Button("Delete", role: .destructive) {
+                                        Task {
+                                            do {
+                                                try await account.deleteAccount()
+                                                deleteFailed = false
+                                            } catch {
+                                                deleteFailed = true
+                                            }
+                                        }
+                                    }
+                                } message: {
+                                    Text("Your shared counts and your account go from the server. Your food log stays on this phone.")
+                                }
                         } header: {
                             SectionTitle(text: "Community")
                         } footer: {
@@ -293,20 +307,6 @@ struct SettingsView: View {
                                 : LocalizedStringKey("People see your estimates under this name. Your food log stays on this phone."))
                         }
                         .onAppear { communityName = account.displayName }
-                        .confirmationDialog("Delete my shared counts and account", isPresented: $confirmDelete, titleVisibility: .visible) {
-                            Button("Delete", role: .destructive) {
-                                Task {
-                                    do {
-                                        try await account.deleteAccount()
-                                        deleteFailed = false
-                                    } catch {
-                                        deleteFailed = true
-                                    }
-                                }
-                            }
-                        } message: {
-                            Text("Your shared counts and your account go from the server. Your food log stays on this phone.")
-                        }
                     }
 
                     Section {
