@@ -4,6 +4,16 @@ Shared dish estimates live in a Supabase project. Reading is open to everyone; s
 
 The app ships with sharing switched off: `CommunityServer.url` in `Bite/Services/Community/CommunityClient.swift` is empty, so no share row, sheet or Community settings appear. Fill it in once the steps below are done.
 
+## The live project
+
+- **bite**, ref `aknoyqzppszoztngtgfr`, Zurich (eu-central-2), free plan, in the organization "Bite". New tables start private and get row level security automatically (set at creation).
+- Both migrations are applied and recorded, so `supabase db push` starts after them.
+- Sign in with Apple is on for `com.dylan.bite` and `com.dylan.bite.demo` (native sign-in, no secret needed).
+- The three functions are deployed; `moderate` has `GEMINI_API_KEY` and `MODERATION_SECRET`, and Vault holds `moderation_url` and `moderation_secret`. Checked end to end: a real dish name became visible, a spam name was rejected.
+- The app points at it (`CommunityServer`), the rules page is https://chinchiland.github.io/bite/, and the repo has the keep-awake secrets.
+- Still to do: the Sign in with Apple key on developer.apple.com (`APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_CLIENT_ID`, `APPLE_PRIVATE_KEY` secrets), which lets deleting an account revoke Apple's token. Sign-in works without it.
+- On this PC the CLI reads `SUPABASE_ACCESS_TOKEN` (a 30-day token for this project only) and `SUPABASE_DB_PASSWORD` from the user environment.
+
 ## Set it up (about an hour, once)
 
 1. **Project.** Create a Supabase project in **Zurich (eu-central-2)**. The free plan is enough to start: it pauses after a week without database activity, so add the repo secrets `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` and `.github/workflows/keep-awake.yml` reads from it every other day. Move to Pro ($25 a month) when real people depend on it, and delete that workflow.

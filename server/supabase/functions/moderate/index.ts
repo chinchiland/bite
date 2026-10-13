@@ -3,9 +3,12 @@
 // name is fit to show everyone; a flagged name is rejected, the rest becomes visible, and an
 // answer that can't be read leaves the dish waiting. Estimates are numbers checked by range in
 // the database, so they need no review. Three reports still hide anything that slips through.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import postgres from "https://deno.land/x/postgresjs@v3.4.4/mod.js";
 
 const MODEL = "gemini-3.1-flash-lite-preview";
+// Straight to the database as its owner, like the other functions: the API roles get no rights
+// on these tables, the service role included.
+const sql = postgres(Deno.env.get("SUPABASE_DB_URL")!, { prepare: false });
 
 Deno.serve(async (request) => {
   const secret = Deno.env.get("MODERATION_SECRET");
@@ -47,8 +50,8 @@ Deno.serve(async (request) => {
     return new Response("Moderation unreadable", { status: 502 });
   }
 
-  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-  const { error } = await admin.from("dishes").update({ status: fit ? "visible" : "rejected" }).eq("id", dish.id);
-  if (error) return new Response(error.message, { status: 500 });
-  return Response.json({ status: fit ? "visible" : "rejected" });
+  const status = fit ? "visible" : "rejected";
+  // Only a dish still waiting: a person's report or a moderator may have decided already.
+  await sql`update public.dishes set status = ${status} where id = ${dish.id} and status = 'pending'`;
+  return Response.json({ status });
 });

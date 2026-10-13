@@ -1,15 +1,15 @@
 import Foundation
 
-/// Where shared estimates live: a Supabase project (in Zurich). Empty until the project exists,
-/// and while it is, nothing about sharing shows: dishes stay on this phone. `server/README.md`
-/// says how to set it up.
+/// Where shared estimates live: the Supabase project "bite", in Zurich. Emptying these turns
+/// sharing off: nothing about it shows and dishes stay on this phone. `server/README.md` says how
+/// the project is set up.
 enum CommunityServer {
     /// "https://<project>.supabase.co"
-    static let url: URL? = nil
+    static let url = URL(string: "https://aknoyqzppszoztngtgfr.supabase.co")
     /// The project's publishable (anon) key. Public by design: the database enforces every rule.
-    static let anonKey = ""
+    static let anonKey = "sb_publishable_LFSXGx8bjrq-atKGvhNO0w_IEgmCIma"
     /// The community rules people accept before sharing, a short web page.
-    static let rulesURL: URL? = nil
+    static let rulesURL = URL(string: "https://chinchiland.github.io/bite/")
 
     static var isConfigured: Bool { url != nil && !anonKey.isEmpty }
 }
