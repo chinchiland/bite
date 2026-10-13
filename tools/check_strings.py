@@ -136,7 +136,7 @@ def main() -> int:
                 rel = "Views/" + rel
             if rel in SKIP_FILES:
                 continue
-            in_views = rel.startswith(("Views/", "Design/"))
+            in_views = rel.startswith(("Views/", "Design/", "Widgets/"))
             for number, line in enumerate(open(path, encoding="utf-8"), 1):
                 if line.strip().startswith("//") or "fatalError(" in line:
                     continue

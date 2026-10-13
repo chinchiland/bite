@@ -133,6 +133,10 @@ jobs:
           shoot 42-settings-end -onboarded YES -screen settings -anchor bottom
           shoot 43-share -onboarded YES -screen share
           shoot 44-share-fr -onboarded YES -screen share -AppleLanguages "(fr)" -AppleLocale fr_FR
+          # The widgets, drawn by the app from the extension's own faces (a simulator can't show the Home Screen).
+          shoot 45-widgets -onboarded YES -screen widgets
+          shoot 46-widgets-lock -onboarded YES -screen widgets-lock
+          shoot 47-widgets-fr -onboarded YES -screen widgets -AppleLanguages "(fr)" -AppleLocale fr_FR
 
           shoot_fresh() {
             name=$1; shift

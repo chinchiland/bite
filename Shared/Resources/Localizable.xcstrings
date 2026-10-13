@@ -737,6 +737,22 @@
         }
       }
     },
+    "%lld of %lld glasses. Add a glass of water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld vasos. Añadir un vaso de agua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld verres sur %2$lld. Ajouter un verre d’eau"
+          }
+        }
+      }
+    },
     "%lld people agree" : {
       "localizations" : {
         "en" : {
@@ -6081,6 +6097,38 @@
         }
       }
     },
+    "Open Bite on the camera, for your plate or a barcode." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Bite en la cámara, para tu plato o un código de barras."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre Bite sur l’appareil photo, pour ton assiette ou un code-barres."
+          }
+        }
+      }
+    },
+    "Open Bite on the camera." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Bite en la cámara."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre Bite sur l’appareil photo."
+          }
+        }
+      }
+    },
     "Open Bite once to see your day here." : {
       "localizations" : {
         "es" : {
@@ -7969,6 +8017,22 @@
         }
       }
     },
+    "Snap a meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotografía una comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photographie un repas"
+          }
+        }
+      }
+    },
     "Snap the label" : {
       "localizations" : {
         "es" : {
@@ -9685,6 +9749,22 @@
         }
       }
     },
+    "Your glasses today. Tap to add one." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus vasos de hoy. Toca para añadir uno."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes verres du jour. Touche pour en ajouter un."
+          }
+        }
+      }
+    },
     "Your goal" : {
       "localizations" : {
         "es" : {
@@ -10289,6 +10369,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ajout en un geste"
+          }
+        }
+      }
+    },
+    "or scan a barcode" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o escanea un código de barras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ou scanne un code-barres"
           }
         }
       }

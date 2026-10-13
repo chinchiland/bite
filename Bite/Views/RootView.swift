@@ -15,6 +15,18 @@ struct RootView: View {
     @State private var seenWrite = AppGroup.defaults.double(forKey: AppGroup.Key.wroteAt)
 
     var body: some View {
+        #if DEBUG
+        if let gallery = WidgetGallery.requested {
+            gallery
+        } else {
+            journal
+        }
+        #else
+        journal
+        #endif
+    }
+
+    private var journal: some View {
         TodayView()
             .environment(events)
             .environment(AppActions.shared)
@@ -38,6 +50,10 @@ struct RootView: View {
                     onboarded = true
                 }
                 .interactiveDismissDisabled()
+            }
+            // bite://scan, from the Scan widget, opens on the camera; any other link opens Today.
+            .onOpenURL { url in
+                if url.scheme == "bite", url.host == "scan" { AppActions.shared.pendingScan = true }
             }
             .alert("Bite couldn't open your log", isPresented: $storeProblem) {
                 Button("OK", role: .cancel) {}

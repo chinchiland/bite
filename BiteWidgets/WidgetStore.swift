@@ -46,21 +46,6 @@ enum WidgetStore {
         #endif
     }
 
-    /// A saved food as a Log widget tile.
-    struct ShelfFood: Identifiable {
-        let id: String
-        let name: String
-        let kcal: Double
-        let emoji: String?
-        let tint: FoodTint
-        let photo: UIImage?
-        /// Logged from this widget in the last five minutes: the tile says so and offers Undo.
-        var addedAt: Date?
-        var undoID: String?
-
-        var entity: SavedFoodEntity { SavedFoodEntity(id: id, name: name, kcal: kcal) }
-    }
-
     /// How long a widget's Undo stays.
     static let undoWindow: TimeInterval = 5 * 60
 
