@@ -74,6 +74,8 @@ struct TodayView: View {
     @AppStorage("firstRun.day") private var firstRunDay = 0.0
     /// "Start tomorrow" was chosen: the journal begins that day.
     @AppStorage("firstRun.startsOn") private var firstRunStartsOn = 0.0
+    /// The mealtime nudge was offered and answered, either way.
+    @AppStorage("reminder.answered") private var reminderAnswered = false
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -408,6 +410,18 @@ struct TodayView: View {
                         zoom: zoom
                     )
                     .transition(.opacity.combined(with: .offset(y: 8)))
+                    if let offer = reminderOffer {
+                        ReminderOffer(reminder: offer) {
+                            Task {
+                                _ = await Reminders.turnOn(offer, context: context)
+                                withAnimation(Motion.settle) { reminderAnswered = true }
+                            }
+                        } onNotNow: {
+                            withAnimation(Motion.settle) { reminderAnswered = true }
+                        }
+                        .padding(.top, 14)
+                        .transition(.opacity)
+                    }
                     if isFirstDay {
                         // Day one's next step, in place of a tip.
                         Text("Hold a food to add it again, or scan your next meal.")
@@ -572,6 +586,14 @@ struct TodayView: View {
     // MARK: First run
 
     private var firstRun: FirstRun { FirstRun(rawValue: firstRunRaw) ?? .done }
+
+    /// The nudge, offered once after the second log, at the first meal's time.
+    private var reminderOffer: MealReminder? {
+        guard isToday, !reminderAnswered, !BiteStore.isDemo,
+              MealReminder.shouldOffer(entries: entries.count, answered: reminderAnswered),
+              let first = entries.first else { return nil }
+        return MealReminder(firstLog: first.date, meal: first.meal)
+    }
 
     /// Four foods for this hour, for the empty day.
     private var hourFoods: [Food] {
@@ -1329,6 +1351,59 @@ private struct TopFade: View {
         .ignoresSafeArea(edges: .top)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
+    }
+}
+
+/// "A nudge tomorrow at 8:10, only if breakfast isn't in?": the reminder as an offer with a
+/// time, once, after the second log. Remind me asks iOS; Not now means never again on its own.
+private struct ReminderOffer: View {
+    let reminder: MealReminder
+    let onRemind: () -> Void
+    let onNotNow: () -> Void
+
+    private var timeText: String {
+        let day = Calendar.current.startOfDay(for: .now)
+        let time = Calendar.current.date(byAdding: .minute, value: reminder.minute, to: day) ?? day
+        return time.formatted(date: .omitted, time: .shortened)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "bell")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Theme.ink)
+                    .frame(width: 34, height: 34)
+                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(reminder.question(timeText: timeText))
+                        .font(.ui(16, .medium))
+                        .foregroundStyle(Theme.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("One a day at most.")
+                        .font(.ui(14))
+                        .foregroundStyle(Theme.secondary)
+                }
+            }
+            HStack(spacing: 18) {
+                Button(action: onRemind) {
+                    Text("Remind me")
+                        .font(.ui(15, .semibold))
+                        .foregroundStyle(Theme.page)
+                        .padding(.horizontal, 16)
+                        .frame(height: 38)
+                        .background(Theme.ink, in: Capsule())
+                }
+                .buttonStyle(PressableStyle(scale: 0.94))
+                Button("Not now", action: onNotNow)
+                    .font(.ui(15, .medium))
+                    .foregroundStyle(Theme.secondary)
+            }
+            .padding(.leading, 46)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.fill, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 }
 

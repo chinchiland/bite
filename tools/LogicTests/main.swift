@@ -657,6 +657,27 @@ do {
     check(doubled.isEmpty, "the newest copy is the one compared")
 }
 
+// MARK: Mealtime nudge
+
+do {
+    var zurich = Calendar(identifier: .gregorian)
+    zurich.timeZone = TimeZone(identifier: "Europe/Zurich")!
+    let day = zurich.date(from: DateComponents(year: 2026, month: 10, day: 13))!
+    func at(_ hour: Int, _ minute: Int = 0, plus days: Int = 0) -> Date {
+        zurich.date(byAdding: DateComponents(day: days, hour: hour, minute: minute), to: day)!
+    }
+    let reminder = MealReminder(firstLog: at(8, 10), meal: .breakfast, calendar: zurich)
+    check(reminder.meal == .breakfast && reminder.minute == 8 * 60 + 10, "breakfast at 8:10")
+    check(MealReminder(firstLog: at(16, 30), meal: .snack, calendar: zurich).meal == .breakfast, "a snack first never gets a snack nudge")
+    check(MealReminder(firstLog: at(19, 40), meal: .snack, calendar: zurich).meal == .dinner, "a snack at dinner time is dinner")
+    check(MealReminder.shouldOffer(entries: 2, answered: false) && !MealReminder.shouldOffer(entries: 1, answered: false), "after the second log")
+    check(!MealReminder.shouldOffer(entries: 9, answered: true), "never again after an answer")
+    let early = reminder.fireDates(now: at(7), loggedToday: false, calendar: zurich)
+    check(early == [at(8, 10), at(8, 10, plus: 1), at(8, 10, plus: 2)], "today too while it is ahead: \(early)")
+    check(reminder.fireDates(now: at(7), loggedToday: true, calendar: zurich) == [at(8, 10, plus: 1), at(8, 10, plus: 2)], "not today once breakfast is in")
+    check(reminder.fireDates(now: at(9), loggedToday: false, calendar: zurich).first == at(8, 10, plus: 1), "past its time, from tomorrow")
+}
+
 // MARK: Community server
 
 do {

@@ -1085,6 +1085,54 @@
         }
       }
     },
+    "A nudge tomorrow at %@, only if breakfast isn't in?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Un aviso mañana a las %@, solo si no has anotado el desayuno?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un rappel demain à %@, seulement si le petit-déjeuner n’est pas noté ?"
+          }
+        }
+      }
+    },
+    "A nudge tomorrow at %@, only if dinner isn't in?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Un aviso mañana a las %@, solo si no has anotado la cena?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un rappel demain à %@, seulement si le dîner n’est pas noté ?"
+          }
+        }
+      }
+    },
+    "A nudge tomorrow at %@, only if lunch isn't in?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Un aviso mañana a las %@, solo si no has anotado la comida?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un rappel demain à %@, seulement si le déjeuner n’est pas noté ?"
+          }
+        }
+      }
+    },
     "A slow, steady gain" : {
       "localizations" : {
         "es" : {
@@ -1401,6 +1449,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouter le repas"
+          }
+        }
+      }
+    },
+    "Add the same as last time in one tap, or open Bite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade lo mismo que la última vez de un toque, o abre Bite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute la même chose que la dernière fois d’un geste, ou ouvre Bite."
           }
         }
       }
@@ -2073,6 +2137,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Petit-déjeuner"
+          }
+        }
+      }
+    },
+    "Breakfast?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Desayuno?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petit-déjeuner ?"
           }
         }
       }
@@ -3033,6 +3113,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dîner"
+          }
+        }
+      }
+    },
+    "Dinner?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cena?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dîner ?"
           }
         }
       }
@@ -4621,6 +4717,22 @@
         }
       }
     },
+    "Lunch?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Comida?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déjeuner ?"
+          }
+        }
+      }
+    },
     "Lupin" : {
       "localizations" : {
         "es" : {
@@ -4761,6 +4873,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Repas : %@"
+          }
+        }
+      }
+    },
+    "Mealtime nudge" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aviso a la hora de comer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rappel à l’heure du repas"
           }
         }
       }
@@ -5357,6 +5485,22 @@
         }
       }
     },
+    "Notifications are off for Bite. Settings, Notifications, Bite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las notificaciones de Bite están desactivadas. Ajustes, Notificaciones, Bite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les notifications de Bite sont désactivées. Réglages, Notifications, Bite."
+          }
+        }
+      }
+    },
     "Nutri-Score" : {
       "localizations" : {
         "es" : {
@@ -5465,6 +5609,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dans l’objectif : %lld sur %lld"
+          }
+        }
+      }
+    },
+    "One a day at most, only when that meal isn't in yet. It stops by itself when you don't open Bite." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uno al día como mucho, solo si esa comida aún no está anotada. Se detiene solo si no abres Bite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un par jour au plus, seulement si ce repas n’est pas encore noté. Il s’arrête tout seul si tu n’ouvres pas Bite."
+          }
+        }
+      }
+    },
+    "One a day at most." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uno al día como mucho."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un par jour au plus."
           }
         }
       }
@@ -6153,6 +6329,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Récents"
+          }
+        }
+      }
+    },
+    "Remind me" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avísame"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Me le rappeler"
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avisos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rappels"
           }
         }
       }

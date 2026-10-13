@@ -5,6 +5,7 @@ import TipKit
 @main
 struct BiteApp: App {
     let container = BiteStore.container
+    @UIApplicationDelegateAdaptor(BiteAppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -34,6 +35,7 @@ struct BiteApp: App {
         #endif
         HealthSync.shared.start(container)
         WidgetBridge.shared.start()
+        Reminders.start(container)
     }
 
     var body: some Scene {
@@ -48,8 +50,9 @@ struct BiteApp: App {
             DemoData.moveToToday(container.mainContext)
             #endif
             // Back in front: Health catches up with anything logged from Siri, or written
-            // while the phone was locked.
+            // while the phone was locked; the nudges are planned three days ahead again.
             HealthSync.shared.soon()
+            Task { await Reminders.reschedule(context: container.mainContext) }
         }
     }
 }

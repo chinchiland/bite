@@ -22,9 +22,48 @@ struct SettingsView: View {
     @State private var communityName = ""
     @State private var confirmDelete = false
     @State private var deleteFailed = false
+    @State private var nudge = Reminders.current
+    @State private var nudgeRefused = false
+    @Environment(\.modelContext) private var modelContext
     @State private var storedKey = ""
 
     private var split: MacroSplit { MacroSplit(rawValue: splitRaw) ?? .balanced }
+
+    /// On asks iOS once and plans the nudge at breakfast time; off stops it.
+    private var nudgeBinding: Binding<Bool> {
+        Binding(
+            get: { nudge != nil },
+            set: { on in
+                guard on else {
+                    Reminders.turnOff()
+                    nudge = nil
+                    return
+                }
+                let reminder = MealReminder(meal: .breakfast, minute: 8 * 60)
+                Task {
+                    let allowed = await Reminders.turnOn(reminder, context: modelContext)
+                    nudgeRefused = !allowed
+                    nudge = allowed ? reminder : nil
+                }
+            }
+        )
+    }
+
+    /// The nudge's time, as a date today for the wheel.
+    private func nudgeTime(_ reminder: MealReminder) -> Binding<Date> {
+        Binding(
+            get: {
+                Calendar.current.date(byAdding: .minute, value: reminder.minute, to: Calendar.current.startOfDay(for: .now)) ?? .now
+            },
+            set: { date in
+                let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+                let moved = MealReminder(meal: reminder.meal, minute: (parts.hour ?? 8) * 60 + (parts.minute ?? 0))
+                Reminders.current = moved
+                nudge = moved
+                Task { await Reminders.reschedule(context: modelContext) }
+            }
+        )
+    }
 
     /// Turning it on asks Health first, then writes the last month; turning it off keeps what
     /// is already there, which belongs to Health now.
@@ -204,6 +243,26 @@ struct SettingsView: View {
                                     : "Each food goes in at the time you ate it. If another app saves your meals too, keep only one on, so nothing counts twice.")
                             }
                         }
+                    }
+
+                    Section {
+                        Toggle(isOn: nudgeBinding) {
+                            Text("Mealtime nudge")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                        }
+                        .listRowBackground(Theme.card)
+                        if let nudge {
+                            DatePicker("Time", selection: nudgeTime(nudge), displayedComponents: .hourAndMinute)
+                                .font(.ui(17))
+                                .listRowBackground(Theme.card)
+                        }
+                    } header: {
+                        SectionTitle(text: "Reminders")
+                    } footer: {
+                        Text(nudgeRefused
+                            ? LocalizedStringKey("Notifications are off for Bite. Settings, Notifications, Bite.")
+                            : LocalizedStringKey("One a day at most, only when that meal isn't in yet. It stops by itself when you don't open Bite."))
                     }
 
                     if CommunityServer.isConfigured && account.isSignedIn {
