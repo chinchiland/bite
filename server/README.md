@@ -15,14 +15,19 @@ The app ships with sharing switched off: `CommunityServer.url` in `Bite/Services
 4. **Functions.** Set the secrets, then deploy:
    ```sh
    supabase secrets set APPLE_TEAM_ID=CKPJMS3P4U APPLE_KEY_ID=<key id> APPLE_CLIENT_ID=com.dylan.bite \
-     APPLE_PRIVATE_KEY="$(cat AuthKey_<key id>.p8)" OPENAI_API_KEY=<key> MODERATION_SECRET=<random>
+     APPLE_PRIVATE_KEY="$(cat AuthKey_<key id>.p8)" GEMINI_API_KEY=<key> MODERATION_SECRET=<random>
    supabase functions deploy apple-token delete-account moderate
    ```
    - `apple-token` keeps Apple's refresh token after sign-in, so deleting an account can revoke it (Apple requires that).
    - `delete-account` is Settings › Community › Delete my shared counts and account.
-   - `moderate` checks a new dish's name with OpenAI's free moderation endpoint before others see it.
-5. **Webhook.** Database › Webhooks: on INSERT into `public.dishes`, call the `moderate` function with the header `x-webhook-secret: <MODERATION_SECRET>`.
-6. **Rules page.** Publish a short community rules page (no tolerance for abuse, reports acted on within 24 hours, a contact email) and put its address in `CommunityServer.rulesURL`.
+   - `moderate` asks Gemini (flash lite, a fraction of a cent a name) whether a new dish's name is fit to show, before others see it.
+5. **Moderation.** The database calls `moderate` itself on every new dish (`20261013020000_moderation.sql`). Give it the address and the secret, once, in the SQL editor:
+   ```sql
+   select vault.create_secret('https://<ref>.supabase.co/functions/v1/moderate', 'moderation_url');
+   select vault.create_secret('<MODERATION_SECRET>', 'moderation_secret');
+   ```
+   Until then new dishes wait, seen only by their author.
+6. **Rules page.** It is written: `server/rules/index.html` (English, French, Spanish; reports looked at within 24 hours; contact through the repo's issues). Publish it, for example with GitHub Pages from a `pages` branch, and put its address in `CommunityServer.rulesURL`.
 7. **The app.** Put the project URL and its publishable (anon) key in `CommunityServer`: that key only opens what the rules below allow. The secret (service role) key never goes in the app or this repo, which is public. Then update `Bite/PrivacyInfo.xcprivacy` and the App Store privacy answers: User ID, Name, Other User Content (estimates, stars, reports) and Precise Location (a place's position), all linked to the person, for App Functionality.
 
 ## Safe by default

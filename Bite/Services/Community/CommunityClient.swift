@@ -6,7 +6,7 @@ import Foundation
 enum CommunityServer {
     /// "https://<project>.supabase.co"
     static let url: URL? = nil
-    /// The project's anon key. Public by design: the database enforces every rule.
+    /// The project's publishable (anon) key. Public by design: the database enforces every rule.
     static let anonKey = ""
     /// The community rules people accept before sharing, a short web page.
     static let rulesURL: URL? = nil
@@ -128,7 +128,11 @@ struct CommunityClient {
         request.httpBody = body
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(CommunityServer.anonKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(token ?? CommunityServer.anonKey)", forHTTPHeaderField: "Authorization")
+        // Only a signed-in person's token goes here: a publishable key is not a token, and
+        // without one the server treats the request as a visitor's.
+        if let token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         for (field, value) in headers {
             request.setValue(value, forHTTPHeaderField: field)
         }
