@@ -13,6 +13,9 @@ on:
     paths-ignore:
       - '**.md'
       - 'docs/**'
+      - 'server/**'
+      - '.github/workflows/server.yml'
+      - '.github/workflows/keep-awake.yml'
   workflow_dispatch:
 
 jobs:

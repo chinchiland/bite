@@ -4,6 +4,10 @@
 -- (security definer), which check who you are, that you accepted the rules, that you are not
 -- banned and not posting too fast. Counters and statuses can never be written by a client.
 -- Your food log never comes here: only the estimates you choose to share.
+--
+-- It fails closed: no client role keeps a right from Supabase's default grants, a table added
+-- later starts private, and a function added later fails server/supabase/tests until it is
+-- granted on purpose. The tests run on every push.
 
 create extension if not exists postgis with schema extensions;
 
@@ -117,7 +121,8 @@ alter table public.ratings enable row level security;
 alter table public.reports enable row level security;
 alter table public.blocks enable row level security;
 
-create policy "names are public" on public.profiles for select using (true);
+-- Your own profile only: the names people see come with the dishes, through dishes_near.
+create policy "your profile" on public.profiles for select using (id = auth.uid());
 create policy "places are public" on public.places for select using (true);
 create policy "visible dishes, and yours" on public.dishes for select
   using (status = 'visible' or author_id = auth.uid());
@@ -127,13 +132,16 @@ create policy "your agrees" on public.agrees for select using (user_id = auth.ui
 create policy "your ratings" on public.ratings for select using (user_id = auth.uid());
 create policy "your blocks" on public.blocks for select using (blocker_id = auth.uid());
 
--- Your profile: create it and change your name; nothing else.
-create policy "you create your profile" on public.profiles for insert to authenticated with check (id = auth.uid());
-create policy "you change your name" on public.profiles for update to authenticated
-  using (id = auth.uid()) with check (id = auth.uid());
-revoke insert, update, delete on all tables in schema public from anon, authenticated;
-grant insert (id, display_name, terms_accepted_at) on public.profiles to authenticated;
-grant update (display_name, terms_accepted_at) on public.profiles to authenticated;
+-- Clients read through the policies above and write nothing directly. Supabase grants every
+-- client role all rights on new public objects by default; take them all back, give back
+-- reading, and make whatever comes later start private.
+revoke all on all tables in schema public from anon, authenticated;
+revoke all on all sequences in schema public from anon, authenticated;
+grant select on public.places, public.dishes, public.estimates to anon, authenticated;
+grant select on public.profiles, public.agrees, public.ratings, public.blocks to authenticated;
+alter default privileges for role postgres in schema public revoke all on tables from anon, authenticated;
+alter default privileges for role postgres in schema public revoke all on sequences from anon, authenticated;
+alter default privileges for role postgres in schema public revoke execute on functions from anon, authenticated;
 
 -- Counters kept by the database.
 create function private.count_agrees() returns trigger
@@ -193,6 +201,22 @@ begin
     raise exception 'not allowed to share' using errcode = '42501';
   end if;
   return v_me;
+end $$;
+
+-- Your name as people see it, and that you accepted the rules (the first time is kept).
+create function public.save_profile(p_name text) returns void
+language plpgsql security definer set search_path = '' as $$
+declare
+  v_me uuid := auth.uid();
+begin
+  if v_me is null then
+    raise exception 'sign in first' using errcode = '28000';
+  end if;
+  insert into public.profiles (id, display_name, terms_accepted_at)
+    values (v_me, btrim(p_name), now())
+    on conflict (id) do update
+      set display_name = excluded.display_name,
+          terms_accepted_at = coalesce(public.profiles.terms_accepted_at, excluded.terms_accepted_at);
 end $$;
 
 -- Share your estimate of a dish at a place: the place and the dish are found or added, your
@@ -295,20 +319,23 @@ language sql stable security definer set search_path = '' as $$
   select coalesce(jsonb_agg(item order by distance), '[]'::jsonb) from near;
 $$;
 
--- Agree with an estimate, or take it back.
+-- Agree with someone else's visible estimate, or take it back.
 create function public.set_agree(p_estimate uuid, p_agree boolean) returns void
 language plpgsql security definer set search_path = '' as $$
 declare
   v_me uuid := private.writer();
 begin
   if p_agree then
-    insert into public.agrees (estimate_id, user_id) values (p_estimate, v_me) on conflict do nothing;
+    insert into public.agrees (estimate_id, user_id)
+      select e.id, v_me from public.estimates e
+      where e.id = p_estimate and e.status = 'visible' and e.author_id <> v_me
+      on conflict do nothing;
   else
     delete from public.agrees where estimate_id = p_estimate and user_id = v_me;
   end if;
 end $$;
 
--- Your stars for a dish; null takes them back.
+-- Your stars for a visible dish; null takes them back.
 create function public.rate_dish(p_dish uuid, p_stars smallint) returns void
 language plpgsql security definer set search_path = '' as $$
 declare
@@ -317,7 +344,8 @@ begin
   if p_stars is null then
     delete from public.ratings where dish_id = p_dish and user_id = v_me;
   else
-    insert into public.ratings (dish_id, user_id, stars) values (p_dish, v_me, p_stars)
+    insert into public.ratings (dish_id, user_id, stars)
+      select d.id, v_me, p_stars from public.dishes d where d.id = p_dish and d.status = 'visible'
       on conflict (dish_id, user_id) do update set stars = excluded.stars;
   end if;
 end $$;
@@ -367,9 +395,10 @@ begin
   delete from public.blocks where blocker_id = v_me;
 end $$;
 
-revoke execute on all functions in schema public from public;
-revoke execute on all functions in schema private from public;
+revoke execute on all functions in schema public from public, anon, authenticated;
+revoke execute on all functions in schema private from public, anon, authenticated;
 grant execute on function public.dishes_near(float8, float8, integer) to anon, authenticated;
+grant execute on function public.save_profile(text) to authenticated;
 grant execute on function public.share_estimate(jsonb, jsonb, jsonb) to authenticated;
 grant execute on function public.set_agree(uuid, boolean) to authenticated;
 grant execute on function public.rate_dish(uuid, smallint) to authenticated;

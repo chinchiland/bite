@@ -1,0 +1,27 @@
+name: Keep the server awake
+
+# Supabase pauses a free project after a week without database activity, which would empty
+# "Near you" for everyone. Every other day this asks for dishes near the Parc de Milan, the
+# same read the app makes. It does nothing until the repo has the SUPABASE_URL and
+# SUPABASE_PUBLISHABLE_KEY secrets; on the Pro plan, delete it.
+on:
+  schedule:
+    - cron: '17 6 */2 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      URL: ${{ secrets.SUPABASE_URL }}
+      KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - name: Look for dishes nearby
+        if: env.URL != '' && env.KEY != ''
+        run: |
+          curl --fail --silent --show-error --max-time 30 -X POST "$URL/rest/v1/rpc/dishes_near" \
+            -H "apikey: $KEY" -H "Content-Type: application/json" \
+            -d '{"p_latitude":46.5167,"p_longitude":6.6215,"p_radius":3000}' > /dev/null

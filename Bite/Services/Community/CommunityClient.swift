@@ -62,19 +62,10 @@ struct CommunityClient {
         )
     }
 
-    /// Your name as people see it, and that you accepted the rules.
-    func saveProfile(userID: String, name: String, token: String) async throws {
-        let profile: [String: String] = [
-            "id": userID,
-            "display_name": name,
-            "terms_accepted_at": ISO8601DateFormatter().string(from: .now),
-        ]
-        _ = try await send(
-            path: "rest/v1/profiles",
-            token: token,
-            body: try JSONEncoder().encode(profile),
-            headers: ["Prefer": "resolution=merge-duplicates,return=minimal"]
-        )
+    /// Your name as people see it, and that you accepted the rules. The server takes who you are
+    /// from the token, never from what the app sends.
+    func saveProfile(name: String, token: String) async throws {
+        _ = try await send(path: "rest/v1/rpc/save_profile", token: token, body: try JSONEncoder().encode(["p_name": name]))
     }
 
     /// Apple's one-time code, kept by the server so deleting the account can revoke it.

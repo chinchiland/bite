@@ -1,0 +1,37 @@
+name: Server
+
+# The community schema, checked on a real local Supabase before it can reach the project: the
+# migration applies, its functions lint clean, and the tests in server/supabase/tests pass as a
+# visitor, a new account and four neighbours would use it.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - '.github/workflows/server.yml'
+  pull_request:
+    paths:
+      - 'server/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start the database with the migrations
+        run: supabase db start
+      - name: Lint the functions
+        run: supabase db lint --level error --fail-on error
+      - name: Test who can do what
+        run: supabase test db

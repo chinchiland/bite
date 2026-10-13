@@ -54,7 +54,7 @@ final class CommunityAccount {
             displayName = CommunityRemote.shortName(given: name?.givenName, family: name?.familyName)
         }
         if displayName.isEmpty { displayName = String(localized: "Someone") }
-        try await client.saveProfile(userID: session.userID, name: displayName, token: session.accessToken)
+        try await client.saveProfile(name: displayName, token: session.accessToken)
         if let code = credential.authorizationCode.flatMap({ String(data: $0, encoding: .utf8) }) {
             try? await client.sendAppleCode(code, token: session.accessToken)
         }
@@ -75,8 +75,9 @@ final class CommunityAccount {
         let trimmed = String(name.trimmingCharacters(in: .whitespacesAndNewlines).prefix(30))
         guard !trimmed.isEmpty else { return }
         displayName = trimmed
-        guard let session, let token = try? await validToken() else { return }
-        try? await CommunityClient().saveProfile(userID: session.userID, name: trimmed, token: token)
+        // validToken refuses when you are signed out.
+        guard let token = try? await validToken() else { return }
+        try? await CommunityClient().saveProfile(name: trimmed, token: token)
     }
 
     func signOut() {
