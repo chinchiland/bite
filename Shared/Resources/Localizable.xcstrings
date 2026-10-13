@@ -531,6 +531,64 @@
         }
       }
     },
+    "%lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld día"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld días"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld jour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld jours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld estimates" : {
       "localizations" : {
         "en" : {
@@ -721,6 +779,64 @@
         }
       }
     },
+    "%lld months" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld month"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld months"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld mes"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld meses"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld mois"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld mois"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld of %lld" : {
       "localizations" : {
         "es" : {
@@ -878,6 +994,122 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld étoiles"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld weeks" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld week"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld weeks"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld semana"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld semanas"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld semaine"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld semaines"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld years" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld year"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld years"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld año"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld años"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld an"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ans"
                 }
               }
             }
@@ -1169,6 +1401,22 @@
         }
       }
     },
+    "A new phone starts fresh. Export before you switch." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un teléfono nuevo empieza de cero. Exporta antes de cambiar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un nouveau téléphone repart de zéro. Exporte avant d’en changer."
+          }
+        }
+      }
+    },
     "A nudge tomorrow at %@, only if breakfast isn't in?" : {
       "localizations" : {
         "es" : {
@@ -1213,6 +1461,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un rappel demain à %@, seulement si le déjeuner n’est pas noté ?"
+          }
+        }
+      }
+    },
+    "A photo of yourself every four weeks, to see what the numbers can't show." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una foto tuya cada cuatro semanas, para ver lo que los números no muestran."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une photo de toi toutes les quatre semaines, pour voir ce que les chiffres ne montrent pas."
           }
         }
       }
@@ -2259,6 +2523,22 @@
         }
       }
     },
+    "Bite scores your day, never your body." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite puntúa tu día, nunca tu cuerpo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite note ta journée, jamais ton corps."
+          }
+        }
+      }
+    },
     "Bite uses your location here, to list the restaurants and cafes nearby. It stays on your phone." : {
       "localizations" : {
         "es" : {
@@ -2351,6 +2631,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Petit-déjeuner ?"
+          }
+        }
+      }
+    },
+    "Brighter than your first. Same lamp?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más clara que la primera. ¿La misma lámpara?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus claire que la première. Même lampe ?"
           }
         }
       }
@@ -2793,6 +3089,22 @@
         }
       }
     },
+    "Choose a photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elegir una foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une photo"
+          }
+        }
+      }
+    },
     "Choose a photo of your plate" : {
       "localizations" : {
         "es" : {
@@ -2965,6 +3277,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Communauté"
+          }
+        }
+      }
+    },
+    "Compare" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparer"
           }
         }
       }
@@ -3193,6 +3521,22 @@
         }
       }
     },
+    "Darker than your first. Same lamp?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más oscura que la primera. ¿La misma lámpara?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus sombre que la première. Même lampe ?"
+          }
+        }
+      }
+    },
     "Data from %@" : {
       "localizations" : {
         "es" : {
@@ -3257,6 +3601,22 @@
         }
       }
     },
+    "Delete all your photos" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar todas tus fotos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes tes photos"
+          }
+        }
+      }
+    },
     "Delete from log" : {
       "localizations" : {
         "es" : {
@@ -3285,6 +3645,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supprimer mes estimations partagées et mon compte"
+          }
+        }
+      }
+    },
+    "Delete this photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar esta foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer cette photo"
           }
         }
       }
@@ -3429,6 +3805,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En baisse de %lld pour cent"
+          }
+        }
+      }
+    },
+    "Drag to compare" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desliza para comparar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fais glisser pour comparer"
           }
         }
       }
@@ -3689,6 +4081,22 @@
         }
       }
     },
+    "Export your photos" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar tus fotos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter tes photos"
+          }
+        }
+      }
+    },
     "Falafel wrap" : {
       "localizations" : {
         "es" : {
@@ -3913,6 +4321,22 @@
         }
       }
     },
+    "Fit yourself in the frame" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entra en el encuadre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entre dans le cadre"
+          }
+        }
+      }
+    },
     "Fits your %@ kcal left" : {
       "localizations" : {
         "en" : {
@@ -3995,6 +4419,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gratuit. Sans compte. Ton journal reste sur ce téléphone."
+          }
+        }
+      }
+    },
+    "From %@ to %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De %@ a %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De %@ à %@"
           }
         }
       }
@@ -4437,6 +4877,22 @@
         }
       }
     },
+    "Hold still" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No te muevas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne bouge plus"
+          }
+        }
+      }
+    },
     "How" : {
       "localizations" : {
         "es" : {
@@ -4673,6 +5129,38 @@
         }
       }
     },
+    "Kept" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardée"
+          }
+        }
+      }
+    },
+    "Kept. Take another?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardada. ¿Haces otra?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardée. Tu en prends une autre ?"
+          }
+        }
+      }
+    },
     "Last 30 days" : {
       "localizations" : {
         "es" : {
@@ -4749,6 +5237,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trouvons ton objectif quotidien"
+          }
+        }
+      }
+    },
+    "Level" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nivelado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De niveau"
+          }
+        }
+      }
+    },
+    "Level the phone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pon el teléfono recto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiens le téléphone droit"
           }
         }
       }
@@ -5281,6 +5801,22 @@
         }
       }
     },
+    "Mirror" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espejo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miroir"
+          }
+        }
+      }
+    },
     "Molluscs" : {
       "localizations" : {
         "es" : {
@@ -5537,6 +6073,22 @@
         }
       }
     },
+    "Never iCloud, never Claude, never your camera roll." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nunca en iCloud, nunca en Claude, nunca en tu carrete."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jamais sur iCloud, jamais chez Claude, jamais dans ta pellicule."
+          }
+        }
+      }
+    },
     "New" : {
       "localizations" : {
         "es" : {
@@ -5697,6 +6249,22 @@
         }
       }
     },
+    "No photos yet." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todavía no hay fotos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore de photo."
+          }
+        }
+      }
+    },
     "No place" : {
       "localizations" : {
         "es" : {
@@ -5789,6 +6357,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sans objectif. Bite compte, et te montre tes habitudes."
+          }
+        }
+      }
+    },
+    "Not level" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin nivelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de niveau"
           }
         }
       }
@@ -5965,6 +6549,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desactivado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé"
+          }
+        }
+      }
+    },
+    "On" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activé"
           }
         }
       }
@@ -6161,6 +6777,22 @@
         }
       }
     },
+    "Open your mirror" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir tu espejo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir ton miroir"
+          }
+        }
+      }
+    },
     "Opens Bite on the camera, ready for a barcode or your plate." : {
       "localizations" : {
         "es" : {
@@ -6205,6 +6837,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ouvre l’endroit dans Uber Eats"
+          }
+        }
+      }
+    },
+    "Opens your mirror" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre tu espejo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre ton miroir"
           }
         }
       }
@@ -6413,6 +7061,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photo"
+          }
+        }
+      }
+    },
+    "Photo deleted" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foto eliminada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo supprimée"
           }
         }
       }
@@ -6753,6 +7417,22 @@
         }
       }
     },
+    "Propped up" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoyado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posé"
+          }
+        }
+      }
+    },
     "Protein" : {
       "localizations" : {
         "es" : {
@@ -6909,6 +7589,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lecture de l’étiquette"
+          }
+        }
+      }
+    },
+    "Ready" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’est bon"
           }
         }
       }
@@ -7089,6 +7785,38 @@
         }
       }
     },
+    "Require Face ID" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requerir Face ID"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exiger Face ID"
+          }
+        }
+      }
+    },
+    "Require Face ID to open" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requerir Face ID para abrir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exiger Face ID pour ouvrir"
+          }
+        }
+      }
+    },
     "Restaurant" : {
       "localizations" : {
         "es" : {
@@ -7229,6 +7957,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comme hier ?"
+          }
+        }
+      }
+    },
+    "Same day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El mismo día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le même jour"
+          }
+        }
+      }
+    },
+    "Same spot?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿En el mismo sitio?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au même endroit ?"
           }
         }
       }
@@ -8113,6 +8873,22 @@
         }
       }
     },
+    "Speak the guidance" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decir las indicaciones en voz alta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dire les consignes à voix haute"
+          }
+        }
+      }
+    },
     "Split" : {
       "localizations" : {
         "es" : {
@@ -8141,6 +8917,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sport presque tous les jours"
+          }
+        }
+      }
+    },
+    "Stand it up and step back" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apoya el teléfono y retrocede"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pose le téléphone et recule"
           }
         }
       }
@@ -8237,6 +9029,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bœuf et légumes verts"
+          }
+        }
+      }
+    },
+    "Step back" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da un paso atrás"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recule"
+          }
+        }
+      }
+    },
+    "Step closer" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acércate"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avance"
           }
         }
       }
@@ -8353,6 +9177,22 @@
         }
       }
     },
+    "Take a photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacer una foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre une photo"
+          }
+        }
+      }
+    },
     "Take back a glass of water" : {
       "localizations" : {
         "es" : {
@@ -8369,7 +9209,71 @@
         }
       }
     },
+    "Take it" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacerla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La prendre"
+          }
+        }
+      }
+    },
+    "Take one photo to see the change later" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haz una foto para ver el cambio más adelante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prends une photo pour voir le changement plus tard"
+          }
+        }
+      }
+    },
     "Take photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacer la foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre la photo"
+          }
+        }
+      }
+    },
+    "Take the first one" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacer la primera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre la première"
+          }
+        }
+      }
+    },
+    "Take the photo" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -8413,6 +9317,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retire le dernier verre d’eau d’aujourd’hui."
+          }
+        }
+      }
+    },
+    "Taking it now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La hago ya"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je la prends"
           }
         }
       }
@@ -8641,6 +9561,54 @@
         }
       }
     },
+    "The photos and the key that opens them both go. Nothing can bring them back." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se borran las fotos y la llave que las abre. Nada podrá recuperarlas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les photos et la clé qui les ouvre disparaissent toutes les deux. Rien ne pourra les récupérer."
+          }
+        }
+      }
+    },
+    "These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estas fotos se quedan en este teléfono, fuera de iCloud y de tu carrete. Un teléfono nuevo empieza de cero, así que expórtalas antes de cambiar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces photos restent sur ce téléphone, hors d’iCloud et hors de ta pellicule. Un nouveau téléphone repart de zéro : exporte-les avant d’en changer."
+          }
+        }
+      }
+    },
+    "These photos stay on this phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estas fotos se quedan en este teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces photos restent sur ce téléphone."
+          }
+        }
+      }
+    },
     "They run on Google's Gemini, whose rules ask for that. Barcodes, search and your saved foods work at any age." : {
       "localizations" : {
         "es" : {
@@ -8669,6 +9637,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cette copie de Bite a été installée sans l’app Santé : les pas, les calories brûlées et les pesées restent éteints."
+          }
+        }
+      }
+    },
+    "This is your spot" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este es tu sitio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voilà ta place"
           }
         }
       }
@@ -9041,6 +10025,22 @@
         }
       }
     },
+    "Unlock" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouiller"
+          }
+        }
+      }
+    },
     "Unprocessed" : {
       "localizations" : {
         "es" : {
@@ -9187,6 +10187,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Très actif"
+          }
+        }
+      }
+    },
+    "Voice" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voz"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix"
           }
         }
       }
@@ -9867,6 +10883,38 @@
         }
       }
     },
+    "Your mirror" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu espejo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton miroir"
+          }
+        }
+      }
+    },
+    "Your mirror is locked" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu espejo está bloqueado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton miroir est verrouillé"
+          }
+        }
+      }
+    },
     "Your month in food" : {
       "localizations" : {
         "es" : {
@@ -9927,6 +10975,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta propre clé Claude (facultatif)"
+          }
+        }
+      }
+    },
+    "Your passcode works too." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu código también sirve."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton code marche aussi."
+          }
+        }
+      }
+    },
+    "Your photo from %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu foto del %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta photo du %@"
+          }
+        }
+      }
+    },
+    "Your photos from %@ and %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus fotos del %@ y del %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes photos du %@ et du %@"
           }
         }
       }

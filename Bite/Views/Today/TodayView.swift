@@ -31,6 +31,8 @@ enum HomeSheet: Identifiable, Hashable {
     case dish(CommunityDish)
     case food(Food)
     case firstRun(FirstRunSheet.Step)
+    /// Your mirror; true to open straight on its camera.
+    case mirror(Bool)
 
     var id: Self { self }
 }
@@ -76,6 +78,8 @@ struct TodayView: View {
     @AppStorage("firstRun.startsOn") private var firstRunStartsOn = 0.0
     /// The mealtime nudge was offered and answered, either way.
     @AppStorage("reminder.answered") private var reminderAnswered = false
+    /// When your mirror asks for a photo and what you said, as JSON.
+    @AppStorage("mirror.history") private var mirrorHistoryData = Data()
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -233,9 +237,13 @@ struct TodayView: View {
             BiteShortcuts.updateAppShortcutParameters()
         }
         .onChange(of: scenePhase) { _, phase in
-            // Back from a walk: pick up the new steps.
-            if phase == .active { activityRefresh += 1 }
+            // Back from a walk: pick up the new steps, and whether your mirror is due.
+            if phase == .active {
+                activityRefresh += 1
+                MirrorLog.shared.refresh()
+            }
         }
+        .task { MirrorLog.shared.refresh() }
         #if DEBUG
         .onAppear(perform: openDemoScreen)
         #endif
@@ -286,10 +294,12 @@ struct TodayView: View {
             }
             #if DEBUG
             .task {
-                // `-anchor usual` scrolls your usual meal into the middle, for its screenshot.
-                guard UserDefaults.standard.string(forKey: "anchor") == "usual" else { return }
+                // `-anchor usual` scrolls your usual meal into the middle, `-anchor mirror` your
+                // mirror's ask, for their screenshots.
+                let anchor = UserDefaults.standard.string(forKey: "anchor")
+                guard anchor == "usual" || anchor == "mirror" else { return }
                 try? await Task.sleep(for: .seconds(1))
-                reader.scrollTo(UsualMoment.anchor, anchor: .center)
+                reader.scrollTo(anchor == "usual" ? UsualMoment.anchor : MirrorMoment.anchor, anchor: .center)
             }
             #endif
         }
@@ -362,6 +372,18 @@ struct TodayView: View {
                 onConnect: connectHealth
             )
             .padding(.top, 16)
+
+            if let ask = mirrorAsk {
+                MirrorMoment(
+                    kind: ask,
+                    onOpen: { sheet = .mirror(false) },
+                    onTake: { sheet = .mirror(true) },
+                    onNotNow: mirrorNotNow
+                )
+                .padding(.top, 18)
+                .transition(.opacity)
+                .id(MirrorMoment.anchor)
+            }
 
             if isToday, !entries.isEmpty {
                 let learned = self.learned
@@ -578,6 +600,11 @@ struct TodayView: View {
                 }
             )
             .onAppear { firstRunSheetUp = true }
+        case .mirror(let camera):
+            NavigationStack {
+                MirrorHome(startOnCamera: camera)
+            }
+            .modelContainer(MirrorStore.container)
         }
     }
 
@@ -931,6 +958,36 @@ struct TodayView: View {
         }
     }
 
+    private var mirrorHistory: MirrorHistory {
+        (try? JSONDecoder().decode(MirrorHistory.self, from: mirrorHistoryData)) ?? MirrorHistory()
+    }
+
+    /// Your mirror asking for a photo, on today only and never beside the week's check-in: the
+    /// first one from your third day, then every four weeks, or from 25 days the morning a
+    /// weighing comes in. The first ask waits on a day that already asks for your weight.
+    private var mirrorAsk: MirrorMoment.Kind? {
+        guard isToday, dueCheckIn == nil else { return nil }
+        let history = mirrorHistory
+        let log = MirrorLog.shared
+        if let newest = log.newest {
+            let weighedToday = weights.last.map { Calendar.current.isDateInToday($0.date) } ?? false
+            guard history.asksNext(now: .now, newest: newest, weighedToday: weighedToday) else { return nil }
+            return .next(MirrorGap.between(newest, .now))
+        }
+        if !entries.isEmpty, trendWeights.isEmpty { return nil }
+        let firstDay = firstRunDay > 0 ? Date(timeIntervalSince1970: firstRunDay) : nil
+        return history.asksFirst(now: .now, firstDay: firstDay) ? .first : nil
+    }
+
+    /// "Not now": back in a week; three in a row and only Settings opens your mirror.
+    private func mirrorNotNow() {
+        var history = mirrorHistory
+        history.notNow(now: .now)
+        withAnimation(Motion.settle) {
+            mirrorHistoryData = (try? JSONEncoder().encode(history)) ?? Data()
+        }
+    }
+
     /// Where your weight goes at the way you ate over the last week's whole days, against what
     /// your body burns: learned when it can be, else worked out from your body.
     private func forecast(learned: LearnedMaintenance?) -> WeightForecast? {
@@ -1242,6 +1299,8 @@ struct TodayView: View {
             if let first = dishes.first { sheet = .place(first.place) }
         case "where": editing = dayEntries.first { $0.place != nil } ?? dayEntries.last
         case "cover2": coverIndex = 1
+        case let screen? where screen.hasPrefix("mirror"):
+            sheet = MirrorFixture.open(screen)
         default: break
         }
     }

@@ -829,5 +829,147 @@ do {
     check(keeper.isDue(now: week4, gap: 540, calendar: utc), "three Keeps: asks once it grew by 150")
 }
 
+// MARK: Your mirror
+
+do {
+    var utc = Calendar(identifier: .gregorian)
+    utc.timeZone = TimeZone(identifier: "UTC")!
+    let start = Date(timeIntervalSince1970: 1_760_000_000)
+    func later(_ days: Int) -> Date { start.addingTimeInterval(Double(days) * 86_400) }
+
+    // The gap, in the unit people say it in.
+    check(MirrorGap.between(start, start, calendar: utc) == .days(0), "the same day")
+    check(MirrorGap.between(start, later(13), calendar: utc) == .days(13), "13 days stay days")
+    check(MirrorGap.between(start, later(14), calendar: utc) == .weeks(2), "14 days are 2 weeks")
+    check(MirrorGap.between(later(42), start, calendar: utc) == .weeks(6), "either order: 6 weeks")
+    check(MirrorGap.between(start, later(59), calendar: utc) == .weeks(8), "59 days are 8 weeks")
+    check(MirrorGap.between(start, later(60), calendar: utc) == .months(2), "60 days are 2 months")
+    check(MirrorGap.between(start, later(400), calendar: utc) == .years(1), "400 days are a year")
+    check(!MirrorGap.weeks(7).isLong && MirrorGap.weeks(8).isLong && MirrorGap.months(3).isLong, "eight weeks is long")
+
+    // When Bite asks.
+    var history = MirrorHistory()
+    check(!history.asksFirst(now: later(1), firstDay: start, calendar: utc), "never on the first two days")
+    check(history.asksFirst(now: later(2), firstDay: start, calendar: utc), "the third day asks for the first photo")
+    check(history.asksFirst(now: later(2), firstDay: nil, calendar: utc), "an install from before the first run asks")
+    check(!history.asksNext(now: later(27), newest: start, weighedToday: false, calendar: utc), "27 days: not yet")
+    check(history.asksNext(now: later(28), newest: start, weighedToday: false, calendar: utc), "28 days: the next photo")
+    check(history.asksNext(now: later(25), newest: start, weighedToday: true, calendar: utc), "a weighing this morning at 25 days")
+    check(!history.asksNext(now: later(24), newest: start, weighedToday: true, calendar: utc), "but not at 24")
+    history.notNow(now: later(28), calendar: utc)
+    check(!history.asksNext(now: later(30), newest: start, weighedToday: true, calendar: utc), "Not now waits a week")
+    check(history.asksNext(now: later(35), newest: start, weighedToday: false, calendar: utc), "back a week later")
+    history.notNow(now: later(35), calendar: utc)
+    history.notNow(now: later(42), calendar: utc)
+    check(!history.asksNext(now: later(80), newest: start, weighedToday: true, calendar: utc), "three Not nows: never again")
+    history.took()
+    check(history.asksNext(now: later(80), newest: start, weighedToday: false, calendar: utc), "a photo taken from Settings starts over")
+
+    // Lining two photos up.
+    let older = MirrorPlacement(centerX: 0.45, shoulderY: 0.30, spanTorso: 0.20)
+    let newer = MirrorPlacement(centerX: 0.55, shoulderY: 0.25, spanTorso: 0.25)
+    let align = MirrorAlign.make(older: older, newer: newer)
+    check(near(align.scale, 1.25), "the torsos match: \(align.scale)")
+    let shoulders = align.place(x: 0.45, y: 0.30)
+    check(near(shoulders.x, 0.55) && near(shoulders.y, 0.25), "the shoulders meet: \(shoulders)")
+    let hips = align.place(x: 0.45, y: 0.50)
+    check(near(hips.y, 0.50), "the hips meet too: \(hips)")
+    check(MirrorAlign.make(older: older, newer: nil) == .none, "no body found: shown as it is")
+    check(MirrorAlign.make(older: MirrorPlacement(centerX: 0.5, shoulderY: 0.3, spanTorso: 0.1), newer: newer).scale == 1.4, "a wild zoom is capped")
+    let wide = MirrorPlacement(centerX: 0.5, shoulderY: 0.3, spanTorso: 0.2).filling(photoAspect: 1, frameAspect: 0.75)
+    check(near(wide.centerX, 0.5) && near(wide.spanTorso, 0.2), "a square photo in a 3:4 frame keeps its middle")
+    let edge = MirrorPlacement(centerX: 0.25, shoulderY: 0.3, spanTorso: 0.2).filling(photoAspect: 1, frameAspect: 0.75)
+    check(near(edge.centerX, 1.0 / 6.0), "and its sides are cut: \(edge.centerX)")
+    let tall = MirrorPlacement(centerX: 0.5, shoulderY: 0.25, spanTorso: 0.2).filling(photoAspect: 0.5, frameAspect: 0.75)
+    check(near(tall.shoulderY, 0.125) && near(tall.spanTorso, 0.3), "a tall photo: top and bottom cut: \(tall)")
+
+    // Straightening.
+    check(near(MirrorLevel.keptShare(width: 3, height: 4, degrees: 0), 1), "level keeps it all")
+    check(near(MirrorLevel.keptShare(width: 3, height: 4, degrees: 2), 0.956, 0.002), "2 degrees keeps 96%")
+    check(near(MirrorLevel.keptShare(width: 3, height: 4, degrees: -5), 0.899, 0.002), "5 degrees either way keeps 90%")
+
+    // The guide. Ten frames a second; t is the time in seconds.
+    func body(_ shoulder: Double, _ hip: Double, ankle: Double? = nil, x: Double = 0.5) -> MirrorReading {
+        MirrorReading(body: MirrorBody(shoulderY: shoulder, hipY: hip, ankleY: ankle, centerX: x, top: max(shoulder - 0.1, 0.05)),
+                      height: (ankle ?? hip) - shoulder + 0.15, luma: 0.5)
+    }
+    func run(_ guide: inout MirrorGuide, _ reading: MirrorReading, from: Double, to: Double, roll: Double = 0) -> [MirrorGuide.Output] {
+        var outputs: [MirrorGuide.Output] = []
+        var t = from
+        while t < to - 0.0001 {
+            outputs.append(guide.update(reading, roll: roll, now: t))
+            t += 0.1
+        }
+        return outputs
+    }
+
+    var first = MirrorGuide(mode: .mirror, target: nil)
+    check(run(&first, .nobody, from: 0, to: 1).last?.line == .fitIn, "nobody: fit yourself in")
+    check(run(&first, MirrorReading(tooClose: true), from: 1, to: 2).last?.line == .stepBack, "too close: step back")
+    // The first photo in a small bathroom: only the torso fits, and stepping back stops helping.
+    var outs = run(&first, body(0.3, 0.7), from: 2, to: 5)
+    check(outs.last?.line == .stepBack, "first photo: step back while it can still get smaller")
+    outs = run(&first, body(0.3, 0.65), from: 5, to: 11)
+    check(outs.contains { $0.line == .stepBack }, "smaller is better: still stepping back")
+    outs = run(&first, body(0.3, 0.65), from: 11, to: 12.5)
+    check(outs.contains { $0.line == .yourSpot }, "six seconds without getting smaller: this is your spot")
+    outs = run(&first, body(0.3, 0.65), from: 12.5, to: 15)
+    check(outs.contains { $0.fire }, "then it takes the photo by itself")
+    check(outs.filter(\.fire).count == 1, "once")
+    outs = run(&first, body(0.3, 0.65), from: 15, to: 30)
+    check(!outs.contains { $0.fire }, "never again by itself after the photo")
+    check(outs.last?.line == .kept, "Ready after the photo offers another: \(String(describing: outs.last?.line))")
+
+    // The whole body in the frame: its spot straight away.
+    var whole = MirrorGuide(mode: .mirror, target: nil)
+    outs = run(&whole, body(0.2, 0.45, ankle: 0.9), from: 0, to: 4)
+    check(outs.contains { $0.line == .yourSpot } && outs.contains { $0.fire }, "a whole body fits: its spot, then the photo")
+    var tiny = MirrorGuide(mode: .mirror, target: nil)
+    check(run(&tiny, body(0.4, 0.5, ankle: 0.7), from: 0, to: 2).last?.line == .stepCloser, "a whole body too small: step closer")
+
+    // The second photo lines up with the first.
+    let target = MirrorTarget(shoulderY: 0.25, hipY: 0.55, ankleY: nil, centerX: 0.5)
+    var second = MirrorGuide(mode: .mirror, target: target)
+    check(run(&second, body(0.25, 0.70), from: 0, to: 2).last?.line == .stepBack, "bigger than the first: step back")
+    check(run(&second, body(0.30, 0.50), from: 2, to: 4).last?.line == .stepCloser, "smaller than the first: step closer")
+    outs = run(&second, body(0.25, 0.56), from: 4, to: 6)
+    check(outs.last?.marks.shoulders == true && outs.last?.marks.hips == true && outs.last?.marks.center == true, "the marks go solid")
+    outs += run(&second, body(0.25, 0.56), from: 6, to: 8)
+    check(outs.contains { $0.fire }, "lined up and still: the photo, within about two seconds")
+    var shaky = MirrorGuide(mode: .mirror, target: target)
+    var wobble: [MirrorGuide.Output] = []
+    for step in 0..<60 {
+        // The phone bobbing up and down in the hand, once a second.
+        let shift = 0.04 * sin(Double(step) * 0.1 * 2 * .pi)
+        wobble.append(shaky.update(body(0.25 + shift, 0.56 + shift), roll: 0, now: Double(step) * 0.1))
+    }
+    check(wobble.last?.line == .holdStill && !wobble.contains { $0.fire }, "moving: hold still, and no photo")
+    var tilted = MirrorGuide(mode: .mirror, target: target)
+    outs = run(&tilted, body(0.25, 0.56), from: 0, to: 3, roll: 9)
+    check(outs.last?.line == .level && outs.last?.level == false, "tilted past six degrees: level the phone")
+    var slight = MirrorGuide(mode: .mirror, target: target)
+    outs = run(&slight, body(0.25, 0.56), from: 0, to: 3, roll: 4)
+    check(outs.contains { $0.fire } && outs.last?.level == false, "four degrees: taken, straightened on save")
+
+    // Propped on the sink: set up, step back, count down out loud.
+    var propped = MirrorGuide(mode: .propped, target: nil)
+    check(run(&propped, .nobody, from: 0, to: 2).last?.line == .setUp, "propped: stand it up and step back")
+    check(run(&propped, body(0.05, 0.6, ankle: 0.98), from: 2, to: 3).last?.line == .setUp, "still too close to start")
+    outs = run(&propped, body(0.2, 0.45, ankle: 0.8), from: 3, to: 6)
+    check(outs.contains { $0.countdown == 3 }, "three, two, one")
+    check(!outs.contains { $0.fire }, "not yet")
+    outs = run(&propped, body(0.2, 0.45, ankle: 0.8), from: 6, to: 9)
+    check(outs.filter { $0.fire }.count == 1, "then the photo, once")
+    var dark = MirrorGuide(mode: .propped, target: nil)
+    outs = run(&dark, .nobody, from: 0, to: 15.3)
+    check(outs.last?.countdown == 10, "a room too dark to see in: a plain ten second countdown")
+    outs = run(&dark, .nobody, from: 15.3, to: 25.6)
+    check(outs.filter { $0.fire }.count == 1, "and the photo all the same")
+    var stubborn = MirrorGuide(mode: .propped, target: MirrorTarget(shoulderY: 0.2, hipY: 0.45, ankleY: 0.9, centerX: 0.5))
+    outs = run(&stubborn, body(0.3, 0.5, ankle: 0.8), from: 0, to: 26)
+    check(outs.contains { $0.line == .stepCloser }, "too far for the first photo's distance: step closer")
+    check(outs.contains { $0.line == .takingNow }, "25 seconds after the pose began: taking it now")
+}
+
 print("\(passes) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)

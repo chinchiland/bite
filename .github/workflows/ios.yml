@@ -140,6 +140,22 @@ jobs:
           shoot 48-widgets-big -onboarded YES -screen widgets-big
           shoot 49-widgets-lock-big -onboarded YES -screen widgets-lock-big
           shoot 50-widgets-dark -onboarded YES -screen widgets-dark
+          # Your mirror. The simulator has no camera and no body: the camera's guide is set by
+          # -mirror.guide, and the photos are drawn stand-ins, a figure on a wall.
+          shoot 51-mirror-ask -onboarded YES -screen mirror.ask -anchor mirror
+          shoot 52-mirror-promise -onboarded YES -screen mirror.promise
+          shoot 53-mirror-camera-first -onboarded YES -screen mirror.camera -mirror.guide first
+          shoot 54-mirror-camera-back -onboarded YES -screen mirror.camera -mirror.guide back
+          shoot 55-mirror-camera-ready -onboarded YES -screen mirror.camera -mirror.guide ready
+          shoot 56-mirror-camera-propped -onboarded YES -screen mirror.camera -mirror.guide propped
+          shoot 57-mirror -onboarded YES -screen mirror
+          shoot 58-mirror-pair -onboarded YES -screen mirror.pair
+          shoot 59-mirror-empty -onboarded YES -screen mirror.empty
+          shoot 71-mirror-camera-fr -onboarded YES -screen mirror.camera -mirror.guide back -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 72-mirror-promise-fr -onboarded YES -screen mirror.promise -AppleLanguages "(fr)" -AppleLocale fr_FR
+          xcrun simctl ui "$UDID" appearance dark
+          shoot 73-mirror-dark -onboarded YES -screen mirror
+          xcrun simctl ui "$UDID" appearance light
 
           shoot_fresh() {
             name=$1; shift

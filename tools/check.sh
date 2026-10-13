@@ -14,6 +14,17 @@ echo "all $(find Bite Shared BiteWidgets -name '*.swift' | wc -l) files parse"
 echo "== translations"
 python3 tools/check_strings.py
 
+echo "== your mirror stays apart"
+# The progress photos never reach the code the widgets compile, never sit in the store as a
+# blob, and have no path to the photo estimate (which sends pictures away) or back.
+walls=0
+if grep -rln --include=*.swift "Mirror" Shared BiteWidgets; then echo "the mirror must stay out of Shared and the widgets"; walls=1; fi
+if grep -rn "externalStorage" Bite/Model/MirrorShot.swift Bite/Services/Mirror*.swift; then echo "no photo in the mirror's store"; walls=1; fi
+if grep -rln "MirrorPicture\|MirrorVault" Bite/Services/ClaudeVision.swift Bite/Services/BiteVision.swift Bite/Views/Scan; then echo "no mirror photo near the estimate"; walls=1; fi
+if grep -rln "ClaudeVision\|claudeKey\|BiteVision\|PhotoEstimator" Bite/Views/Mirror Bite/Services/Mirror*.swift; then echo "no estimate near the mirror"; walls=1; fi
+[ "$walls" -eq 0 ] || exit 1
+echo "the mirror stays apart"
+
 echo "== logic tests"
 OUT="$(mktemp -d)"
 swiftc -o "$OUT/logic-tests" \
@@ -32,5 +43,7 @@ swiftc -o "$OUT/logic-tests" \
   Bite/Services/OpenFoodFacts.swift \
   Bite/Services/BasicFoods.swift \
   Bite/Services/ClaudeVision.swift \
+  Bite/Services/MirrorGuide.swift \
+  Bite/Services/MirrorRules.swift \
   tools/LogicTests/main.swift
 "$OUT/logic-tests" "$PWD"

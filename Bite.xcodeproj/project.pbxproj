@@ -376,7 +376,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bite;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes, photograph your meals and take your mirror photos, which stay on this phone.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID keeps your mirror photos for your eyes only.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps, the calories you burn and your weight next to what you eat.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bite uses your location to list the restaurants and cafes around you when you add a meal. Only Apple Maps sees it.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "When you turn it on, Bite saves the meals you log to Apple Health, with their calories and nutrients.";
@@ -410,7 +411,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bite;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes and photograph your meals.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Bite uses the camera to scan barcodes, photograph your meals and take your mirror photos, which stay on this phone.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID keeps your mirror photos for your eyes only.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bite shows your steps, the calories you burn and your weight next to what you eat.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Bite uses your location to list the restaurants and cafes around you when you add a meal. Only Apple Maps sees it.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "When you turn it on, Bite saves the meals you log to Apple Health, with their calories and nutrients.";

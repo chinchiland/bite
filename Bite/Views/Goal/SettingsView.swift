@@ -2,8 +2,8 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Your goal and macros, Apple Health, the key that turns photos into estimates, and your log
-/// to take with you.
+/// Your goal and macros, Apple Health, the key that turns photos into estimates, your mirror,
+/// and your log to take with you.
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("goal.kcal") private var kcal = 2000
@@ -26,6 +26,25 @@ struct SettingsView: View {
     @State private var nudgeRefused = false
     @Environment(\.modelContext) private var modelContext
     @State private var storedKey = ""
+    @AppStorage("mirror.consented") private var mirrorConsented = false
+    @AppStorage("mirror.faceID") private var mirrorFaceID = true
+    @State private var confirmMirrorErase = false
+
+    /// Changing the lock opens the mirror first, through the lock it has now.
+    private var mirrorFaceIDBinding: Binding<Bool> {
+        Binding(
+            get: { mirrorFaceID },
+            set: { on in
+                Task {
+                    guard await MirrorLock.open(faceID: mirrorFaceID) else { return }
+                    let changed = await Task.detached(priority: .userInitiated) {
+                        MirrorVault.shared.setProtected(on)
+                    }.value
+                    if changed { mirrorFaceID = on }
+                }
+            }
+        )
+    }
 
     private var split: MacroSplit { MacroSplit(rawValue: splitRaw) ?? .balanced }
 
@@ -337,6 +356,43 @@ struct SettingsView: View {
                         Text(CommunityServer.isConfigured
                             ? LocalizedStringKey("Photos you scan go to Bite's server and on to Google's Gemini, which sends back the calories and macros. No photo is kept. With your own Claude key, photos go to Anthropic instead, billed to your Anthropic account. Your log never leaves your phone.")
                             : LocalizedStringKey("Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone."))
+                    }
+
+                    Section {
+                        NavigationLink {
+                            MirrorHome(showsDone: false)
+                                .modelContainer(MirrorStore.container)
+                        } label: {
+                            Label {
+                                Text("Open your mirror")
+                                    .font(.ui(17))
+                                    .foregroundStyle(Theme.ink)
+                            } icon: {
+                                Image(systemName: "person.crop.rectangle")
+                                    .foregroundStyle(Theme.ink)
+                            }
+                        }
+                        .listRowBackground(Theme.card)
+                        if mirrorConsented {
+                            Toggle(isOn: mirrorFaceIDBinding) {
+                                Text("Require Face ID")
+                                    .font(.ui(17))
+                                    .foregroundStyle(Theme.ink)
+                            }
+                            .listRowBackground(Theme.card)
+                            Button("Delete all your photos", role: .destructive) { confirmMirrorErase = true }
+                                .font(.ui(17))
+                                .listRowBackground(Theme.card)
+                                .confirmationDialog("Delete all your photos", isPresented: $confirmMirrorErase, titleVisibility: .visible) {
+                                    Button("Delete", role: .destructive) { MirrorErase.everything() }
+                                } message: {
+                                    Text("The photos and the key that opens them both go. Nothing can bring them back.")
+                                }
+                        }
+                    } header: {
+                        SectionTitle(text: "Your mirror")
+                    } footer: {
+                        Text("These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch.")
                     }
 
                     Section {

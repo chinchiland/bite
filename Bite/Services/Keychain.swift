@@ -1,4 +1,5 @@
 import Foundation
+import LocalAuthentication
 import Security
 
 /// Keeps secrets, like your Claude API key, in the iOS Keychain instead of app storage.
@@ -40,6 +41,48 @@ enum Keychain {
         let status = SecItemUpdate(identity as CFDictionary, attributes as CFDictionary)
         guard status == errSecItemNotFound else { return status == errSecSuccess }
         let item = identity.merging(attributes) { _, new in new }
+        return SecItemAdd(item as CFDictionary, nil) == errSecSuccess
+    }
+
+    /// Bytes, for your mirror's keys. When the item is behind Face ID, pass the context Face ID
+    /// was just asked through so the Keychain doesn't ask again; without one it asks itself,
+    /// holding the thread until it's answered.
+    static func data(for account: String, context: LAContext? = nil) -> Data? {
+        var query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+        ]
+        if let context { query[kSecUseAuthenticationContext as String] = context }
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess else { return nil }
+        return result as? Data
+    }
+
+    /// Saves bytes on this phone only, never in a backup, or removes them when nil. `protected`
+    /// puts them behind Face ID or the passcode (the protection then rides in the access
+    /// control: an item can't carry both it and a plain accessibility). True when it worked.
+    @discardableResult
+    static func setData(_ data: Data?, for account: String, protected: Bool) -> Bool {
+        let identity: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+        ]
+        let removed = SecItemDelete(identity as CFDictionary)
+        guard let data else { return removed == errSecSuccess || removed == errSecItemNotFound }
+        var item = identity
+        item[kSecValueData as String] = data
+        if protected {
+            // Never biometry only: re-enrolling a face would lose the key and every photo, and
+            // a few failed tries would lock you out with no way back but the passcode.
+            guard let access = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleWhenUnlockedThisDeviceOnly, .userPresence, nil) else { return false }
+            item[kSecAttrAccessControl as String] = access
+        } else {
+            item[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        }
         return SecItemAdd(item as CFDictionary, nil) == errSecSuccess
     }
 
