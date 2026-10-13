@@ -138,6 +138,7 @@ enum DemoData {
         let place = MealPlace(name: "El Beirout", area: "Parc de Milan", latitude: 46.51492, longitude: 6.62268, category: .restaurant)
         typealias Count = (author: String, source: EstimateSource, nutrients: Nutrients, agrees: Int, tint: FoodTint)
 
+        @discardableResult
         func dish(_ name: String, emoji: String, photo key: String?, stars: Double, ratings: Int, _ counts: [Count]) -> CommunityDish {
             let item = CommunityDish(name: name, emoji: emoji, photo: key.flatMap { photo($0) }, place: place)
             item.ratingSum = stars * Double(ratings)

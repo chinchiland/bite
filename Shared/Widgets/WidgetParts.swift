@@ -119,6 +119,21 @@ struct GlyphTile: View {
     }
 }
 
+/// A macro's glyph alone, in the Lock Screen's single color, where a tile would be too much:
+/// it names each bar of the rectangular widget.
+struct MacroMark: View {
+    let macro: Macro
+    var size: CGFloat = 12
+
+    var body: some View {
+        Canvas { context, canvas in
+            MacroGlyph.draw(macro, in: &context, rect: CGRect(origin: .zero, size: canvas), color: .white)
+        }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
 /// A food as a tile: its photo, or its emoji on its tint.
 struct FoodTile: View {
     let emoji: String?

@@ -137,6 +137,9 @@ jobs:
           shoot 45-widgets -onboarded YES -screen widgets
           shoot 46-widgets-lock -onboarded YES -screen widgets-lock
           shoot 47-widgets-fr -onboarded YES -screen widgets -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 48-widgets-big -onboarded YES -screen widgets-big
+          shoot 49-widgets-lock-big -onboarded YES -screen widgets-lock-big
+          shoot 50-widgets-dark -onboarded YES -screen widgets-dark
 
           shoot_fresh() {
             name=$1; shift

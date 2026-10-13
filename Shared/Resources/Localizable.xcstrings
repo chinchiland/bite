@@ -748,7 +748,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld verres sur %2$lld. Ajouter un verre d’eau"
+            "value" : "%1$lld sur %2$lld verres. Ajouter un verre d’eau"
           }
         }
       }
@@ -9250,7 +9250,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eau : %lld verres sur %lld"
+            "value" : "Eau : %1$lld sur %2$lld verres"
           }
         }
       }

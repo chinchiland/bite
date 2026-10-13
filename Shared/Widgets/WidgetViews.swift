@@ -102,15 +102,29 @@ struct TodayWidgetView: View {
         .accessibilityLabel("\(macro.title): \(grams.gramsText) of \(target.kcalText) grams")
     }
 
+    /// Water as one more line under the macros, on a tile of its own: "3 / 8 glasses".
     private var waterLine: some View {
         HStack(spacing: 6) {
             Image(systemName: "drop.fill")
-                .font(.system(size: 11))
+                .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(Theme.water)
-            Text("\(snapshot.water) of \(snapshot.waterGoal)")
-                .font(.ui(12))
-                .monospacedDigit()
-                .foregroundStyle(Theme.ink)
+                .frame(width: 18, height: 18)
+                .background(Theme.tint(.sky), in: RoundedRectangle(cornerRadius: 18 * 0.3, style: .continuous))
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
+                Text(verbatim: "\(snapshot.water)")
+                    .font(.number(13, .semibold))
+                    .foregroundStyle(Theme.ink)
+                Text(verbatim: " / ")
+                    .font(.ui(11))
+                    .foregroundStyle(Theme.secondary)
+                Text("\(snapshot.waterGoal) glasses")
+                    .font(.ui(11))
+                    .foregroundStyle(Theme.secondary)
+            }
+            .lineLimit(1)
+            .monospacedDigit()
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Water: \(snapshot.water) of \(snapshot.waterGoal) glasses")
             Spacer(minLength: 0)
             Button(intent: RemoveWaterIntent()) {
                 Image(systemName: "minus")
@@ -132,11 +146,13 @@ struct TodayWidgetView: View {
         .foregroundStyle(Theme.ink)
     }
 
+    /// The ring toward the goal and the number; a plus says the day went over, since a full
+    /// ring alone could mean either.
     private var circular: some View {
         Gauge(value: snapshot.progress) {
             Image(systemName: "flame.fill")
         } currentValueLabel: {
-            Text(snapshot.headline.kcalText)
+            Text(verbatim: (snapshot.isOver ? "+" : "") + snapshot.headline.kcalText)
                 .minimumScaleFactor(0.6)
         }
         .gaugeStyle(.accessoryCircular)
@@ -153,14 +169,19 @@ struct TodayWidgetView: View {
             } icon: {
                 Image(systemName: "flame.fill")
             }
+            // Each bar led by its macro's glyph, so three bars never read as three of the same.
             HStack(spacing: 8) {
                 ForEach(Macro.allCases, id: \.self) { macro in
                     let share = target(of: macro) > 0 ? min(grams(of: macro) / target(of: macro), 1) : 0
-                    Gauge(value: share) {
-                        EmptyView()
+                    HStack(spacing: 3) {
+                        MacroMark(macro: macro)
+                        Gauge(value: share) {
+                            EmptyView()
+                        }
+                        .gaugeStyle(.accessoryLinearCapacity)
                     }
-                    .gaugeStyle(.accessoryLinearCapacity)
-                    .accessibilityLabel(macro.title)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(macro.title): \(grams(of: macro).gramsText) of \(target(of: macro).kcalText) grams")
                 }
             }
         }
@@ -330,10 +351,12 @@ struct LogWidgetView: View {
                 Text("Water")
                     .font(.ui(11))
                     .foregroundStyle(Theme.ink)
-                Text("\(entry.snapshot.water) of \(entry.snapshot.waterGoal)")
+                (Text(verbatim: "\(entry.snapshot.water) / ") + Text("\(entry.snapshot.waterGoal) glasses"))
                     .font(.ui(10))
                     .monospacedDigit()
                     .foregroundStyle(Theme.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
         }
         .buttonStyle(.plain)
@@ -366,19 +389,25 @@ struct ScanWidgetView: View {
             }
             .accessibilityLabel("Scan food")
         default:
+            // Two lines each where a language needs them ("Photographie un repas"), so nothing
+            // is cut: the camera, then the words at the bottom.
             VStack(alignment: .leading, spacing: 0) {
                 Image(systemName: "camera.fill")
-                    .font(.system(size: 26, weight: .medium))
+                    .font(.system(size: 23, weight: .medium))
                     .foregroundStyle(Theme.page)
-                    .frame(width: 52, height: 52)
+                    .frame(width: 46, height: 46)
                     .background(Theme.page.opacity(0.14), in: Circle())
-                Spacer(minLength: 8)
+                Spacer(minLength: 6)
                 Text("Snap a meal")
                     .font(.ui(17, .semibold))
                     .foregroundStyle(Theme.page)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.9)
                 Text("or scan a barcode")
                     .font(.ui(13))
                     .foregroundStyle(Theme.page.opacity(0.7))
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.9)
                     .padding(.top, 1)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

@@ -44,9 +44,9 @@ enum Reminders {
 
     static func turnOff() {
         current = nil
-        let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests { requests in
-            let ids = requests.map(\.identifier).filter { $0.hasPrefix(prefix) }
+        Task {
+            let center = UNUserNotificationCenter.current()
+            let ids = await center.pendingNotificationRequests().map(\.identifier).filter { $0.hasPrefix(prefix) }
             center.removePendingNotificationRequests(withIdentifiers: ids)
         }
     }

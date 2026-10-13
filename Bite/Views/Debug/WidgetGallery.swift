@@ -4,26 +4,45 @@ import WidgetKit
 
 /// Every widget at its real size, drawn by the app from the same faces the extension uses, so
 /// a simulator screenshot can show them: `-screen widgets` for the Home Screen and StandBy,
-/// `-screen widgets-lock` for the Lock Screen and its controls. Debug builds only.
+/// `widgets-lock` for the Lock Screen and its two buttons. Add `-big` for a heavy day (four
+/// digits over, long names, every macro past its target) and `-dark` for the night. Debug
+/// builds only.
 struct WidgetGallery: View {
     let lock: Bool
+    let heavy: Bool
+    let dark: Bool
 
     static var requested: WidgetGallery? {
-        switch UserDefaults.standard.string(forKey: "screen") {
-        case "widgets": WidgetGallery(lock: false)
-        case "widgets-lock": WidgetGallery(lock: true)
-        default: nil
-        }
+        guard let screen = UserDefaults.standard.string(forKey: "screen"), screen.hasPrefix("widgets") else { return nil }
+        let words = Set(screen.split(separator: "-").map(String.init))
+        return WidgetGallery(lock: words.contains("lock"), heavy: words.contains("big"), dark: words.contains("dark"))
     }
 
-    private let today = TodayEntry(date: .now, snapshot: .sample, canRead: true)
+    /// The demo's lunch at El Beirout, or a heavy day: 1,412 kcal over and 12 glasses.
+    private var snapshot: WidgetSnapshot {
+        heavy
+            ? .make(day: Nutrients(kcal: 3412, protein: 182, carbs: 361, fat: 148), goal: 2000, water: 12)
+            : .sample
+    }
+
+    private var today: TodayEntry { TodayEntry(date: .now, snapshot: snapshot, canRead: true) }
+
     private var log: LogEntry {
-        LogEntry(date: .now, snapshot: .sample, foods: [
-            ShelfFood(id: "demo:skyr", name: tr("Morning skyr"), kcal: 68, emoji: "🥣", tint: .butter, photo: nil),
-            ShelfFood(id: "demo:coffee", name: tr("Coffee, black"), kcal: 2, emoji: "☕", tint: .sky, photo: nil,
-                      addedAt: .now.addingTimeInterval(-60), undoID: "demo"),
-            ShelfFood(id: "demo:almonds", name: tr("Almonds"), kcal: 162, emoji: "🌰", tint: .sand, photo: nil),
-        ], canRead: true)
+        let justNow = Date.now.addingTimeInterval(-60)
+        let foods: [ShelfFood] = heavy
+            ? [
+                ShelfFood(id: "demo:plate", name: tr("Shawarma plate, fries"), kcal: 1240, emoji: "🍟", tint: .peach, photo: nil),
+                ShelfFood(id: "demo:shawarma", name: tr("Chicken shawarma"), kcal: 590, emoji: "🌯", tint: .sand, photo: nil,
+                          addedAt: justNow, undoID: "demo"),
+                ShelfFood(id: "demo:falafel", name: tr("Falafel wrap"), kcal: 520, emoji: "🧆", tint: .mint, photo: nil),
+            ]
+            : [
+                ShelfFood(id: "demo:skyr", name: tr("Morning skyr"), kcal: 68, emoji: "🥣", tint: .butter, photo: nil),
+                ShelfFood(id: "demo:coffee", name: tr("Coffee, black"), kcal: 2, emoji: "☕", tint: .sky, photo: nil,
+                          addedAt: justNow, undoID: "demo"),
+                ShelfFood(id: "demo:almonds", name: tr("Almonds"), kcal: 162, emoji: "🌰", tint: .sand, photo: nil),
+            ]
+        return LogEntry(date: .now, snapshot: snapshot, foods: foods, canRead: true)
     }
 
     var body: some View {
@@ -34,8 +53,10 @@ struct WidgetGallery: View {
 
     private var homeScreen: some View {
         ZStack {
-            LinearGradient(colors: [Color(red: 0.73, green: 0.79, blue: 0.86), Color(red: 0.91, green: 0.85, blue: 0.77)],
-                           startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: dark
+                ? [Color(red: 0.09, green: 0.11, blue: 0.17), Color(red: 0.21, green: 0.16, blue: 0.23)]
+                : [Color(red: 0.73, green: 0.79, blue: 0.86), Color(red: 0.91, green: 0.85, blue: 0.77)],
+                startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
             VStack(spacing: 22) {
                 HStack(spacing: 22) {
@@ -51,6 +72,7 @@ struct WidgetGallery: View {
             }
             .padding(.top, 40)
         }
+        .environment(\.colorScheme, dark ? .dark : .light)
     }
 
     private func system<Face: View>(_ family: WidgetFamily, background: Color = Theme.page, @ViewBuilder face: () -> Face) -> some View {
@@ -58,7 +80,6 @@ struct WidgetGallery: View {
             .padding(16)
             .frame(width: family == .systemMedium ? 364 : 170, height: 170)
             .background(background, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .environment(\.colorScheme, .light)
     }
 
     // MARK: Lock Screen
@@ -77,7 +98,7 @@ struct WidgetGallery: View {
                     .monospacedDigit()
                 HStack(spacing: 10) {
                     accessory { TodayWidgetView(entry: today, family: .accessoryCircular) }
-                    accessory { WaterWidgetView(snapshot: .sample) }
+                    accessory { WaterWidgetView(snapshot: snapshot) }
                     accessory { ScanWidgetView(family: .accessoryCircular) }
                 }
                 .padding(.top, 8)
@@ -92,7 +113,9 @@ struct WidgetGallery: View {
                 .padding(.horizontal, 46)
                 .padding(.bottom, 40)
             }
+            // The Lock Screen draws widgets in one vibrant color, gauges included.
             .foregroundStyle(.white)
+            .tint(.white)
         }
         .environment(\.colorScheme, .dark)
     }
