@@ -147,13 +147,13 @@ struct TodayWidgetView: View {
     }
 
     /// The ring toward the goal and the number; a plus says the day went over, since a full
-    /// ring alone could mean either.
+    /// ring alone could mean either. No thousands separator, so "+1412" still fits the circle.
     private var circular: some View {
         Gauge(value: snapshot.progress) {
             Image(systemName: "flame.fill")
         } currentValueLabel: {
-            Text(verbatim: (snapshot.isOver ? "+" : "") + snapshot.headline.kcalText)
-                .minimumScaleFactor(0.6)
+            Text(verbatim: (snapshot.isOver ? "+" : "") + snapshot.headline.safeInt.formatted(.number.grouping(.never)))
+                .minimumScaleFactor(0.5)
         }
         .gaugeStyle(.accessoryCircular)
         .accessibilityLabel(snapshot.headlineText)
@@ -319,11 +319,11 @@ struct LogWidgetView: View {
                 Button(intent: LogSavedFoodIntent(food: food.entity)) {
                     VStack(spacing: 4) {
                         FoodTile(emoji: food.emoji, tint: food.tint, photo: food.photo, size: 50)
+                        // One size for every name: a long one ends in "…" rather than shrinking.
                         Text(food.name)
                             .font(.ui(11))
                             .foregroundStyle(Theme.ink)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.8)
                         Text("\(food.kcal.kcalText) kcal")
                             .font(.ui(10))
                             .monospacedDigit()
@@ -372,9 +372,11 @@ struct LogWidgetView: View {
 struct ScanWidgetView: View {
     let family: WidgetFamily
 
+    /// Ink in both modes: at night the tile sits dark with the other widgets instead of
+    /// lighting up the Home Screen.
     var body: some View {
         content
-            .containerBackground(for: .widget) { Theme.ink }
+            .containerBackground(for: .widget) { Theme.ink.environment(\.colorScheme, .light) }
             .widgetURL(URL(string: "bite://scan"))
     }
 
@@ -411,6 +413,7 @@ struct ScanWidgetView: View {
                     .padding(.top, 1)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .environment(\.colorScheme, .light)
             .accessibilityElement(children: .combine)
         }
     }

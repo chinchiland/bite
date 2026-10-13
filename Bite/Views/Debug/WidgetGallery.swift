@@ -61,7 +61,9 @@ struct WidgetGallery: View {
             VStack(spacing: 22) {
                 HStack(spacing: 22) {
                     system(.systemSmall) { TodayWidgetView(entry: today, family: .systemSmall) }
+                    // The Scan tile stays ink at night too, as the widget draws it.
                     system(.systemSmall, background: Theme.ink) { ScanWidgetView(family: .systemSmall) }
+                        .environment(\.colorScheme, .light)
                 }
                 system(.systemMedium) { TodayWidgetView(entry: today, family: .systemMedium) }
                 system(.systemMedium) { LogWidgetView(entry: log, family: .systemMedium) }
