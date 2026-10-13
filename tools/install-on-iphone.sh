@@ -68,7 +68,7 @@ install_app() {
     -allowProvisioningUpdates \
     DEVELOPMENT_TEAM="$TEAM" \
     CODE_SIGN_STYLE=Automatic \
-    PRODUCT_BUNDLE_IDENTIFIER="$bundle" \
+    BITE_BUNDLE_ID="$bundle" \
     "$@" \
     -quiet
   echo "== Installing $name"
@@ -86,7 +86,7 @@ case "$WHICH" in
     # Release builds normally leave out.
     install_app "Bite Demo" "$BUNDLE_ID.demo" \
       INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
-      ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
+      BITE_APP_ICON=AppIconDemo \
       'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
       EXCLUDED_SOURCE_FILE_NAMES=
     ;;

@@ -8,8 +8,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "== parse"
-find Bite -name '*.swift' -print0 | xargs -0 swiftc -parse
-echo "all $(find Bite -name '*.swift' | wc -l) files parse"
+find Bite Shared BiteWidgets -name '*.swift' -print0 | xargs -0 swiftc -parse
+echo "all $(find Bite Shared BiteWidgets -name '*.swift' | wc -l) files parse"
 
 echo "== translations"
 python3 tools/check_strings.py
@@ -17,17 +17,17 @@ python3 tools/check_strings.py
 echo "== logic tests"
 OUT="$(mktemp -d)"
 swiftc -o "$OUT/logic-tests" \
-  Bite/Model/Localization.swift \
-  Bite/Model/Nutrients.swift \
-  Bite/Model/Formatting.swift \
-  Bite/Model/Food.swift \
-  Bite/Model/FoodTint.swift \
-  Bite/Model/Meal.swift \
-  Bite/Model/Highlights.swift \
-  Bite/Model/Goals.swift \
-  Bite/Model/SearchText.swift \
-  Bite/Model/Insights.swift \
-  Bite/Model/MealEstimate.swift   Bite/Model/HealthMeal.swift   Bite/Model/CheckIn.swift   Bite/Model/FirstRun.swift   Bite/Model/MealPlace.swift   Bite/Model/Consensus.swift   Bite/Model/Forecast.swift   Bite/Model/Usual.swift   Bite/Model/LogExport.swift \
+  Shared/Model/Localization.swift \
+  Shared/Model/Nutrients.swift \
+  Shared/Model/Formatting.swift \
+  Shared/Model/Food.swift \
+  Shared/Model/FoodTint.swift \
+  Shared/Model/Meal.swift \
+  Shared/Model/Highlights.swift \
+  Shared/Model/Goals.swift \
+  Shared/Model/SearchText.swift \
+  Shared/Model/Insights.swift \
+  Shared/Model/MealEstimate.swift   Shared/Model/HealthMeal.swift   Shared/Model/CheckIn.swift   Shared/Model/FirstRun.swift   Shared/Model/WidgetSnapshot.swift   Shared/Model/MealPlace.swift   Shared/Model/Consensus.swift   Shared/Model/Forecast.swift   Shared/Model/Usual.swift   Shared/Model/LogExport.swift \
   Bite/Services/OFFModels.swift \
   Bite/Services/OpenFoodFacts.swift \
   Bite/Services/BasicFoods.swift \

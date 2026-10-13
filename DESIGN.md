@@ -94,7 +94,7 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 ## Components
 
-`DayCover`, `DottedRing`, `MacroList`, `MacroBlock`, `MacroGlyph`, `MacroTile`, `SymbolTile`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Bite/Design/Theme.swift`, the typeface in `Bite/Design/Typeface.swift`.
+`DayCover`, `DottedRing`, `MacroList`, `MacroBlock`, `MacroGlyph`, `MacroTile`, `SymbolTile`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Shared/Design/Theme.swift`, the typeface in `Shared/Design/Typeface.swift`.
 
 ## Interactions
 
@@ -127,4 +127,4 @@ The scan laser sweeps, numbers roll, the ring lights up round from twelve the fi
 
 Short and friendly. The first words carry the meaning. No dashes.
 
-**Languages: English, French, Spanish.** Written in each language, never translated word for word. French says *tu*, uses a narrow no-break space before `: ? ! %` and curly apostrophes; Spanish is from Spain and says *tú*. Apple's own words win: Réglages and Ajustes, l'app Santé and la app Salud. Labels next to a number agree with what it counts ("kcal mangées", "quemadas": calories). Every key lives in `Bite/Resources/Localizable.xcstrings`; `tools/check_strings.py` fails on any word without both translations.
+**Languages: English, French, Spanish.** Written in each language, never translated word for word. French says *tu*, uses a narrow no-break space before `: ? ! %` and curly apostrophes; Spanish is from Spain and says *tú*. Apple's own words win: Réglages and Ajustes, l'app Santé and la app Salud. Labels next to a number agree with what it counts ("kcal mangées", "quemadas": calories). Every key lives in `Shared/Resources/Localizable.xcstrings`; `tools/check_strings.py` fails on any word without both translations.

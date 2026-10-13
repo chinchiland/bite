@@ -22,7 +22,7 @@ tools/install-on-iphone.sh demo     # only Bite Demo
 
 It builds each app in Release for the plugged-in iPhone, signs it with team CKPJMS3P4U (Xcode registers the iPhone and the app ids, Apple Health included, the first time), installs it and opens it.
 
-- **Bite** starts on the goal screen, then an empty Today. Tap **Connect Health** on Today for Apple's Health window, and paste your Claude key in Settings › Photo estimates (from <https://platform.claude.com/settings/keys>).
+- **Bite** starts on a welcome screen, then the first bite and your goal over Today. It comes with widgets (Today and Log on the Home Screen, Today on the Lock Screen, a water control): Xcode signs the widget extension and the App Group `group.<bundle id>` with the team the first time. If signing ever refuses the App Group, the app still runs on its own folder and the widgets say "Open Bite once". Tap **Connect Health** on Today for Apple's Health window, and paste your Claude key in Settings › Photo estimates (from <https://platform.claude.com/settings/keys>).
 - **Bite Demo** opens on the El Beirout day with two weeks of sample meals. Nothing you add in it is kept.
 
 If Apple says `com.dylan.bite` is not available, pick your own: `BUNDLE_ID=ch.dylan.bite tools/install-on-iphone.sh`. Two iPhones plugged in: `DEVICE=<udid> tools/install-on-iphone.sh` (`xcrun devicectl list devices` lists them).

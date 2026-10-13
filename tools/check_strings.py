@@ -1,6 +1,7 @@
 """Checks that every word the app shows has a French and a Spanish translation.
 
-It reads Bite/Resources/Localizable.xcstrings and every string literal in the Swift sources,
+It reads Shared/Resources/Localizable.xcstrings and every string literal in the Swift sources
+(the app, the shared code and the widgets),
 turns SwiftUI interpolations into the catalog's format (Int becomes %lld, anything else %@),
 and lists literals with no translation. Literals that are not words (symbol names, keys,
 emoji, numbers with a unit) are skipped. Run: python3 tools/check_strings.py
@@ -20,6 +21,7 @@ INTEGERS = {
     "water", "waterGoal", "tally.onTarget", "tally.logged", "consensus.estimates", "consensus.spreadPercent",
     "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days", "learned.days",
     "day.known", "day.counted", "checkIn.wholeDays",
+    "snapshot.water", "snapshot.waterGoal", "entry.snapshot.water", "entry.snapshot.waterGoal",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.
@@ -27,7 +29,7 @@ NOT_WORDS = re.compile(
     r"""^(
         [a-z0-9]+(\.[a-z0-9]+)+                     # SF Symbols
       | [a-z][A-Za-z0-9]*(\.[a-z][A-Za-z0-9]*)*     # keys and identifiers
-      | saved:.*|-.*|https?://.*                    # internal ids, launch arguments, links
+      | saved:.*|-.*|https?://.*|bite://.*         # internal ids, launch arguments, links
       | [A-Z]                                       # Nutri-Score letters
       | %@|%@\ %@|%@\ (g|kcal|ml)|\+%@|\ /\ %@\ g|×%lld|%lld|\#%lld|%@\ ·\ %@|100\ %@
       | (g|kcal|ml|cm|kg)
@@ -111,7 +113,7 @@ def specifiers(text: str) -> list:
 
 
 def main() -> int:
-    catalog = json.load(open(os.path.join(ROOT, "Bite/Resources/Localizable.xcstrings"), encoding="utf-8"))
+    catalog = json.load(open(os.path.join(ROOT, "Shared/Resources/Localizable.xcstrings"), encoding="utf-8"))
     strings = catalog["strings"]
     problems = []
 
@@ -124,12 +126,14 @@ def main() -> int:
                 if specifiers(value) != specifiers(key):
                     problems.append(f"catalog: {key!r} in {language} has {specifiers(value)}, the key has {specifiers(key)}")
 
-    for folder, _, files in os.walk(os.path.join(ROOT, "Bite")):
-        for name in sorted(files):
-            if not name.endswith(".swift"):
-                continue
-            path = os.path.join(folder, name)
-            rel = os.path.relpath(path, os.path.join(ROOT, "Bite")).replace(os.sep, "/")
+    sources = []
+    for top in ("Bite", "Shared", "BiteWidgets"):
+        for folder, _, files in os.walk(os.path.join(ROOT, top)):
+            sources += [(top, os.path.join(folder, name)) for name in sorted(files) if name.endswith(".swift")]
+    for top, path in sources:
+            rel = os.path.relpath(path, os.path.join(ROOT, top)).replace(os.sep, "/")
+            if top == "BiteWidgets":
+                rel = "Views/" + rel
             if rel in SKIP_FILES:
                 continue
             in_views = rel.startswith(("Views/", "Design/"))

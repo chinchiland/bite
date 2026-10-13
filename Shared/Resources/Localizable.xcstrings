@@ -161,6 +161,22 @@
         }
       }
     },
+    "%@ kcal eaten" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal ingeridas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal mangées"
+          }
+        }
+      }
+    },
     "%@ kcal in total" : {
       "localizations" : {
         "es" : {
@@ -173,6 +189,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ kcal au total"
+          }
+        }
+      }
+    },
+    "%@ kcal left" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te quedan %@ kcal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encore %@ kcal"
           }
         }
       }
@@ -623,6 +655,22 @@
         }
       }
     },
+    "%lld of %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld sur %2$lld"
+          }
+        }
+      }
+    },
     "%lld people agree" : {
       "localizations" : {
         "en" : {
@@ -941,6 +989,22 @@
         }
       }
     },
+    "A glass of water, one tap." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un vaso de agua, de un toque."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un verre d’eau, d’un geste."
+          }
+        }
+      }
+    },
     "A goal of %@ kcal fits what you burn" : {
       "localizations" : {
         "es" : {
@@ -1197,6 +1261,22 @@
         }
       }
     },
+    "Add a glass of water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir un vaso de agua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un verre d’eau"
+          }
+        }
+      }
+    },
     "Add a place" : {
       "localizations" : {
         "es" : {
@@ -1341,6 +1421,22 @@
         }
       }
     },
+    "Add water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir agua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter de l’eau"
+          }
+        }
+      }
+    },
     "Add your Claude API key in Settings once, and every photo gets calories and macros in a few seconds." : {
       "localizations" : {
         "es" : {
@@ -1437,6 +1533,22 @@
         }
       }
     },
+    "Added %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadido a las %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouté à %@"
+          }
+        }
+      }
+    },
     "Added %@ to %@, %@ kcal." : {
       "localizations" : {
         "es" : {
@@ -1485,6 +1597,22 @@
         }
       }
     },
+    "Adds a glass of water to today." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade un vaso de agua a hoy."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute un verre d’eau à aujourd’hui."
+          }
+        }
+      }
+    },
     "Adds one of your saved foods to today, with its usual amount." : {
       "localizations" : {
         "es" : {
@@ -1513,6 +1641,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Âge"
+          }
+        }
+      }
+    },
+    "Almonds" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Almendras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amandes"
           }
         }
       }
@@ -2461,6 +2605,22 @@
         }
       }
     },
+    "Coffee, black" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Café solo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Café noir"
+          }
+        }
+      }
+    },
     "Connect Apple Health" : {
       "localizations" : {
         "es" : {
@@ -2985,6 +3145,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saisi à la main"
+          }
+        }
+      }
+    },
+    "Entry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrée"
           }
         }
       }
@@ -4045,6 +4221,22 @@
         }
       }
     },
+    "Log" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
+          }
+        }
+      }
+    },
     "Log a few days and they show up here, with your best days ranked." : {
       "localizations" : {
         "es" : {
@@ -4105,6 +4297,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note ce que tu manges d’un geste. Bite compte le reste."
+          }
+        }
+      }
+    },
+    "Log your saved foods and water in one tap." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade tus guardados y un vaso de agua de un toque."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute tes favoris et un verre d’eau d’un geste."
           }
         }
       }
@@ -5181,6 +5389,22 @@
         }
       }
     },
+    "Open Bite once to see your day here." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Bite una vez para ver tu día aquí."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre Bite une fois pour voir ta journée ici."
+          }
+        }
+      }
+    },
     "Open Settings" : {
       "localizations" : {
         "es" : {
@@ -6029,6 +6253,22 @@
         }
       }
     },
+    "Save a food in Bite to log it here in one tap." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarda un alimento en Bite para añadirlo aquí de un toque."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garde un aliment dans Bite pour l’ajouter ici d’un geste."
+          }
+        }
+      }
+    },
     "Save key" : {
       "localizations" : {
         "es" : {
@@ -6361,6 +6601,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vois les endroits autour de toi"
+          }
+        }
+      }
+    },
+    "See what's left today and how your macros stand." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mira lo que te queda hoy y cómo van tus macros."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vois ce qu’il te reste aujourd’hui et où en sont tes macros."
           }
         }
       }
@@ -6877,6 +7133,22 @@
         }
       }
     },
+    "Take back a glass of water" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar un vaso de agua"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer un verre d’eau"
+          }
+        }
+      }
+    },
     "Take photo" : {
       "localizations" : {
         "es" : {
@@ -6905,6 +7177,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Retire ton accord"
+          }
+        }
+      }
+    },
+    "Takes the last glass of water off today." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quita el último vaso de agua de hoy."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retire le dernier verre d’eau d’aujourd’hui."
           }
         }
       }

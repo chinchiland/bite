@@ -4,9 +4,10 @@ A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 langua
 
 ## Where things are
 
-- `Bite/Model`: Foundation-only logic (nutrients, goals, insights, forecast, usual meal, search, export). Tested without Xcode by `tools/check.sh`.
-- `Bite/Services`: Open Food Facts, the USDA basics, the Claude photo estimate (raw HTTP, `claude-opus-5-5`), Apple Health, places, the SwiftData store (`BiteStore`, versioned schema), the demo data.
-- `Bite/Views`, `Bite/Design`: screens and components. Tokens in `Bite/Design/Theme.swift`.
+- `Shared/`: compiled into the app and the widgets. `Shared/Model` is the Foundation-only logic (nutrients, goals, insights, forecast, the weekly check-in, usual meal, first run, widget snapshot, Health plan, search, export), tested without Xcode by `tools/check.sh`; `Shared/Design` holds the tokens (`Theme.swift`), the typeface and the macro glyphs; `Shared/Services` the SwiftData store (`BiteStore`, versioned schema, in the App Group `group.<bundle id>`), and the intents widgets and Siri run (`LogIntents.swift`); `Shared/Resources` the string catalog and the fonts.
+- `Bite/Services`: Open Food Facts, the USDA basics, the Claude photo estimate (raw HTTP, `claude-opus-5-5`), Apple Health (read, and opt-in write via `HealthSync`), places, the widget bridge, the demo data.
+- `Bite/Views`, `Bite/Design`: screens and components; `Bite/Views/Start` is the first run.
+- `BiteWidgets/`: the widget extension (Today, Log, the water control). Its bundle id follows the app's (`BITE_BUNDLE_ID`, `.widgets`); set `BITE_BUNDLE_ID` and `BITE_APP_ICON`, never `PRODUCT_BUNDLE_IDENTIFIER`, on the command line.
 - `docs/`: research, the iPhone guides (`docs/mac.md`, `docs/iphone.md`).
 
 ## On a Mac
@@ -21,6 +22,6 @@ Every push to main runs `.github/workflows/ios.yml` on a macOS runner: a Debug b
 
 ## Rules for the code
 
-- Every word on screen lives in `Bite/Resources/Localizable.xcstrings` with French (tu, curly apostrophes, a narrow no-break space before `: ? ! %`) and Spanish from Spain (tú). Model code uses `tr()`. `tools/check_strings.py` fails on any untranslated literal.
+- Every word on screen lives in `Shared/Resources/Localizable.xcstrings` with French (tu, curly apostrophes, a narrow no-break space before `: ? ! %`) and Spanish from Spain (tú). Model code uses `tr()`. `tools/check_strings.py` fails on any untranslated literal.
 - Copy is short and plain, never an em dash. Comments are full sentences that say why, in the "you" voice the app uses.
 - Commit with `git -c user.name=Dylan`; never change the global git config.

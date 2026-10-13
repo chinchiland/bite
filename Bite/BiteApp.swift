@@ -33,6 +33,7 @@ struct BiteApp: App {
         }
         #endif
         HealthSync.shared.start(container)
+        WidgetBridge.shared.start()
     }
 
     var body: some Scene {

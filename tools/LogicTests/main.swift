@@ -657,6 +657,26 @@ do {
     check(doubled.isEmpty, "the newest copy is the one compared")
 }
 
+// MARK: Widgets
+
+do {
+    let day = Nutrients(kcal: 1033, protein: 62, carbs: 79, fat: 55)
+    let today = WidgetSnapshot.make(day: day, goal: 2000, water: 3)
+    check(today.headline == 967 && today.headlineKind == .left, "967 kcal left")
+    check(today.targets == MacroTargets(kcal: 2000, split: .balanced), "the macros aim for the goal's split")
+    let ring = today.ring
+    check(near(ring.protein + ring.carbs + ring.fat, 1033.0 / 2000, 0.001) && ring.overflow == 0, "the ring fills to half: \(ring)")
+    let over = WidgetSnapshot.make(day: Nutrients(kcal: 2450, protein: 152, carbs: 312, fat: 98), goal: 2000)
+    check(over.headline == 450 && over.headlineKind == .over && near(over.ring.overflow, 0.225), "450 kcal over, the outer ring a quarter red")
+    let burned = WidgetSnapshot.make(day: day, goal: 2000, burned: 412)
+    check(burned.headline == 1379, "burned calories added to the goal leave more")
+    let free = WidgetSnapshot.make(day: over.eaten, goal: 2000, noTarget: true)
+    check(free.headline == 2450 && free.headlineKind == .eaten && free.ring.overflow == 0, "no target: what was eaten, never red")
+    let empty = WidgetSnapshot.make(day: .zero, goal: 2000)
+    check(empty.ring.protein == 0 && empty.headline == 2000 && empty.progress == 0, "an empty day: the whole goal left")
+    check(WidgetSnapshot.make(day: day, goal: 2000, waterGoal: 0).waterGoal == 1, "a water goal of nothing is one glass")
+}
+
 // MARK: First run
 
 do {

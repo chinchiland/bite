@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// The one food log, shared by the app and its Siri and Shortcuts actions.
+/// The one food log, shared by the app, its widgets, and its Siri and Shortcuts actions.
 enum BiteStore {
     /// The seeded log in memory: Debug builds launched with `-demo` (the screenshots), and
     /// Bite Demo, the app built with BITE_DEMO, which always opens on it.
@@ -21,14 +21,15 @@ enum BiteStore {
 
     static let container: ModelContainer = {
         let schema = Schema(versionedSchema: BiteSchemaV1.self)
+        let configuration = configuration(for: schema)
         do {
             return try ModelContainer(
                 for: schema,
                 migrationPlan: BiteMigrationPlan.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: isDemo)
+                configurations: configuration
             )
         } catch {
-            if let plain = try? ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: isDemo)) {
+            if let plain = try? ModelContainer(for: schema, configurations: configuration) {
                 return plain
             }
             failedToOpen = true
@@ -39,6 +40,20 @@ enum BiteStore {
             }
         }
     }()
+}
+
+extension BiteStore {
+    /// Where the log lives: in the App Group, so the widgets read and write the same one,
+    /// moved there once from the app's own folder; in memory for the demo; in the app's own
+    /// folder in a copy signed without the group. Never mirrored to iCloud.
+    static func configuration(for schema: Schema) -> ModelConfiguration {
+        if isDemo { return ModelConfiguration(schema: schema, isStoredInMemoryOnly: true) }
+        guard let url = AppGroup.storeURL else {
+            return ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        }
+        StoreMove.moveIfNeeded(to: url)
+        return ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
+    }
 }
 
 /// The log's shape, versioned from the first install on: a later change that is more than a new

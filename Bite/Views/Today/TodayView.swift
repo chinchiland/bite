@@ -1171,7 +1171,9 @@ struct TodayView: View {
             activity = nil
             return
         }
-        activity = await HealthActivity.shared.activity(on: day)
+        let read = await HealthActivity.shared.activity(on: day)
+        activity = read
+        if isToday { WidgetBridge.shared.publishBurned(read.activeKcal, on: day) }
     }
 
     /// Gone at once, with Undo in the toast instead of an "are you sure?".

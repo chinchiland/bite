@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct RootView: View {
@@ -6,11 +7,26 @@ struct RootView: View {
     @AppStorage("firstRun.day") private var firstRunDay = 0.0
     @State private var events = LogEvents()
     @State private var storeProblem = BiteStore.failedToOpen
+    @Environment(\.scenePhase) private var scenePhase
+    /// The log as the screens read it. A widget or Siri that wrote to it while Bite was away
+    /// leaves the main context holding old values, so Bite reads through a fresh one then.
+    @State private var context = BiteStore.container.mainContext
+    @State private var seenWrite = AppGroup.defaults.double(forKey: AppGroup.Key.wroteAt)
 
     var body: some View {
         TodayView()
             .environment(events)
             .environment(AppActions.shared)
+            .modelContext(context)
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active else { return }
+                let wrote = AppGroup.defaults.double(forKey: AppGroup.Key.wroteAt)
+                guard wrote > seenWrite else { return }
+                seenWrite = wrote
+                let fresh = ModelContext(BiteStore.container)
+                fresh.autosaveEnabled = true
+                context = fresh
+            }
             .fullScreenCover(isPresented: needsWelcome) {
                 WelcomeView {
                     firstRunDay = Calendar.current.startOfDay(for: .now).timeIntervalSince1970

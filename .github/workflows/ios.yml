@@ -159,9 +159,9 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build-demo-sim \
             CODE_SIGNING_ALLOWED=NO \
-            PRODUCT_BUNDLE_IDENTIFIER=com.dylan.bite.demo \
+            BITE_BUNDLE_ID=com.dylan.bite.demo \
             INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
-            ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
+            BITE_APP_ICON=AppIconDemo \
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
             EXCLUDED_SOURCE_FILE_NAMES= -quiet
           xcrun simctl install "$UDID" build-demo-sim/Build/Products/Release-iphonesimulator/Bite.app
@@ -189,10 +189,16 @@ jobs:
             CODE_SIGNING_ALLOWED=NO
           mkdir -p Payload
           cp -R build-device/Build/Products/Release-iphoneos/Bite.app Payload/
-          # An ad-hoc signature that carries the Health entitlement, so Sideloadly can keep it
-          # when it signs the app with your Apple ID.
-          codesign --force --sign - --entitlements Bite.entitlements --timestamp=none Payload/Bite.app
+          # Ad-hoc signatures that carry the entitlements (Health, the App Group the widgets
+          # share), so Sideloadly can keep them when it signs with your Apple ID: the widgets
+          # first, then the app around them.
+          sed 's/$(BITE_BUNDLE_ID)/com.dylan.bite/' Bite.entitlements > app.entitlements
+          sed 's/$(BITE_BUNDLE_ID)/com.dylan.bite/' BiteWidgets.entitlements > widgets.entitlements
+          codesign --force --sign - --entitlements widgets.entitlements --timestamp=none Payload/Bite.app/PlugIns/BiteWidgets.appex
+          codesign --force --sign - --entitlements app.entitlements --timestamp=none Payload/Bite.app
           codesign -d --entitlements - Payload/Bite.app
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' Payload/Bite.app/PlugIns/BiteWidgets.appex/Info.plist)" = com.dylan.bite.widgets ] \
+            || { echo "::error::the widgets' bundle id does not follow the app's"; exit 1; }
           zip -qry Bite-unsigned.ipa Payload
 
       - uses: actions/upload-artifact@v4
@@ -216,9 +222,9 @@ jobs:
             -destination 'generic/platform=iOS' \
             -derivedDataPath build-demo \
             CODE_SIGNING_ALLOWED=NO \
-            PRODUCT_BUNDLE_IDENTIFIER=com.dylan.bite.demo \
+            BITE_BUNDLE_ID=com.dylan.bite.demo \
             INFOPLIST_KEY_CFBundleDisplayName="Bite Demo" \
-            ASSETCATALOG_COMPILER_APPICON_NAME=AppIconDemo \
+            BITE_APP_ICON=AppIconDemo \
             'SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) BITE_DEMO' \
             EXCLUDED_SOURCE_FILE_NAMES= -quiet
           APP=build-demo/Build/Products/Release-iphoneos/Bite.app
@@ -228,7 +234,11 @@ jobs:
             [ -f "$APP/demo-$photo.jpg" ] || fail "demo-$photo.jpg is missing from Bite Demo"
           done
           rm -rf DemoIPA && mkdir -p DemoIPA/Payload
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/PlugIns/BiteWidgets.appex/Info.plist")" = com.dylan.bite.demo.widgets ] \
+            || fail "Bite Demo's widgets kept Bite's bundle id"
           cp -R "$APP" DemoIPA/Payload/
+          sed 's/$(BITE_BUNDLE_ID)/com.dylan.bite.demo/' BiteWidgets.entitlements > demo-widgets.entitlements
+          codesign --force --sign - --entitlements demo-widgets.entitlements --timestamp=none DemoIPA/Payload/Bite.app/PlugIns/BiteWidgets.appex
           codesign --force --sign - --timestamp=none DemoIPA/Payload/Bite.app
           (cd DemoIPA && zip -qry ../Bite-Demo-unsigned.ipa Payload)
 
