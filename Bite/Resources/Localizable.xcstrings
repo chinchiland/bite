@@ -81,6 +81,22 @@
         }
       }
     },
+    "%@ g to aim for" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ g de meta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ g à viser"
+          }
+        }
+      }
+    },
     "%@ has no nutrition facts yet." : {
       "localizations" : {
         "es" : {
@@ -381,6 +397,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ : %@ grammes"
+          }
+        }
+      }
+    },
+    "%@: %@ grams to aim for" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ gramos de meta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ : %2$@ grammes à viser"
           }
         }
       }
@@ -813,6 +845,22 @@
         }
       }
     },
+    "3 to 5 workouts a week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 a 5 entrenos a la semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 à 5 séances par semaine"
+          }
+        }
+      }
+    },
     "50 to 69" : {
       "localizations" : {
         "es" : {
@@ -857,6 +905,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "90 à 100"
+          }
+        }
+      }
+    },
+    "A calm food journal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un diario de comidas tranquilo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un journal de repas, tout en calme."
           }
         }
       }
@@ -985,6 +1049,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Environ un demi-kilo de moins par semaine"
+          }
+        }
+      }
+    },
+    "About you" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre ti"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toi"
           }
         }
       }
@@ -1673,6 +1753,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bite n’a pas pu ouvrir ton journal"
+          }
+        }
+      }
+    },
+    "Bite counts what you eat and shows the pattern, with no budget to stay under. Macros still show what to aim for." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite cuenta lo que comes y te muestra tus hábitos, sin un límite que respetar. Los macros siguen mostrando tu meta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite compte ce que tu manges et te montre tes habitudes, sans budget à respecter. Les macros montrent toujours quoi viser."
           }
         }
       }
@@ -2621,6 +2717,22 @@
         }
       }
     },
+    "Desk, little exercise" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oficina, poco ejercicio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bureau, peu de sport"
+          }
+        }
+      }
+    },
     "Dinner" : {
       "localizations" : {
         "es" : {
@@ -3053,6 +3165,38 @@
         }
       }
     },
+    "Fill in from Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rellenar con Salud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remplir avec Santé"
+          }
+        }
+      }
+    },
+    "Filled in from Apple Health" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rellenado con Salud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rempli avec Santé"
+          }
+        }
+      }
+    },
     "Filled in from your photo" : {
       "localizations" : {
         "es" : {
@@ -3065,6 +3209,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rempli d’après ta photo"
+          }
+        }
+      }
+    },
+    "First bite" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primer bocado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Première bouchée"
           }
         }
       }
@@ -3181,6 +3341,22 @@
         }
       }
     },
+    "Free. No account. Your log stays on this phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis. Sin cuenta. Tu diario se queda en este teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratuit. Sans compte. Ton journal reste sur ce téléphone."
+          }
+        }
+      }
+    },
     "From a photo" : {
       "localizations" : {
         "es" : {
@@ -3209,6 +3385,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prendre"
+          }
+        }
+      }
+    },
+    "Gain slowly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganar poco a poco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre doucement"
           }
         }
       }
@@ -3517,6 +3709,22 @@
         }
       }
     },
+    "Hold a food to add it again, or scan your next meal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén pulsado un alimento para volver a añadirlo, o escanea tu próxima comida."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintiens un aliment pour l’ajouter à nouveau, ou scanne ton prochain repas."
+          }
+        }
+      }
+    },
     "How" : {
       "localizations" : {
         "es" : {
@@ -3613,6 +3821,22 @@
         }
       }
     },
+    "Is %@ kcal right for you?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Te van bien %@ kcal?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal, ça te va ?"
+          }
+        }
+      }
+    },
     "It's still on your phone, and the next update will open it. Until then, what you add isn't kept." : {
       "localizations" : {
         "es" : {
@@ -3641,6 +3865,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Garder %@ kcal"
+          }
+        }
+      }
+    },
+    "Keep steady" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenerme"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rester stable"
           }
         }
       }
@@ -3853,6 +4093,22 @@
         }
       }
     },
+    "Log what you eat in a tap. Bite counts the rest." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anota lo que comes con un toque. Bite cuenta el resto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note ce que tu manges d’un geste. Bite compte le reste."
+          }
+        }
+      }
+    },
     "Look up" : {
       "localizations" : {
         "es" : {
@@ -3913,6 +4169,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perdre"
+          }
+        }
+      }
+    },
+    "Lose a little" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perder un poco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdre un peu"
           }
         }
       }
@@ -4621,6 +4893,38 @@
         }
       }
     },
+    "No target" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin objetivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans objectif"
+          }
+        }
+      }
+    },
+    "No target. Bite counts, and shows you the pattern." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin objetivo. Bite cuenta y te muestra tus hábitos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans objectif. Bite compte, et te montre tes habitudes."
+          }
+        }
+      }
+    },
     "Not now" : {
       "localizations" : {
         "es" : {
@@ -4681,6 +4985,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rien de noté ce jour-là."
+          }
+        }
+      }
+    },
+    "Nothing yet" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún nada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien pour l’instant"
           }
         }
       }
@@ -4921,6 +5241,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ouvre l’endroit dans Uber Eats"
+          }
+        }
+      }
+    },
+    "Or type it in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O escríbelo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ou tape-le"
           }
         }
       }
@@ -5853,6 +6189,22 @@
         }
       }
     },
+    "Scan a barcode" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear un código"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner un code-barres"
+          }
+        }
+      }
+    },
     "Scan a barcode or snap your plate to log your first bite." : {
       "localizations" : {
         "es" : {
@@ -6301,6 +6653,70 @@
         }
       }
     },
+    "Sport most days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deporte casi a diario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport presque tous les jours"
+          }
+        }
+      }
+    },
+    "Start" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer"
+          }
+        }
+      }
+    },
+    "Start my journal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar mi diario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer mon journal"
+          }
+        }
+      }
+    },
+    "Start tomorrow" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar mañana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commencer demain"
+          }
+        }
+      }
+    },
     "Start tracking" : {
       "localizations" : {
         "es" : {
@@ -6541,6 +6957,22 @@
         }
       }
     },
+    "Tap it, scan it or search. You can change it later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tócalo, escanéalo o búscalo. Puedes cambiarlo luego."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touche-le, scanne-le ou cherche-le. Tu pourras le changer ensuite."
+          }
+        }
+      }
+    },
     "Tap one to adjust" : {
       "localizations" : {
         "es" : {
@@ -6681,6 +7113,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cette semaine"
+          }
+        }
+      }
+    },
+    "Three answers make it yours." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tres respuestas y es tuyo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trois réponses, et il est à toi."
           }
         }
       }
@@ -7037,6 +7485,22 @@
         }
       }
     },
+    "Use %@ kcal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar %@ kcal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser %@ kcal"
+          }
+        }
+      }
+    },
     "Use it" : {
       "localizations" : {
         "es" : {
@@ -7133,6 +7597,22 @@
         }
       }
     },
+    "Walks, 1 to 3 workouts" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paseos, 1 a 3 entrenos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marche, 1 à 3 séances"
+          }
+        }
+      }
+    },
     "Walks, or training 1 to 3 days a week" : {
       "localizations" : {
         "es" : {
@@ -7209,6 +7689,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Poids"
+          }
+        }
+      }
+    },
+    "What did you eat last?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué fue lo último que comiste?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’as-tu mangé en dernier ?"
+          }
+        }
+      }
+    },
+    "What did you have for lunch?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué has comido a mediodía?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’as-tu mangé à midi ?"
+          }
+        }
+      }
+    },
+    "What did you have this morning?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué has tomado esta mañana?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’as-tu mangé ce matin ?"
+          }
+        }
+      }
+    },
+    "What did you have? Tap it, scan it or search." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué has comido? Tócalo, escanéalo o búscalo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’as-tu mangé ? Touche-le, scanne-le ou cherche-le."
           }
         }
       }
@@ -7453,6 +7997,22 @@
         }
       }
     },
+    "Your aim" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu meta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton but"
+          }
+        }
+      }
+    },
     "Your data" : {
       "localizations" : {
         "es" : {
@@ -7497,6 +8057,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton estimation"
+          }
+        }
+      }
+    },
+    "Your first page" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu primera página"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta première page"
           }
         }
       }
@@ -7565,6 +8141,38 @@
         }
       }
     },
+    "Your height, weight, age and sex, to work out the goal. Then your steps and what you burn." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu altura, peso, edad y sexo, para calcular el objetivo. Luego tus pasos y lo que quemas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta taille, ton poids, ton âge et ton sexe, pour calculer l’objectif. Puis tes pas et ce que tu brûles."
+          }
+        }
+      }
+    },
+    "Your journal starts tomorrow. See you at breakfast." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu diario empieza mañana. Nos vemos en el desayuno."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton journal commence demain. À demain au petit-déjeuner."
+          }
+        }
+      }
+    },
     "Your month in food" : {
       "localizations" : {
         "es" : {
@@ -7577,6 +8185,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton mois dans l’assiette"
+          }
+        }
+      }
+    },
+    "Your numbers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes chiffres"
           }
         }
       }

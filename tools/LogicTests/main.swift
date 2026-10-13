@@ -657,6 +657,28 @@ do {
     check(doubled.isEmpty, "the newest copy is the one compared")
 }
 
+// MARK: First run
+
+do {
+    var zurich = Calendar(identifier: .gregorian)
+    zurich.timeZone = TimeZone(identifier: "Europe/Zurich")!
+    let day = zurich.date(from: DateComponents(year: 2026, month: 10, day: 13))!
+    func at(_ hour: Int) -> Date { zurich.date(byAdding: .hour, value: hour, to: day)! }
+    check(HourFoods.moment(at: at(8), calendar: zurich) == .morning && HourFoods.moment(at: at(12), calendar: zurich) == .noon, "morning and noon")
+    check(HourFoods.moment(at: at(16), calendar: zurich) == .afternoon && HourFoods.moment(at: at(20), calendar: zurich) == .evening, "afternoon and evening")
+    check(HourFoods.moment(at: at(2), calendar: zurich) == .evening, "the small hours belong to the evening")
+    let basics = BasicFoods.load(from: URL(fileURLWithPath: CommandLine.arguments[1] + "/Bite/Resources/basics.json"), language: "en")
+    let known = Set(basics.map(\.food.id))
+    for moment in [HourFoods.Moment.morning, .noon, .afternoon, .evening] {
+        let ids = HourFoods.ids(for: moment).map { "usda:\($0)" }
+        check(ids.count == 8 && Set(ids).count == 8, "eight different foods for \(moment)")
+        check(ids.allSatisfy(known.contains), "every food for \(moment) is a basic: \(ids.filter { !known.contains($0) })")
+    }
+    check(HourFoods.foodIDs(at: at(8), calendar: zurich).first == "usda:171890", "coffee first in the morning")
+    check(HourFoods.question(at: at(8), calendar: zurich) == "What did you have this morning?", "the morning question")
+    check(HourFoods.isLate(at(22), calendar: zurich) && !HourFoods.isLate(at(20), calendar: zurich), "late is after nine")
+}
+
 // MARK: Weekly check-in
 
 do {

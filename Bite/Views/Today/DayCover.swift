@@ -30,6 +30,8 @@ struct DayCover<Controls: View>: View {
     var lastMeal: String? = nil
     /// With no photo today: good morning, afternoon or evening, with the sky of that hour.
     var greeting: (text: String, symbol: String)? = nil
+    /// Under the greeting on your first day: "Your first page".
+    var greetingNote: String? = nil
     let detail: String
     /// The detail turns red: a day past its goal.
     var detailIsOver = false
@@ -150,10 +152,18 @@ struct DayCover<Controls: View>: View {
                     .padding(.bottom, 2)
             }
             if photos.isEmpty, let greeting {
-                Label(greeting.text, systemImage: greeting.symbol)
-                    .font(.ui(17, .medium))
-                    .foregroundStyle(Theme.ink)
-                    .padding(.bottom, 2)
+                VStack(alignment: .leading, spacing: 3) {
+                    Label(greeting.text, systemImage: greeting.symbol)
+                        .font(.ui(17, .medium))
+                        .foregroundStyle(Theme.ink)
+                    if let greetingNote {
+                        Text(greetingNote)
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.secondary)
+                            .padding(.leading, 30)
+                    }
+                }
+                .padding(.bottom, 2)
             }
             // The words sit beside the number when they fit, under it when they do not.
             ViewThatFits(in: .horizontal) {

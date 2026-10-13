@@ -2,7 +2,8 @@ import SwiftUI
 
 struct RootView: View {
     @AppStorage("onboarded") private var onboarded = false
-    @AppStorage("goal.kcal") private var goalKcal = 2000
+    @AppStorage("firstRun.stage") private var firstRunRaw = FirstRun.done.rawValue
+    @AppStorage("firstRun.day") private var firstRunDay = 0.0
     @State private var events = LogEvents()
     @State private var storeProblem = BiteStore.failedToOpen
 
@@ -10,18 +11,13 @@ struct RootView: View {
         TodayView()
             .environment(events)
             .environment(AppActions.shared)
-            .fullScreenCover(isPresented: needsGoal) {
-                NavigationStack {
-                    GoalCalculatorView(isWelcome: true) { kcal in
-                        goalKcal = kcal
-                        onboarded = true
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Skip") { onboarded = true }
-                        }
-                    }
+            .fullScreenCover(isPresented: needsWelcome) {
+                WelcomeView {
+                    firstRunDay = Calendar.current.startOfDay(for: .now).timeIntervalSince1970
+                    firstRunRaw = FirstRun.firstBite.rawValue
+                    onboarded = true
                 }
+                .interactiveDismissDisabled()
             }
             .alert("Bite couldn't open your log", isPresented: $storeProblem) {
                 Button("OK", role: .cancel) {}
@@ -30,7 +26,7 @@ struct RootView: View {
             }
     }
 
-    private var needsGoal: Binding<Bool> {
+    private var needsWelcome: Binding<Bool> {
         Binding(
             get: { !onboarded },
             set: { presented in if !presented { onboarded = true } }

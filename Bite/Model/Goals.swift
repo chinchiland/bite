@@ -74,6 +74,16 @@ enum Activity: String, CaseIterable, Identifiable {
         }
     }
 
+    /// The detail in a few words, for a choice in a two-by-two grid.
+    var shortDetail: String {
+        switch self {
+        case .sedentary: tr("Desk, little exercise")
+        case .light: tr("Walks, 1 to 3 workouts")
+        case .moderate: tr("3 to 5 workouts a week")
+        case .active: tr("Sport most days")
+        }
+    }
+
     var factor: Double {
         switch self {
         case .sedentary: 1.2

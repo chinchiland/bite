@@ -29,6 +29,8 @@ enum HomeSheet: Identifiable, Hashable {
     case editSaved(SavedFood)
     case place(MealPlace)
     case dish(CommunityDish)
+    case food(Food)
+    case firstRun(FirstRunSheet.Step)
 
     var id: Self { self }
 }
@@ -67,6 +69,11 @@ struct TodayView: View {
     @AppStorage("checkin.history") private var checkInHistoryData = Data()
     /// "No target": Bite counts and shows the pattern, with no budget to stay under.
     @AppStorage("goal.noTarget") private var noTarget = false
+    @AppStorage("firstRun.stage") private var firstRunRaw = FirstRun.done.rawValue
+    /// The day the welcome's Start was tapped: day one.
+    @AppStorage("firstRun.day") private var firstRunDay = 0.0
+    /// "Start tomorrow" was chosen: the journal begins that day.
+    @AppStorage("firstRun.startsOn") private var firstRunStartsOn = 0.0
 
     @State private var tab: HomeTab = .today
     @State private var day = Calendar.current.startOfDay(for: .now)
@@ -90,6 +97,8 @@ struct TodayView: View {
     /// Home button takes the inset to 0, which would make the cover 20 pt shorter and move the
     /// page each time the bar shows or hides.
     @State private var steadyTopInset: CGFloat = 0
+    /// The first run's own sheet is up, so closing it ends the first run.
+    @State private var firstRunSheetUp = false
     @State private var weights: [WeightPoint] = []
     @State private var placeFinder = PlaceFinder()
     @Namespace private var zoom
@@ -142,11 +151,11 @@ struct TodayView: View {
             .onAppear { steadyTopInset = max(steadyTopInset, proxy.safeAreaInsets.top) }
             .onChange(of: proxy.safeAreaInsets.top) { _, top in steadyTopInset = max(steadyTopInset, top) }
         }
-        .fullScreenCover(isPresented: $showScanner) {
+        .fullScreenCover(isPresented: $showScanner, onDismiss: continueFirstRun) {
             ScannerView(day: day)
                 .zoomTransition(id: "scan", in: zoom)
         }
-        .sheet(item: $sheet) { sheet in
+        .sheet(item: $sheet, onDismiss: sheetClosed) { sheet in
             sheetContent(sheet)
         }
         .sheet(item: $editing, onDismiss: deletePending) { entry in
@@ -192,7 +201,14 @@ struct TodayView: View {
             guard !movedByCode else { return }
             DaySwitcherTip().invalidate(reason: .actionPerformed)
         }
-        .onChange(of: events.last?.id) { _, _ in celebrateIfEarned() }
+        .onChange(of: events.last?.id) { _, _ in
+            celebrateIfEarned()
+            // The first food came in by scan or search: the goal comes next.
+            if firstRun == .awaitingLog, case .added? = events.last?.change {
+                firstRunRaw = FirstRun.goal.rawValue
+            }
+        }
+        .onChange(of: firstRunRaw, initial: true) { _, _ in continueFirstRun() }
         .sensoryFeedback(Feel.reached, trigger: celebrations)
         // Siri, Spotlight or the Action button asked to scan.
         .onChange(of: actions.pendingScan, initial: true) { _, pending in
@@ -236,6 +252,7 @@ struct TodayView: View {
                         unit: hero.unit,
                         lastMeal: hasPhoto ? nil : dayEntries.last.map { String(localized: "Last meal: \($0.name)") },
                         greeting: isToday ? greeting : nil,
+                        greetingNote: isFirstDay ? String(localized: "Your first page") : nil,
                         detail: heroDetail.text,
                         detailIsOver: heroDetail.isOver,
                         onPlace: { sheet = .place($0) },
@@ -321,12 +338,13 @@ struct TodayView: View {
                 nutrients: totals,
                 targets: targets,
                 ring: ring.parts,
-                overflow: ring.overflow,
+                overflow: noTarget ? 0 : ring.overflow,
                 number: totals.kcal,
                 unit: "kcal eaten",
                 glint: celebrations,
                 fiber: fiberToShow,
-                fiberTarget: FiberTarget.grams(forGoal: Double(goalKcal))
+                fiberTarget: FiberTarget.grams(forGoal: Double(goalKcal)),
+                aimOnly: isToday && dayEntries.isEmpty
             )
             ActivityChips(
                 health: healthState,
@@ -364,8 +382,15 @@ struct TodayView: View {
             // the day replaces the empty line instead of jumping in under it.
             VStack(alignment: .leading, spacing: 0) {
                 if dayEntries.isEmpty, usual == nil {
-                    EmptyDay(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
-                        .transition(.opacity)
+                    EmptyDay(
+                        isToday: Calendar.current.isDateInToday(day),
+                        startsTomorrow: startsTomorrow,
+                        foods: hourFoods,
+                        onFood: { sheet = .food($0) },
+                        onScan: { showScanner = true },
+                        onSearch: { sheet = .search(nil) }
+                    )
+                    .transition(.opacity)
                 } else if !dayEntries.isEmpty {
                     DayTimeline(
                         entries: dayEntries,
@@ -380,6 +405,16 @@ struct TodayView: View {
                         zoom: zoom
                     )
                     .transition(.opacity.combined(with: .offset(y: 8)))
+                    if isFirstDay {
+                        // Day one's next step, in place of a tip.
+                        Text("Hold a food to add it again, or scan your next meal.")
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.leading, 68)
+                            .padding(.top, 2)
+                            .transition(.opacity)
+                    }
                 }
                 if let usual {
                     UsualMoment(
@@ -498,6 +533,91 @@ struct TodayView: View {
             NavigationStack {
                 DishView(dish: dish, onOpenPlace: { self.sheet = .place($0) }, onDone: { self.sheet = nil })
             }
+        case .food(let food):
+            NavigationStack {
+                FoodDetailView(food: food, day: day, onDone: { self.sheet = nil })
+            }
+            .presentationDragIndicator(.visible)
+        case .firstRun(let step):
+            FirstRunSheet(
+                startAt: step,
+                day: day,
+                onScan: {
+                    firstRunRaw = FirstRun.awaitingLog.rawValue
+                    firstRunSheetUp = false
+                    self.sheet = nil
+                    Task {
+                        try? await Task.sleep(for: .milliseconds(450))
+                        showScanner = true
+                    }
+                },
+                onSearch: {
+                    firstRunRaw = FirstRun.awaitingLog.rawValue
+                    firstRunSheetUp = false
+                    self.sheet = .search(nil)
+                },
+                onGoal: { firstRunRaw = FirstRun.goal.rawValue },
+                onFinished: {
+                    firstRunRaw = FirstRun.done.rawValue
+                    self.sheet = nil
+                }
+            )
+            .onAppear { firstRunSheetUp = true }
+        }
+    }
+
+    // MARK: First run
+
+    private var firstRun: FirstRun { FirstRun(rawValue: firstRunRaw) ?? .done }
+
+    /// Four foods for this hour, for the empty day.
+    private var hourFoods: [Food] {
+        let basics = Dictionary(BasicFoods.all.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        return HourFoods.foodIDs(at: .now).prefix(4).compactMap { basics[$0] }
+    }
+
+    /// Day one, the day Start was tapped, while it is still that day.
+    private var isFirstDay: Bool {
+        isToday && firstRunDay > 0 && Calendar.current.isDate(Date(timeIntervalSince1970: firstRunDay), inSameDayAs: .now)
+    }
+
+    /// "Start tomorrow" was chosen tonight.
+    private var startsTomorrow: Bool {
+        isToday && Date.now.timeIntervalSince1970 < firstRunStartsOn
+    }
+
+    /// The first run's next sheet, once nothing else is up: the first bite after the welcome,
+    /// the goal once the first food is in.
+    private func continueFirstRun() {
+        guard sheet == nil, !showScanner else { return }
+        let next: FirstRunSheet.Step
+        switch firstRun {
+        case .firstBite: next = .firstBite
+        case .goal: next = .goal
+        default: return
+        }
+        Task {
+            // Let the welcome or the scanner finish leaving first.
+            try? await Task.sleep(for: .milliseconds(500))
+            guard sheet == nil, !showScanner else { return }
+            sheet = .firstRun(next)
+        }
+    }
+
+    /// A sheet closed. Swiping the first run's sheet away ends the first run; a search sheet
+    /// that logged the first food brings the goal.
+    private func sheetClosed() {
+        let closedFirstRun = firstRunSheetUp
+        firstRunSheetUp = false
+        switch firstRun {
+        case .firstBite, .goal:
+            if closedFirstRun {
+                firstRunRaw = FirstRun.done.rawValue
+            } else {
+                continueFirstRun()
+            }
+        default:
+            break
         }
     }
 
@@ -590,7 +710,7 @@ struct TodayView: View {
 
     /// Today counts down what is left (or what went over); a past day shows what you ate.
     private var hero: (number: Double, unit: String) {
-        guard Calendar.current.isDateInToday(day) else {
+        guard Calendar.current.isDateInToday(day), !noTarget else {
             return (number: totals.kcal, unit: String(localized: "kcal eaten"))
         }
         if totals.kcal > budget {
@@ -605,6 +725,7 @@ struct TodayView: View {
             if case .over = verdict { return (label, true) }
             return (label, false)
         }
+        if noTarget { return (String(localized: "No target"), false) }
         return (String(localized: "Goal \(budget.kcalText) kcal"), false)
     }
 
@@ -873,7 +994,7 @@ struct TodayView: View {
     /// Once a day, when a log (not a switch, a Health refresh, a new goal or an Undo) takes
     /// today onto target: success a moment after the food lands, so the two never blur.
     private func celebrateIfEarned() {
-        guard case .added? = events.last?.change, isOnTargetToday else { return }
+        guard !noTarget, case .added? = events.last?.change, isOnTargetToday else { return }
         let today = Calendar.current.startOfDay(for: .now).timeIntervalSince1970
         guard celebratedDay != today else { return }
         celebratedDay = today
@@ -1206,27 +1327,74 @@ private struct TopFade: View {
     }
 }
 
-/// Nothing logged yet: the scan glyph and one line.
+/// Nothing logged yet. Today: four foods for the hour, one tap from their page, then Scan and
+/// Search; tonight after "Start tomorrow", a line for the morning. A past day: one line.
 private struct EmptyDay: View {
     let isToday: Bool
+    var startsTomorrow = false
+    var foods: [Food] = []
+    var onFood: (Food) -> Void = { _ in }
     let onScan: () -> Void
+    var onSearch: () -> Void = {}
 
     var body: some View {
-        HStack(spacing: 14) {
-            ScanGlyph(color: Theme.ink, animated: isToday)
-                .frame(width: 30, height: 26)
-                .frame(width: 76, height: 76)
-                .background(Theme.fill, in: RoundedRectangle(cornerRadius: FoodThumb.radius(for: 76), style: .continuous))
-            VStack(alignment: .leading, spacing: 6) {
-                Text(isToday ? "Scan a barcode or snap your plate to log your first bite." : "Nothing logged this day.")
+        if !isToday {
+            Text("Nothing logged this day.")
+                .font(.ui(15))
+                .foregroundStyle(Theme.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else if startsTomorrow {
+            Text("Your journal starts tomorrow. See you at breakfast.")
+                .font(.ui(15))
+                .foregroundStyle(Theme.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("First bite")
+                    .font(.ui(16, .semibold))
+                    .foregroundStyle(Theme.ink)
+                Text("What did you have? Tap it, scan it or search.")
                     .font(.ui(15))
                     .foregroundStyle(Theme.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                if isToday {
-                    Button("Scan food", action: onScan)
-                        .font(.ui(15, .semibold))
-                        .foregroundStyle(Theme.ink)
+                    .padding(.top, 3)
+                HStack(alignment: .top, spacing: 8) {
+                    ForEach(foods) { food in
+                        Button { onFood(food) } label: {
+                            VStack(alignment: .leading, spacing: 6) {
+                                FoodThumb(food: food, size: 70)
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(food.name)
+                                        .font(.ui(13))
+                                        .foregroundStyle(Theme.ink)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.8)
+                                    Text("\(food.nutrients(for: food.defaultAmount).kcal.kcalText) kcal")
+                                        .font(.ui(12))
+                                        .monospacedDigit()
+                                        .foregroundStyle(Theme.secondary)
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(PressableStyle(scale: 0.95))
+                    }
                 }
+                .padding(.top, 14)
+                HStack(spacing: 10) {
+                    Button(action: onScan) {
+                        Label("Scan", systemImage: "barcode.viewfinder")
+                            .frame(maxWidth: .infinity)
+                    }
+                    Button(action: onSearch) {
+                        Label("Search", systemImage: "magnifyingglass")
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+                .buttonStyle(SoftButtonStyle(height: 44))
+                .padding(.top, 16)
             }
         }
     }

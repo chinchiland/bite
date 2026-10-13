@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @AppStorage("goal.kcal") private var kcal = 2000
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
+    @AppStorage("goal.noTarget") private var noTarget = false
     @AppStorage("health.asked") private var healthAsked = false
     @AppStorage("health.weightAsked") private var weightAsked = false
     @AppStorage("health.unavailable") private var healthUnavailable = false
@@ -78,8 +79,19 @@ struct SettingsView: View {
                             }
                         }
                         .listRowBackground(Theme.card)
+
+                        Toggle(isOn: $noTarget) {
+                            Text("No target")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                        }
+                        .listRowBackground(Theme.card)
                     } header: {
                         SectionTitle(text: "Daily goal")
+                    } footer: {
+                        if noTarget {
+                            Text("Bite counts what you eat and shows the pattern, with no budget to stay under. Macros still show what to aim for.")
+                        }
                     }
 
                     Section {

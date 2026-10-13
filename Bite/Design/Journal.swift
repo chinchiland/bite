@@ -280,11 +280,15 @@ struct MacroList: View {
     /// The day's fiber, when enough of the day has it on record, and its target.
     var fiber: FiberDay? = nil
     var fiberTarget: Double = 28
+    /// Nothing logged yet today: each row says what to aim for instead of "0 / 125 g".
+    var aimOnly = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: showsTarget ? 2 : 0) {
             ForEach(Macro.allCases, id: \.self) { macro in
-                if showsTarget {
+                if showsTarget && aimOnly {
+                    aimRow(macro)
+                } else if showsTarget {
                     targetRow(macro)
                 } else {
                     shareRow(macro)
@@ -339,6 +343,27 @@ struct MacroList: View {
         .animation(.smooth, value: day.grams)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Fiber: \(day.grams.gramsText) of at least \(fiberTarget.kcalText) grams")
+    }
+
+    private func aimRow(_ macro: Macro) -> some View {
+        let target = macro.target(in: targets)
+        return VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                MacroTile(macro: macro)
+                name(macro)
+                Text("\(target.kcalText) g to aim for")
+                    .font(.ui(14))
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(height: 47)
+            ProgressBar(value: 0, color: macro.color, height: 3)
+                .padding(.leading, 36)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(macro.title): \(target.kcalText) grams to aim for")
     }
 
     private func targetRow(_ macro: Macro) -> some View {
@@ -424,6 +449,8 @@ struct MacroBlock: View {
     /// The day's fiber line, on Today only.
     var fiber: FiberDay? = nil
     var fiberTarget: Double = 28
+    /// Today with nothing logged: targets, not zeros.
+    var aimOnly = false
 
     /// Under 345 pt across (a 375 pt phone, or Display Zoom), the ring steps down to 124.
     @State private var narrow = false
@@ -459,7 +486,7 @@ struct MacroBlock: View {
             .frame(width: side, height: side)
             .animation(Motion.count, value: number)
 
-            MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget, fiber: fiber, fiberTarget: fiberTarget)
+            MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget, fiber: fiber, fiberTarget: fiberTarget, aimOnly: aimOnly)
                 .frame(maxWidth: .infinity)
         }
         .onGeometryChange(for: Bool.self) { $0.size.width < 345 } action: { narrow = $0 }
