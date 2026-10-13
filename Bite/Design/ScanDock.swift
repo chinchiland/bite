@@ -64,7 +64,6 @@ private struct ScanCapsule: View {
             .background(Theme.ink, in: Capsule())
         }
         .buttonStyle(PressableStyle(scale: 0.94))
-        .sensoryFeedback(.impact(weight: .medium), trigger: taps)
         .accessibilityLabel("Scan food")
         .accessibilityHint("Opens the camera to scan a barcode or a plate")
     }

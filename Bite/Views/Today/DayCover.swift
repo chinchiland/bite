@@ -5,6 +5,8 @@ import UIKit
 struct CoverPhoto: Identifiable, Equatable {
     let id: AnyHashable
     let image: UIImage
+    /// A small blurred copy for where the photo melts into the page.
+    let soft: UIImage
     let dish: String
     let place: MealPlace?
 
@@ -32,6 +34,8 @@ struct DayCover<Controls: View>: View {
     /// The detail turns red: a day past its goal.
     var detailIsOver = false
     let onPlace: (MealPlace) -> Void
+    /// True for a moment while code moves the index (a new day, a new photo): no tick then.
+    var quietPaging = false
     @ViewBuilder let controls: Controls
 
     private var current: CoverPhoto? {
@@ -55,7 +59,7 @@ struct DayCover<Controls: View>: View {
                 .padding(.top, topInset + 2)
                 .padding(.horizontal, 16)
         }
-        .sensoryFeedback(.selection, trigger: index)
+        .sensoryFeedback(trigger: index) { _, _ in quietPaging ? nil : Feel.tick }
     }
 
     @ViewBuilder private var backdrop: some View {
@@ -63,16 +67,35 @@ struct DayCover<Controls: View>: View {
             Theme.coverGradient
                 .overlay { melt(shade: false) }
                 .accessibilityHidden(true)
+        } else if photos.count == 1 {
+            // One photo: nothing to page, so nothing that can slide sideways.
+            page(photos[0])
+                .accessibilityHidden(true)
         } else {
-            TabView(selection: $index) {
-                ForEach(Array(photos.enumerated()), id: \.element.id) { offset, photo in
-                    page(photo)
-                        .tag(offset)
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 0) {
+                    ForEach(photos) { photo in
+                        page(photo)
+                            .containerRelativeFrame([.horizontal, .vertical])
+                    }
                 }
+                .scrollTargetLayout()
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(.paging)
+            .scrollPosition(id: shownPhoto)
             .accessibilityHidden(true)
         }
+    }
+
+    /// The photo in view, by its id, for the paging scroll view.
+    private var shownPhoto: Binding<AnyHashable?> {
+        Binding(
+            get: { current?.id },
+            set: { id in
+                if let id, let found = photos.firstIndex(where: { $0.id == id }) { index = found }
+            }
+        )
     }
 
     /// A photo filling the cover, clear down to the number, then softening into the page.
@@ -86,10 +109,9 @@ struct DayCover<Controls: View>: View {
             .overlay {
                 // The same photo blurred, showing only where it melts, so the food turns to
                 // color before it turns to paper.
-                Image(uiImage: photo.image)
+                Image(uiImage: photo.soft)
                     .resizable()
                     .scaledToFill()
-                    .blur(radius: 18, opaque: true)
                     .mask {
                         LinearGradient(
                             stops: [.init(color: .clear, location: 0.5), .init(color: .black, location: 0.82)],
@@ -209,6 +231,13 @@ struct DayCover<Controls: View>: View {
 
     private func advance() {
         guard photos.count > 1 else { return }
-        withAnimation(.snappy) { index = (index + 1) % photos.count }
+        if index >= photos.count - 1 {
+            // Back to the first without sliding back across every photo.
+            var cut = Transaction()
+            cut.disablesAnimations = true
+            withTransaction(cut) { index = 0 }
+        } else {
+            withAnimation(Motion.respond) { index += 1 }
+        }
     }
 }

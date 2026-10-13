@@ -115,6 +115,7 @@ struct AddEstimateView: View {
                         .disabled(!canSave)
                 }
             }
+            .keyboardDone()
             // A new pick, or closing the sheet, cancels the one still being counted.
             .task(id: pickedPhoto) {
                 await estimate(from: pickedPhoto)
@@ -251,7 +252,7 @@ struct AddEstimateView: View {
             target.estimates.append(mine)
         }
         try? context.save()
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.click)
         dismiss()
     }
 }

@@ -70,11 +70,21 @@ struct PageDots: View {
     let index: Int
 
     var body: some View {
-        HStack(spacing: 6) {
-            ForEach(0..<count, id: \.self) { dot in
-                Circle()
-                    .fill(Color.white.opacity(dot == index ? 1 : 0.45))
-                    .frame(width: 6, height: 6)
+        Group {
+            if count > 8 {
+                Text(verbatim: "\(index + 1) / \(count)")
+                    .font(.ui(12, .semibold))
+                    .monospacedDigit()
+                    .foregroundStyle(.white)
+                    .contentTransition(.numericText(value: Double(index)))
+            } else {
+                HStack(spacing: 6) {
+                    ForEach(0..<count, id: \.self) { dot in
+                        Circle()
+                            .fill(Color.white.opacity(dot == index ? 1 : 0.45))
+                            .frame(width: 6, height: 6)
+                    }
+                }
             }
         }
         .padding(.horizontal, 8)
@@ -149,7 +159,7 @@ struct PressableStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? scale : 1)
-            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
+            .animation(Motion.press, value: configuration.isPressed)
     }
 }
 
@@ -169,17 +179,50 @@ struct ChipButtonStyle: ButtonStyle {
     }
 }
 
-/// − and + around a number. Holding repeats, and each step ticks up or down under the finger.
+/// A shelf that runs edge to edge: its first item lines up with the page margin, the next one
+/// peeks at the right edge, a swipe settles on an item, and it only moves sideways when there
+/// is more to see. Placed inside a section padded by the page margin, it takes the full width
+/// back, so every tile you can see can be tapped.
+struct Rail<Content: View>: View {
+    var spacing: CGFloat = 10
+    var alignment: VerticalAlignment = .top
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(alignment: alignment, spacing: spacing) {
+                content
+            }
+            .scrollTargetLayout()
+        }
+        .scrollIndicators(.hidden)
+        .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
+        .scrollTargetBehavior(.viewAligned(limitBehavior: .never))
+        // The axes default is vertical: without .horizontal this would do nothing for a rail.
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+        .padding(.horizontal, -Theme.margin)
+    }
+}
+
+/// − and + around a number. Holding repeats, and each step that moves the number ticks under
+/// the finger; a step at the limit stays quiet.
 struct StepButton: View {
     let systemImage: String
     let label: LocalizedStringKey
+    /// The number the button changes, so a step that can't move it doesn't tick.
+    var value: Double? = nil
     let action: () -> Void
 
-    @State private var steps = 0
+    @State private var ticks = 0
+    @State private var stepping = false
 
     var body: some View {
         Button {
-            steps += 1
+            if value == nil {
+                ticks += 1
+            } else {
+                stepping = true
+            }
             action()
         } label: {
             Image(systemName: systemImage)
@@ -190,7 +233,12 @@ struct StepButton: View {
         }
         .buttonStyle(.plain)
         .buttonRepeatBehavior(.enabled)
-        .sensoryFeedback(systemImage.contains("plus") ? .increase : .decrease, trigger: steps)
+        .onChange(of: value) { _, _ in
+            guard stepping else { return }
+            stepping = false
+            ticks += 1
+        }
+        .sensoryFeedback(Feel.tick, trigger: ticks)
         .accessibilityLabel(label)
     }
 }
@@ -225,7 +273,7 @@ struct MealMenuLabel: View {
                 .font(.ui(16, .medium))
                 .foregroundStyle(Theme.ink)
                 .lineLimit(1)
-                .fixedSize()
+                .minimumScaleFactor(0.75)
             Image(systemName: "chevron.up.chevron.down")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Theme.secondary)
@@ -553,7 +601,7 @@ struct FlowLayout: Layout {
         var rowHeight: CGFloat = 0
         var widest: CGFloat = 0
         for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
+            let size = Self.measure(subview, maxWidth: maxWidth)
             if x > 0, x + size.width > maxWidth + 0.5 {
                 y += rowHeight + spacing
                 x = 0
@@ -572,7 +620,7 @@ struct FlowLayout: Layout {
         var y = bounds.minY
         var rowHeight: CGFloat = 0
         for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
+            let size = Self.measure(subview, maxWidth: bounds.width)
             if x > bounds.minX, x + size.width > bounds.maxX + 0.5 {
                 y += rowHeight + spacing
                 x = bounds.minX
@@ -582,6 +630,13 @@ struct FlowLayout: Layout {
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
         }
+    }
+
+    /// A child's own width, or the row's when it is wider, so it truncates inside the row.
+    private static func measure(_ subview: LayoutSubview, maxWidth: CGFloat) -> CGSize {
+        let ideal = subview.sizeThatFits(.unspecified)
+        guard ideal.width > maxWidth, maxWidth.isFinite else { return ideal }
+        return subview.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
     }
 }
 
@@ -609,7 +664,7 @@ extension View {
     }
 
     /// Marks where a screen zooms out from (iOS 18 and later; earlier versions slide as usual).
-    @ViewBuilder func zoomSource(id: String, in namespace: Namespace.ID) -> some View {
+    @ViewBuilder func zoomSource(id: some Hashable, in namespace: Namespace.ID) -> some View {
         if #available(iOS 18.0, *) {
             matchedTransitionSource(id: id, in: namespace)
         } else {
@@ -618,11 +673,37 @@ extension View {
     }
 
     /// Lets a presented screen grow out of its source.
-    @ViewBuilder func zoomTransition(id: String, in namespace: Namespace.ID) -> some View {
+    @ViewBuilder func zoomTransition(id: some Hashable, in namespace: Namespace.ID) -> some View {
         if #available(iOS 18.0, *) {
             navigationTransition(.zoom(sourceID: id, in: namespace))
         } else {
             self
+        }
+    }
+
+    /// A bar floating at the bottom that every scroll view ends above, so nothing needs a
+    /// guessed bottom padding. On iOS 26 the page also softens under it.
+    @ViewBuilder func dockBar<Bar: View>(@ViewBuilder _ bar: () -> Bar) -> some View {
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            safeAreaBar(edge: .bottom, spacing: 0, content: bar)
+        } else {
+            safeAreaInset(edge: .bottom, spacing: 0, content: bar)
+        }
+        #else
+        safeAreaInset(edge: .bottom, spacing: 0, content: bar)
+        #endif
+    }
+
+    /// A Done button over the number pad, which has no return key of its own.
+    func keyboardDone() -> some View {
+        toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+            }
         }
     }
 }

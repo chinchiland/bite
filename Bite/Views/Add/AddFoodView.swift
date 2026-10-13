@@ -222,7 +222,7 @@ struct AddFoodView: View {
         context.insert(entry)
         try? context.save()
         events.added(entry)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.land)
         withAnimation(.snappy) { _ = added.insert(key) }
     }
 }

@@ -21,6 +21,8 @@ struct EstimateView: View {
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
 
     @State private var phase: Phase = .working
+    /// The photo has scrolled up under the back button.
+    @State private var photoGone = false
     @State private var estimate: MealEstimate?
     /// What Claude first saw: every change scales from it, so an ingredient set to nothing can
     /// come back.
@@ -73,13 +75,20 @@ struct EstimateView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     photo
+                        .onGeometryChange(for: Bool.self) { $0.frame(in: .scrollView).maxY < 120 } action: { photoGone = $0 }
                     sheet
                         .padding(.top, -32)
                 }
             }
             .scrollIndicators(.hidden)
             .ignoresSafeArea(edges: .top)
+            topBand
             backButton
+        }
+        .sensoryFeedback(trigger: phase) { _, new in
+            if new == .ready { return Feel.reached }
+            if case .failed = new { return Feel.failed }
+            return nil
         }
         .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -124,8 +133,25 @@ struct EstimateView: View {
             .accessibilityHidden(true)
     }
 
+    /// The sheet's white under the clock and the back button, once the photo is gone.
+    private var topBand: some View {
+        Color.clear
+            .frame(height: 52)
+            .frame(maxWidth: .infinity)
+            .background(Theme.card.ignoresSafeArea(edges: .top))
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(Theme.hairline)
+                    .frame(height: 1)
+            }
+            .opacity(photoGone ? 1 : 0)
+            .animation(.easeOut(duration: 0.2), value: photoGone)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
     private var backButton: some View {
-        GlassCircleButton(systemImage: "chevron.left", label: "Back to the camera", onPhoto: true) {
+        GlassCircleButton(systemImage: "chevron.left", label: "Back to the camera", onPhoto: !photoGone) {
             dismiss()
         }
         .padding(.horizontal, 16)
@@ -140,6 +166,7 @@ struct EstimateView: View {
             case .working:
                 working
                     .padding(.horizontal, Theme.margin)
+                    .transition(.opacity)
             case .needsKey:
                 message(
                     "Photo estimates use Claude",
@@ -159,7 +186,10 @@ struct EstimateView: View {
                     .padding(.horizontal, Theme.margin)
             case .ready:
                 if let estimate {
-                    ready(estimate)
+                    VStack(alignment: .leading, spacing: 0) {
+                        ready(estimate)
+                    }
+                    .transition(.opacity.combined(with: .offset(y: 8)))
                 }
             }
         }
@@ -279,12 +309,15 @@ struct EstimateView: View {
                 HStack(alignment: .top, spacing: 12) {
                     ForEach(estimate.items.indices, id: \.self) { index in
                         IngredientBubble(item: estimate.items[index], isSelected: selected == index) {
-                            withAnimation(.snappy) { selected = selected == index ? nil : index }
+                            withAnimation(Motion.respond) { selected = selected == index ? nil : index }
                         }
                     }
                 }
+                .scrollTargetLayout()
             }
             .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .never))
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
 
             if let selected, estimate.items.indices.contains(selected) {
                 adjuster(estimate.items[selected], index: selected)
@@ -311,11 +344,11 @@ struct EstimateView: View {
                         .foregroundStyle(Theme.secondary)
                 }
                 Spacer()
-                StepButton(systemImage: "minus", label: "Less") { change(index, by: -10) }
+                StepButton(systemImage: "minus", label: "Less", value: item.grams) { change(index, by: -10) }
                 Text("\(item.grams.kcalText) g")
                     .font(.number(17))
                     .frame(minWidth: 58)
-                StepButton(systemImage: "plus", label: "More") { change(index, by: 10) }
+                StepButton(systemImage: "plus", label: "More", value: item.grams) { change(index, by: 10) }
             }
         }
     }
@@ -352,9 +385,11 @@ struct EstimateView: View {
         #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
             try? await Task.sleep(for: .seconds(1.2))
-            estimate = DemoData.estimate
-            original = DemoData.estimate
-            phase = .ready
+            withAnimation(Motion.settle) {
+                estimate = DemoData.estimate
+                original = DemoData.estimate
+                phase = .ready
+            }
             return
         }
         #endif
@@ -371,7 +406,7 @@ struct EstimateView: View {
         let language = OpenFoodFacts.languages.first ?? "en"
         do {
             let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: language, isLabel: isLabel)
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+            withAnimation(Motion.settle) {
                 estimate = result
                 original = result
                 phase = .ready
@@ -390,13 +425,13 @@ struct EstimateView: View {
     private func change(_ index: Int, by delta: Double) {
         guard let current = estimate, let original, current.items.indices.contains(index) else { return }
         let grams = max(current.items[index].grams + delta, 5)
-        withAnimation(.snappy) { estimate = current.setting(item: index, grams: grams, from: original) }
+        withAnimation(Motion.respond) { estimate = current.setting(item: index, grams: grams, from: original) }
     }
 
     /// One tap on the doubt's answer sets its ingredient to that amount.
     private func settle(_ doubt: MealEstimate.Doubt, with answer: MealEstimate.Doubt.Answer) {
         guard let current = estimate, let original else { return }
-        withAnimation(.snappy) { estimate = current.setting(item: doubt.item, grams: answer.grams, from: original) }
+        withAnimation(Motion.respond) { estimate = current.setting(item: doubt.item, grams: answer.grams, from: original) }
     }
 
     /// The plate as one food, keeping the photo sharp enough to be the day's cover.
@@ -410,7 +445,7 @@ struct EstimateView: View {
         context.insert(entry)
         try? context.save()
         events.added(entry)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.land)
         onDone()
     }
 
@@ -419,7 +454,7 @@ struct EstimateView: View {
         item.subtitle = estimate.items.map(\.name).joined(separator: ", ")
         context.insert(item)
         try? context.save()
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.click)
         isSaved = true
     }
 }
@@ -431,6 +466,8 @@ private struct DoubtQuestion: View {
     let chosen: Int?
     let onAnswer: (MealEstimate.Doubt.Answer) -> Void
 
+    @State private var taps = 0
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(doubt.question)
@@ -439,13 +476,16 @@ private struct DoubtQuestion: View {
                 .fixedSize(horizontal: false, vertical: true)
             FlowLayout(spacing: 8) {
                 ForEach(doubt.answers.indices, id: \.self) { index in
-                    Button(doubt.answers[index].label) { onAnswer(doubt.answers[index]) }
+                    Button(doubt.answers[index].label) {
+                        taps += 1
+                        onAnswer(doubt.answers[index])
+                    }
                         .buttonStyle(ChipButtonStyle(isSelected: chosen == index))
                         .accessibilityAddTraits(chosen == index ? .isSelected : [])
                 }
             }
         }
-        .sensoryFeedback(.selection, trigger: chosen)
+        .sensoryFeedback(Feel.tick, trigger: taps)
     }
 }
 

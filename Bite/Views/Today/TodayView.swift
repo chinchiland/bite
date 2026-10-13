@@ -75,10 +75,22 @@ struct TodayView: View {
     @State private var activityRefresh = 0
     @State private var coverPhotos: [CoverPhoto] = []
     @State private var coverIndex = 0
-    @State private var coverOnScreen = true
+    /// True for a moment while the clock or code moves the day or the cover: no tick then.
+    @State private var movedByCode = false
+    /// The day today last landed on target through a log, so it is celebrated once.
+    @AppStorage("celebrated.day") private var celebratedDay = 0.0
+    @State private var celebrations = 0
+    /// The last day Bite was opened, so the switcher tip counts days, not launches.
+    @AppStorage("tips.openedDay") private var openedDay = 0.0
+    @State private var chrome = CoverChrome()
+    /// The top inset with the status bar showing. Hiding the status bar on an iPhone with a
+    /// Home button takes the inset to 0, which would make the cover 20 pt shorter and move the
+    /// page each time the bar shows or hides.
+    @State private var steadyTopInset: CGFloat = 0
     @State private var weights: [WeightPoint] = []
     @State private var placeFinder = PlaceFinder()
     @Namespace private var zoom
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// How far back home reads the log: a month for the ranges, and the month before it so
     /// they can show how things moved.
@@ -93,27 +105,40 @@ struct TodayView: View {
 
     var body: some View {
         GeometryReader { proxy in
+            let topInset = max(proxy.safeAreaInsets.top, steadyTopInset)
             ZStack(alignment: .bottom) {
                 Theme.page.ignoresSafeArea()
                 switch tab {
                 case .today:
-                    dayPage(topInset: proxy.safeAreaInsets.top)
+                    dayPage(topInset: topInset)
                 case .week:
                     rangePage(.week)
                 case .month:
                     rangePage(.month)
                 }
-                if tab != .today || !coverOnScreen {
-                    TopFade(height: proxy.safeAreaInsets.top)
-                        .transition(.opacity)
-                }
-                bottomStack
+                TopChrome(
+                    chrome: chrome,
+                    height: topInset,
+                    onDay: tab == .today,
+                    photoCover: !coverPhotos.isEmpty && colorScheme == .light
+                )
+                toast
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.easeOut(duration: 0.2), value: coverOnScreen)
+            .dockBar {
+                ScanDock(
+                    namespace: zoom,
+                    onSearch: { sheet = .search(nil) },
+                    onScan: { showScanner = true },
+                    onQuickAdd: { sheet = .quickAdd }
+                )
+                // With no Home indicator below it (an iPhone with a Home button), the dock
+                // keeps clear of the bottom edge.
+                .padding(.bottom, proxy.safeAreaInsets.bottom > 0 ? 4 : 12)
+            }
+            .onAppear { steadyTopInset = max(steadyTopInset, proxy.safeAreaInsets.top) }
+            .onChange(of: proxy.safeAreaInsets.top) { _, top in steadyTopInset = max(steadyTopInset, top) }
         }
-        // A photo cover runs to the top edge, where the time would sit dark on the picture.
-        .statusBarHidden(tab == .today && !coverPhotos.isEmpty && coverOnScreen && colorScheme == .light)
         .fullScreenCover(isPresented: $showScanner) {
             ScannerView(day: day)
                 .zoomTransition(id: "scan", in: zoom)
@@ -135,15 +160,17 @@ struct TodayView: View {
                 )
             }
             .presentationDragIndicator(.visible)
+            // The tile you tapped grows into its page and shrinks back into its place.
+            .zoomTransition(id: entry.persistentModelID, in: zoom)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
-            day = Calendar.current.startOfDay(for: .now)
+            quietly { day = Calendar.current.startOfDay(for: .now) }
         }
         .task(id: "\(day.timeIntervalSince1970) \(activityRefresh) \(healthAsked)") {
             await loadActivity()
         }
-        .task(id: photoEntries.map(\.persistentModelID)) {
-            loadCoverPhotos()
+        .task(id: dayEntries.map(\.persistentModelID)) {
+            await loadCoverPhotos()
         }
         .task(id: "\(healthAsked) \(weightAsked) \(activityRefresh)") {
             await loadWeights()
@@ -152,15 +179,17 @@ struct TodayView: View {
             await placeFinder.locateIfAllowed()
         }
         .onChange(of: day) { _, _ in
-            coverIndex = 0
+            quietly { coverIndex = 0 }
         }
-        // A tick under the finger when the switcher moves, and a quiet success the moment
-        // today lands on target. Nothing else buzzes.
-        .sensoryFeedback(.selection, trigger: selectionKey)
-        .sensoryFeedback(.success, trigger: isOnTargetToday) { old, new in !old && new }
+        // A tick under the finger when you switch, never when the clock does; and once a day,
+        // when a log takes today onto target, success as the food settles.
+        .sensoryFeedback(trigger: selectionKey) { _, _ in movedByCode ? nil : Feel.tick }
         .onChange(of: selectionKey) { _, _ in
+            guard !movedByCode else { return }
             DaySwitcherTip().invalidate(reason: .actionPerformed)
         }
+        .onChange(of: events.last?.id) { _, _ in celebrateIfEarned() }
+        .sensoryFeedback(Feel.reached, trigger: celebrations)
         // Siri, Spotlight or the Action button asked to scan.
         .onChange(of: actions.pendingScan, initial: true) { _, pending in
             guard pending else { return }
@@ -168,7 +197,10 @@ struct TodayView: View {
             showScanner = true
         }
         .task {
-            await DaySwitcherTip.opened.donate()
+            let today = Calendar.current.startOfDay(for: .now).timeIntervalSince1970
+            guard openedDay != today else { return }
+            openedDay = today
+            await DaySwitcherTip.openedOnDay.donate()
         }
         .task(id: saved.map(\.foodID)) {
             BiteShortcuts.updateAppShortcutParameters()
@@ -183,6 +215,8 @@ struct TodayView: View {
     }
 
     // MARK: Day
+
+    private static let coverAnchor = "cover"
 
     private func dayPage(topInset: CGFloat) -> some View {
         let hasPhoto = !coverPhotos.isEmpty
@@ -200,15 +234,17 @@ struct TodayView: View {
                         greeting: isToday ? greeting : nil,
                         detail: heroDetail.text,
                         detailIsOver: heroDetail.isOver,
-                        onPlace: { sheet = .place($0) }
+                        onPlace: { sheet = .place($0) },
+                        quietPaging: movedByCode
                     ) {
                         coverControls(onPhoto: hasPhoto || colorScheme == .dark)
                     }
                     .onGeometryChange(for: Bool.self) { geometry in
                         geometry.frame(in: .scrollView).maxY > 120
                     } action: { onScreen in
-                        coverOnScreen = onScreen
+                        chrome.onScreen = onScreen
                     }
+                    .id(Self.coverAnchor)
 
                     daySheet
                 }
@@ -216,6 +252,10 @@ struct TodayView: View {
             .scrollIndicators(.hidden)
             .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
             .ignoresSafeArea(edges: .top)
+            // Another day opens on its cover and number, not wherever the last one was left.
+            .onChange(of: day) { _, _ in
+                reader.scrollTo(Self.coverAnchor, anchor: .top)
+            }
             #if DEBUG
             .task {
                 // `-anchor usual` scrolls your usual meal into the middle, for its screenshot.
@@ -234,6 +274,7 @@ struct TodayView: View {
                     Text(title)
                         .font(.ui(16, .semibold))
                         .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12, weight: .semibold))
                 }
@@ -254,6 +295,7 @@ struct TodayView: View {
                     Text("\(streak)-day streak")
                         .font(.ui(14, .semibold))
                         .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 .foregroundStyle(onPhoto ? Color.white : Theme.ink)
                 .padding(.leading, 11)
@@ -277,7 +319,8 @@ struct TodayView: View {
                 ring: ring.parts,
                 overflow: ring.overflow,
                 number: totals.kcal,
-                unit: "kcal eaten"
+                unit: "kcal eaten",
+                glint: celebrations
             )
             ActivityChips(
                 health: healthState,
@@ -309,33 +352,41 @@ struct TodayView: View {
                 .padding(.top, 26)
                 .padding(.bottom, 14)
             let usual = self.usual
-            if dayEntries.isEmpty, usual == nil {
-                EmptyDay(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
-            } else if !dayEntries.isEmpty {
-                DayTimeline(
-                    entries: dayEntries,
-                    isToday: Calendar.current.isDateInToday(day),
-                    onSelect: { editing = $0 },
-                    onSave: { save($0.food, amount: $0.amount, meal: $0.meal) },
-                    onDelete: delete,
-                    onAddHere: { sheet = .search($0) },
-                    onSaveMeal: saveMeal,
-                    onAddToToday: addToToday,
-                    onMoveTime: move
-                )
+            // Every add, delete and Undo settles in, wherever it came from; the first food of
+            // the day replaces the empty line instead of jumping in under it.
+            VStack(alignment: .leading, spacing: 0) {
+                if dayEntries.isEmpty, usual == nil {
+                    EmptyDay(isToday: Calendar.current.isDateInToday(day)) { showScanner = true }
+                        .transition(.opacity)
+                } else if !dayEntries.isEmpty {
+                    DayTimeline(
+                        entries: dayEntries,
+                        isToday: Calendar.current.isDateInToday(day),
+                        onSelect: { editing = $0 },
+                        onSave: { save($0.food, amount: $0.amount, meal: $0.meal) },
+                        onDelete: delete,
+                        onAddHere: { sheet = .search($0) },
+                        onSaveMeal: saveMeal,
+                        onAddToToday: addToToday,
+                        onMoveTime: move,
+                        zoom: zoom
+                    )
+                    .transition(.opacity.combined(with: .offset(y: 8)))
+                }
+                if let usual {
+                    UsualMoment(
+                        meal: usual.meal.meal,
+                        entries: usual.entries,
+                        time: usual.meal.time(on: day),
+                        onAdd: { addToToday(usual.entries) },
+                        onDismiss: { withAnimation(Motion.settle) { usualDismissed = usual.meal.dismissalKey(on: day) } }
+                    )
+                    .padding(.top, dayEntries.isEmpty ? 0 : 14)
+                    .transition(.opacity)
+                    .id(UsualMoment.anchor)
+                }
             }
-            if let usual {
-                UsualMoment(
-                    meal: usual.meal.meal,
-                    entries: usual.entries,
-                    time: usual.meal.time(on: day),
-                    onAdd: { addToToday(usual.entries) },
-                    onDismiss: { withAnimation(.snappy) { usualDismissed = usual.meal.dismissalKey(on: day) } }
-                )
-                .padding(.top, dayEntries.isEmpty ? 0 : 14)
-                .transition(.opacity)
-                .id(UsualMoment.anchor)
-            }
+            .animation(reduceMotion ? nil : Motion.settle, value: dayEntries.map(\.persistentModelID))
 
             SavedShelf(
                 title: shelfTitle,
@@ -362,7 +413,7 @@ struct TodayView: View {
         }
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
-        .padding(.bottom, 140)
+        .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Theme.page)
     }
@@ -400,10 +451,11 @@ struct TodayView: View {
         }
     }
 
-    // MARK: Dock and toast
+    // MARK: Toast
 
-    private var bottomStack: some View {
-        VStack(spacing: 12) {
+    /// What you just did, resting on the dock: the page's safe area already ends at the dock.
+    private var toast: some View {
+        VStack(spacing: 0) {
             if let event = events.last {
                 EventToast(event: event) { undo(event) }
                     .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -413,14 +465,8 @@ struct TodayView: View {
                         if events.last?.id == event.id { events.dismiss() }
                     }
             }
-            ScanDock(
-                namespace: zoom,
-                onSearch: { sheet = .search(nil) },
-                onScan: { showScanner = true },
-                onQuickAdd: { sheet = .quickAdd }
-            )
         }
-        .padding(.bottom, 4)
+        .padding(.bottom, 12)
         .animation(.spring(response: 0.45, dampingFraction: 0.82), value: events.last)
     }
 
@@ -630,6 +676,7 @@ struct TodayView: View {
         let todays = entries(on: today)
         let todayKcal = todays.reduce(0) { $0 + $1.totals.kcal }
         let todayVerdict = DayVerdict(kcal: todayKcal, entries: todays.count, goal: Double(goalKcal))
+        let verdicts = self.verdicts
         return (0..<7).reversed().compactMap { offset in
             guard let date = calendar.date(byAdding: .day, value: -offset, to: today) else { return nil }
             return WeekStrip.Day(date: date, verdict: offset == 0 ? todayVerdict : verdicts[date] ?? .empty)
@@ -725,15 +772,49 @@ struct TodayView: View {
         return .connected(activity ?? DayActivity(steps: 0, activeKcal: 0))
     }
 
-    private func loadCoverPhotos() {
-        let previous = coverPhotos.count
-        coverPhotos = photoEntries.compactMap { entry in
-            guard let data = entry.imageData, let image = UIImage(data: data) else { return nil }
-            return CoverPhoto(id: AnyHashable(entry.persistentModelID), image: image, dish: entry.name, place: entry.place)
+    /// The day's photos for the cover, latest first: decoded off the main thread at the size
+    /// the cover shows them, with the soft copy for the melt; photos already shown are kept.
+    private func loadCoverPhotos() async {
+        let previous = coverPhotos
+        let known = Dictionary(previous.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        var sources: [(id: AnyHashable, data: Data?, dish: String, place: MealPlace?)] = []
+        for entry in photoEntries {
+            let id = AnyHashable(entry.persistentModelID)
+            sources.append((id: id, data: known[id] == nil ? entry.imageData : nil, dish: entry.name, place: entry.place))
         }
+        let loaded: [CoverPhoto] = await Task.detached(priority: .userInitiated) {
+            sources.compactMap { source -> CoverPhoto? in
+                if let kept = known[source.id] { return kept }
+                guard let data = source.data, let image = ImageTools.downsample(data, maxPixel: 1320) else { return nil }
+                return CoverPhoto(id: source.id, image: image, soft: ImageTools.softened(data) ?? image, dish: source.dish, place: source.place)
+            }
+        }.value
+        guard !Task.isCancelled, loaded.map(\.id) != previous.map(\.id) else { return }
+        withAnimation(Motion.settle) { coverPhotos = loaded }
         // A new photo comes to the front; a removed one never leaves the cover past its end.
-        if coverPhotos.count > previous, previous > 0 { coverIndex = 0 }
-        if coverIndex >= coverPhotos.count { coverIndex = 0 }
+        if (loaded.count > previous.count && !previous.isEmpty) || coverIndex >= loaded.count {
+            quietly { coverIndex = 0 }
+        }
+    }
+
+    /// A change made by the clock or by code, not by your finger: it moves without a tick.
+    private func quietly(_ change: () -> Void) {
+        movedByCode = true
+        change()
+        DispatchQueue.main.async { movedByCode = false }
+    }
+
+    /// Once a day, when a log (not a switch, a Health refresh, a new goal or an Undo) takes
+    /// today onto target: success a moment after the food lands, so the two never blur.
+    private func celebrateIfEarned() {
+        guard case .added? = events.last?.change, isOnTargetToday else { return }
+        let today = Calendar.current.startOfDay(for: .now).timeIntervalSince1970
+        guard celebratedDay != today else { return }
+        celebratedDay = today
+        Task {
+            try? await Task.sleep(for: .milliseconds(450))
+            celebrations += 1
+        }
     }
 
     private func loadWeights() async {
@@ -770,9 +851,11 @@ struct TodayView: View {
     private func add(_ item: SavedFood) {
         let meal = item.meal ?? Meal.likely()
         let entry = FoodEntry(food: item.food, amount: item.amount, meal: meal, date: FoodDetailView.logDate(for: day))
-        context.insert(entry)
-        item.timesAdded += 1
-        try? context.save()
+        withAnimation(Motion.settle) {
+            context.insert(entry)
+            item.timesAdded += 1
+            try? context.save()
+        }
         events.added(entry)
     }
 
@@ -1009,6 +1092,31 @@ struct HomeSwitcher<Label: View>: View {
 }
 
 /// Paper fading in under the status bar, so content scrolled up never runs into the time.
+/// Whether the day's cover is still on screen, kept apart from Today so that scrolling past it
+/// redraws only the top of the screen.
+@Observable final class CoverChrome {
+    var onScreen = true
+}
+
+/// The paper under the status bar once the cover has gone, and the status bar itself, hidden
+/// over a photo in light mode: the only views that change as the cover leaves.
+private struct TopChrome: View {
+    let chrome: CoverChrome
+    let height: CGFloat
+    let onDay: Bool
+    let photoCover: Bool
+
+    var body: some View {
+        let paper = !onDay || !chrome.onScreen
+        TopFade(height: height)
+            .opacity(paper ? 1 : 0)
+            .animation(.easeOut(duration: 0.2), value: paper)
+            .allowsHitTesting(false)
+            // A photo cover runs to the top edge, where the time would sit dark on the picture.
+            .statusBarHidden(onDay && photoCover && chrome.onScreen)
+    }
+}
+
 private struct TopFade: View {
     let height: CGFloat
 

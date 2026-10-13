@@ -170,7 +170,7 @@ struct PlacePicker: View {
     }
 
     private func pick(_ place: MealPlace?) {
-        UISelectionFeedbackGenerator().selectionChanged()
+        Feel.play(.tick)
         onPick(place)
         dismiss()
     }

@@ -20,19 +20,16 @@ struct NearbyDishes: View {
                 title: hasDistances ? "Near you" : "At your places",
                 symbol: "mappin.and.ellipse"
             )
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 12) {
-                    ForEach(items) { item in
-                        Button {
-                            onOpen(item.dish)
-                        } label: {
-                            DishCard(dish: item.dish, distance: item.distance)
-                        }
-                        .buttonStyle(PressableStyle(scale: 0.95))
+            Rail(spacing: 12) {
+                ForEach(items) { item in
+                    Button {
+                        onOpen(item.dish)
+                    } label: {
+                        DishCard(dish: item.dish, distance: item.distance)
                     }
+                    .buttonStyle(PressableStyle(scale: 0.95))
                 }
             }
-            .scrollClipDisabled()
         }
     }
 }

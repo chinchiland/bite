@@ -169,7 +169,7 @@ struct AgreeButton: View {
             .animation(.snappy, value: isOn)
         }
         .buttonStyle(PressableStyle(scale: 0.92))
-        .sensoryFeedback(trigger: isOn) { _, on in on ? .increase : .decrease }
+        .sensoryFeedback(trigger: isOn) { _, on in on ? Feel.click : nil }
         .accessibilityLabel("\(count) people agree")
         .accessibilityHint(isOn ? "Takes back your agreement" : "Says this count matches your plate")
     }
@@ -225,7 +225,7 @@ struct StarRating: View {
                 .accessibilityLabel("\(star) stars")
             }
         }
-        .sensoryFeedback(.selection, trigger: rating)
+        .sensoryFeedback(Feel.tick, trigger: rating)
     }
 }
 

@@ -73,6 +73,6 @@ struct UsualMoment: View {
                 .padding(.top, 2)
             }
         }
-        .sensoryFeedback(.success, trigger: taps)
+        .sensoryFeedback(Feel.land, trigger: taps)
     }
 }

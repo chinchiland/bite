@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import TipKit
 import UIKit
 
 /// One food, before you log it or while you edit it. Its picture as the hero, then on a white
@@ -18,6 +19,8 @@ struct FoodDetailView: View {
     @AppStorage("goal.kcal") private var goalKcal = 2000
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @State private var amount: Double
+    /// The photo has scrolled up under the bar: the bar gets its background back.
+    @State private var heroGone = false
     @State private var amountText: String
     @State private var meal: Meal
     /// When you ate it: now, or the time on the entry. Logging late? Move it back.
@@ -60,6 +63,7 @@ struct FoodDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 FoodHero(food: food, height: 330)
+                    .onGeometryChange(for: Bool.self) { $0.frame(in: .scrollView).maxY < 120 } action: { heroGone = $0 }
                 sheet
                     .padding(.top, -32)
             }
@@ -69,7 +73,7 @@ struct FoodDetailView: View {
         .ignoresSafeArea(edges: .top)
         .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .modifier(HeroBar(heroGone: heroGone))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -90,7 +94,7 @@ struct FoodDetailView: View {
                         .contentTransition(.symbolEffect(.replace))
                         .symbolEffect(.bounce, value: saves)
                 }
-                .sensoryFeedback(.success, trigger: saves)
+                .sensoryFeedback(trigger: saves) { _, _ in isSaved ? Feel.click : nil }
                 .accessibilityLabel(isSaved ? "Saved to your shelf" : "Save to your shelf")
             }
         }
@@ -191,20 +195,17 @@ struct FoodDetailView: View {
     private var amountPicker: some View {
         VStack(alignment: .leading, spacing: 12) {
             if !food.portions.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(food.portions, id: \.self) { portion in
-                            Button { set(portion.amount) } label: {
-                                Text(chipTitle(portion))
-                            }
-                            .buttonStyle(ChipButtonStyle(isSelected: abs(amount - portion.amount) < 0.01))
+                Rail(spacing: 8, alignment: .center) {
+                    ForEach(food.portions, id: \.self) { portion in
+                        Button { set(portion.amount) } label: {
+                            Text(chipTitle(portion))
                         }
+                        .buttonStyle(ChipButtonStyle(isSelected: abs(amount - portion.amount) < 0.01))
                     }
                 }
-                .scrollClipDisabled()
             }
             HStack {
-                StepButton(systemImage: "minus", label: "Less") { step(-food.unit.step) }
+                StepButton(systemImage: "minus", label: "Less", value: amount) { step(-food.unit.step) }
                 Spacer()
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     TextField("0", text: $amountText)
@@ -220,7 +221,7 @@ struct FoodDetailView: View {
                         .foregroundStyle(Theme.secondary)
                 }
                 Spacer()
-                StepButton(systemImage: "plus", label: "More") { step(food.unit.step) }
+                StepButton(systemImage: "plus", label: "More", value: amount) { step(food.unit.step) }
             }
             .padding(10)
             .background(Theme.inset, in: RoundedRectangle(cornerRadius: Theme.insetRadius, style: .continuous))
@@ -368,19 +369,31 @@ struct FoodDetailView: View {
 
     private func save() {
         if let entry {
+            if abs(entry.date.timeIntervalSince(time)) >= 600 { MealTimeTip.movedTheLongWay = true }
             entry.amount = amount
             entry.meal = meal
             entry.date = time
             entry.place = place
             try? context.save()
+            Feel.play(.click)
         } else {
+            if loggedRecently { FoodTileTip.relogged = true }
             let added = FoodEntry(food: food, amount: amount, meal: meal, date: time, place: place)
             context.insert(added)
             try? context.save()
             events.added(added)
+            Feel.play(.land)
         }
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
         onDone()
+    }
+
+    /// This food is already in your last two weeks: logged again by search or scan.
+    private var loggedRecently: Bool {
+        let id = food.id
+        guard let since = Calendar.current.date(byAdding: .day, value: -14, to: .now) else { return false }
+        var descriptor = FetchDescriptor<FoodEntry>(predicate: #Predicate { $0.foodID == id && $0.date >= since })
+        descriptor.fetchLimit = 1
+        return ((try? context.fetchCount(descriptor)) ?? 0) > 0
     }
 
     /// Bookmark keeps the food on your shelf with this amount; tapping again takes it off.
@@ -400,6 +413,32 @@ struct FoodDetailView: View {
         if calendar.isDateInToday(day) { return .now }
         let time = calendar.dateComponents([.hour, .minute], from: .now)
         return calendar.date(bySettingHour: time.hour ?? 12, minute: time.minute ?? 0, second: 0, of: day) ?? day
+    }
+}
+
+/// The bar over a hero photo: clear while the photo is under it, then the system's edge effect
+/// (iOS 26) or the white sheet's own color (before), so the buttons never sit on words.
+struct HeroBar: ViewModifier {
+    let heroGone: Bool
+
+    func body(content: Content) -> some View {
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            content
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .scrollEdgeEffectHidden(!heroGone, for: .top)
+        } else {
+            legacy(content)
+        }
+        #else
+        legacy(content)
+        #endif
+    }
+
+    private func legacy(_ content: Content) -> some View {
+        content
+            .toolbarBackground(Theme.card, for: .navigationBar)
+            .toolbarBackground(heroGone ? .visible : .hidden, for: .navigationBar)
     }
 }
 
@@ -425,7 +464,7 @@ struct FoodHero: View {
     }
 
     @ViewBuilder private var content: some View {
-        if let data = food.imageData, let photo = UIImage(data: data) {
+        if let data = food.imageData, let photo = ImageTools.thumbnail(data, points: 440) {
             Image(uiImage: photo)
                 .resizable()
                 .scaledToFill()

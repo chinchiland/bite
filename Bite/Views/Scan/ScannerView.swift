@@ -121,7 +121,7 @@ struct ScannerView: View {
         }
         .task { camera = await CameraState.check() }
         .onDisappear { if torchOn { setTorch(false) } }
-        .sensoryFeedback(.success, trigger: scans)
+        .sensoryFeedback(Feel.click, trigger: scans)
         .onChange(of: pickedPhoto) { _, item in
             Task { await usePicked(item) }
         }
@@ -366,7 +366,7 @@ struct ScannerView: View {
             defer { capturing = false }
             if let image = try? await control.capturePhoto() {
                 scans += 1
-                photo = CapturedPhoto(image: image, isLabel: mode == .label)
+                photo = CapturedPhoto(image: ImageTools.fitted(image, maxPixel: 2048), isLabel: mode == .label)
             }
         }
     }
@@ -389,7 +389,7 @@ struct ScannerView: View {
         if !typed, code == lastCode, Date.now.timeIntervalSince(resumedAt) < 2 { return }
 
         lastCode = code
-        scans += 1
+        if !typed { scans += 1 }
         phase = .looking(code)
         Task { @MainActor in
             do {
@@ -398,12 +398,15 @@ struct ScannerView: View {
                         phase = .scanning
                         found = food
                     } else {
+                        Feel.play(.snag)
                         phase = .noNutrition(code: code, name: food.name)
                     }
                 } else {
+                    Feel.play(.snag)
                     phase = .notFound(code)
                 }
             } catch {
+                Feel.play(.failed)
                 phase = .failed(code)
             }
         }

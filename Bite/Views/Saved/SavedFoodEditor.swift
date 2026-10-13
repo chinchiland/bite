@@ -86,6 +86,7 @@ struct SavedFoodEditor: View {
                         .disabled(!canSave)
                 }
             }
+            .keyboardDone()
             .onAppear(perform: load)
             .onDisappear {
                 guard removeOnClose, let existing else { return }

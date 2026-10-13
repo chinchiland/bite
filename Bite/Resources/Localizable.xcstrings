@@ -1453,6 +1453,22 @@
         }
       }
     },
+    "Ate it earlier?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Lo comiste antes?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu as mangé plus tôt ?"
+          }
+        }
+      }
+    },
     "Back to the camera" : {
       "localizations" : {
         "es" : {
@@ -6297,6 +6313,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prise de la photo"
+          }
+        }
+      }
+    },
+    "Tap a meal's time to change when you ate it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca la hora de una comida para cambiar cuándo la comiste."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touche l’heure d’un repas pour changer le moment où tu l’as mangé."
           }
         }
       }

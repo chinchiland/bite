@@ -23,19 +23,16 @@ struct SavedShelf: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 10) {
-                    ForEach(saved) { item in
-                        SavedTile(item: item) { onAdd(item) }
-                            .contextMenu {
-                                Button("Edit", systemImage: "pencil") { onEdit(item) }
-                                Button("Remove", systemImage: "trash", role: .destructive) { onDelete(item) }
-                            }
-                    }
-                    NewSavedTile(isFirst: saved.isEmpty, action: onNew)
+            Rail(spacing: 10) {
+                ForEach(saved) { item in
+                    SavedTile(item: item) { onAdd(item) }
+                        .contextMenu {
+                            Button("Edit", systemImage: "pencil") { onEdit(item) }
+                            Button("Remove", systemImage: "trash", role: .destructive) { onDelete(item) }
+                        }
                 }
+                NewSavedTile(isFirst: saved.isEmpty, action: onNew)
             }
-            .scrollClipDisabled()
         }
     }
 }
@@ -67,7 +64,7 @@ private struct SavedTile: View {
             .frame(width: 76, alignment: .leading)
         }
         .buttonStyle(PressableStyle(scale: 0.92))
-        .sensoryFeedback(.success, trigger: taps)
+        .sensoryFeedback(Feel.land, trigger: taps)
         .accessibilityLabel("Add \(item.name), \(item.totals.kcal.kcalText) calories")
     }
 }

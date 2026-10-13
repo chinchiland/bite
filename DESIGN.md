@@ -101,15 +101,27 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 - **Do, then offer Undo; never "are you sure?".** An add or a delete happens at once and a toast slides up over the dock for 4 seconds with Undo. A delete keeps a copy of the entry until the toast leaves.
 - **Edit in place.** Tap a meal's time to move it with a wheel in a small popover. A food's page has its own Time, set to now on its own, so logging late never needs a form.
 - **Repeat without retyping.** Press and hold a food for Add again (Add to today on a past day); hold a past meal for Add to today. Most people eat the same few meals.
-- **Haptics only where they mean something:** a tick when the switcher changes day, a rising or falling tick on − and +, a success on add and the moment today lands on target. Navigation taps stay silent.
-- **Teach once, in place.** Two tips, never a tour: hold a food (on the first tile), and the switcher (from the third visit). Each disappears once you have used the gesture.
+- **Haptics only where they mean something, six of them** (`Feel` in `Bite/Design/Feel.swift`). A tick when a value moves under your finger (a day, a photo, a step, an answer, a star). A soft landing when food goes into your day, once per tap. A smaller drop for a glass of water. A crisp click for a code read, a photo taken, a like, a bookmark, a save. Success only for a goal reached (today on target and the day's water, once each) and a photo estimate arriving. A warning when a barcode has no data, an error when something failed. Removing, navigating, a change made by the clock and going over the goal stay silent.
+- **Teach once, in place.** Three tips, never a tour, at most one a day, each shown twice at most and gone once you use the gesture: the switcher (from the third day you open Bite), hold a food (once you logged again the long way a food from the last two weeks) and tap a meal's time (once you moved a food's time on its page). The switcher's tip points from the top; the other two sit on the page under the first meal, so they scroll with it and never take a touch.
 - **Beyond the app.** Scan food (opens the camera, for the Action button, Siri, Spotlight and Shortcuts) and Log a saved food ("Log Morning skyr in Bite", without opening the app).
 - **No dead ends.** A barcode with no data offers Snap the label first, then Type it in. A typo still finds its food: when nothing matches as typed, one slip per word of four letters or more is forgiven (a letter wrong, missing, added or swapped; the first letter has to be right).
 - **Your data is yours.** Settings exports the whole log as a spreadsheet (CSV, a point for decimals, accents kept), and says the log stays on the phone.
 
 ## Motion
 
-The scan laser sweeps, numbers roll, the ring's dots light up round from twelve o'clock and each macro's glyph appears as the light reaches it, the range bars grow, covers stretch when pulled, and "Added to Breakfast" slides up over the dock, then leaves after 2.6 seconds. Reduce Motion stops the laser and lights everything at once.
+Motion explains a change you caused, then stops. Five curves (`Motion` in `Bite/Design/Feel.swift`): respond for direct answers to a finger, settle for content arriving, count for numbers and the ring, reveal for the ring's first light, press for buttons. Never a wobble.
+
+The scan laser sweeps, numbers roll, the ring lights up round from twelve the first time and afterwards grows or shrinks from where it was, each macro's glyph appears as the light reaches it, the range bars grow, covers stretch when pulled, a food's tile grows into its page (iOS 18 and later), the day's foods settle in and out, and "Added to Breakfast" rises over the dock and leaves after 4 seconds. Once a day, when a log lands today on target, a warmer light passes round the ring with the success. The estimate fades up into place when it arrives. Reduce Motion stops the laser, lights everything at once and turns moves into fades.
+
+## Scrolling
+
+- **Nothing slides sideways unless there is more to see.** Every shelf is a `Rail`: edge to edge, the first item on the page margin, the next one peeking, a swipe settling on an item, no bounce when it all fits. The cover pages only with two photos or more, and the last wraps to the first with a cut.
+- **Scrolling never changes the layout.** Heights never follow the status bar or a live safe area; the state that changes as the cover leaves lives in a small object only the top chrome reads.
+- **A data change doesn't move what's under your finger.** Inserts and the cover's photo height animate; another day opens on its cover.
+- **Rows fit 320 pt** (Display Zoom on an SE, in French): rows with fixed parts fall back with `ViewThatFits`, the macro ring steps down under 345 pt, a chip wider than its row truncates inside it.
+- **Words never sit under the bar or the clock.** Paper under the status bar on Today, the bar's background or iOS 26's edge effect once a hero photo has gone, a band of the sheet on the estimate.
+- **The dock lives in the safe area**, so every page ends above it and iOS 26 softens the page under it.
+- **Images are decoded off the main thread at the size they show**, and cached; the cover's melt uses a small copy blurred once.
 
 ## Copy
 

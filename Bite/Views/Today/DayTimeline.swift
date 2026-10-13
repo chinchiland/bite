@@ -14,6 +14,8 @@ struct DayTimeline: View {
     let onSaveMeal: (Meal, [FoodEntry]) -> Void
     let onAddToToday: ([FoodEntry]) -> Void
     let onMoveTime: ([FoodEntry], Date) -> Void
+    /// Where a tapped tile grows into its food's page, on iOS 18 and later.
+    var zoom: Namespace.ID? = nil
 
     /// Meals in the order you ate them.
     private var meals: [(meal: Meal, entries: [FoodEntry])] {
@@ -41,7 +43,8 @@ struct DayTimeline: View {
                     onAddHere: { onAddHere(item.meal) },
                     onSaveMeal: { onSaveMeal(item.meal, item.entries) },
                     onAddToToday: onAddToToday,
-                    onMoveTime: { onMoveTime(item.entries, $0) }
+                    onMoveTime: { onMoveTime(item.entries, $0) },
+                    zoom: zoom
                 )
                 .padding(.top, index == 0 ? 0 : 14)
             }
@@ -63,6 +66,7 @@ private struct MealMoment: View {
     let onSaveMeal: () -> Void
     let onAddToToday: ([FoodEntry]) -> Void
     let onMoveTime: (Date) -> Void
+    let zoom: Namespace.ID?
 
     @State private var editingTime = false
     @State private var time = Date.now
@@ -120,14 +124,17 @@ private struct MealMoment: View {
                 .accessibilityElement(children: .combine)
 
                 FlowLayout(spacing: 6) {
-                    ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                        if showsTip && index == 0 {
-                            tile(entry)
-                                .popoverTip(FoodTileTip(), arrowEdge: .bottom)
-                        } else {
-                            tile(entry)
-                        }
+                    ForEach(entries) { entry in
+                        tile(entry)
                     }
+                }
+
+                // At most one of them shows on a day.
+                if showsTip {
+                    TipView(FoodTileTip())
+                        .modifier(InlineTipStyle())
+                    TipView(MealTimeTip())
+                        .modifier(InlineTipStyle())
                 }
             }
             .padding(.bottom, 14)
@@ -143,19 +150,29 @@ private struct MealMoment: View {
 
     private func tile(_ entry: FoodEntry) -> some View {
         Button {
-            FoodTileTip().invalidate(reason: .actionPerformed)
             onSelect(entry)
         } label: {
             FoodThumb(food: entry.food, size: 76)
+                .modifier(ZoomSource(id: entry.persistentModelID, zoom: zoom))
         }
         .buttonStyle(PressableStyle(scale: 0.94))
         .contextMenu {
             Button(isToday ? LocalizedStringKey("Add again") : LocalizedStringKey("Add to today"), systemImage: "arrow.uturn.forward") {
+                learnedHold()
                 onAddToToday([entry])
             }
-            Button("Edit amount", systemImage: "slider.horizontal.3") { onSelect(entry) }
-            Button("Save to shelf", systemImage: "bookmark") { onSave(entry) }
-            Button("Delete", systemImage: "trash", role: .destructive) { onDelete(entry) }
+            Button("Edit amount", systemImage: "slider.horizontal.3") {
+                learnedHold()
+                onSelect(entry)
+            }
+            Button("Save to shelf", systemImage: "bookmark") {
+                learnedHold()
+                onSave(entry)
+            }
+            Button("Delete", systemImage: "trash", role: .destructive) {
+                learnedHold()
+                onDelete(entry)
+            }
         }
         .accessibilityLabel("\(entry.name), \(entry.food.unit.format(entry.amount)), \(entry.totals.kcal.kcalText) calories")
     }
@@ -184,8 +201,37 @@ private struct MealMoment: View {
     }
 
     private func openTimeEditor() {
+        MealTimeTip().invalidate(reason: .actionPerformed)
         time = entries.first?.date ?? .now
         opened = time
         editingTime = true
+    }
+
+    private func learnedHold() {
+        FoodTileTip().invalidate(reason: .actionPerformed)
+    }
+}
+
+/// A tip on the page: a white card on the paper, like the rest of the day.
+struct InlineTipStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .tipBackground(Theme.card)
+            .tipCornerRadius(16)
+            .tint(Theme.ink)
+    }
+}
+
+/// A zoom source when there is somewhere to zoom to.
+private struct ZoomSource<ID: Hashable>: ViewModifier {
+    let id: ID
+    let zoom: Namespace.ID?
+
+    func body(content: Content) -> some View {
+        if let zoom {
+            content.zoomSource(id: id, in: zoom)
+        } else {
+            content
+        }
     }
 }

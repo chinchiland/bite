@@ -162,7 +162,7 @@ private struct GoalOffer: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(14)
         .background(Theme.fill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .sensoryFeedback(.success, trigger: taps)
+        .sensoryFeedback(Feel.click, trigger: taps)
     }
 }
 

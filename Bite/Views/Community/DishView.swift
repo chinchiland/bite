@@ -18,6 +18,8 @@ struct DishView: View {
     @State private var meal = Meal.likely()
     @State private var showAccuracy = false
     @State private var showAddEstimate = false
+    /// The photo has scrolled up under the bar: the bar gets its background back.
+    @State private var heroGone = false
 
     private var consensus: Consensus { dish.consensus }
     private var targets: MacroTargets {
@@ -28,6 +30,7 @@ struct DishView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 FoodHero(food: dish.food, height: 300)
+                    .onGeometryChange(for: Bool.self) { $0.frame(in: .scrollView).maxY < 120 } action: { heroGone = $0 }
                 sheet
                     .padding(.top, -32)
             }
@@ -37,7 +40,7 @@ struct DishView: View {
         .ignoresSafeArea(edges: .top)
         .background(Theme.card.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .modifier(HeroBar(heroGone: heroGone))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAccuracy) {
             AccuracyExplainer(consensus: consensus)
@@ -231,7 +234,7 @@ struct DishView: View {
         context.insert(entry)
         try? context.save()
         events.added(entry)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.land)
         onDone()
     }
 }

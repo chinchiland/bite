@@ -25,14 +25,14 @@ struct SettingsView: View {
                     Section {
                         VStack(spacing: 4) {
                             HStack {
-                                StepButton(systemImage: "minus", label: "Lower") { change(by: -50) }
+                                StepButton(systemImage: "minus", label: "Lower", value: Double(kcal)) { change(by: -50) }
                                 Spacer()
                                 Text(kcal.formatted())
                                     .font(.number(44))
                                     .foregroundStyle(Theme.ink)
                                     .contentTransition(.numericText(value: Double(kcal)))
                                 Spacer()
-                                StepButton(systemImage: "plus", label: "Higher") { change(by: 50) }
+                                StepButton(systemImage: "plus", label: "Higher", value: Double(kcal)) { change(by: 50) }
                             }
                             Text("kcal a day")
                                 .font(.ui(15))

@@ -116,9 +116,10 @@ struct RangeView<Switcher: View>: View {
             }
             .padding(.horizontal, Theme.margin)
             .padding(.top, 8)
-            .padding(.bottom, 140)
+            .padding(.bottom, 24)
         }
-        .scrollIndicators(.hidden)
+        // A month of days is long: the indicator says where you are and drags you through it.
+        .scrollIndicators(.automatic)
         .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
     }
 
@@ -300,6 +301,14 @@ private struct DayRow: View {
         return false
     }
 
+    private func thumbs(_ count: Int) -> some View {
+        HStack(spacing: 6) {
+            ForEach(pictures.prefix(count)) { entry in
+                FoodThumb(food: entry.food, size: 58)
+            }
+        }
+    }
+
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
@@ -318,10 +327,10 @@ private struct DayRow: View {
                 }
             }
             .frame(width: 74, alignment: .leading)
-            HStack(spacing: 6) {
-                ForEach(pictures) { entry in
-                    FoodThumb(food: entry.food, size: 58)
-                }
+            ViewThatFits(in: .horizontal) {
+                thumbs(4)
+                thumbs(3)
+                thumbs(2)
             }
             Spacer(minLength: 0)
         }

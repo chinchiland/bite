@@ -25,10 +25,15 @@ struct BiteApp: App {
         #if DEBUG || BITE_DEMO
         if BiteStore.isDemo { DemoData.seed(container.mainContext) }
         #endif
-        // Tips teach the hidden gestures once, in place. Screenshots run without them.
+        // Tips teach the hidden gestures once, in place, at most one a day. Bite Demo shows
+        // them too; the screenshots run without them.
+        #if BITE_DEMO
+        try? Tips.configure([.displayFrequency(.daily)])
+        #else
         if !BiteStore.isDemo {
-            try? Tips.configure([.displayFrequency(.immediate)])
+            try? Tips.configure([.displayFrequency(.daily)])
         }
+        #endif
     }
 
     var body: some Scene {

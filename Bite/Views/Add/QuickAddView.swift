@@ -145,7 +145,7 @@ struct QuickAddView: View {
         context.insert(entry)
         try? context.save()
         events.added(entry)
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        Feel.play(.land)
         onDone()
     }
 

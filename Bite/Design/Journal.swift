@@ -21,20 +21,71 @@ struct DottedRing: View {
     var overflow: Double = 0
     /// What the ring sits on, so a glyph's disc can cut its dots cleanly.
     var surface: Color = Theme.page
+    /// Each change sends one warmer light round the lit dots: the day just landed on target.
+    var glint = 0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var reveal: Double = 0
 
     var body: some View {
-        DotRingCanvas(parts: parts, overflow: overflow, surface: surface, reveal: reveal)
+        let shares = Shares(parts)
+        DotRingCanvas(shares: shares, overflow: overflow, surface: surface, reveal: reveal)
+            .animation(reduceMotion ? nil : Motion.count, value: shares)
+            .animation(reduceMotion ? nil : Motion.count, value: overflow)
+            .keyframeAnimator(initialValue: -1.0, trigger: glint) { ring, sweep in
+                ring.environment(\.ringGlint, reduceMotion ? -1 : sweep)
+            } keyframes: { _ in
+                // Starts just before twelve and ends past the last lit dot, then rests unseen.
+                LinearKeyframe(-0.1, duration: 0.01)
+                CubicKeyframe(1.15, duration: 0.8)
+                LinearKeyframe(-1, duration: 0.01)
+            }
             .onAppear {
                 guard reveal < 1 else { return }
                 if reduceMotion {
                     reveal = 1
                 } else {
-                    withAnimation(.easeOut(duration: 1.1).delay(0.15)) { reveal = 1 }
+                    withAnimation(Motion.reveal.delay(0.1)) { reveal = 1 }
                 }
             }
+    }
+
+    /// The ring's four possible parts, zero when absent, so they can animate from one value to
+    /// the next: protein, carbs, fat, and calories with no macros.
+    struct Shares: Equatable {
+        var protein = 0.0
+        var carbs = 0.0
+        var fat = 0.0
+        var plain = 0.0
+
+        init(protein: Double = 0, carbs: Double = 0, fat: Double = 0, plain: Double = 0) {
+            self.protein = protein
+            self.carbs = carbs
+            self.fat = fat
+            self.plain = plain
+        }
+
+        init(_ parts: [Part]) {
+            for part in parts {
+                switch part.macro {
+                case .protein: protein += part.share
+                case .carbs: carbs += part.share
+                case .fat: fat += part.share
+                case nil: plain += part.share
+                }
+            }
+        }
+
+        /// Back to drawable parts, in the ring's order, the empty ones left out.
+        var parts: [Part] {
+            [
+                Part(share: protein, color: Theme.protein, macro: .protein),
+                Part(share: carbs, color: Theme.carbs, macro: .carbs),
+                Part(share: fat, color: Theme.fat, macro: .fat),
+                Part(share: plain, color: Theme.tertiary),
+            ]
+            .filter { $0.share > 0.0005 }
+        }
     }
 
     /// The day's calories against its goal, split by where they came from.
@@ -60,17 +111,51 @@ struct DottedRing: View {
     }
 }
 
-/// Draws the rings. Animating `reveal` sweeps the colors in from twelve o'clock.
+private struct RingGlintKey: EnvironmentKey {
+    static let defaultValue = -1.0
+}
+
+extension EnvironmentValues {
+    /// Where the ring's warmer light is, as a share of its lit arc; below 0 when there is none.
+    var ringGlint: Double {
+        get { self[RingGlintKey.self] }
+        set { self[RingGlintKey.self] = newValue }
+    }
+}
+
+/// Draws the rings. Animating `reveal` sweeps the colors in from twelve o'clock; animating the
+/// shares and the overflow grows or shrinks each part from where it was.
 private struct DotRingCanvas: View, Animatable {
-    let parts: [DottedRing.Part]
-    let overflow: Double
+    var shares: DottedRing.Shares
+    var overflow: Double
     let surface: Color
     var reveal: Double
 
-    var animatableData: Double {
-        get { reveal }
-        set { reveal = newValue }
+    var animatableData: AnimatablePair<
+        AnimatablePair<Double, Double>,
+        AnimatablePair<AnimatablePair<Double, Double>, AnimatablePair<Double, Double>>
+    > {
+        get {
+            AnimatablePair(
+                AnimatablePair(reveal, overflow),
+                AnimatablePair(AnimatablePair(shares.protein, shares.carbs), AnimatablePair(shares.fat, shares.plain))
+            )
+        }
+        set {
+            reveal = newValue.first.first
+            overflow = newValue.first.second
+            shares = DottedRing.Shares(
+                protein: newValue.second.first.first,
+                carbs: newValue.second.first.second,
+                fat: newValue.second.second.first,
+                plain: newValue.second.second.second
+            )
+        }
     }
+
+    private var parts: [DottedRing.Part] { shares.parts }
+    /// Where the warmer light is, as a share of the lit arc; below 0 when there is none.
+    @Environment(\.ringGlint) private var glint
 
     private static let rings = 6
     // Drawn on a 176 pt square and scaled: six rings from radius 50 out to 82.5.
@@ -90,6 +175,7 @@ private struct DotRingCanvas: View, Animatable {
             let unit = min(size.width, size.height) / 176
             let center = CGPoint(x: size.width / 2, y: size.height / 2)
             let diameter = Self.dot * unit
+            let parts = self.parts
             let colored = parts.reduce(0) { $0 + max($1.share, 0) }
             let boundaries = Self.boundaries(parts.map(\.share), colored: colored)
             for ring in 0..<Self.rings {
@@ -100,13 +186,19 @@ private struct DotRingCanvas: View, Animatable {
                 for index in 0..<count {
                     let position = Double(index) * step
                     if boundaries.contains(where: { Self.distance(position, $0) < step / 2 }) { continue }
-                    var lit = partColor(at: position)
+                    var lit = Self.color(at: position, in: parts)
                     if lit != nil, position > reveal * colored { lit = nil }
                     if isOuter, overflow > 0, position < overflow * reveal { lit = Theme.over }
                     let angle = position * 2 * .pi - .pi / 2
                     let point = CGPoint(x: center.x + radius * CGFloat(cos(angle)), y: center.y + radius * CGFloat(sin(angle)))
-                    let rect = CGRect(x: point.x - diameter / 2, y: point.y - diameter / 2, width: diameter, height: diameter)
+                    // The light lifts the lit dots it passes, a little larger and paler.
+                    let warmth = lit == nil || glint < -0.5 ? 0 : max(0, 1 - abs(position - glint * colored) / 0.07)
+                    let grown = diameter * (1 + 0.3 * warmth)
+                    let rect = CGRect(x: point.x - grown / 2, y: point.y - grown / 2, width: grown, height: grown)
                     context.fill(Path(ellipseIn: rect), with: .color(lit ?? Theme.ringRest))
+                    if warmth > 0 {
+                        context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(0.45 * warmth)))
+                    }
                 }
             }
             drawGlyphs(in: context, center: center, unit: unit, colored: colored)
@@ -141,7 +233,7 @@ private struct DotRingCanvas: View, Animatable {
     }
 
     /// The part a position falls in, or nil for the part of the ring still to eat.
-    private func partColor(at position: Double) -> Color? {
+    private static func color(at position: Double, in parts: [DottedRing.Part]) -> Color? {
         var start = 0.0
         for part in parts where part.share > 0 {
             if position < start + part.share { return part.color }
@@ -280,11 +372,17 @@ struct MacroBlock: View {
     var showsTarget = true
     /// What the block sits on: the paper on Today, a white sheet on a food.
     var surface: Color = Theme.page
+    /// Bumped when a log lands today on target: the ring warms once.
+    var glint = 0
+
+    /// Under 345 pt across (a 375 pt phone, or Display Zoom), the ring steps down to 124.
+    @State private var narrow = false
 
     var body: some View {
-        HStack(alignment: .center, spacing: 16) {
+        let side: CGFloat = narrow ? 124 : 150
+        HStack(alignment: .center, spacing: narrow ? 12 : 16) {
             ZStack {
-                DottedRing(parts: ring, overflow: overflow, surface: surface)
+                DottedRing(parts: ring, overflow: overflow, surface: surface, glint: glint)
                 // Inside the inner ring, which leaves about 81 pt across the middle and less below
                 // it: the number steps down for four digits, the unit takes a second line when a
                 // language needs it ("kcal" over "mangées"), so each word stays short.
@@ -303,15 +401,16 @@ struct MacroBlock: View {
                         .lineLimit(2)
                         .minimumScaleFactor(0.9)
                 }
-                .frame(maxWidth: 72)
+                .frame(maxWidth: side * 0.48)
                 .accessibilityElement(children: .combine)
             }
-            .frame(width: 150, height: 150)
-            .animation(.smooth, value: number)
+            .frame(width: side, height: side)
+            .animation(Motion.count, value: number)
 
             MacroList(nutrients: nutrients, targets: targets, showsTarget: showsTarget)
                 .frame(maxWidth: .infinity)
         }
+        .onGeometryChange(for: Bool.self) { $0.size.width < 345 } action: { narrow = $0 }
     }
 }
 
@@ -333,6 +432,9 @@ struct ActivityChips: View {
     var onWater: (() -> Void)? = nil
     var onWaterRemove: (() -> Void)? = nil
     let onConnect: () -> Void
+
+    /// Bumped by the glass that meets the day's goal, never by the ones after it.
+    @State private var goalGlass = 0
 
     var body: some View {
         FlowLayout(spacing: 8) {
@@ -368,6 +470,7 @@ struct ActivityChips: View {
                 Image(systemName: "drop.fill")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Theme.water)
+                    .symbolEffect(.bounce, value: goalGlass)
                 Group {
                     if water == 0 {
                         Text("Water")
@@ -394,10 +497,16 @@ struct ActivityChips: View {
                 }
                 .clipShape(Capsule())
             }
-            .animation(.smooth, value: water)
+            .animation(Motion.settle, value: water)
         }
         .buttonStyle(PressableStyle(scale: 0.95))
-        .sensoryFeedback(.increase, trigger: water)
+        .sensoryFeedback(trigger: water) { old, new in
+            guard new > old else { return nil }
+            return new == waterGoal ? Feel.reached : Feel.drop
+        }
+        .onChange(of: water) { old, new in
+            if new > old, new == waterGoal { goalGlass += 1 }
+        }
         .contextMenu {
             if let onWaterRemove, water > 0 {
                 Button("Remove a glass", systemImage: "minus", action: onWaterRemove)
