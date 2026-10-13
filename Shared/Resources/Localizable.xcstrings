@@ -2099,6 +2099,22 @@
         }
       }
     },
+    "Barcodes, search and your saved foods work as usual." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los códigos de barras, la búsqueda y tus alimentos guardados funcionan como siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les codes-barres, la recherche et tes aliments enregistrés marchent comme d’habitude."
+          }
+        }
+      }
+    },
     "Basics" : {
       "localizations" : {
         "es" : {
@@ -2175,6 +2191,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bite compte ce que tu manges et te montre tes habitudes, sans budget à respecter. Les macros montrent toujours quoi viser."
+          }
+        }
+      }
+    },
+    "Bite estimates it, and you can correct the numbers before saving." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite lo estima, y puedes corregir las cifras antes de guardar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bite l’estime, et tu peux corriger les chiffres avant d’enregistrer."
           }
         }
       }
@@ -2761,22 +2793,6 @@
         }
       }
     },
-    "Claude API key" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clave API de Claude"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clé API Claude"
-          }
-        }
-      }
-    },
     "Claude couldn't estimate this photo." : {
       "localizations" : {
         "es" : {
@@ -2821,70 +2837,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Claude n’a pas accepté ta clé"
-          }
-        }
-      }
-    },
-    "Claude estimates it, and you can correct the numbers before saving." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude lo estima y puedes corregir los números antes de guardar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude l’estime, et tu peux corriger les chiffres avant d’enregistrer."
-          }
-        }
-      }
-    },
-    "Claude is counting…" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude está contando…"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude compte…"
-          }
-        }
-      }
-    },
-    "Claude is looking at your plate" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude está mirando tu plato"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude regarde ton assiette"
-          }
-        }
-      }
-    },
-    "Claude is reading the label" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude está leyendo la etiqueta"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude lit l’étiquette"
           }
         }
       }
@@ -3093,6 +3045,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impossible de joindre Open Food Facts."
+          }
+        }
+      }
+    },
+    "Counting…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calcul…"
           }
         }
       }
@@ -4501,6 +4469,38 @@
         }
       }
     },
+    "I'm 18 or over" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tengo 18 años o más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai 18 ans ou plus"
+          }
+        }
+      }
+    },
+    "I'm under 18" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tengo menos de 18 años"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai moins de 18 ans"
+          }
+        }
+      }
+    },
     "Ice cream" : {
       "localizations" : {
         "fr" : {
@@ -4909,6 +4909,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recherche autour de toi…"
+          }
+        }
+      }
+    },
+    "Looking at your plate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mirando tu plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyse de ton assiette"
           }
         }
       }
@@ -6321,18 +6337,66 @@
         }
       }
     },
-    "Photo estimates are on" : {
+    "Photo estimates are busy right now. Try again in a moment." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estimaciones por foto activadas"
+            "value" : "Las estimaciones por foto están muy solicitadas. Vuelve a intentarlo en un momento."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estimations photo activées"
+            "value" : "Les estimations par photo sont très demandées. Réessaie dans un instant."
+          }
+        }
+      }
+    },
+    "Photo estimates are for 18 and over" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones por foto son para mayores de 18 años"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations par photo sont pour les 18 ans et plus"
+          }
+        }
+      }
+    },
+    "Photo estimates are for 18 and over. Are you?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones por foto son para mayores de 18 años. ¿Es tu caso?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations par photo sont pour les 18 ans et plus. C’est ton cas ?"
+          }
+        }
+      }
+    },
+    "Photo estimates are resting for a while. Barcodes and search work as usual." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones por foto descansan un rato. Los códigos de barras y la búsqueda funcionan como siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations par photo font une pause. Les codes-barres et la recherche marchent comme d’habitude."
           }
         }
       }
@@ -6353,6 +6417,54 @@
         }
       }
     },
+    "Photo estimates wait until 18" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones por foto esperarán a tus 18 años"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations par photo attendront tes 18 ans"
+          }
+        }
+      }
+    },
+    "Photo estimates wait until 18. Type the numbers instead." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones por foto esperarán a tus 18 años. Escribe las cifras a mano."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations par photo attendront tes 18 ans. Saisis les chiffres à la main."
+          }
+        }
+      }
+    },
+    "Photos use your Claude key" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las fotos usan tu clave de Claude"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les photos utilisent ta clé Claude"
+          }
+        }
+      }
+    },
     "Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone." : {
       "localizations" : {
         "es" : {
@@ -6365,6 +6477,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les photos que tu scannes partent chez Claude, d’Anthropic, qui renvoie les calories et les macros. Environ 2 centimes par photo, facturés sur ton compte Anthropic. Ton journal ne quitte jamais ton téléphone."
+          }
+        }
+      }
+    },
+    "Photos you scan go to Bite's server and on to Google's Gemini, which sends back the calories and macros. No photo is kept. With your own Claude key, photos go to Anthropic instead, billed to your Anthropic account. Your log never leaves your phone." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las fotos que escaneas pasan por el servidor de Bite y después por Gemini de Google, que devuelve las calorías y los macros. No se guarda ninguna foto. Con tu propia clave de Claude, las fotos van a Anthropic, con cargo a tu cuenta de Anthropic. Tu diario nunca sale de tu teléfono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les photos que tu scannes passent par le serveur de Bite puis par Gemini de Google, qui renvoie les calories et les macros. Aucune photo n’est gardée. Avec ta propre clé Claude, les photos vont plutôt chez Anthropic, facturées sur ton compte Anthropic. Ton journal ne quitte jamais ton téléphone."
           }
         }
       }
@@ -6669,6 +6797,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note ce plat"
+          }
+        }
+      }
+    },
+    "Reading the label" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo la etiqueta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture de l’étiquette"
           }
         }
       }
@@ -8241,6 +8385,38 @@
         }
       }
     },
+    "That's a lot of photos for one day. Photo estimates are back tomorrow; barcodes and search work as usual." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son muchas fotos para un día. Las estimaciones vuelven mañana; los códigos de barras y la búsqueda funcionan como siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ça fait beaucoup de photos pour une journée. Les estimations reviennent demain ; les codes-barres et la recherche marchent comme d’habitude."
+          }
+        }
+      }
+    },
+    "That's a lot of photos in one minute. Give it a few seconds." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Son muchas fotos en un minuto. Espera unos segundos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ça fait beaucoup de photos en une minute. Laisse passer quelques secondes."
+          }
+        }
+      }
+    },
     "The calories here come from estimates people shared. Each dish shows how sure they are, and yours makes it surer." : {
       "localizations" : {
         "es" : {
@@ -8269,6 +8445,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La sauce peut ajouter 50 kcal si elle a été versée généreusement."
+          }
+        }
+      }
+    },
+    "The estimate came back unreadable. Try again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La estimación llegó ilegible. Vuelve a intentarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’estimation est revenue illisible. Réessaie."
+          }
+        }
+      }
+    },
+    "They run on Google's Gemini, whose rules ask for that. Barcodes, search and your saved foods work at any age." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Funcionan con Gemini de Google, cuyas normas lo piden. Los códigos de barras, la búsqueda y tus alimentos guardados funcionan a cualquier edad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elles passent par Gemini de Google, dont les règles le demandent. Les codes-barres, la recherche et tes aliments enregistrés marchent à tout âge."
           }
         }
       }
@@ -9511,6 +9719,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tes chiffres"
+          }
+        }
+      }
+    },
+    "Your own Claude key (optional)" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu propia clave de Claude (opcional)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta propre clé Claude (facultatif)"
           }
         }
       }

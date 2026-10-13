@@ -44,6 +44,9 @@ struct EstimateView: View {
         case ready
         case needsKey
         case keyRejected
+        /// Bite's own estimates ask once whether you're 18 or over.
+        case needsAge
+        case underAge
         case failed(String)
     }
 
@@ -181,6 +184,27 @@ struct EstimateView: View {
                     action: ("Open Settings", { showSettings = true })
                 )
                 .padding(.horizontal, Theme.margin)
+            case .needsAge:
+                message(
+                    "Photo estimates are for 18 and over",
+                    detail: String(localized: "They run on Google's Gemini, whose rules ask for that. Barcodes, search and your saved foods work at any age."),
+                    action: ("I'm 18 or over", {
+                        AgeAnswer.current = .adult
+                        attempt += 1
+                    }),
+                    secondary: ("I'm under 18", {
+                        AgeAnswer.current = .under
+                        withAnimation(Motion.respond) { phase = .underAge }
+                    })
+                )
+                .padding(.horizontal, Theme.margin)
+            case .underAge:
+                message(
+                    "Photo estimates wait until 18",
+                    detail: String(localized: "Barcodes, search and your saved foods work as usual."),
+                    action: ("Close", { dismiss() })
+                )
+                .padding(.horizontal, Theme.margin)
             case .failed(let text):
                 message("That didn't work", detail: text, action: ("Try again", { attempt += 1 }))
                     .padding(.horizontal, Theme.margin)
@@ -206,7 +230,7 @@ struct EstimateView: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 10) {
                 ProgressView()
-                Text(isLabel ? "Claude is reading the label" : "Claude is looking at your plate")
+                Text(isLabel ? "Reading the label" : "Looking at your plate")
                     .font(.ui(17, .medium))
                     .foregroundStyle(Theme.ink)
             }
@@ -221,7 +245,12 @@ struct EstimateView: View {
         }
     }
 
-    private func message(_ title: LocalizedStringKey, detail: String, action: (LocalizedStringKey, () -> Void)) -> some View {
+    private func message(
+        _ title: LocalizedStringKey,
+        detail: String,
+        action: (LocalizedStringKey, () -> Void),
+        secondary: (LocalizedStringKey, () -> Void)? = nil
+    ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.ui(22, .semibold))
@@ -233,6 +262,13 @@ struct EstimateView: View {
             Button(action.0, action: action.1)
                 .buttonStyle(PrimaryButtonStyle(height: 50))
                 .padding(.top, 4)
+            if let secondary {
+                Button(secondary.0, action: secondary.1)
+                    .font(.ui(16))
+                    .foregroundStyle(Theme.secondary)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+            }
         }
     }
 
@@ -393,11 +429,6 @@ struct EstimateView: View {
             return
         }
         #endif
-        let key = Keychain.string(for: Keychain.claudeKey) ?? ""
-        guard !key.isEmpty else {
-            phase = .needsKey
-            return
-        }
         guard let jpeg = ImageTools.jpeg(image, maxSide: 1024, quality: 0.72) else {
             phase = .failed(String(localized: "This photo couldn't be read."))
             return
@@ -405,12 +436,20 @@ struct EstimateView: View {
         sentPhoto = jpeg
         let language = OpenFoodFacts.languages.first ?? "en"
         do {
-            let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: language, isLabel: isLabel)
+            let result = try await PhotoEstimator.estimate(jpeg: jpeg, language: language, isLabel: isLabel)
             withAnimation(Motion.settle) {
                 estimate = result
                 original = result
                 phase = .ready
             }
+        } catch let blocked as PhotoEstimator.Blocked {
+            switch blocked {
+            case .needsAge: phase = .needsAge
+            case .underAge: phase = .underAge
+            case .needsKey: phase = .needsKey
+            }
+        } catch let failure as BiteVision.Failure {
+            phase = .failed(failure.errorDescription ?? String(localized: "Try again."))
         } catch let failure as ClaudeVision.Failure {
             switch failure {
             case .missingKey: phase = .needsKey

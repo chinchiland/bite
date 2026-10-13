@@ -454,6 +454,20 @@ do {
     let schema = MealEstimate.schema["properties"] as? [String: Any]
     check((MealEstimate.schema["required"] as? [String])?.contains("doubt") == true && schema?["doubt"] != nil, "the schema asks for the doubt")
     check(ClaudeVision.prompt(language: "fr").contains("never 0"), "the prompt keeps the likeliest answer above zero")
+
+    // Bite's server answers with the estimate itself, not wrapped in a message: the same cleaning.
+    let wrapped = try JSONSerialization.jsonObject(with: Data(oily.utf8)) as? [String: Any]
+    let text = ((wrapped?["content"] as? [[String: Any]])?.first?["text"] as? String) ?? ""
+    let bare = try JSONDecoder().decode(MealEstimate.self, from: Data(text.utf8)).cleaned()
+    check(bare == cleaned, "the server's answer is cleaned the same way as Claude's")
+
+    // The server asks Gemini in the app's own words: every line of the prompt is in meal.ts.
+    let server = (try? String(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1] + "/server/supabase/functions/estimate/meal.ts"), encoding: .utf8)) ?? ""
+    for isLabel in [false, true] {
+        let lines = ClaudeVision.prompt(language: "§", isLabel: isLabel).split(separator: "\n").map(String.init).filter { !$0.contains("§") }
+        let missing = lines.filter { !server.contains($0) }
+        check(!lines.isEmpty && missing.isEmpty, "the server's prompt matches the app's (label \(isLabel)): \(missing)")
+    }
 } catch {
     failures += 1
     print("FAIL: doubt fixture threw \(error)")

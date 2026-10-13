@@ -37,14 +37,19 @@ struct CommunityClient {
 
     /// Trades Apple's identity token for a session on the server.
     func signIn(idToken: String, nonce: String) async throws -> CommunitySession {
-        try await token(query: "grant_type=id_token", body: ["provider": "apple", "id_token": idToken, "nonce": nonce])
+        try await token(path: "auth/v1/token?grant_type=id_token", body: ["provider": "apple", "id_token": idToken, "nonce": nonce])
     }
 
     func refresh(_ refreshToken: String) async throws -> CommunitySession {
-        try await token(query: "grant_type=refresh_token", body: ["refresh_token": refreshToken])
+        try await token(path: "auth/v1/token?grant_type=refresh_token", body: ["refresh_token": refreshToken])
     }
 
-    private func token(query: String, body: [String: String]) async throws -> CommunitySession {
+    /// A session with no name and no email, for photo estimates before any sign-in.
+    func signUpAnonymously() async throws -> CommunitySession {
+        try await token(path: "auth/v1/signup", body: [:])
+    }
+
+    private func token(path: String, body: [String: String]) async throws -> CommunitySession {
         struct Answer: Decodable {
             struct User: Decodable { let id: String }
             let accessToken: String
@@ -52,7 +57,7 @@ struct CommunityClient {
             let expiresIn: Double
             let user: User
         }
-        let data = try await send(path: "auth/v1/token?\(query)", token: nil, body: try JSONEncoder().encode(body))
+        let data = try await send(path: path, token: nil, body: try JSONEncoder().encode(body))
         guard let answer = try? CommunityRemote.decoder.decode(Answer.self, from: data) else { throw Failure.unreadable }
         return CommunitySession(
             accessToken: answer.accessToken,

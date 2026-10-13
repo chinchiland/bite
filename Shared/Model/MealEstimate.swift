@@ -89,6 +89,31 @@ struct MealEstimate: Decodable, Equatable {
         items.reduce(Nutrients.zero) { $0 + $1.nutrients }
     }
 
+    /// The estimate made safe to log, whoever answered: a fiber or sugar that can't be real is
+    /// unknown rather than zero, anything that isn't a real amount goes, and the doubt keeps
+    /// pointing at its item, or goes when it no longer can be asked.
+    func cleaned() -> MealEstimate {
+        var estimate = self
+        // Cleaned first, so the doubt below still finds its item by equality.
+        estimate.items = estimate.items.map { item in
+            var item = item
+            if let fiber = item.fiber, !(fiber.isFinite && fiber >= 0 && fiber <= item.carbs + 1) { item.fiber = nil }
+            if let sugar = item.sugar, !(sugar.isFinite && sugar >= 0 && sugar <= item.carbs + 1) { item.sugar = nil }
+            return item
+        }
+        let doubted = estimate.doubt.flatMap { estimate.items.indices.contains($0.item) ? estimate.items[$0.item] : nil }
+        estimate.items = estimate.items.filter { item in
+            [item.grams, item.kcal, item.protein, item.carbs, item.fat].allSatisfy { $0.isFinite && $0 >= 0 && $0 < 20_000 }
+        }
+        estimate.doubt = estimate.doubt.flatMap { doubt in
+            guard let doubted, let index = estimate.items.firstIndex(of: doubted) else { return nil }
+            var moved = doubt
+            moved.item = index
+            return moved.isAskable(about: estimate.items[index]) ? moved : nil
+        }
+        return estimate
+    }
+
     /// The plate with one item at another amount, scaled from `original`, what Claude first
     /// saw, so an item set to nothing can come back.
     func setting(item index: Int, grams: Double, from original: MealEstimate) -> MealEstimate {

@@ -310,7 +310,7 @@ struct SettingsView: View {
                     }
 
                     Section {
-                        SecureField("Claude API key", text: $apiKey)
+                        SecureField("Your own Claude key (optional)", text: $apiKey)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .font(.ui(17))
@@ -321,7 +321,7 @@ struct SettingsView: View {
                                 .font(.ui(17, .medium))
                                 .listRowBackground(Theme.card)
                         } else if !storedKey.isEmpty {
-                            Label("Photo estimates are on", systemImage: "checkmark.circle.fill")
+                            Label("Photos use your Claude key", systemImage: "checkmark.circle.fill")
                                 .font(.ui(17))
                                 .foregroundStyle(Theme.goodText)
                                 .listRowBackground(Theme.card)
@@ -334,7 +334,9 @@ struct SettingsView: View {
                     } header: {
                         SectionTitle(text: "Photo estimates")
                     } footer: {
-                        Text("Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone.")
+                        Text(CommunityServer.isConfigured
+                            ? LocalizedStringKey("Photos you scan go to Bite's server and on to Google's Gemini, which sends back the calories and macros. No photo is kept. With your own Claude key, photos go to Anthropic instead, billed to your Anthropic account. Your log never leaves your phone.")
+                            : LocalizedStringKey("Photos you scan go to Anthropic's Claude, which sends back the calories and macros. About 2 cents a photo, billed to your Anthropic account. Your log never leaves your phone."))
                     }
 
                     Section {

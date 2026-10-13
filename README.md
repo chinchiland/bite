@@ -44,5 +44,5 @@ It parses every Swift file and runs the logic tests against real Open Food Facts
 - [Open Food Facts](https://world.openfoodfacts.org), the free and open food database (ODbL, images CC BY-SA). No account or key.
 - [USDA FoodData Central](https://fdc.nal.usda.gov), SR Legacy (public domain). Rebuild the basics with `python tools/build_basics.py <sr_legacy_csv_folder> Bite/Resources/basics.json`.
 - Apple Health, read only: steps and active energy.
-- Claude, for photo estimates you ask for.
+- Google's Gemini 3.1 Flash-Lite through Bite's own server for photo estimates (no photo kept, ceilings no honest use reaches), or Claude when you set your own key.
 - [DM Sans](https://github.com/googlefonts/dm-fonts) by Colophon, SIL Open Font License (`Bite/Resources/Fonts`). The demo plate photos in `Bite/Resources/Demo` are from [Unsplash](https://unsplash.com), the two shawarmas are public domain (CC0: Andy Li on [Wikimedia Commons](https://commons.wikimedia.org/w/index.php?curid=130489661), Joan Namunina on [WordPress Photos](https://wordpress.org/photos/photo/8636a6d0de/)), and they ship in Debug builds and Bite Demo only.

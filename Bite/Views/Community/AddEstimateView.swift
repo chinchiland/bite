@@ -22,6 +22,8 @@ struct AddEstimateView: View {
         case idle
         case working
         case done
+        /// Bite's own estimates ask once whether you're 18 or over.
+        case needsAge
         case failed(String)
     }
 
@@ -85,7 +87,7 @@ struct AddEstimateView: View {
                         }
                         photoStatus
                     } footer: {
-                        Text("Claude estimates it, and you can correct the numbers before saving.")
+                        Text("Bite estimates it, and you can correct the numbers before saving.")
                     }
                     .listRowBackground(Theme.card)
                 }
@@ -131,7 +133,7 @@ struct AddEstimateView: View {
         case .working:
             HStack(spacing: 10) {
                 ProgressView()
-                Text("Claude is counting…")
+                Text("Counting…")
                     .font(.ui(15))
                     .foregroundStyle(Theme.secondary)
             }
@@ -139,6 +141,24 @@ struct AddEstimateView: View {
             Label("Filled in from your photo", systemImage: "sparkles")
                 .font(.ui(15))
                 .foregroundStyle(Theme.secondary)
+        case .needsAge:
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Photo estimates are for 18 and over. Are you?")
+                    .font(.ui(15))
+                    .foregroundStyle(Theme.secondary)
+                HStack(spacing: 10) {
+                    Button("I'm 18 or over") {
+                        AgeAnswer.current = .adult
+                        Task { await estimate(from: pickedPhoto) }
+                    }
+                    .buttonStyle(SoftButtonStyle(height: 36))
+                    Button("I'm under 18") {
+                        AgeAnswer.current = .under
+                        photoState = .failed(String(localized: "Photo estimates wait until 18. Type the numbers instead."))
+                    }
+                    .buttonStyle(SoftButtonStyle(height: 36))
+                }
+            }
         case .failed(let message):
             Text(message)
                 .font(.ui(15))
@@ -200,18 +220,27 @@ struct AddEstimateView: View {
             return
         }
         #endif
-        let key = Keychain.string(for: Keychain.claudeKey) ?? ""
         guard let jpeg = ImageTools.jpeg(image, maxSide: 1024, quality: 0.72) else {
             photoState = .failed(String(localized: "This photo couldn't be read."))
             return
         }
         do {
-            let result = try await ClaudeVision(apiKey: key).estimate(jpeg: jpeg, language: OpenFoodFacts.languages.first ?? "en")
+            let result = try await PhotoEstimator.estimate(jpeg: jpeg, language: OpenFoodFacts.languages.first ?? "en")
             guard !Task.isCancelled else { return }
             set(result.totals)
             if isNewDish, name.isEmpty { name = result.title }
             fromPhoto = true
             photoState = .done
+        } catch let blocked as PhotoEstimator.Blocked {
+            guard !Task.isCancelled else { return }
+            switch blocked {
+            case .needsAge: photoState = .needsAge
+            case .underAge: photoState = .failed(String(localized: "Photo estimates wait until 18. Type the numbers instead."))
+            case .needsKey: photoState = .failed(ClaudeVision.Failure.missingKey.errorDescription ?? "")
+            }
+        } catch let failure as BiteVision.Failure {
+            guard !Task.isCancelled else { return }
+            photoState = .failed(failure.errorDescription ?? String(localized: "Try again."))
         } catch let failure as ClaudeVision.Failure {
             guard !Task.isCancelled else { return }
             photoState = .failed(failure.errorDescription ?? String(localized: "Try again."))
