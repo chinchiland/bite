@@ -31,7 +31,8 @@ jobs:
           version: latest
       - name: Start the database with the migrations
         run: supabase db start
+      # Ours only: PostGIS's own functions in the extensions schema fail this lint by design.
       - name: Lint the functions
-        run: supabase db lint --level error --fail-on error
+        run: supabase db lint --schema public,private --level error --fail-on error
       - name: Test who can do what
         run: supabase test db
