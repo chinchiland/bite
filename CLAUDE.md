@@ -1,6 +1,6 @@
 # Bite
 
-A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 language mode, Xcode 26). The design system is `DESIGN.md`; what the app does is in `README.md`.
+A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 language mode, Xcode 26). The design system is `DESIGN.md`; what the app does is in `README.md`. Where things stand, how Dylan works and what comes next: `docs/handoff.md`.
 
 ## Where things are
 
