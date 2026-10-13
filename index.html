@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bite community rules</title>
+<meta name="description" content="The rules for sharing calorie estimates of restaurant dishes in Bite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<style>
+:root { --paper: #FAFAF8; --ink: #141414; --muted: #75736E; --hairline: #ECEAE5; --card: #FFFFFF; }
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #121110; --ink: #F3F2EE; --muted: #A3A09A; --hairline: #2B2A26; --card: #1C1B19; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "DM Sans", -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+main { max-width: 640px; margin: 0 auto; padding: 48px 20px 72px; }
+h1 { font-size: 34px; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+.lead { font-size: 17px; line-height: 1.5; color: var(--muted); margin: 10px 0 0; }
+nav { display: flex; gap: 8px; margin-top: 22px; }
+nav a { font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: none; padding: 6px 14px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--hairline); }
+section { margin-top: 40px; }
+h2 { font-size: 22px; font-weight: 600; margin: 0 0 12px; }
+ol { margin: 0; padding: 0; list-style: none; counter-reset: rule; }
+li { counter-increment: rule; position: relative; padding: 14px 0 14px 40px; border-top: 1px solid var(--hairline); font-size: 16px; line-height: 1.5; }
+li::before { content: counter(rule); position: absolute; left: 0; top: 13px; width: 26px; height: 26px; border-radius: 50%; background: var(--card); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+b { font-weight: 600; }
+a { color: inherit; }
+.contact { margin-top: 16px; font-size: 15px; color: var(--muted); line-height: 1.5; }
+footer { margin-top: 48px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Bite community rules</h1>
+  <p class="lead">Bite lets people share their calorie estimate of a dish at a restaurant, so the next person eating there knows what's on the plate.</p>
+  <nav aria-label="Languages"><a href="#en">English</a><a href="#fr">Français</a><a href="#es">Español</a></nav>
+
+  <section id="en" lang="en">
+    <h2>English</h2>
+    <ol>
+      <li><b>Share what you really ate,</b> with your honest estimate. Numbers out of any sensible range are refused.</li>
+      <li><b>Dish names only.</b> No insults, hate, sexual content, personal data, links or ads. New dish names are checked before others see them.</li>
+      <li><b>Report what breaks these rules:</b> hold a dish or an estimate and tap Report. Three reports hide it at once, and every report is looked at within 24 hours.</li>
+      <li><b>Hide someone</b> (Hide this person's counts) and you won't see what they share again.</li>
+      <li><b>Bite can remove</b> anything that breaks these rules and close the account behind it.</li>
+      <li><b>Your food log never leaves your phone.</b> Only the estimates you choose to share are public, under the first name you pick.</li>
+      <li><b>Leave whenever you like:</b> Settings › Community › Delete my shared counts and account removes everything you shared.</li>
+    </ol>
+    <p class="contact">Questions or a problem: <a href="https://github.com/chinchiland/bite/issues">open an issue</a>.</p>
+  </section>
+
+  <section id="fr" lang="fr">
+    <h2>Français</h2>
+    <ol>
+      <li><b>Partage ce que tu as vraiment mangé,</b> avec ton estimation honnête. Les chiffres hors de toute plage raisonnable sont refusés.</li>
+      <li><b>Uniquement des noms de plats.</b> Pas d’insultes, de haine, de contenu sexuel, de données personnelles, de liens ni de pub. Les nouveaux noms sont vérifiés avant d’être visibles.</li>
+      <li><b>Signale ce qui enfreint ces règles&#8239;:</b> maintiens un plat ou une estimation et touche Signaler. Trois signalements le masquent aussitôt, et chaque signalement est examiné sous 24&#8239;heures.</li>
+      <li><b>Masque quelqu’un</b> (Masquer les estimations de cette personne) et tu ne verras plus ce qu’il partage.</li>
+      <li><b>Bite peut retirer</b> tout ce qui enfreint ces règles et fermer le compte qui l’a publié.</li>
+      <li><b>Ton journal ne quitte jamais ton téléphone.</b> Seules les estimations que tu choisis de partager sont publiques, sous le prénom que tu choisis.</li>
+      <li><b>Pars quand tu veux&#8239;:</b> Réglages › Communauté › Supprimer mes estimations partagées et mon compte efface tout ce que tu as partagé.</li>
+    </ol>
+    <p class="contact">Une question ou un problème&#8239;: <a href="https://github.com/chinchiland/bite/issues">ouvre un ticket</a>.</p>
+  </section>
+
+  <section id="es" lang="es">
+    <h2>Español</h2>
+    <ol>
+      <li><b>Comparte lo que de verdad comiste,</b> con tu estimación honesta. Se rechazan las cifras fuera de cualquier rango razonable.</li>
+      <li><b>Solo nombres de platos.</b> Nada de insultos, odio, contenido sexual, datos personales, enlaces ni publicidad. Los nombres nuevos se revisan antes de que otros los vean.</li>
+      <li><b>Denuncia lo que incumpla estas reglas:</b> mantén pulsado un plato o una estimación y toca Denunciar. Tres denuncias lo ocultan al momento, y cada denuncia se revisa en 24 horas.</li>
+      <li><b>Oculta a alguien</b> (Ocultar los cálculos de esta persona) y no volverás a ver lo que comparte.</li>
+      <li><b>Bite puede retirar</b> lo que incumpla estas reglas y cerrar la cuenta que lo publicó.</li>
+      <li><b>Tu diario nunca sale de tu teléfono.</b> Solo son públicas las estimaciones que eliges compartir, con el nombre que eliges.</li>
+      <li><b>Vete cuando quieras:</b> Ajustes › Comunidad › Borrar mis cálculos compartidos y mi cuenta borra todo lo que compartiste.</li>
+    </ol>
+    <p class="contact">Dudas o un problema: <a href="https://github.com/chinchiland/bite/issues">abre una incidencia</a>.</p>
+  </section>
+
+  <footer>Bite · October 2026</footer>
+</main>
+</body>
+</html>
