@@ -2499,6 +2499,22 @@
         }
       }
     },
+    "Calories and macros in a few seconds" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calorías y macros en unos segundos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calories et macros en quelques secondes"
+          }
+        }
+      }
+    },
     "Calories each day, with your goal of %@ kcal" : {
       "localizations" : {
         "en" : {
@@ -4849,22 +4865,6 @@
         }
       }
     },
-    "Log what you eat in a tap. Bite counts the rest." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anota lo que comes con un toque. Bite cuenta el resto."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Note ce que tu manges d’un geste. Bite compte le reste."
-          }
-        }
-      }
-    },
     "Log your saved foods and water in one tap." : {
       "localizations" : {
         "es" : {
@@ -5585,6 +5585,38 @@
         }
       }
     },
+    "Next time, it waits on your shelf" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La próxima vez, te espera en tus guardados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La prochaine fois, il t’attend dans tes enregistrés"
+          }
+        }
+      }
+    },
+    "Next time, one tap adds it" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La próxima vez, basta un toque"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La prochaine fois, un geste suffit"
+          }
+        }
+      }
+    },
     "No camera here. Pick a photo instead." : {
       "localizations" : {
         "es" : {
@@ -6125,6 +6157,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ouvre l’endroit dans Uber Eats"
+          }
+        }
+      }
+    },
+    "Or tap one" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O toca uno"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ou touches-en un"
           }
         }
       }
@@ -7233,6 +7281,22 @@
         }
       }
     },
+    "Save for one tap" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardarlo para un toque"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’enregistrer pour un geste"
+          }
+        }
+      }
+    },
     "Save key" : {
       "localizations" : {
         "es" : {
@@ -7313,6 +7377,22 @@
         }
       }
     },
+    "Save what you eat often" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarda lo que comes a menudo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistre ce que tu manges souvent"
+          }
+        }
+      }
+    },
     "Saved" : {
       "localizations" : {
         "es" : {
@@ -7389,6 +7469,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scanner"
+          }
+        }
+      }
+    },
+    "Scan a barcode" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanea un código de barras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanne un code-barres"
           }
         }
       }
@@ -7889,6 +7985,22 @@
         }
       }
     },
+    "Snap your plate" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotografía tu plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photographie ton assiette"
+          }
+        }
+      }
+    },
     "Someone" : {
       "localizations" : {
         "es" : {
@@ -8289,22 +8401,6 @@
         }
       }
     },
-    "Tap it, scan it or search. You can change it later." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tócalo, escanéalo o búscalo. Puedes cambiarlo luego."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Touche-le, scanne-le ou cherche-le. Tu pourras le changer ensuite."
-          }
-        }
-      }
-    },
     "Tap one to adjust" : {
       "localizations" : {
         "es" : {
@@ -8461,6 +8557,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "L’estimation est revenue illisible. Réessaie."
+          }
+        }
+      }
+    },
+    "The label's own numbers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las cifras de la propia etiqueta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les chiffres mêmes de l’étiquette"
           }
         }
       }

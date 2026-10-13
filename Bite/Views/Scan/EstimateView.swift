@@ -36,6 +36,9 @@ struct EstimateView: View {
     /// When you ate it: the photo's own time when it has one, else now; a tap changes it.
     @State private var time: Date?
     @State private var isSaved = false
+    /// Save for one tap: on the first time, while the shelf is empty, so it starts with what you
+    /// really eat; your choice after that.
+    @State private var saveToo: Bool?
     @State private var showSettings = false
     @State private var attempt = 0
 
@@ -332,6 +335,8 @@ struct EstimateView: View {
                 .padding(.top, 14)
                 PlaceRow(place: $place)
                     .padding(.top, 2)
+                saveRow
+                    .padding(.top, 14)
             }
         }
         .padding(.horizontal, Theme.margin)
@@ -389,6 +394,27 @@ struct EstimateView: View {
         }
     }
 
+    private var saveRow: some View {
+        Toggle(isOn: Binding(get: { saveToo ?? saved.isEmpty }, set: { saveToo = $0 })) {
+            HStack(spacing: 12) {
+                SymbolTile(systemImage: "bookmark", color: Theme.ink, glyph: Theme.ink, size: 36)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Save for one tap")
+                        .font(.ui(15, .semibold))
+                        .foregroundStyle(Theme.ink)
+                    Text("Next time, it waits on your shelf")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
+                }
+            }
+        }
+        .tint(Theme.onTarget)
+        .padding(.vertical, 10)
+        .padding(.leading, 12)
+        .padding(.trailing, 14)
+        .background(Theme.page, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
     private func actionBar(_ estimate: MealEstimate) -> some View {
         HStack(spacing: 10) {
             Menu {
@@ -404,9 +430,6 @@ struct EstimateView: View {
 
             Button("Add meal") { add(estimate) }
                 .buttonStyle(PrimaryButtonStyle())
-
-            BookmarkButton(isSaved: isSaved) { save(estimate) }
-                .disabled(isSaved)
         }
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
@@ -482,18 +505,18 @@ struct EstimateView: View {
         let food = plate(estimate)
         let entry = FoodEntry(food: food, amount: 1, meal: meal, date: timeBinding.wrappedValue, place: place)
         context.insert(entry)
+        if saveToo ?? saved.isEmpty, !isSaved { save(estimate) }
         try? context.save()
         events.added(entry)
         Feel.play(.land)
         onDone()
     }
 
+    /// On the shelf for one tap: the whole plate, its foods as the line under it.
     private func save(_ estimate: MealEstimate) {
         let item = SavedFood(food: plate(estimate), amount: 1, sortIndex: (saved.map(\.sortIndex).max() ?? 0) + 1)
         item.subtitle = estimate.items.map(\.name).joined(separator: ", ")
         context.insert(item)
-        try? context.save()
-        Feel.play(.click)
         isSaved = true
     }
 }

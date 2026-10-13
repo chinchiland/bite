@@ -124,11 +124,27 @@ private struct FirstBiteStep: View {
                     .foregroundStyle(Theme.ink)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-                Text("Tap it, scan it or search. You can change it later.")
-                    .font(.ui(15))
+                // The fastest way in leads: the dock's own Scan, wide, opening on the camera.
+                Button {
+                    UserDefaults.standard.set(ScanMode.food.rawValue, forKey: "scan.mode")
+                    onScan()
+                } label: {
+                    Label("Snap your plate", systemImage: "camera")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(PrimaryButtonStyle(height: 56))
+                .padding(.top, 18)
+                Text("Calories and macros in a few seconds")
+                    .font(.ui(13))
                     .foregroundStyle(Theme.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.top, 5)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+
+                Text("Or tap one")
+                    .font(.ui(13))
+                    .textCase(.uppercase)
+                    .foregroundStyle(Theme.secondary)
+                    .padding(.top, 22)
 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8, alignment: .top), count: 4), spacing: 14) {
                     ForEach(foods) { food in
@@ -140,7 +156,7 @@ private struct FirstBiteStep: View {
                         }
                     }
                 }
-                .padding(.top, 18)
+                .padding(.top, 12)
 
                 if let picked {
                     portion(picked)
@@ -148,8 +164,11 @@ private struct FirstBiteStep: View {
                         .transition(.opacity.combined(with: .offset(y: 6)))
                 } else {
                     HStack(spacing: 10) {
-                        Button(action: onScan) {
-                            Label("Scan", systemImage: "barcode.viewfinder")
+                        Button {
+                            UserDefaults.standard.set(ScanMode.barcode.rawValue, forKey: "scan.mode")
+                            onScan()
+                        } label: {
+                            Label("Barcode", systemImage: "barcode.viewfinder")
                                 .frame(maxWidth: .infinity)
                         }
                         Button(action: onSearch) {

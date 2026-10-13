@@ -284,26 +284,6 @@ struct MealMenuLabel: View {
     }
 }
 
-/// The bookmark beside the main button: saves to your shelf, filled once it is there.
-struct BookmarkButton: View {
-    let isSaved: Bool
-    let action: () -> Void
-    var size: CGFloat = 56
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
-                .font(.system(size: 19, weight: .regular))
-                .foregroundStyle(Theme.ink)
-                .frame(width: size, height: size)
-                .background(Theme.fill, in: Circle())
-                .contentTransition(.symbolEffect(.replace))
-        }
-        .buttonStyle(PressableStyle(scale: 0.9))
-        .accessibilityLabel(isSaved ? "Saved to your shelf" : "Save to your shelf")
-    }
-}
-
 // MARK: - Chips and badges
 
 /// A fact in a soft pill. Color only when the fact is good news or worth a look.
