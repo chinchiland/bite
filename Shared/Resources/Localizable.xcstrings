@@ -4013,6 +4013,22 @@
         }
       }
     },
+    "Hides your numbers" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta tus datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masque tes chiffres"
+          }
+        }
+      }
+    },
     "High fat" : {
       "localizations" : {
         "es" : {
@@ -7257,6 +7273,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Montre tes 7 derniers jours"
+          }
+        }
+      }
+    },
+    "Shows your sex, age, height and weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra tu sexo, edad, altura y peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche ton sexe, ton âge, ta taille et ton poids"
           }
         }
       }

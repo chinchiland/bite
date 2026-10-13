@@ -119,18 +119,23 @@ struct GoalStep: View {
     private var aboutYou: some View {
         VStack(alignment: .leading, spacing: 0) {
             if HealthActivity.isAvailable && !healthUnavailable {
+                // Icon, title, reason: one left edge, the way the card reads best.
                 Button(action: fillFromHealth) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "heart.fill")
-                            .font(.system(size: 16))
-                            .foregroundStyle(Theme.burned)
-                            .frame(width: 32, height: 32)
-                            .background(Theme.card, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                            .overlay { RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Theme.hairline) }
-                        Text(filledFromHealth ? LocalizedStringKey("Filled in from Apple Health") : LocalizedStringKey("Fill in from Apple Health"))
-                            .font(.ui(17, .medium))
-                            .foregroundStyle(Theme.ink)
-                        Spacer(minLength: 8)
+                    HStack(alignment: .center, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 0) {
+                            AppleHealthIcon(size: 40)
+                            Text(filledFromHealth ? LocalizedStringKey("Filled in from Apple Health") : LocalizedStringKey("Fill in from Apple Health"))
+                                .font(.ui(17, .medium))
+                                .foregroundStyle(Theme.ink)
+                                .padding(.top, 10)
+                            Text("Your height, weight, age and sex, to work out the goal. Then your steps and what you burn.")
+                                .font(.ui(14))
+                                .foregroundStyle(Theme.secondary)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top, 4)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         if asking {
                             ProgressView()
                         } else {
@@ -139,41 +144,42 @@ struct GoalStep: View {
                                 .foregroundStyle(filledFromHealth ? Theme.onTarget : Theme.tertiary)
                         }
                     }
-                    .frame(minHeight: 52)
+                    .padding(.vertical, 16)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .disabled(asking)
-                Text("Your height, weight, age and sex, to work out the goal. Then your steps and what you burn.")
-                    .font(.ui(13))
-                    .foregroundStyle(Theme.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.leading, 44)
-                    .padding(.bottom, 12)
                 Rectangle().fill(Theme.hairline).frame(height: 1)
             }
 
             Button {
                 withAnimation(Motion.respond) { typing.toggle() }
             } label: {
-                HStack(spacing: 10) {
-                    Text(typing ? LocalizedStringKey("Your numbers") : LocalizedStringKey("Or type it in"))
-                        .font(.ui(17))
-                        .foregroundStyle(typing ? Theme.ink : Theme.secondary)
-                    Spacer(minLength: 8)
-                    if !typing {
-                        Text(verbatim: bodySummary)
-                            .font(.ui(14))
-                            .monospacedDigit()
-                            .foregroundStyle(Theme.secondary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(typing ? LocalizedStringKey("Your numbers") : LocalizedStringKey("Or type it in"))
+                            .font(.ui(17, .medium))
+                            .foregroundStyle(Theme.ink)
+                        if !typing {
+                            Text(verbatim: bodySummary)
+                                .font(.ui(14))
+                                .monospacedDigit()
+                                .foregroundStyle(Theme.secondary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.85)
+                        }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(Theme.tertiary)
+                        .rotationEffect(.degrees(typing ? 180 : 0))
                 }
-                .frame(minHeight: 50)
+                .padding(.vertical, 14)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityHint(typing ? LocalizedStringKey("Hides your numbers") : LocalizedStringKey("Shows your sex, age, height and weight"))
 
             if typing {
                 VStack(spacing: 0) {
@@ -251,7 +257,7 @@ struct GoalStep: View {
         Text(text)
             .font(.ui(13))
             .textCase(.uppercase)
-            .foregroundStyle(Theme.secondary)
+            .foregroundStyle(Theme.ink)
             .padding(.leading, 16)
             .padding(.top, 24)
             .padding(.bottom, 8)
@@ -346,5 +352,24 @@ struct GoalStep: View {
             if aim != .none { goalKcal = result }
         }
         onDone()
+    }
+}
+
+/// Apple's own Health app icon (Apple Design Resources), as provided: its shape is in the file,
+/// and the words Apple Health sit beside it. A hairline keeps its white edge on a white card,
+/// as iOS draws app icons in lists.
+struct AppleHealthIcon: View {
+    var size: CGFloat = 40
+
+    var body: some View {
+        Image("AppleHealth")
+            .resizable()
+            .interpolation(.high)
+            .frame(width: size, height: size)
+            .overlay {
+                RoundedRectangle(cornerRadius: size * 0.225, style: .continuous)
+                    .strokeBorder(Theme.ink.opacity(0.12), lineWidth: 0.5)
+            }
+            .accessibilityHidden(true)
     }
 }
