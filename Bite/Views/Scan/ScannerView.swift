@@ -47,14 +47,17 @@ enum ScanMode: String, CaseIterable, Identifiable {
 /// estimate; a menu's photo is read dish by dish and kept. All end in one tap to add.
 struct ScannerView: View {
     let day: Date
-    /// The mode to open on, instead of the last one used.
-    var startMode: ScanMode? = nil
+    /// The meal to add to, when search was opened from one.
+    let meal: Meal?
     /// Once something is added, instead of only closing the camera: search closes with it.
-    var onAdded: (() -> Void)? = nil
+    let onAdded: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @AppStorage("scan.mode") private var modeRaw = ScanMode.barcode.rawValue
+    /// The mode the camera was opened on, for this visit only: the one you last chose yourself
+    /// is still there next time.
+    @State private var askedMode: ScanMode?
 
     @State private var camera: CameraState = .checking
     @State private var phase: Phase = .scanning
@@ -72,6 +75,13 @@ struct ScannerView: View {
     @State private var control = ScannerControl()
     /// The screens pushed over a menu: its dishes.
     @State private var menuPath: [FoodRoute] = []
+
+    init(day: Date, startMode: ScanMode? = nil, meal: Meal? = nil, onAdded: (() -> Void)? = nil) {
+        self.day = day
+        self.meal = meal
+        self.onAdded = onAdded
+        _askedMode = State(initialValue: startMode)
+    }
 
     enum CameraState {
         case checking
@@ -100,7 +110,7 @@ struct ScannerView: View {
         var isLabel: Bool { mode == .label }
     }
 
-    private var mode: ScanMode { ScanMode(rawValue: modeRaw) ?? .barcode }
+    private var mode: ScanMode { askedMode ?? ScanMode(rawValue: modeRaw) ?? .barcode }
 
     private var isScanning: Bool {
         mode == .barcode && phase == .scanning && found == nil && quickAdd == nil && photo == nil && !typing
@@ -133,9 +143,6 @@ struct ScannerView: View {
             .environment(\.colorScheme, .dark)
         }
         .task { camera = await CameraState.check() }
-        .onAppear {
-            if let startMode { modeRaw = startMode.rawValue }
-        }
         .onDisappear { if torchOn { setTorch(false) } }
         .sensoryFeedback(Feel.click, trigger: scans)
         .onChange(of: pickedPhoto) { _, item in
@@ -157,7 +164,7 @@ struct ScannerView: View {
                 NavigationStack(path: $menuPath) {
                     MenuView(source: .photo(captured.image, takenAt: captured.takenAt), day: day, overCamera: true) { finish() }
                         .navigationDestination(for: FoodRoute.self) { route in
-                            FoodRouteView(route: route, day: day) { finish() }
+                            FoodRouteView(route: route, day: day, meal: meal) { finish() }
                         }
                 }
             } else {
@@ -289,6 +296,7 @@ struct ScannerView: View {
     /// No data for this barcode: read the nutrition label off the pack instead.
     private func snapLabel() {
         withAnimation(.snappy) {
+            askedMode = nil
             modeRaw = ScanMode.label.rawValue
             phase = .scanning
         }
@@ -301,6 +309,7 @@ struct ScannerView: View {
                 let selected = option == mode
                 Button {
                     withAnimation(.snappy) {
+                        askedMode = nil
                         modeRaw = option.rawValue
                         phase = .scanning
                     }

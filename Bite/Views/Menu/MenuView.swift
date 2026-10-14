@@ -29,6 +29,9 @@ struct MenuView: View {
     @State private var heroGone = false
     @State private var showPhoto = false
     @State private var confirmDelete = false
+    /// The try already sent: a cover closing over the menu appears it again, and must not send
+    /// the photo twice.
+    @State private var sentAttempt: Int?
 
     enum Phase: Equatable {
         case reading
@@ -82,6 +85,14 @@ struct MenuView: View {
                     .accessibilityLabel("Back to the camera")
                 }
             }
+            if phase == .ready, heroImage != nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showPhoto = true } label: {
+                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                    }
+                    .accessibilityLabel("See the whole menu")
+                }
+            }
         }
         .sensoryFeedback(trigger: phase) { _, new in
             if new == .ready { return Feel.reached }
@@ -112,7 +123,7 @@ struct MenuView: View {
         Color.clear
             .frame(height: 300)
             .frame(maxWidth: .infinity)
-            .overlay {
+            .overlay(alignment: .top) {
                 if let heroImage {
                     Image(uiImage: heroImage)
                         .resizable()
@@ -122,7 +133,7 @@ struct MenuView: View {
                 }
             }
             .overlay {
-                LinearGradient(colors: [.black.opacity(0.32), .clear], startPoint: .top, endPoint: .center)
+                LinearGradient(colors: [.black.opacity(0.45), .black.opacity(0.12), .clear], startPoint: .top, endPoint: .center)
             }
             .overlay {
                 if phase == .reading { ScanBand() }
@@ -130,7 +141,7 @@ struct MenuView: View {
             .clipped()
             .contentShape(Rectangle())
             .onTapGesture {
-                if heroImage != nil, phase != .reading { showPhoto = true }
+                if heroImage != nil, phase == .ready { showPhoto = true }
             }
             .visualEffect { content, proxy in
                 let pull = max(proxy.frame(in: .scrollView).minY, 0)
@@ -317,7 +328,8 @@ struct MenuView: View {
     }
 
     private func read() async {
-        guard case .photo(let image, let takenAt) = source, menuID == nil else { return }
+        guard case .photo(let image, let takenAt) = source, menuID == nil, sentAttempt != attempt else { return }
+        sentAttempt = attempt
         phase = .reading
         #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {
@@ -366,21 +378,29 @@ private struct MenuDishRow: View {
                     .font(.ui(17))
                     .foregroundStyle(Theme.ink)
                     .lineLimit(2)
-                if !dish.detail.isEmpty {
-                    Text(dish.detail)
+                if !dish.description.isEmpty {
+                    Text(dish.description)
                         .font(.ui(15))
                         .foregroundStyle(Theme.secondary)
                         .lineLimit(1)
                 }
             }
             Spacer(minLength: 8)
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(dish.dish.kcal.kcalText)
-                    .font(.number(17))
-                    .foregroundStyle(Theme.ink)
-                Text("kcal")
-                    .font(.ui(13))
-                    .foregroundStyle(Theme.secondary)
+            VStack(alignment: .trailing, spacing: 2) {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text(dish.dish.kcal.kcalText)
+                        .font(.number(17))
+                        .foregroundStyle(Theme.ink)
+                    Text("kcal")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
+                }
+                if !dish.price.isEmpty {
+                    Text(verbatim: dish.price)
+                        .font(.ui(15))
+                        .monospacedDigit()
+                        .foregroundStyle(Theme.secondary)
+                }
             }
             Image(systemName: "chevron.right")
                 .font(.system(size: 13, weight: .semibold))

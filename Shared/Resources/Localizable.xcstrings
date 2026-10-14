@@ -9469,6 +9469,22 @@
         }
       }
     },
+    "See the whole menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver toda la carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir tout le menu"
+          }
+        }
+      }
+    },
     "See what's left today and how your macros stand." : {
       "localizations" : {
         "es" : {

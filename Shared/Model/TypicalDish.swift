@@ -202,11 +202,6 @@ struct MenuScan: Codable, Equatable, Hashable, Identifiable {
         var dish: TypicalDish
 
         var id: String { "\(name)|\(price)" }
-
-        /// "pain libanais · 14.50": what the menu says beside the name.
-        var detail: String {
-            [description, price].filter { !$0.isEmpty }.joined(separator: " · ")
-        }
     }
 
     var id = UUID()
@@ -226,7 +221,7 @@ struct MenuScan: Codable, Equatable, Hashable, Identifiable {
     /// One of its dishes as a food to log: the restaurant as its brand, so it reads
     /// "Shawarma poulet · El Beirout" in Recent.
     func food(_ dish: Dish, _ richness: TypicalDish.Richness) -> Food {
-        let id = "menu:\(self.id.uuidString):" + SearchText.words(in: dish.name).joined(separator: "-")
+        let id = "menu:\(self.id.uuidString):" + SearchText.words(in: "\(dish.name) \(dish.price)").joined(separator: "-")
         let brand = restaurant.isEmpty ? place?.name : restaurant
         return dish.dish.food(richness, id: id, brand: brand)
     }

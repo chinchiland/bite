@@ -32,6 +32,8 @@ struct TypicalDishView: View {
     @State private var place: MealPlace?
     @State private var heroGone = false
     @State private var attempt = 0
+    /// The try already sent, so the view appearing again doesn't ask twice.
+    @State private var sentAttempt: Int?
     @State private var saves = 0
 
     enum Phase: Equatable {
@@ -358,7 +360,8 @@ struct TypicalDishView: View {
     // MARK: Actions
 
     private func estimate() async {
-        guard case .typed(let words) = origin, dish == nil else { return }
+        guard case .typed(let words) = origin, dish == nil, sentAttempt != attempt else { return }
+        sentAttempt = attempt
         phase = .working
         #if DEBUG || BITE_DEMO
         if BiteStore.isDemo {

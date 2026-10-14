@@ -1037,12 +1037,14 @@ do {
     check(menu?.dishes(matching: "pizza").isEmpty == true, "nothing else")
     check(menu?.dishes(matching: "libanais").first?.name == "Shawarma poulet", "and by the words beside it")
     check(MenuScan.read(Data("not json".utf8)) == nil, "an unreadable answer reads as nothing")
-    check(menu?.dishes.first?.detail == "pain libanais · 14.50" && menu?.dishes.last?.detail == "9", "what the menu says beside a dish")
+    check(menu?.dishes.first?.description == "pain libanais" && menu?.dishes.first?.price == "14.50", "what the menu says beside a dish")
 
     if var menu {
         let dish = menu.dishes[0]
         let logged = menu.food(dish, .rich)
-        check(logged.id.hasPrefix("menu:\(menu.id.uuidString):shawarma-poulet:rich") && logged.brand == "El Beirout", "a menu's dish logs under its house: \(logged.id)")
+        check(logged.id == "menu:\(menu.id.uuidString):shawarma-poulet-14-50:rich" && logged.brand == "El Beirout", "a menu's dish logs under its house: \(logged.id)")
+        let pricier = MenuScan.Dish(name: dish.name, description: "", price: "19.00", dish: dish.dish)
+        check(menu.food(pricier, .rich).id != logged.id, "one name at two prices is two foods")
         check(menu.title == "El Beirout", "a menu is called by its house")
         menu.restaurant = ""
         check(menu.title == "Menu", "or just Menu")

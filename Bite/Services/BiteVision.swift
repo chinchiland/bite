@@ -175,12 +175,17 @@ enum PhotoEstimator {
         }
     }
 
+    /// Your own Claude key is set.
+    @MainActor
+    static var hasClaudeKey: Bool {
+        !(Keychain.string(for: Keychain.claudeKey) ?? "").isEmpty
+    }
+
     /// Whether an estimate can run for you at all: false under 18 without a key, where search
     /// would only offer something that says no.
     @MainActor
-    static var isOpen: Bool {
-        if !(Keychain.string(for: Keychain.claudeKey) ?? "").isEmpty { return true }
-        return CommunityServer.isConfigured && AgeAnswer.current != .under
+    static func isOpen(hasKey: Bool, age: AgeAnswer) -> Bool {
+        hasKey || (CommunityServer.isConfigured && age != .under)
     }
 
     @MainActor

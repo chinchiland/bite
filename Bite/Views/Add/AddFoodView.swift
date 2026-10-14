@@ -64,9 +64,16 @@ struct AddFoodView: View {
     @State private var failed = false
     @State private var recents: [RecentFood] = []
     @State private var added: Set<String> = []
-    /// Estimates can run for you: false under 18 without a key.
-    @State private var canEstimate = false
     @State private var scanningMenu = false
+    /// Your own Claude key is set: read once, the Keychain is too slow for every keystroke.
+    @State private var hasClaudeKey = false
+    @AppStorage("scan.age") private var ageRaw = AgeAnswer.unknown.rawValue
+    @State private var appeared = false
+
+    /// Estimates can run for you: false under 18 without a key, and at once when you say so.
+    private var canEstimate: Bool {
+        PhotoEstimator.isOpen(hasKey: hasClaudeKey, age: AgeAnswer(rawValue: ageRaw) ?? .unknown)
+    }
 
     nonisolated static var historyDescriptor: FetchDescriptor<FoodEntry> {
         var descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.date, order: .reverse)])
@@ -105,11 +112,14 @@ struct AddFoodView: View {
             }
         }
         .fullScreenCover(isPresented: $scanningMenu) {
-            ScannerView(day: day, startMode: .menu) { dismiss() }
+            ScannerView(day: day, startMode: .menu, meal: meal) { dismiss() }
         }
         .onAppear {
             recents = RecentFood.list(from: history)
-            canEstimate = PhotoEstimator.isOpen
+            hasClaudeKey = PhotoEstimator.hasClaudeKey
+            // Once: closing the camera, or a menu's photo, over search appears it again.
+            guard !appeared else { return }
+            appeared = true
             #if DEBUG
             switch UserDefaults.standard.string(forKey: "screen") {
             case "typical": path = [.typical(UserDefaults.standard.string(forKey: "query") ?? "shawarma")]
@@ -155,6 +165,7 @@ struct AddFoodView: View {
                                 .lineLimit(1)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
