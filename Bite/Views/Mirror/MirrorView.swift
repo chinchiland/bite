@@ -29,6 +29,9 @@ struct MirrorHome: View {
     @State private var hiddenID: UUID?
     @State private var leftAt: Date?
     @State private var cameraOpened = false
+    /// Photos kept from another iPhone, offered back on the promise.
+    @State private var kept: Int?
+    private var keep: MirrorKeep { MirrorKeep.shared }
 
     /// The photos, newest first, without the one just deleted.
     private var visible: [MirrorShot] { shots.filter { $0.photoID != hiddenID } }
@@ -40,7 +43,7 @@ struct MirrorHome: View {
     var body: some View {
         Group {
             if !consented {
-                MirrorPromise(onStart: start)
+                MirrorPromise(kept: kept, onStart: start, onRestore: restore)
             } else if visible.isEmpty {
                 empty
             } else if !unlocked {
@@ -68,11 +71,15 @@ struct MirrorHome: View {
             if consented, !MirrorVault.shared.hasKeys {
                 MirrorErase.everything()
             }
-            if startOnCamera, consented, !cameraOpened {
+            if !consented {
+                // A new iPhone: photos kept forever from the last one come back first.
+                kept = await keep.findKept()
+            } else if startOnCamera, !cameraOpened {
                 cameraOpened = true
                 cameraUp = true
-            } else if consented, !visible.isEmpty {
+            } else if !visible.isEmpty {
                 await unlock()
+                await keep.sync()
             }
             #if DEBUG
             if UserDefaults.standard.string(forKey: "screen") == "mirror.pair" { comparing = true }
@@ -119,6 +126,8 @@ struct MirrorHome: View {
                     rail
                         .padding(.top, 22)
                 }
+                keepCard
+                    .padding(.top, 28)
             }
             .padding(.horizontal, Theme.margin)
             .padding(.top, 8)
@@ -346,8 +355,12 @@ struct MirrorHome: View {
         return (first, current)
     }
 
-    private func start(faceID wanted: Bool) {
+    private func start(faceID wanted: Bool, keepForever: Bool) {
         Task {
+            // Keep forever is paid first; cancelled, the promise stays as it was.
+            if keepForever, !keep.owned {
+                guard await keep.buy() else { return }
+            }
             let made = await Task.detached(priority: .userInitiated) {
                 MirrorVault.shared.createKeys(protected: wanted)
             }.value
@@ -357,6 +370,72 @@ struct MirrorHome: View {
             unlocked = true
             cameraOpened = true
             cameraUp = true
+        }
+    }
+
+    /// Photos kept forever, back on this iPhone.
+    private func restore(faceID wanted: Bool) {
+        Task {
+            guard await keep.restore(protected: wanted) else { return }
+            faceID = wanted
+            consented = true
+            withAnimation(Motion.settle) { unlocked = true }
+        }
+    }
+
+    /// Below the photos: Keep forever, once, or how the copy stands.
+    @ViewBuilder private var keepCard: some View {
+        if keep.owned {
+            HStack(spacing: 8) {
+                Image(systemName: keep.status == .failed ? "exclamationmark.icloud" : "checkmark.icloud")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(Theme.secondary)
+                Group {
+                    switch keep.status {
+                    case .saving, .restoring: Text("Kept forever · Saving…")
+                    case .failed: Text("Kept forever · Couldn't reach Bite. Tries again later.")
+                    default: Text("Kept forever · Up to date")
+                    }
+                }
+                .font(.ui(13))
+                .foregroundStyle(Theme.secondary)
+            }
+            .accessibilityElement(children: .combine)
+        } else {
+            InsetBox(padding: 16) {
+                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Keep them forever")
+                            .font(.ui(16, .semibold))
+                            .foregroundStyle(Theme.ink)
+                        Text("An encrypted copy only your iPhones can open, back on your next one.")
+                            .font(.ui(14))
+                            .foregroundStyle(Theme.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Button {
+                        Task {
+                            guard await keep.buy() else { return }
+                            await keep.sync()
+                        }
+                    } label: {
+                        Text("Keep forever · \(keep.price)")
+                            .font(.ui(15, .semibold))
+                            .foregroundStyle(Theme.page)
+                            .padding(.horizontal, 16)
+                            .frame(height: 38)
+                            .background(Theme.ink, in: Capsule())
+                    }
+                    .buttonStyle(PressableStyle(scale: 0.95))
+                    .disabled(keep.product == nil || keep.buying)
+                    .opacity(keep.product == nil ? 0.4 : 1)
+                    if keep.product == nil {
+                        Text("Not available in this version")
+                            .font(.ui(13))
+                            .foregroundStyle(Theme.secondary)
+                    }
+                }
+            }
         }
     }
 
@@ -398,6 +477,7 @@ struct MirrorHome: View {
         }
         MirrorVault.shared.remove(id)
         MirrorLog.shared.refresh()
+        Task { await keep.sync() }
     }
 
     /// "25 April · 69.8 kg", with the year once it isn't this one.

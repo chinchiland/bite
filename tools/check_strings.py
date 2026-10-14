@@ -22,7 +22,7 @@ INTEGERS = {
     "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days", "learned.days",
     "day.known", "day.counted", "checkIn.wholeDays",
     "snapshot.water", "snapshot.waterGoal", "entry.snapshot.water", "entry.snapshot.waterGoal",
-    "days", "weeks", "months", "years",
+    "days", "weeks", "months", "years", "kept",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.

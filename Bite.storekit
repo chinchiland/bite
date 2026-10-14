@@ -1,0 +1,33 @@
+{
+  "identifier" : "4B1E7E50",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : true,
+      "internalID" : "4B1E7E51",
+      "localizations" : [
+        {
+          "description" : "An encrypted copy of your mirror photos that only your iPhones can open, back on your next one.",
+          "displayName" : "Keep forever",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.dylan.bite.mirror.forever",
+      "referenceName" : "Your mirror, kept forever",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

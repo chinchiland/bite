@@ -29,6 +29,7 @@ struct SettingsView: View {
     @AppStorage("mirror.consented") private var mirrorConsented = false
     @AppStorage("mirror.faceID") private var mirrorFaceID = true
     @State private var confirmMirrorErase = false
+    private var mirrorKeep: MirrorKeep { MirrorKeep.shared }
 
     /// Changing the lock opens the mirror first, through the lock it has now.
     private var mirrorFaceIDBinding: Binding<Bool> {
@@ -382,19 +383,42 @@ struct SettingsView: View {
                                     .foregroundStyle(Theme.ink)
                             }
                             .listRowBackground(Theme.card)
+                            if mirrorKeep.owned {
+                                Label("Kept forever", systemImage: "checkmark.icloud")
+                                    .font(.ui(17))
+                                    .foregroundStyle(Theme.ink)
+                                    .listRowBackground(Theme.card)
+                            } else {
+                                Button("Keep forever, \(mirrorKeep.price) once") {
+                                    Task {
+                                        guard await mirrorKeep.buy() else { return }
+                                        await mirrorKeep.sync()
+                                    }
+                                }
+                                .font(.ui(17))
+                                .disabled(mirrorKeep.product == nil || mirrorKeep.buying)
+                                .listRowBackground(Theme.card)
+                            }
+                            Button("Restore Purchases") { Task { await mirrorKeep.restorePurchases() } }
+                                .font(.ui(17))
+                                .listRowBackground(Theme.card)
                             Button("Delete all your photos", role: .destructive) { confirmMirrorErase = true }
                                 .font(.ui(17))
                                 .listRowBackground(Theme.card)
                                 .confirmationDialog("Delete all your photos", isPresented: $confirmMirrorErase, titleVisibility: .visible) {
                                     Button("Delete", role: .destructive) { MirrorErase.everything() }
                                 } message: {
-                                    Text("The photos and the key that opens them both go. Nothing can bring them back.")
+                                    Text(mirrorKeep.owned
+                                        ? LocalizedStringKey("The photos, the copy kept for your next iPhone and the key that opens them all go. Nothing can bring them back.")
+                                        : LocalizedStringKey("The photos and the key that opens them both go. Nothing can bring them back."))
                                 }
                         }
                     } header: {
                         SectionTitle(text: "Your mirror")
                     } footer: {
-                        Text("These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch.")
+                        Text(mirrorKeep.owned
+                            ? LocalizedStringKey("Kept forever: an encrypted copy waits for your next iPhone, and only your iPhones can open it. Never iCloud, never your camera roll.")
+                            : LocalizedStringKey("These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch."))
                     }
 
                     Section {

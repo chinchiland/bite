@@ -103,6 +103,39 @@ enum Keychain {
         return SecItemAdd(item as CFDictionary, nil) == errSecSuccess
     }
 
+    /// Bytes kept in iCloud Keychain, end-to-end encrypted by Apple, on every iPhone signed in
+    /// to the same Apple Account: your mirror's keys, when you keep your photos forever.
+    static func syncedData(for account: String) -> Data? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecAttrSynchronizable as String: true,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+        ]
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess else { return nil }
+        return result as? Data
+    }
+
+    /// Saves bytes to iCloud Keychain, or removes them everywhere when nil. True when it worked.
+    @discardableResult
+    static func setSyncedData(_ data: Data?, for account: String) -> Bool {
+        let identity: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecAttrSynchronizable as String: true,
+        ]
+        let removed = SecItemDelete(identity as CFDictionary)
+        guard let data else { return removed == errSecSuccess || removed == errSecItemNotFound }
+        var item = identity
+        item[kSecValueData as String] = data
+        item[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlocked
+        return SecItemAdd(item as CFDictionary, nil) == errSecSuccess
+    }
+
     static let claudeKey = "claude-api-key"
     /// How every Anthropic API key starts, to tell a whole key from a stray fragment.
     static let claudeKeyPrefix = "sk-ant-"

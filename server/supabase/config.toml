@@ -427,3 +427,7 @@ verify_jwt = false
 
 [functions.delete-account]
 verify_jwt = false
+
+# Your mirror, kept forever: no account, each request is signed by the phone's own key.
+[functions.mirror-backup]
+verify_jwt = false

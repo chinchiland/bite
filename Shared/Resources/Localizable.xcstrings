@@ -327,6 +327,22 @@
         }
       }
     },
+    "%@ once" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ un solo pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ une fois"
+          }
+        }
+      }
+    },
     "%@ options" : {
       "localizations" : {
         "es" : {
@@ -939,6 +955,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Précis à %lld %%"
+          }
+        }
+      }
+    },
+    "%lld photos are kept for you." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photo is kept for you."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photos are kept for you."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto te espera."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fotos te esperan."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photo t’attend."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld photos t’attendent."
+                }
+              }
+            }
           }
         }
       }
@@ -2167,6 +2241,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quantité"
+          }
+        }
+      }
+    },
+    "An encrypted copy only your iPhones can open, back on your next one." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una copia cifrada que solo tus iPhone pueden abrir, de vuelta en el siguiente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une copie chiffrée que seuls tes iPhone peuvent ouvrir, de retour sur le prochain."
           }
         }
       }
@@ -4407,6 +4497,22 @@
         }
       }
     },
+    "Free" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratuit"
+          }
+        }
+      }
+    },
     "Free. No account. Your log stays on this phone." : {
       "localizations" : {
         "es" : {
@@ -5097,6 +5203,54 @@
         }
       }
     },
+    "Keep forever" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar para siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder pour toujours"
+          }
+        }
+      }
+    },
+    "Keep forever · %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar para siempre · %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder pour toujours · %@"
+          }
+        }
+      }
+    },
+    "Keep forever, %@ once" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar para siempre, %@ un solo pago"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder pour toujours, %@ une fois"
+          }
+        }
+      }
+    },
     "Keep steady" : {
       "localizations" : {
         "es" : {
@@ -5109,6 +5263,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rester stable"
+          }
+        }
+      }
+    },
+    "Keep them forever" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardarlas para siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les garder pour toujours"
           }
         }
       }
@@ -5141,6 +5311,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gardée"
+          }
+        }
+      }
+    },
+    "Kept forever" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardadas para siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardées pour toujours"
+          }
+        }
+      }
+    },
+    "Kept forever · Couldn't reach Bite. Tries again later." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardadas para siempre · Sin conexión con Bite, se reintentará más tarde."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardées pour toujours · Bite injoignable, nouvel essai plus tard."
+          }
+        }
+      }
+    },
+    "Kept forever · Saving…" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardadas para siempre · Guardando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardées pour toujours · Enregistrement…"
+          }
+        }
+      }
+    },
+    "Kept forever · Up to date" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardadas para siempre · Al día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardées pour toujours · À jour"
+          }
+        }
+      }
+    },
+    "Kept forever: an encrypted copy waits for your next iPhone, and only your iPhones can open it. Never iCloud, never your camera roll." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardadas para siempre: una copia cifrada espera a tu próximo iPhone y solo tus iPhone pueden abrirla. Nunca iCloud, nunca tu carrete."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardées pour toujours : une copie chiffrée attend ton prochain iPhone, et seuls tes iPhone peuvent l’ouvrir. Jamais iCloud, jamais ta pellicule."
           }
         }
       }
@@ -6089,6 +6339,22 @@
         }
       }
     },
+    "Never leaves it. A new phone starts fresh." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nunca salen de él. Un teléfono nuevo empieza de cero."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elles n’en sortent jamais. Un nouveau téléphone repart de zéro."
+          }
+        }
+      }
+    },
     "New" : {
       "localizations" : {
         "es" : {
@@ -6357,6 +6623,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sans objectif. Bite compte, et te montre tes habitudes."
+          }
+        }
+      }
+    },
+    "Not available in this version" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No disponible en esta versión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas disponible dans cette version"
           }
         }
       }
@@ -6693,6 +6975,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un geste ajoute"
+          }
+        }
+      }
+    },
+    "Only on this phone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo en este teléfono"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seulement sur ce téléphone"
           }
         }
       }
@@ -7829,6 +8127,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restaurant"
+          }
+        }
+      }
+    },
+    "Restore Purchases" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar compras"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurer les achats"
+          }
+        }
+      }
+    },
+    "Restore them" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuperarlas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les récupérer"
           }
         }
       }
@@ -9577,6 +9907,22 @@
         }
       }
     },
+    "The photos, the copy kept for your next iPhone and the key that opens them all go. Nothing can bring them back." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se borran las fotos, la copia guardada para tu próximo iPhone y la llave que las abre. Nada podrá recuperarlas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les photos, la copie gardée pour ton prochain iPhone et la clé qui les ouvre disparaissent. Rien ne pourra les récupérer."
+          }
+        }
+      }
+    },
     "These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch." : {
       "localizations" : {
         "es" : {
@@ -10299,6 +10645,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Poids"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hola de nuevo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bon retour"
           }
         }
       }

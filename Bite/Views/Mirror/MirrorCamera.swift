@@ -551,6 +551,7 @@ struct MirrorCamera: View {
         history.took()
         historyData = (try? JSONEncoder().encode(history)) ?? Data()
         MirrorLog.shared.refresh()
+        Task { await MirrorKeep.shared.sync() }
         return true
     }
 

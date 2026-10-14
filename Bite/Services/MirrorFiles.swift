@@ -134,6 +134,52 @@ final class MirrorVault: @unchecked Sendable {
         return false
     }
 
+    // MARK: Keeping forever
+
+    /// The private key's bytes, while the mirror is open: what iCloud Keychain carries to your
+    /// next iPhone when you keep your photos forever.
+    func privateKeyData() -> Data? {
+        lock.lock()
+        defer { lock.unlock() }
+        return privateKey?.rawRepresentation
+    }
+
+    /// A new iPhone taking over the keys kept in iCloud Keychain: the photos come back openable.
+    func adoptKeys(privateRaw: Data, protected: Bool) -> Bool {
+        guard let key = try? P256.KeyAgreement.PrivateKey(rawRepresentation: privateRaw) else { return false }
+        var saved = Keychain.setData(privateRaw, for: Self.privateAccount, protected: protected)
+        if !saved && protected { saved = Keychain.setData(privateRaw, for: Self.privateAccount, protected: false) }
+        guard saved, Keychain.setData(key.publicKey.rawRepresentation, for: Self.publicAccount, protected: false) else { return false }
+        lock.lock()
+        privateKey = key
+        lock.unlock()
+        return true
+    }
+
+    /// Anything sealed to the mirror's public key, like the list of photos a backup keeps.
+    func sealed(_ plain: Data) throws -> Data {
+        guard let publicRaw = Keychain.data(for: Self.publicAccount),
+              let publicKey = try? P256.KeyAgreement.PublicKey(rawRepresentation: publicRaw) else { throw Failure.noKey }
+        return try Self.seal(plain, to: publicKey)
+    }
+
+    /// Opens something sealed to the mirror's key with the key's bytes, for a restore.
+    static func open(_ sealed: Data, privateRaw: Data) throws -> Data {
+        let key = try P256.KeyAgreement.PrivateKey(rawRepresentation: privateRaw)
+        return try open(sealed, with: key)
+    }
+
+    /// A photo's sealed file as it is on disk, for the backup: it never needs opening to travel.
+    func sealedFile(_ id: UUID, thumbnail: Bool) -> Data? {
+        try? Data(contentsOf: url(for: id, thumbnail: thumbnail))
+    }
+
+    /// A sealed file brought back from the backup, written as it came.
+    func writeSealed(_ data: Data, id: UUID, thumbnail: Bool) throws {
+        MirrorStore.prepareFolder()
+        try data.write(to: url(for: id, thumbnail: thumbnail), options: [.atomic, .completeFileProtection])
+    }
+
     // MARK: Files
 
     func url(for id: UUID, thumbnail: Bool) -> URL {
@@ -297,6 +343,7 @@ enum MirrorErase {
             try? context.save()
         }
         MirrorVault.shared.eraseAll()
+        Task { await MirrorKeep.shared.eraseShelf() }
         let defaults = UserDefaults.standard
         for key in ["mirror.consented", "mirror.history", "mirror.longGap"] {
             defaults.removeObject(forKey: key)

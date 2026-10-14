@@ -243,7 +243,11 @@ struct TodayView: View {
                 MirrorLog.shared.refresh()
             }
         }
-        .task { MirrorLog.shared.refresh() }
+        .task {
+            MirrorLog.shared.refresh()
+            // Purchases arrive at any time (Ask to Buy, another iPhone): listen from the start.
+            MirrorKeep.shared.start()
+        }
         #if DEBUG
         .onAppear(perform: openDemoScreen)
         #endif
