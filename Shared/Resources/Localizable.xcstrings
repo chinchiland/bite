@@ -605,6 +605,64 @@
         }
       }
     },
+    "%lld dishes" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dish"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dishes"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld plato"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld platos"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld plat"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld plats"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld estimates" : {
       "localizations" : {
         "en" : {
@@ -1571,6 +1629,38 @@
         }
       }
     },
+    "A typical portion" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una ración típica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une portion type"
+          }
+        }
+      }
+    },
+    "About %@ g" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unos %@ g"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ %@ g"
+          }
+        }
+      }
+    },
     "About %@ kcal a day on %lld days" : {
       "localizations" : {
         "en" : {
@@ -2213,6 +2303,22 @@
         }
       }
     },
+    "All menus" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tous les menus"
+          }
+        }
+      }
+    },
     "Almonds" : {
       "localizations" : {
         "es" : {
@@ -2373,6 +2479,22 @@
         }
       }
     },
+    "Back" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour"
+          }
+        }
+      }
+    },
     "Back to the camera" : {
       "localizations" : {
         "es" : {
@@ -2469,6 +2591,22 @@
         }
       }
     },
+    "Barcodes, product search and your saved foods work as usual." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los códigos de barras, la búsqueda de productos y tus alimentos guardados funcionan como siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les codes-barres, la recherche de produits et tes aliments enregistrés marchent comme d’habitude."
+          }
+        }
+      }
+    },
     "Barcodes, search and your saved foods work as usual." : {
       "localizations" : {
         "es" : {
@@ -2529,6 +2667,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meilleurs jours"
+          }
+        }
+      }
+    },
+    "Big" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grande"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grande"
           }
         }
       }
@@ -3307,6 +3461,22 @@
         }
       }
     },
+    "Clear" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer"
+          }
+        }
+      }
+    },
     "Close" : {
       "localizations" : {
         "es" : {
@@ -3739,6 +3909,22 @@
         }
       }
     },
+    "Delete this menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar esta carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer ce menu"
+          }
+        }
+      }
+    },
     "Delete this photo" : {
       "localizations" : {
         "es" : {
@@ -3911,6 +4097,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fais glisser pour comparer"
+          }
+        }
+      }
+    },
+    "Each dish gets a calorie estimate. A long menu can take up to a minute." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada plato tendrá su estimación de calorías. Una carta larga puede tardar hasta un minuto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque plat a son estimation de calories. Un long menu peut prendre jusqu’à une minute."
           }
         }
       }
@@ -4123,6 +4325,134 @@
         }
       }
     },
+    "Estimated from its name, as it is usually served." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimado a partir de su nombre, como se suele servir."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimé d’après son nom, comme il est habituellement servi."
+          }
+        }
+      }
+    },
+    "Estimated from the menu, for the portion a place like this usually serves." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimado a partir de la carta, para la ración habitual en un sitio así."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimé d’après le menu, pour la portion habituelle dans ce genre d’endroit."
+          }
+        }
+      }
+    },
+    "Estimates are busy right now. Try again in a moment." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones están muy solicitadas. Vuelve a intentarlo en un momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations sont très demandées. Réessaie dans un instant."
+          }
+        }
+      }
+    },
+    "Estimates are for 18 and over" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones son para mayores de 18 años"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations sont pour les 18 ans et plus"
+          }
+        }
+      }
+    },
+    "Estimates are resting for a while. Barcodes and product search work as usual." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones descansan un rato. Los códigos de barras y la búsqueda de productos funcionan como siempre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations font une pause. Les codes-barres et la recherche de produits marchent comme d’habitude."
+          }
+        }
+      }
+    },
+    "Estimates wait until 18" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las estimaciones esperarán a tus 18 años"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les estimations attendront tes 18 ans"
+          }
+        }
+      }
+    },
+    "Estimating a typical portion" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimando una ración típica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimation d’une portion type"
+          }
+        }
+      }
+    },
+    "Every dish with its calories" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada plato con sus calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque plat avec ses calories"
+          }
+        }
+      }
+    },
     "Every estimate counts once, and once more for each person who agreed with it. The calories are the average of all that. Accuracy is how close the estimates sit to each other, times how many people stand behind them, so three close estimates and a few agreements reach 90." : {
       "localizations" : {
         "es" : {
@@ -4183,6 +4513,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exporter tes photos"
+          }
+        }
+      }
+    },
+    "Extra oil, sauce or cheese" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más aceite, salsa o queso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus d’huile, de sauce ou de fromage"
           }
         }
       }
@@ -4347,6 +4693,22 @@
         }
       }
     },
+    "Find a dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar un plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trouver un plat"
+          }
+        }
+      }
+    },
     "First bite" : {
       "localizations" : {
         "es" : {
@@ -4375,6 +4737,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Poisson"
+          }
+        }
+      }
+    },
+    "Fit the menu in the frame" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuadra la carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cadre le menu"
           }
         }
       }
@@ -4561,6 +4939,22 @@
         }
       }
     },
+    "From your menus" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tus cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans tes menus"
+          }
+        }
+      }
+    },
     "Gain" : {
       "localizations" : {
         "es" : {
@@ -4605,6 +4999,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Galerie"
+          }
+        }
+      }
+    },
+    "Garlic sauce, pickles, Lebanese bread" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salsa de ajo, encurtidos, pan libanés"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauce à l’ail, pickles, pain libanais"
           }
         }
       }
@@ -5015,6 +5425,22 @@
         }
       }
     },
+    "How big was it?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Y la ración?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Et la portion ?"
+          }
+        }
+      }
+    },
     "How much dressing was on it?" : {
       "localizations" : {
         "es" : {
@@ -5031,6 +5457,22 @@
         }
       }
     },
+    "How rich was it?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Era ligero o contundente?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’était plutôt léger ou riche ?"
+          }
+        }
+      }
+    },
     "How the accuracy is worked out" : {
       "localizations" : {
         "es" : {
@@ -5043,6 +5485,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comment la précision est calculée"
+          }
+        }
+      }
+    },
+    "Huge" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enorme"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Énorme"
           }
         }
       }
@@ -5177,6 +5635,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Il est toujours sur ton téléphone, et la prochaine mise à jour l’ouvrira. D’ici là, ce que tu ajoutes n’est pas gardé."
+          }
+        }
+      }
+    },
+    "Its dishes leave your search. What you logged from it stays." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sus platos dejarán de salir en tu búsqueda. Lo que ya anotaste de ella se queda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ses plats n’apparaîtront plus dans ta recherche. Ce que tu en as déjà noté reste."
           }
         }
       }
@@ -5395,6 +5869,38 @@
         }
       }
     },
+    "Kept in your menus" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardada en tus cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardé dans tes menus"
+          }
+        }
+      }
+    },
+    "Kept on this phone. What you logged from a menu stays when you delete it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se guardan en este teléfono. Lo que anotaste de una carta se conserva aunque la elimines."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardés sur ce téléphone. Ce que tu as noté à partir d’un menu reste quand tu le supprimes."
+          }
+        }
+      }
+    },
     "Kept. Take another?" : {
       "localizations" : {
         "es" : {
@@ -5407,6 +5913,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gardée. Tu en prends une autre ?"
+          }
+        }
+      }
+    },
+    "Lamb and beef, rice" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cordero y ternera, arroz"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agneau et bœuf, riz"
           }
         }
       }
@@ -5455,6 +5977,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dernier repas : %@"
+          }
+        }
+      }
+    },
+    "Lean" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligero"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Léger"
+          }
+        }
+      }
+    },
+    "Lean or rich, small or huge" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligero o contundente, ración pequeña o enorme"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Léger ou riche, portion petite ou énorme"
           }
         }
       }
@@ -5535,6 +6089,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Journée légère"
+          }
+        }
+      }
+    },
+    "Light on oil and sauce" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con poco aceite y salsa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peu d’huile et de sauce"
           }
         }
       }
@@ -5907,6 +6477,22 @@
         }
       }
     },
+    "Made the usual way" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho como siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fait comme d’habitude"
+          }
+        }
+      }
+    },
     "Maintain" : {
       "localizations" : {
         "es" : {
@@ -6015,6 +6601,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rappel à l’heure du repas"
+          }
+        }
+      }
+    },
+    "Menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu"
           }
         }
       }
@@ -6479,6 +7081,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pas d’appareil photo ici. Saisis plutôt le code-barres."
+          }
+        }
+      }
+    },
+    "No dish by that name on this menu." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay ningún plato con ese nombre en esta carta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun plat de ce nom sur ce menu."
+          }
+        }
+      }
+    },
+    "No dishes found in this photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se han encontrado platos en esta foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun plat trouvé sur cette photo"
           }
         }
       }
@@ -7107,6 +7741,22 @@
         }
       }
     },
+    "Opens it full screen" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La abre a pantalla completa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’ouvre en plein écran"
+          }
+        }
+      }
+    },
     "Opens the camera to scan a barcode or a plate" : {
       "localizations" : {
         "es" : {
@@ -7395,22 +8045,6 @@
         }
       }
     },
-    "Photo estimates are busy right now. Try again in a moment." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las estimaciones por foto están muy solicitadas. Vuelve a intentarlo en un momento."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les estimations par photo sont très demandées. Réessaie dans un instant."
-          }
-        }
-      }
-    },
     "Photo estimates are for 18 and over" : {
       "localizations" : {
         "es" : {
@@ -7439,22 +8073,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les estimations par photo sont pour les 18 ans et plus. C’est ton cas ?"
-          }
-        }
-      }
-    },
-    "Photo estimates are resting for a while. Barcodes and search work as usual." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las estimaciones por foto descansan un rato. Los códigos de barras y la búsqueda funcionan como siempre."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les estimations par photo font une pause. Les codes-barres et la recherche marchent comme d’habitude."
           }
         }
       }
@@ -7891,6 +8509,22 @@
         }
       }
     },
+    "Reading the menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo la carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture du menu"
+          }
+        }
+      }
+    },
     "Ready" : {
       "localizations" : {
         "es" : {
@@ -7935,6 +8569,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vino tinto"
+          }
+        }
+      }
+    },
+    "Regular" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
           }
         }
       }
@@ -8175,6 +8825,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Arroz"
+          }
+        }
+      }
+    },
+    "Rich" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contundente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riche"
           }
         }
       }
@@ -8643,6 +9309,22 @@
         }
       }
     },
+    "Scan a menu" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear una carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner un menu"
+          }
+        }
+      }
+    },
     "Scan again" : {
       "localizations" : {
         "es" : {
@@ -9091,6 +9773,38 @@
         }
       }
     },
+    "Small" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pequeña"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petite"
+          }
+        }
+      }
+    },
+    "Smoked aubergine" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berenjena ahumada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aubergine fumée"
+          }
+        }
+      }
+    },
     "Snacks" : {
       "localizations" : {
         "es" : {
@@ -9215,6 +9929,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dire les consignes à voix haute"
+          }
+        }
+      }
+    },
+    "Spicy salami" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salami picante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salami piquant"
           }
         }
       }
@@ -9487,6 +10217,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maïs"
+          }
+        }
+      }
+    },
+    "Tahini, onions, parsley" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahini, cebolla, perejil"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahini, oignons, persil"
+          }
+        }
+      }
+    },
+    "Tahini, tomatoes, mint" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahini, tomate, menta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahini, tomates, menthe"
           }
         }
       }
@@ -9779,6 +10541,22 @@
         }
       }
     },
+    "That doesn't sound like a dish" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eso no parece un plato"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ça ne ressemble pas à un plat"
+          }
+        }
+      }
+    },
     "That saved food isn't on your shelf any more." : {
       "localizations" : {
         "es" : {
@@ -9795,34 +10573,34 @@
         }
       }
     },
-    "That's a lot of photos for one day. Photo estimates are back tomorrow; barcodes and search work as usual." : {
+    "That's a lot of estimates for one day. They're back tomorrow; barcodes and product search work as usual." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Son muchas fotos para un día. Las estimaciones vuelven mañana; los códigos de barras y la búsqueda funcionan como siempre."
+            "value" : "Son muchas estimaciones para un día. Vuelven mañana; los códigos de barras y la búsqueda de productos funcionan como siempre."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ça fait beaucoup de photos pour une journée. Les estimations reviennent demain ; les codes-barres et la recherche marchent comme d’habitude."
+            "value" : "Ça fait beaucoup d’estimations pour une journée. Elles reviennent demain ; les codes-barres et la recherche de produits marchent comme d’habitude."
           }
         }
       }
     },
-    "That's a lot of photos in one minute. Give it a few seconds." : {
+    "That's a lot of estimates in one minute. Give it a few seconds." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Son muchas fotos en un minuto. Espera unos segundos."
+            "value" : "Son muchas estimaciones en un minuto. Espera unos segundos."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ça fait beaucoup de photos en une minute. Laisse passer quelques secondes."
+            "value" : "Ça fait beaucoup d’estimations en une minute. Attends quelques secondes."
           }
         }
       }
@@ -9887,6 +10665,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les chiffres mêmes de l’étiquette"
+          }
+        }
+      }
+    },
+    "The menu's photo" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La foto de la carta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La photo du menu"
           }
         }
       }
@@ -9967,6 +10761,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Elles passent par Gemini de Google, dont les règles le demandent. Les codes-barres, la recherche et tes aliments enregistrés marchent à tout âge."
+          }
+        }
+      }
+    },
+    "They run on Google's Gemini, whose terms ask for 18 and over. Barcodes, product search and your saved foods work at any age." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Funcionan con Gemini de Google, cuyas condiciones piden tener 18 años. Los códigos de barras, la búsqueda de productos y tus alimentos guardados funcionan a cualquier edad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elles passent par Gemini de Google, dont les conditions demandent d’avoir 18 ans. Les codes-barres, la recherche de produits et tes aliments enregistrés marchent à tout âge."
           }
         }
       }
@@ -10211,6 +11021,22 @@
         }
       }
     },
+    "Try again with the whole menu in the frame, in good light." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuelve a intentarlo con toda la carta en el encuadre y buena luz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessaie avec tout le menu dans le cadre et une bonne lumière."
+          }
+        }
+      }
+    },
     "Try again." : {
       "localizations" : {
         "es" : {
@@ -10223,6 +11049,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Réessaie."
+          }
+        }
+      }
+    },
+    "Try other words, or pick a product from the results." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba con otras palabras o elige un producto de los resultados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essaie d’autres mots ou choisis un produit dans les résultats."
           }
         }
       }
@@ -10303,6 +11145,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saisir le code-barres"
+          }
+        }
+      }
+    },
+    "Typical portion" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ración típica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portion type"
+          }
+        }
+      }
+    },
+    "Typical portions for a place like this. Open a dish to say how rich and how big yours was." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raciones típicas para un sitio así. Abre un plato e indica si tu ración era ligera o contundente, pequeña o grande."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des portions types pour ce genre d’endroit. Ouvre un plat pour dire si ta portion était légère ou riche, petite ou grande."
           }
         }
       }
@@ -10485,6 +11359,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Utiliser cet objectif"
+          }
+        }
+      }
+    },
+    "Usual" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habitual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habituelle"
+          }
+        }
+      }
+    },
+    "Usual · %@ g" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habitual · %@ g"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habituelle · %@ g"
           }
         }
       }
@@ -10827,6 +11733,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paquet entier"
+          }
+        }
+      }
+    },
+    "With hummus and salad" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con hummus y ensalada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec houmous et salade"
           }
         }
       }
@@ -11245,6 +12167,22 @@
         }
       }
     },
+    "Your menus" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus cartas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes menus"
+          }
+        }
+      }
+    },
     "Your mirror" : {
       "localizations" : {
         "es" : {
@@ -11529,6 +12467,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La tienne"
+          }
+        }
+      }
+    },
+    "a typical portion" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "una ración típica"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "une portion type"
           }
         }
       }

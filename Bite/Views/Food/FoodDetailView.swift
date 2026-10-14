@@ -296,6 +296,16 @@ struct FoodDetailView: View {
             Text("Calories from the estimates people shared.")
                 .font(.ui(13))
                 .foregroundStyle(Theme.secondary)
+        } else if food.source == .typical {
+            Group {
+                if food.id.hasPrefix("menu:") {
+                    Text("Estimated from the menu, for the portion a place like this usually serves.")
+                } else {
+                    Text("Estimated from its name, as it is usually served.")
+                }
+            }
+            .font(.ui(13))
+            .foregroundStyle(Theme.secondary)
         }
     }
 

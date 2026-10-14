@@ -1283,15 +1283,15 @@ struct TodayView: View {
 
     #if DEBUG
     /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday|over`
-    /// `|place|dish|addestimate|accuracy|where|cover2` opens a screen straight away, for
-    /// screenshots. `over` is the demo's heaviest day, three days back: four digit calories,
+    /// `|place|dish|addestimate|accuracy|where|cover2|scanmenu|menu|menu.dish|typical|menus|menus.all`
+    /// opens a screen straight away, for screenshots. `over` is the demo's heaviest day, three days back: four digit calories,
     /// past the goal, carbs and fat past their targets.
     private func openDemoScreen() {
         switch UserDefaults.standard.string(forKey: "screen") {
         case "food": editing = dayEntries.first { $0.imageURLString != nil } ?? dayEntries.first
-        case "search": sheet = .search(nil)
+        case "search", "typical", "menus", "menus.all": sheet = .search(nil)
         case "settings": sheet = .settings
-        case "scanner", "photo", "estimate": showScanner = true
+        case "scanner", "photo", "estimate", "scanmenu", "menu", "menu.dish": showScanner = true
         case "edit": editing = dayEntries.last
         case "plate": editing = dayEntries.first { $0.imageData != nil }
         case "saved": if let first = saved.first { sheet = .editSaved(first) }

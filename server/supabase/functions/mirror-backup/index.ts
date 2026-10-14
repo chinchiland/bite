@@ -19,7 +19,7 @@ const MAX_FILE = 2_500_000; // a 1600 pixel photo is 300 to 800 KB
 const MAX_FILES = 400; // a photo every four weeks is about 13 a year, two files each
 const NAME = /^([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}(-t)?|manifest)\.bite$/;
 
-function bytes(base64: string): Uint8Array | null {
+function bytes(base64: string): Uint8Array<ArrayBuffer> | null {
   try {
     return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
   } catch {
@@ -27,7 +27,7 @@ function bytes(base64: string): Uint8Array | null {
   }
 }
 
-async function hex(data: Uint8Array): Promise<string> {
+async function hex(data: Uint8Array<ArrayBuffer>): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", data);
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }

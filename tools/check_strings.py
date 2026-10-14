@@ -22,7 +22,7 @@ INTEGERS = {
     "consensus.agrees", "consensus.accuracy", "count", "star", "forecast.days", "learned.days",
     "day.known", "day.counted", "checkIn.wholeDays",
     "snapshot.water", "snapshot.waterGoal", "entry.snapshot.water", "entry.snapshot.waterGoal",
-    "days", "weeks", "months", "years", "kept",
+    "days", "weeks", "months", "years", "kept", "menu.dishes.count",
 }
 
 # Literals that are not shown as words, or are deliberately left as they are.
@@ -30,7 +30,7 @@ NOT_WORDS = re.compile(
     r"""^(
         [a-z0-9]+(\.[a-z0-9]+)+                     # SF Symbols
       | [a-z][A-Za-z0-9]*(\.[a-z][A-Za-z0-9]*)*     # keys and identifiers
-      | saved:.*|-.*|https?://.*|bite://.*         # internal ids, launch arguments, links
+      | (saved|menu|typical):.*|-.*|https?://.*|bite://.*   # internal ids, launch arguments, links
       | [A-Z]                                       # Nutri-Score letters
       | %@|%@\ %@|%@\ (g|kcal|ml)|\+%@|\ /\ %@\ g|×%lld|%lld|\#%lld|%@\ ·\ %@|100\ %@
       | (g|kcal|ml|cm|kg)

@@ -156,6 +156,21 @@ jobs:
           xcrun simctl ui "$UDID" appearance dark
           shoot 73-mirror-dark -onboarded YES -screen mirror
           xcrun simctl ui "$UDID" appearance light
+          # Menus and typical portions. The demo reads every menu photo as El Beirout's, and
+          # remembers "shawarma", so its typical portion opens at once.
+          shoot 74-scan-menu -onboarded YES -screen scanmenu
+          shoot 75-menu -onboarded YES -screen menu
+          shoot 76-menu-dish -onboarded YES -screen menu.dish
+          shoot 77-typical-search -onboarded YES -screen search -query shawarma
+          shoot 78-typical -onboarded YES -screen typical -query shawarma
+          shoot 79-menu-saved -onboarded YES -screen menus
+          shoot 80-menu-fr -onboarded YES -screen menu -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 81-typical-es -onboarded YES -screen typical -query shawarma -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 82-typical-fr -onboarded YES -screen typical -query shawarma -AppleLanguages "(fr)" -AppleLocale fr_FR
+          xcrun simctl ui "$UDID" appearance dark
+          shoot 83-menu-dark -onboarded YES -screen menu
+          shoot 84-typical-dark -onboarded YES -screen typical -query shawarma
+          xcrun simctl ui "$UDID" appearance light
 
           shoot_fresh() {
             name=$1; shift

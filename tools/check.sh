@@ -45,5 +45,6 @@ swiftc -o "$OUT/logic-tests" \
   Bite/Services/ClaudeVision.swift \
   Bite/Services/MirrorGuide.swift \
   Bite/Services/MirrorRules.swift \
+  Shared/Model/TypicalDish.swift \
   tools/LogicTests/main.swift
 "$OUT/logic-tests" "$PWD"

@@ -9,6 +9,7 @@ enum ScanMode: String, CaseIterable, Identifiable {
     case food
     case barcode
     case label
+    case menu
 
     var id: String { rawValue }
 
@@ -17,6 +18,7 @@ enum ScanMode: String, CaseIterable, Identifiable {
         case .food: "Scan food"
         case .barcode: "Barcode"
         case .label: "Food label"
+        case .menu: "Menu"
         }
     }
 
@@ -25,6 +27,7 @@ enum ScanMode: String, CaseIterable, Identifiable {
         case .food: "fork.knife"
         case .barcode: "barcode.viewfinder"
         case .label: "tag"
+        case .menu: "menucard"
         }
     }
 
@@ -33,16 +36,21 @@ enum ScanMode: String, CaseIterable, Identifiable {
         case .food: "Fit your plate in the frame"
         case .barcode: "Point at a barcode"
         case .label: "Fit the nutrition label in the frame"
+        case .menu: "Fit the menu in the frame"
         }
     }
 
     var takesPhoto: Bool { self != .barcode }
 }
 
-/// Full screen camera. A barcode opens its product; a photo of a plate or a label goes to
-/// Claude for an estimate. Both end in one tap to add.
+/// Full screen camera. A barcode opens its product; a photo of a plate or a label goes for an
+/// estimate; a menu's photo is read dish by dish and kept. All end in one tap to add.
 struct ScannerView: View {
     let day: Date
+    /// The mode to open on, instead of the last one used.
+    var startMode: ScanMode? = nil
+    /// Once something is added, instead of only closing the camera: search closes with it.
+    var onAdded: (() -> Void)? = nil
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
@@ -62,6 +70,8 @@ struct ScannerView: View {
     @State private var capturing = false
     @State private var pickedPhoto: PhotosPickerItem?
     @State private var control = ScannerControl()
+    /// The screens pushed over a menu: its dishes.
+    @State private var menuPath: [FoodRoute] = []
 
     enum CameraState {
         case checking
@@ -78,13 +88,16 @@ struct ScannerView: View {
         case failed(String)
     }
 
-    /// A photo on its way to Claude.
+    /// A photo on its way to an estimate.
     struct CapturedPhoto: Identifiable {
         let id = UUID()
         let image: UIImage
-        let isLabel: Bool
+        /// What it is a photo of: a plate, a label or a menu.
+        let mode: ScanMode
         /// When a photo picked from the library was taken, so lunch logged tonight stays lunch.
         var takenAt: Date? = nil
+
+        var isLabel: Bool { mode == .label }
     }
 
     private var mode: ScanMode { ScanMode(rawValue: modeRaw) ?? .barcode }
@@ -120,6 +133,9 @@ struct ScannerView: View {
             .environment(\.colorScheme, .dark)
         }
         .task { camera = await CameraState.check() }
+        .onAppear {
+            if let startMode { modeRaw = startMode.rawValue }
+        }
         .onDisappear { if torchOn { setTorch(false) } }
         .sensoryFeedback(Feel.click, trigger: scans)
         .onChange(of: pickedPhoto) { _, item in
@@ -127,17 +143,26 @@ struct ScannerView: View {
         }
         .sheet(item: $found, onDismiss: resume) { food in
             NavigationStack {
-                FoodDetailView(food: food, day: day) { dismiss() }
+                FoodDetailView(food: food, day: day) { finish() }
             }
             .presentationDragIndicator(.visible)
         }
         .sheet(item: $quickAdd, onDismiss: resume) { draft in
             NavigationStack {
-                QuickAddView(draft: draft, day: day) { dismiss() }
+                QuickAddView(draft: draft, day: day) { finish() }
             }
         }
-        .fullScreenCover(item: $photo) { captured in
-            EstimateView(image: captured.image, isLabel: captured.isLabel, day: day, takenAt: captured.takenAt) { dismiss() }
+        .fullScreenCover(item: $photo, onDismiss: { menuPath = [] }) { captured in
+            if captured.mode == .menu {
+                NavigationStack(path: $menuPath) {
+                    MenuView(source: .photo(captured.image, takenAt: captured.takenAt), day: day, overCamera: true) { finish() }
+                        .navigationDestination(for: FoodRoute.self) { route in
+                            FoodRouteView(route: route, day: day) { finish() }
+                        }
+                }
+            } else {
+                EstimateView(image: captured.image, isLabel: captured.isLabel, day: day, takenAt: captured.takenAt) { finish() }
+            }
         }
         .alert("Type the barcode", isPresented: $typing) {
             TextField("Barcode", text: $typedCode)
@@ -269,7 +294,7 @@ struct ScannerView: View {
         }
     }
 
-    /// Scan food, Barcode, Food label: glass tiles, the chosen one white.
+    /// Scan food, Barcode, Food label, Menu: glass tiles, the chosen one white.
     private var modeTiles: some View {
         HStack(spacing: 8) {
             ForEach(ScanMode.allCases) { option in
@@ -285,9 +310,10 @@ struct ScannerView: View {
                             .font(.system(size: 21, weight: .regular))
                         Text(option.title)
                             .font(.ui(13, .medium))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.75)
-                            .padding(.horizontal, 6)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                            .padding(.horizontal, 4)
                     }
                     .foregroundStyle(selected ? Color.black : Color.white)
                     .frame(maxWidth: .infinity)
@@ -366,7 +392,7 @@ struct ScannerView: View {
             defer { capturing = false }
             if let image = try? await control.capturePhoto() {
                 scans += 1
-                photo = CapturedPhoto(image: ImageTools.fitted(image, maxPixel: 2048), isLabel: mode == .label)
+                photo = CapturedPhoto(image: ImageTools.fitted(image, maxPixel: 2048), mode: mode)
             }
         }
     }
@@ -378,7 +404,7 @@ struct ScannerView: View {
         pickedPhoto = nil
         // Last night's dinner picked this morning goes on today, at today's time.
         let takenAt = ImageTools.captureDate(of: data).flatMap { Calendar.current.isDate($0, inSameDayAs: day) ? $0 : nil }
-        photo = CapturedPhoto(image: image, isLabel: mode == .label, takenAt: takenAt)
+        photo = CapturedPhoto(image: image, mode: mode, takenAt: takenAt)
     }
 
     private func lookUp(_ raw: String, typed: Bool = false) {
@@ -417,6 +443,15 @@ struct ScannerView: View {
         phase = .scanning
     }
 
+    /// Something was added: the camera closes, and whatever opened it, if it asked.
+    private func finish() {
+        if let onAdded {
+            onAdded()
+        } else {
+            dismiss()
+        }
+    }
+
     private func openSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
     }
@@ -437,13 +472,25 @@ struct ScannerView: View {
     }
 
     #if DEBUG
-    /// `-screen photo` opens on the food mode; `-screen estimate` jumps to a demo estimate.
+    /// `-screen photo` opens on the food mode; `-screen estimate` jumps to a demo estimate;
+    /// `-screen scanmenu` opens on the menu mode, `menu` reads the demo's menu, `menu.dish` opens
+    /// its first dish.
     private func openDemoState() {
         switch UserDefaults.standard.string(forKey: "screen") {
         case "photo":
             modeRaw = ScanMode.food.rawValue
         case "estimate":
-            photo = CapturedPhoto(image: DemoData.plateImage(), isLabel: false)
+            photo = CapturedPhoto(image: DemoData.plateImage(), mode: .food)
+        case "scanmenu":
+            modeRaw = ScanMode.menu.rawValue
+        case "menu", "menu.dish":
+            modeRaw = ScanMode.menu.rawValue
+            guard let menu = MenuShelf.shared.menus.first,
+                  let image = MenuShelf.shared.photo(of: menu.id).flatMap(UIImage.init(data:)) else { return }
+            photo = CapturedPhoto(image: image, mode: .menu)
+            if UserDefaults.standard.string(forKey: "screen") == "menu.dish", let dish = menu.dishes.first {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) { menuPath = [.menuDish(menu.id, dish)] }
+            }
         default:
             break
         }
@@ -506,6 +553,7 @@ private struct Viewfinder: View {
         case .barcode: 170
         case .food: width
         case .label: width * 1.2
+        case .menu: width * 1.3
         }
     }
 }

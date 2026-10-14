@@ -6,10 +6,44 @@ import UIKit
 enum FoodRoute: Hashable {
     case food(Food, amount: Double?)
     case quickAdd
+    /// A typical portion of the words typed in search.
+    case typical(String)
+    /// One of the menus you photographed.
+    case menu(UUID)
+    /// A dish on one of them.
+    case menuDish(UUID, MenuScan.Dish)
+    /// All your menus.
+    case menus
 }
 
-/// Search and add. Empty, it shows your saved foods and what you logged recently, both one tap
-/// from today. Typing searches the bundled basics instantly and Open Food Facts as you pause.
+/// Each route's screen, for every stack that can push one: search, and a menu over the camera.
+struct FoodRouteView: View {
+    let route: FoodRoute
+    let day: Date
+    var meal: Meal? = nil
+    let onDone: () -> Void
+
+    var body: some View {
+        switch route {
+        case .food(let food, let amount):
+            FoodDetailView(food: food, amount: amount, day: day, meal: meal, onDone: onDone)
+        case .quickAdd:
+            QuickAddView(day: day, meal: meal, onDone: onDone)
+        case .typical(let words):
+            TypicalDishView(origin: .typed(words), day: day, meal: meal, onDone: onDone)
+        case .menu(let id):
+            MenuView(source: .saved(id), day: day, onDone: onDone)
+        case .menuDish(let id, let dish):
+            TypicalDishView(origin: .menu(id, dish), day: day, meal: meal, onDone: onDone)
+        case .menus:
+            MenusView()
+        }
+    }
+}
+
+/// Search and add. Empty, it shows your saved foods, your menus and what you logged recently,
+/// one tap from today. Typing offers a typical portion of what you typed first, then the dishes
+/// on your menus, the bundled basics instantly and Open Food Facts as you pause.
 struct AddFoodView: View {
     var day: Date = .now
     /// The meal to add to, when you came from a meal's menu.
@@ -30,6 +64,9 @@ struct AddFoodView: View {
     @State private var failed = false
     @State private var recents: [RecentFood] = []
     @State private var added: Set<String> = []
+    /// Estimates can run for you: false under 18 without a key.
+    @State private var canEstimate = false
+    @State private var scanningMenu = false
 
     nonisolated static var historyDescriptor: FetchDescriptor<FoodEntry> {
         var descriptor = FetchDescriptor<FoodEntry>(sortBy: [SortDescriptor(\.date, order: .reverse)])
@@ -64,17 +101,22 @@ struct AddFoodView: View {
             }
             .task(id: trimmedQuery) { await searchProducts(trimmedQuery) }
             .navigationDestination(for: FoodRoute.self) { route in
-                switch route {
-                case .food(let food, let amount):
-                    FoodDetailView(food: food, amount: amount, day: day, meal: meal) { dismiss() }
-                case .quickAdd:
-                    QuickAddView(day: day, meal: meal) { dismiss() }
-                }
+                FoodRouteView(route: route, day: day, meal: meal) { dismiss() }
             }
+        }
+        .fullScreenCover(isPresented: $scanningMenu) {
+            ScannerView(day: day, startMode: .menu) { dismiss() }
         }
         .onAppear {
             recents = RecentFood.list(from: history)
+            canEstimate = PhotoEstimator.isOpen
             #if DEBUG
+            switch UserDefaults.standard.string(forKey: "screen") {
+            case "typical": path = [.typical(UserDefaults.standard.string(forKey: "query") ?? "shawarma")]
+            case "menus": if let first = MenuShelf.shared.menus.first { path = [.menu(first.id)] }
+            case "menus.all": path = [.menus]
+            default: break
+            }
             if let demoQuery = UserDefaults.standard.string(forKey: "query") {
                 query = demoQuery
                 return
@@ -99,6 +141,25 @@ struct AddFoodView: View {
                 }
             }
             .listRowBackground(Theme.card)
+            if canEstimate {
+                Button { scanningMenu = true } label: {
+                    HStack(spacing: 12) {
+                        IconCircle(systemImage: "menucard", size: 44)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Scan a menu")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                            Text("Every dish with its calories")
+                                .font(.ui(15))
+                                .foregroundStyle(Theme.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .listRowBackground(Theme.card)
+            }
         }
 
         if !saved.isEmpty {
@@ -116,6 +177,34 @@ struct AddFoodView: View {
                 }
             } header: {
                 SectionTitle(text: "Saved")
+            }
+        }
+
+        let menus = MenuShelf.shared.menus
+        if !menus.isEmpty {
+            Section {
+                ForEach(menus.prefix(2)) { menu in
+                    NavigationLink(value: FoodRoute.menu(menu.id)) {
+                        MenuRow(menu: menu)
+                    }
+                    .listRowBackground(Theme.card)
+                }
+                if menus.count > 2 {
+                    NavigationLink(value: FoodRoute.menus) {
+                        HStack {
+                            Text("All menus")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                            Spacer()
+                            Text(verbatim: "\(menus.count)")
+                                .font(.number(17))
+                                .foregroundStyle(Theme.secondary)
+                        }
+                    }
+                    .listRowBackground(Theme.card)
+                }
+            } header: {
+                SectionTitle(text: "Your menus")
             }
         }
 
@@ -139,6 +228,31 @@ struct AddFoodView: View {
     }
 
     @ViewBuilder private var resultSections: some View {
+        if canEstimate, trimmedQuery.count >= 2, trimmedQuery.contains(where: \.isLetter) {
+            Section {
+                NavigationLink(value: FoodRoute.typical(trimmedQuery)) {
+                    TypicalRow(words: trimmedQuery, remembered: DishMemory.dish(for: trimmedQuery, language: PhotoEstimator.language))
+                }
+                .listRowBackground(Theme.card)
+            } header: {
+                SectionTitle(text: "Typical portion")
+            }
+        }
+
+        let fromMenus = MenuShelf.shared.dishes(matching: trimmedQuery)
+        if !fromMenus.isEmpty {
+            Section {
+                ForEach(fromMenus) { found in
+                    NavigationLink(value: FoodRoute.menuDish(found.menu.id, found.dish)) {
+                        FoodRow(food: found.menu.food(found.dish, .regular), subtitle: [found.menu.title, found.dish.price].filter { !$0.isEmpty }.joined(separator: " · "))
+                    }
+                    .listRowBackground(Theme.card)
+                }
+            } header: {
+                SectionTitle(text: "From your menus")
+            }
+        }
+
         let basics = BasicFoods.search(trimmedQuery)
         if !basics.isEmpty {
             Section {
@@ -242,6 +356,81 @@ struct RecentFood: Identifiable {
             if result.count == limit { break }
         }
         return result
+    }
+}
+
+/// The first answer to anything typed: a typical portion of it, made yours in two taps. Its
+/// calories show once the same words were estimated before.
+private struct TypicalRow: View {
+    let words: String
+    let remembered: TypicalDish?
+
+    var body: some View {
+        HStack(spacing: 12) {
+            if let remembered {
+                FoodThumb(emoji: remembered.emoji.isEmpty ? "🍽️" : remembered.emoji, tint: FoodTint.suggested(for: remembered.emoji), size: 44)
+            } else {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 19, weight: .medium))
+                    .foregroundStyle(Theme.infoText)
+                    .frame(width: 44, height: 44)
+                    .background(Theme.infoFill, in: RoundedRectangle(cornerRadius: FoodThumb.radius(for: 44), style: .continuous))
+                    .accessibilityHidden(true)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(remembered?.title ?? (words.prefix(1).uppercased() + words.dropFirst()))
+                    .font(.ui(17))
+                    .foregroundStyle(Theme.ink)
+                    .lineLimit(1)
+                Group {
+                    if let remembered {
+                        Text("Usual · \(remembered.grams.kcalText) g")
+                    } else {
+                        Text("Lean or rich, small or huge")
+                    }
+                }
+                .font(.ui(15))
+                .foregroundStyle(Theme.secondary)
+                .lineLimit(1)
+            }
+            Spacer(minLength: 8)
+            if let remembered {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text(remembered.kcal.kcalText)
+                        .font(.number(17))
+                        .foregroundStyle(Theme.ink)
+                    Text("kcal")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
+                }
+            }
+        }
+        .contentShape(Rectangle())
+    }
+}
+
+/// A menu you photographed: its photo, its name, how many dishes and when.
+struct MenuRow: View {
+    let menu: MenuScan
+
+    var body: some View {
+        HStack(spacing: 12) {
+            FoodThumb(imageData: MenuShelf.shared.photo(of: menu.id), emoji: "📜", tint: .sand, size: 44)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(menu.title)
+                    .font(.ui(17))
+                    .foregroundStyle(Theme.ink)
+                    .lineLimit(1)
+                HStack(spacing: 0) {
+                    Text("\(menu.dishes.count) dishes")
+                    Text(verbatim: " · " + menu.takenAt.formatted(.dateTime.day().month(.abbreviated)))
+                }
+                .font(.ui(15))
+                .foregroundStyle(Theme.secondary)
+                .lineLimit(1)
+            }
+        }
+        .contentShape(Rectangle())
     }
 }
 

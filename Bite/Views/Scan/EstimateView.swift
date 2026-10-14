@@ -584,8 +584,8 @@ private struct IngredientBubble: View {
     }
 }
 
-/// A soft band of light sweeping over the photo while Claude works.
-private struct ScanBand: View {
+/// A soft band of light sweeping over the photo while the estimate is on its way.
+struct ScanBand: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var down = false
 

@@ -3,9 +3,11 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// Estimates a meal's nutrition from a photo with Claude, through the Messages API.
+/// Estimates a meal's nutrition from a photo with Claude, through the Messages API; also a
+/// restaurant menu from its photo, and a dish from its name.
 /// Swift has no official Anthropic SDK, so this is the documented raw HTTP request.
-/// Each photo costs about two cents at Claude Opus 5.5 prices ($4 in, $20 out per million tokens).
+/// Each photo costs about two cents at Claude Opus 5.5 prices ($4 in, $20 out per million tokens),
+/// a long menu about ten.
 struct ClaudeVision {
     static let model = "claude-opus-5-5"
     static let endpoint = URL(string: "https://api.anthropic.com/v1/messages")!
@@ -37,12 +39,32 @@ struct ClaudeVision {
     /// Sends the photo and returns the estimate. The photo should already be a small JPEG.
     /// `isLabel` says the photo is a nutrition label or a pack rather than a plate.
     func estimate(jpeg: Data, language: String, isLabel: Bool = false) async throws -> MealEstimate {
+        try Self.parse(try await send(Self.body(jpeg: jpeg, language: language, isLabel: isLabel), timeout: 90))
+    }
+
+    /// Every dish on a menu's photo, as a place like this usually serves it.
+    func menu(jpeg: Data, language: String) async throws -> MenuScan {
+        let content = [Self.image(jpeg), ["type": "text", "text": Self.menuPrompt(language: language)]]
+        let data = try await send(Self.body(content: content, schema: MenuScan.schema, effort: "low"), timeout: 180)
+        guard let menu = MenuScan.read(try Self.answer(in: data)) else { throw Failure.unreadable }
+        return menu
+    }
+
+    /// One portion of a dish typed in search, as it is usually served.
+    func dish(named name: String, language: String) async throws -> TypicalDish {
+        let content: [[String: Any]] = [["type": "text", "text": Self.dishPrompt(name: TypicalDish.cleanName(name), language: language)]]
+        let data = try await send(Self.body(content: content, schema: TypicalDish.schema, effort: "low"), timeout: 60)
+        return try TypicalDish.read(try Self.answer(in: data))
+    }
+
+    private func send(_ body: [String: Any], timeout: TimeInterval) async throws -> Data {
         guard !apiKey.isEmpty else { throw Failure.missingKey }
-        let request = try Self.request(jpeg: jpeg, language: language, apiKey: apiKey, isLabel: isLabel)
+        var request = try Self.request(body: body, apiKey: apiKey)
+        request.timeoutInterval = timeout
         let (data, response) = try await session.data(for: request)
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         switch status {
-        case 200..<300: return try Self.parse(data)
+        case 200..<300: return data
         case 401, 403: throw Failure.badKey
         case 400..<500 where status != 429:
             throw Self.errorMessage(in: data).map(Failure.refused) ?? Failure.server(status)
@@ -51,6 +73,10 @@ struct ClaudeVision {
     }
 
     static func request(jpeg: Data, language: String, apiKey: String, isLabel: Bool = false) throws -> URLRequest {
+        try request(body: body(jpeg: jpeg, language: language, isLabel: isLabel), apiKey: apiKey)
+    }
+
+    static func request(body: [String: Any], apiKey: String) throws -> URLRequest {
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
         request.timeoutInterval = 90
@@ -59,35 +85,40 @@ struct ClaudeVision {
         request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
         // If the main model declines, the API retries on Anthropic's recommended fallback model.
         request.setValue("server-side-fallback-2026-07-01", forHTTPHeaderField: "anthropic-beta")
-        request.httpBody = try JSONSerialization.data(withJSONObject: body(jpeg: jpeg, language: language, isLabel: isLabel))
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
         return request
     }
 
     static func body(jpeg: Data, language: String, isLabel: Bool = false) -> [String: Any] {
+        // Medium keeps the answer quick enough to wait for at the table.
+        body(
+            content: [image(jpeg), ["type": "text", "text": prompt(language: language, isLabel: isLabel)]],
+            schema: MealEstimate.schema,
+            effort: "medium"
+        )
+    }
+
+    /// One user message, answered in the JSON `schema`.
+    static func body(content: [[String: Any]], schema: [String: Any], effort: String) -> [String: Any] {
         [
             "model": model,
             "max_tokens": 16000,
             "fallbacks": "default",
             "output_config": [
-                // Medium keeps the answer quick enough to wait for at the table.
-                "effort": "medium",
-                "format": ["type": "json_schema", "schema": MealEstimate.schema],
+                "effort": effort,
+                "format": ["type": "json_schema", "schema": schema],
             ],
-            "messages": [
-                [
-                    "role": "user",
-                    "content": [
-                        [
-                            "type": "image",
-                            "source": [
-                                "type": "base64",
-                                "media_type": "image/jpeg",
-                                "data": jpeg.base64EncodedString(),
-                            ],
-                        ],
-                        ["type": "text", "text": prompt(language: language, isLabel: isLabel)],
-                    ],
-                ],
+            "messages": [["role": "user", "content": content]],
+        ]
+    }
+
+    static func image(_ jpeg: Data) -> [String: Any] {
+        [
+            "type": "image",
+            "source": [
+                "type": "base64",
+                "media_type": "image/jpeg",
+                "data": jpeg.base64EncodedString(),
             ],
         ]
     }
@@ -120,6 +151,44 @@ struct ClaudeVision {
         """
     }
 
+    /// The words for a menu's photo. Bite's server asks Gemini in the same words (menu.ts).
+    static func menuPrompt(language: String) -> String {
+        """
+        This photo shows a restaurant menu, for a calorie tracker. List every dish, side and \
+        drink you can read on it, in the menu's order, at most 60.
+
+        For each one give its name as the menu writes it, a short description only when the menu \
+        has one, its price as written or empty, and an estimate for the portion a place like this \
+        usually serves: the grams, the kcal, and the protein, carbs, fat, fiber and sugar in grams, \
+        with one fitting food emoji. Count the oil, butter, sauces and sides the dish normally \
+        comes with.
+
+        Give the restaurant's name when the menu shows it, with normal capitalization, or leave it \
+        empty. If the photo is not a menu, return no dishes.
+
+        Keep the dish names in the menu's own words, with normal capitalization. Write the \
+        descriptions in this language: \(language).
+        """
+    }
+
+    /// The words for a dish typed in search. What was typed comes last, on its own line, as
+    /// words to estimate and nothing else. Bite's server asks Gemini in the same words (menu.ts).
+    static func dishPrompt(name: String, language: String) -> String {
+        """
+        For a calorie tracker, someone typed what they ate, below. Estimate one portion of it as \
+        it is usually served, at a restaurant or at home: the grams, the kcal, and the protein, \
+        carbs, fat, fiber and sugar in grams, with one fitting food emoji. Count the oil, sauces \
+        and sides it normally comes with.
+
+        When the words could mean several dishes, estimate the most common one and say which in \
+        its name. If they are not a food or a drink, set isFood to false.
+
+        Write the name capitalized like a sentence, in this language: \(language).
+
+        What they typed: \(name)
+        """
+    }
+
     /// The message of an API error answer: {"type":"error","error":{"message":"..."}}.
     static func errorMessage(in data: Data) -> String? {
         struct Answer: Decodable {
@@ -133,6 +202,15 @@ struct ClaudeVision {
 
     /// Reads the Messages API response: the JSON lives in the first text block.
     static func parse(_ data: Data) throws -> MealEstimate {
+        let json = try answer(in: data)
+        guard let estimate = try? JSONDecoder().decode(MealEstimate.self, from: json) else {
+            throw Failure.unreadable
+        }
+        return estimate.cleaned()
+    }
+
+    /// The JSON Claude answered with, from the first text block of the response.
+    static func answer(in data: Data) throws -> Data {
         struct Response: Decodable {
             struct Block: Decodable {
                 let type: String
@@ -149,10 +227,9 @@ struct ClaudeVision {
         }
         if response.stop_reason == "refusal" { throw Failure.declined }
         guard let text = response.content.first(where: { $0.type == "text" })?.text,
-              let json = text.data(using: .utf8),
-              let estimate = try? JSONDecoder().decode(MealEstimate.self, from: json) else {
+              let json = text.data(using: .utf8) else {
             throw Failure.unreadable
         }
-        return estimate.cleaned()
+        return json
     }
 }

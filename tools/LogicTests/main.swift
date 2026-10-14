@@ -979,5 +979,97 @@ do {
     check(outs.contains { $0.line == .takingNow }, "25 seconds after the pose began: taking it now")
 }
 
+// MARK: Typical dishes and menus
+
+do {
+    let shawarma = TypicalDish(title: "Chicken shawarma", emoji: "🌯", grams: 350, kcal: 640, protein: 38, carbs: 55, fat: 28, fiber: 4, sugar: 5)
+    check(shawarma.isUsable, "a real dish is usable")
+    check(shawarma.nutrients(.regular) == Nutrients(kcal: 640, protein: 38, carbs: 55, fat: 28, sugar: 5, fiber: 4), "regular is as served")
+    let lean = shawarma.nutrients(.lean)
+    check(near(lean.fat, 16.8) && near(lean.kcal, 640 - 11.2 * 9), "lean: 60% of the fat, its calories gone: \(lean)")
+    let rich = shawarma.nutrients(.rich)
+    check(near(rich.fat, 42) && near(rich.kcal, 640 + 14 * 9) && rich.protein == 38, "rich: half the fat again, protein as it was")
+    let huge = shawarma.nutrients(.rich, .huge)
+    check(near(huge.kcal, (640 + 126) * 1.75), "huge and rich: \(huge.kcal)")
+    check(shawarma.grams(.small) == 245 && shawarma.grams(.huge) == 613, "sizes in grams")
+    let food = shawarma.food(.lean, id: TypicalDish.typedID(shawarma.title))
+    check(food.unit == .gram && food.per == 350 && near(food.nutrients.fat, 16.8), "a food in grams, at the richness chosen")
+    check(food.portions.map(\.amount) == [350, 245, 473, 613] && food.defaultAmount == 350, "four named sizes, the usual first: \(food.portions.map(\.amount))")
+    check(food.id == "typical:chicken-shawarma:lean" && food.source == .typical && food.brand == nil, "one id a dish and richness: \(food.id)")
+    check(TypicalDish.typedID("Chicken  Shawarma!") == "typical:chicken-shawarma", "the same dish whatever its spacing and case")
+    check(near(food.nutrients(for: shawarma.grams(.big)).kcal, shawarma.nutrients(.lean, .big).kcal, 2), "what is logged is what was shown")
+    check(TypicalDish.cleanName("  a \"big\"\nkebab  ") == "a  big  kebab", "typed words on one line, no quotes: \(TypicalDish.cleanName("  a \"big\"\nkebab  "))")
+    check(TypicalDish.cleanName(String(repeating: "x", count: 200)).count == 80, "typed words, 80 at most")
+
+    // A dish typed in search, as the server and Claude answer it.
+    let typed = #"{"title":"Chicken shawarma","isFood":true,"emoji":"🌯","grams":350,"kcal":640,"protein":38,"carbs":55,"fat":28,"fiber":4,"sugar":5}"#
+    check((try? TypicalDish.read(Data(typed.utf8))) == shawarma, "a typed dish reads as the dish")
+    do {
+        _ = try TypicalDish.read(Data(#"{"title":"Bicycle","isFood":false,"emoji":"","grams":0,"kcal":0,"protein":0,"carbs":0,"fat":0,"fiber":0,"sugar":0}"#.utf8))
+        check(false, "a bicycle is not a dish")
+    } catch {
+        check(error as? TypicalDish.Failure == .notFood, "not a food says so: \(error)")
+    }
+    do {
+        _ = try TypicalDish.read(Data(#"{"title":"Soup","isFood":true,"emoji":"🍲","grams":0,"kcal":120,"protein":4,"carbs":10,"fat":6,"fiber":1,"sugar":2}"#.utf8))
+        check(false, "a dish of no grams is unreadable")
+    } catch {
+        check(error as? TypicalDish.Failure == .unreadable, "no grams reads as unreadable: \(error)")
+    }
+    check((try? TypicalDish.read(Data("{}".utf8))) == nil, "an empty answer is no dish")
+    check(!TypicalDish(title: "", emoji: "", grams: 100, kcal: 100, protein: 1, carbs: 1, fat: 1).isUsable, "no name, not offered")
+    check(!TypicalDish(title: "Soup", emoji: "", grams: 0, kcal: 100, protein: 1, carbs: 1, fat: 1).isUsable, "no grams, not offered")
+    check(TypicalDish(title: "Still water", emoji: "💧", grams: 500, kcal: 0, protein: 0, carbs: 0, fat: 0).isUsable, "water is real at zero calories")
+    check(TypicalDish(title: "X", emoji: "", grams: 10, kcal: 10, protein: 1, carbs: 2, fat: 1, fiber: 50).nutrients(.regular).fiber == nil, "fiber past the carbs is unknown")
+
+    let json = """
+    {"restaurant":"El Beirout","dishes":[
+      {"name":"Shawarma poulet","description":"pain libanais","price":"14.50","emoji":"🌯","grams":350,"kcal":640,"protein":38,"carbs":55,"fat":28,"fiber":4,"sugar":5},
+      {"name":"Shawarma poulet","description":"","price":"14.50","emoji":"🌯","grams":350,"kcal":640,"protein":38,"carbs":55,"fat":28,"fiber":4,"sugar":5},
+      {"name":"Falafel","description":"","price":"9","emoji":"🧆","grams":220,"kcal":480,"protein":16,"carbs":45,"fat":24,"fiber":9,"sugar":3},
+      {"name":"Broken","description":"","price":"","emoji":"","grams":-5,"kcal":100,"protein":1,"carbs":1,"fat":1,"fiber":0,"sugar":0}
+    ]}
+    """
+    let menu = MenuScan.read(Data(json.utf8))
+    check(menu?.restaurant == "El Beirout", "the restaurant read off the menu")
+    check(menu?.dishes.map(\.name) == ["Shawarma poulet", "Falafel"], "repeats and broken dishes left out: \(menu?.dishes.map(\.name) ?? [])")
+    check(menu?.dishes(matching: "shawar").first?.name == "Shawarma poulet", "a menu's dish found by a word's start")
+    check(menu?.dishes(matching: "pizza").isEmpty == true, "nothing else")
+    check(menu?.dishes(matching: "libanais").first?.name == "Shawarma poulet", "and by the words beside it")
+    check(MenuScan.read(Data("not json".utf8)) == nil, "an unreadable answer reads as nothing")
+    check(menu?.dishes.first?.detail == "pain libanais · 14.50" && menu?.dishes.last?.detail == "9", "what the menu says beside a dish")
+
+    if var menu {
+        let dish = menu.dishes[0]
+        let logged = menu.food(dish, .rich)
+        check(logged.id.hasPrefix("menu:\(menu.id.uuidString):shawarma-poulet:rich") && logged.brand == "El Beirout", "a menu's dish logs under its house: \(logged.id)")
+        check(menu.title == "El Beirout", "a menu is called by its house")
+        menu.restaurant = ""
+        check(menu.title == "Menu", "or just Menu")
+        menu.place = MealPlace(name: "Chez Ali")
+        check(menu.title == "Chez Ali" && menu.food(dish, .regular).brand == "Chez Ali", "or the place you set")
+        let kept = try? JSONDecoder().decode(MenuScan.self, from: JSONEncoder().encode(menu))
+        check(kept == menu, "a menu comes back from the shelf as it went")
+    } else {
+        check(false, "the menu fixture reads")
+    }
+
+    // Claude gets the same words and the same shapes as Gemini on Bite's server (menu.ts).
+    let menuServer = (try? String(contentsOf: root.appendingPathComponent("server/supabase/functions/estimate/menu.ts"), encoding: .utf8)) ?? ""
+    for prompt in [ClaudeVision.menuPrompt(language: "§"), ClaudeVision.dishPrompt(name: "§", language: "§")] {
+        let lines = prompt.split(separator: "\n").map(String.init).filter { !$0.contains("§") }
+        let missing = lines.filter { !menuServer.contains($0) }
+        check(lines.count >= 2 && missing.isEmpty, "the server's menu and dish words match the app's: \(missing)")
+    }
+    check(ClaudeVision.dishPrompt(name: "kebab", language: "fr").hasSuffix("What they typed: kebab"), "what was typed comes last")
+    let keys = (TypicalDish.schema["required"] as? [String] ?? []) + ["restaurant", "dishes", "name", "description", "price"]
+    check(keys.count == 15 && keys.allSatisfy { menuServer.contains("\($0)") }, "the schemas ask for the same fields")
+    let menuItems = ((MenuScan.schema["properties"] as? [String: Any])?["dishes"] as? [String: Any])?["items"] as? [String: Any]
+    check((menuItems?["required"] as? [String])?.count == 11 && menuItems?["additionalProperties"] as? Bool == false, "a menu's dishes are closed objects with every field")
+    let dishBody = ClaudeVision.body(content: [["type": "text", "text": "x"]], schema: TypicalDish.schema, effort: "low")
+    let dishConfig = dishBody["output_config"] as? [String: Any]
+    check(dishConfig?["effort"] as? String == "low" && (dishBody["messages"] as? [[String: Any]])?.first?["content"] as? [[String: String]] != nil, "a typed dish asks quickly, with words only")
+}
+
 print("\(passes) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)

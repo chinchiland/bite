@@ -8,6 +8,8 @@ enum FoodSource: String, Hashable {
     case ai
     /// A restaurant dish, from the estimates people in the community made of it.
     case community
+    /// A dish as it is usually served, estimated from its name or from a menu.
+    case typical
 }
 
 enum FoodUnit: String, Hashable {
@@ -132,6 +134,7 @@ struct Food: Identifiable, Hashable {
         case .manual: "you"
         case .ai: "Claude"
         case .community: tr("the community")
+        case .typical: tr("a typical portion")
         }
     }
 
@@ -144,7 +147,7 @@ struct Food: Identifiable, Hashable {
         case .usda:
             guard let fdcID = id.split(separator: ":").last else { return nil }
             return URL(string: "https://fdc.nal.usda.gov/food-details/\(fdcID)/nutrients")
-        case .manual, .ai, .community:
+        case .manual, .ai, .community, .typical:
             return nil
         }
     }
