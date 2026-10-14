@@ -874,7 +874,15 @@ do {
     check(near(shoulders.x, 0.55) && near(shoulders.y, 0.25), "the shoulders meet: \(shoulders)")
     let hips = align.place(x: 0.45, y: 0.50)
     check(near(hips.y, 0.50), "the hips meet too: \(hips)")
+    check(!align.movesNewer, "the smaller body is the older one: it moves")
     check(MirrorAlign.make(older: older, newer: nil) == .none, "no body found: shown as it is")
+    let shrunk = MirrorAlign.make(older: newer, newer: older)
+    check(shrunk.movesNewer && shrunk.scale >= 1.25, "the newer body smaller: the newer photo grows instead: \(shrunk)")
+    for moved in [align, shrunk, MirrorAlign.make(older: MirrorPlacement(centerX: 0.45, shoulderY: 0.25, spanTorso: 0.24), newer: MirrorPlacement(centerX: 0.55, shoulderY: 0.28, spanTorso: 0.25))] {
+        let topLeft = moved.place(x: 0, y: 0)
+        let bottomRight = moved.place(x: 1, y: 1)
+        check(topLeft.x <= 0.0001 && topLeft.y <= 0.0001 && bottomRight.x >= 0.9999 && bottomRight.y >= 0.9999, "the moved photo still fills the frame: \(moved)")
+    }
     check(MirrorAlign.make(older: MirrorPlacement(centerX: 0.5, shoulderY: 0.3, spanTorso: 0.1), newer: newer).scale == 1.4, "a wild zoom is capped")
     let wide = MirrorPlacement(centerX: 0.5, shoulderY: 0.3, spanTorso: 0.2).filling(photoAspect: 1, frameAspect: 0.75)
     check(near(wide.centerX, 0.5) && near(wide.spanTorso, 0.2), "a square photo in a 3:4 frame keeps its middle")

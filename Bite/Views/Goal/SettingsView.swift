@@ -41,6 +41,8 @@ struct SettingsView: View {
                         MirrorVault.shared.setProtected(on)
                     }.value
                     if changed { mirrorFaceID = on }
+                    // Changed, then closed again: the next visit asks through the new lock.
+                    MirrorVault.shared.lockNow()
                 }
             }
         )

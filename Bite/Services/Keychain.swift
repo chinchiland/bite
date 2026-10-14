@@ -61,6 +61,23 @@ enum Keychain {
         return result as? Data
     }
 
+    /// Whether an item is there, asked so that nothing prompts: an item behind Face ID answers
+    /// that it would need to ask, which means it exists. Only "not found" is missing.
+    static func exists(_ account: String) -> Bool {
+        let context = LAContext()
+        context.interactionNotAllowed = true
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnAttributes as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecUseAuthenticationContext as String: context,
+        ]
+        var result: AnyObject?
+        return SecItemCopyMatching(query as CFDictionary, &result) != errSecItemNotFound
+    }
+
     /// Saves bytes on this phone only, never in a backup, or removes them when nil. `protected`
     /// puts them behind Face ID or the passcode (the protection then rides in the access
     /// control: an item can't carry both it and a plain accessibility). True when it worked.

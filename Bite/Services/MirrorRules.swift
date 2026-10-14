@@ -103,17 +103,20 @@ struct MirrorPlacement: Equatable {
     }
 }
 
-/// How to draw the older photo of a pair over the newer one so the two bodies line up: scaled
-/// around its shoulders so the torsos are the same height, then moved so the shoulders meet.
-/// Capture is advice; this is where a pair is really lined up.
+/// How to draw one photo of a pair so the two bodies line up: scaled around its shoulders so
+/// the torsos are the same height, then moved so the shoulders meet. The photo that moves is
+/// always the one whose body is smaller, so it grows and still fills the frame; never an edge of
+/// it inside the frame. Capture is advice; this is where a pair is really lined up.
 struct MirrorAlign: Equatable {
     var scale: Double
-    /// The point the older photo is scaled around: its shoulders, in the frame.
+    /// The point the moving photo is scaled around: its shoulders, in the frame.
     var anchorX: Double
     var anchorY: Double
     /// Then moved by, as fractions of the frame.
     var dx: Double
     var dy: Double
+    /// The newer photo moves (its body was the smaller); otherwise the older one does.
+    var movesNewer = false
 
     static let none = MirrorAlign(scale: 1, anchorX: 0.5, anchorY: 0.5, dx: 0, dy: 0)
 
@@ -121,18 +124,34 @@ struct MirrorAlign: Equatable {
     /// of them is shown as it is.
     static func make(older: MirrorPlacement?, newer: MirrorPlacement?) -> MirrorAlign {
         guard let older, let newer, older.spanTorso > 0.05, newer.spanTorso > 0.05 else { return .none }
-        // A body measured badly could ask for a wild zoom; anything past these is a bad read.
-        let scale = min(max(newer.spanTorso / older.spanTorso, 0.7), 1.4)
-        return MirrorAlign(
-            scale: scale,
-            anchorX: older.centerX,
-            anchorY: older.shoulderY,
-            dx: newer.centerX - older.centerX,
-            dy: newer.shoulderY - older.shoulderY
+        let movesNewer = newer.spanTorso < older.spanTorso
+        let moving = movesNewer ? newer : older
+        let still = movesNewer ? older : newer
+        // A body measured badly could ask for a wild zoom; past 1.4 it is a bad read.
+        let align = MirrorAlign(
+            scale: min(still.spanTorso / moving.spanTorso, 1.4),
+            anchorX: moving.centerX,
+            anchorY: moving.shoulderY,
+            dx: still.centerX - moving.centerX,
+            dy: still.shoulderY - moving.shoulderY,
+            movesNewer: movesNewer
         )
+        return align.filling()
     }
 
-    /// Where a point of the older photo lands, for the logic tests.
+    /// Grown just enough that the moved photo still covers the whole frame once it is moved.
+    func filling() -> MirrorAlign {
+        func need(_ anchor: Double, _ shift: Double) -> Double {
+            if shift > 0 { return 1 + shift / max(anchor, 0.05) }
+            if shift < 0 { return 1 - shift / max(1 - anchor, 0.05) }
+            return 1
+        }
+        var copy = self
+        copy.scale = min(max(scale, need(anchorX, dx), need(anchorY, dy)), 1.6)
+        return copy
+    }
+
+    /// Where a point of the moving photo lands.
     func place(x: Double, y: Double) -> (x: Double, y: Double) {
         (anchorX + scale * (x - anchorX) + dx, anchorY + scale * (y - anchorY) + dy)
     }

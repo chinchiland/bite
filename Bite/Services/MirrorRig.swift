@@ -355,16 +355,31 @@ extension MirrorCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 }
 
-/// Waits for one photo.
+/// Waits for one photo, and answers exactly once: with the photo, or with nothing when the
+/// capture ended without one, so the shutter is never left waiting.
 private final class MirrorShutter: NSObject, AVCapturePhotoCaptureDelegate, @unchecked Sendable {
     private let done: @Sendable (Data?) -> Void
+    private let lock = NSLock()
+    private var answered = false
 
     init(done: @escaping @Sendable (Data?) -> Void) {
         self.done = done
     }
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        done(error == nil ? photo.fileDataRepresentation() : nil)
+        answer(error == nil ? photo.fileDataRepresentation() : nil)
+    }
+
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+        answer(nil)
+    }
+
+    private func answer(_ data: Data?) {
+        lock.lock()
+        let first = !answered
+        answered = true
+        lock.unlock()
+        if first { done(data) }
     }
 }
 

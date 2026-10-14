@@ -464,8 +464,7 @@ struct MirrorCamera: View {
         Task {
             let light = await rig.light()
             guard let data = await rig.takePhoto() else {
-                taking = false
-                Feel.play(.failed)
+                failedToKeep()
                 return
             }
             let weight = await latestWeight()
@@ -473,8 +472,7 @@ struct MirrorCamera: View {
                 MirrorDevelop.keep(data, roll: roll)
             }.value
             guard let developed else {
-                taking = false
-                Feel.play(.failed)
+                failedToKeep()
                 return
             }
             let shot = MirrorShot(proppedUp: propped)
@@ -490,10 +488,22 @@ struct MirrorCamera: View {
             shot.whiteBlue = light?.blue
             shot.lockFailed = failed
             shot.lightDifference = direction
-            await keep(developed, as: shot, weight: weight)
+            guard await keep(developed, as: shot, weight: weight) else {
+                failedToKeep()
+                return
+            }
             if propped, speaks { voice.say(String(localized: "Kept")) } else { Feel.play(.click) }
             taking = false
         }
+    }
+
+    /// The photo didn't come, or couldn't be kept: nothing says Kept, and the guide starts over
+    /// so the next photo can still take itself.
+    private func failedToKeep() {
+        taking = false
+        Feel.play(.failed)
+        guide = MirrorGuide(mode: mode, target: shots.anchor(for: mode)?.target)
+        output = MirrorGuide.Output(line: mode == .propped ? .setUp : .fitIn, level: false, marks: MirrorMarks(), countdown: nil, fire: false)
     }
 
     /// A photo picked from the library: kept as it is, on the day it was taken.
@@ -512,12 +522,13 @@ struct MirrorCamera: View {
         }
         let shot = MirrorShot(takenAt: date, proppedUp: mode == .propped)
         shot.imported = true
-        await keep(developed, as: shot, weight: nil)
-        Feel.play(.click)
+        let kept = await keep(developed, as: shot, weight: nil)
+        if kept { Feel.play(.click) }
         taking = false
     }
 
-    private func keep(_ developed: MirrorDevelop.Kept, as shot: MirrorShot, weight: Double?) async {
+    /// Writes the photo's files, then its row. False when the files couldn't be written.
+    private func keep(_ developed: MirrorDevelop.Kept, as shot: MirrorShot, weight: Double?) async -> Bool {
         let id = shot.photoID
         do {
             try await Task.detached(priority: .userInitiated) {
@@ -525,7 +536,7 @@ struct MirrorCamera: View {
             }.value
         } catch {
             Feel.play(.failed)
-            return
+            return false
         }
         shot.widthPx = developed.width
         shot.heightPx = developed.height
@@ -540,6 +551,7 @@ struct MirrorCamera: View {
         history.took()
         historyData = (try? JSONEncoder().encode(history)) ?? Data()
         MirrorLog.shared.refresh()
+        return true
     }
 
     /// Your latest weighing from Apple Health, for the line under the photo.
@@ -593,8 +605,9 @@ private struct MirrorPreview: UIViewRepresentable {
 }
 
 /// Where the first photo's shoulders, hips and ankles were, as short marks at both edges of the
-/// screen, and its middle as a mark at the top: readable at arm's length and from two meters,
-/// and nothing an arm or a phone in the picture can break. Each goes solid when you match it.
+/// screen: readable at arm's length and from two meters, and nothing an arm or a phone in the
+/// picture can break. Each grows and goes solid when you match it. Left and right need no mark:
+/// the comparison lines the two photos up sideways on its own.
 struct MirrorMarksView: View {
     let target: MirrorTarget
     let marks: MirrorMarks
@@ -609,8 +622,6 @@ struct MirrorMarksView: View {
             if let ankle = target.ankleY {
                 row(ankle, solid: marks.ankles)
             }
-            MirrorTick(length: 48, vertical: true, solid: marks.center)
-                .position(x: point(target.centerX, 0).x, y: 110)
         }
         .frame(width: size.width, height: size.height)
         .animation(Motion.respond, value: marks)
@@ -621,10 +632,12 @@ struct MirrorMarksView: View {
     private func row(_ y: Double, solid: Bool) -> some View {
         let screenY = point(0.5, y).y
         return ZStack {
-            MirrorTick(length: 36, vertical: false, solid: solid)
-                .position(x: 18, y: screenY)
-            MirrorTick(length: 36, vertical: false, solid: solid)
-                .position(x: size.width - 18, y: screenY)
+            MirrorTick(solid: solid)
+                .frame(width: 60, alignment: .leading)
+                .position(x: 30, y: screenY)
+            MirrorTick(solid: solid)
+                .frame(width: 60, alignment: .trailing)
+                .position(x: size.width - 30, y: screenY)
         }
     }
 
@@ -642,19 +655,20 @@ struct MirrorMarksView: View {
 }
 
 /// One mark: a fine white line over a soft dark one, so it reads on a white bathroom wall.
+/// Matched, it grows from the edge and goes solid, a change of shape and not only of light.
 private struct MirrorTick: View {
-    let length: CGFloat
-    let vertical: Bool
     let solid: Bool
 
     var body: some View {
+        let length: CGFloat = solid ? 52 : 30
+        let weight: CGFloat = solid ? 3 : 2
         ZStack {
             Capsule()
                 .fill(Color.black.opacity(0.25))
-                .frame(width: vertical ? 4 : length + 2, height: vertical ? length + 2 : 4)
+                .frame(width: length + 2, height: weight + 2)
             Capsule()
-                .fill(Color.white.opacity(solid ? 1 : 0.45))
-                .frame(width: vertical ? 2 : length, height: vertical ? length : 2)
+                .fill(Color.white.opacity(solid ? 1 : 0.6))
+                .frame(width: length, height: weight)
         }
     }
 }

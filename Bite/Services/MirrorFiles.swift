@@ -60,12 +60,13 @@ final class MirrorVault: @unchecked Sendable {
 
     // MARK: Keys
 
-    /// A key pair exists: photos can be kept.
+    /// Both keys exist: photos can be kept and opened. Removing the phone's passcode makes iOS
+    /// delete the private key behind it; asked without a prompt, so it never shows Face ID.
     var hasKeys: Bool {
         #if DEBUG
         if fixturesOn { return true }
         #endif
-        return Keychain.data(for: Self.publicAccount) != nil
+        return Keychain.data(for: Self.publicAccount) != nil && Keychain.exists(Self.privateAccount)
     }
 
     var isUnlocked: Bool {
@@ -211,7 +212,7 @@ final class MirrorVault: @unchecked Sendable {
         let data = try open(id, thumbnail: false)
         let folder = Self.exportFolder
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        let day = takenAt.formatted(.iso8601.year().month().day())
+        let day = takenAt.formatted(Date.ISO8601FormatStyle(timeZone: .current).year().month().day())
         let url = folder.appending(path: "Mirror \(day) \(id.uuidString.prefix(4)).jpg")
         try data.write(to: url, options: [.atomic, .completeFileProtection])
         return url

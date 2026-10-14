@@ -9,23 +9,37 @@ enum MirrorFigure {
     /// Where the shoulders, hips and ankles sit on the grid, for lining the figure up.
     static let shoulderY: CGFloat = 52
     static let hipY: CGFloat = 132
-    static let ankleY: CGFloat = 244
+    static let ankleY: CGFloat = 240
 
     private static let outline: Path = {
         let parts = [
-            Path(ellipseIn: CGRect(x: 37, y: 4, width: 26, height: 31)),
-            Path(roundedRect: CGRect(x: 44, y: 28, width: 12, height: 22), cornerRadius: 4),
-            Path(roundedRect: CGRect(x: 26, y: 44, width: 48, height: 62), cornerRadius: 16),
-            Path(roundedRect: CGRect(x: 31, y: 94, width: 38, height: 48), cornerRadius: 13),
-            limb(from: CGPoint(x: 29, y: 54), to: CGPoint(x: 19, y: 140), width: 11),
-            limb(from: CGPoint(x: 71, y: 54), to: CGPoint(x: 81, y: 140), width: 11),
-            limb(from: CGPoint(x: 41, y: 128), to: CGPoint(x: 37, y: 244), width: 16),
-            limb(from: CGPoint(x: 59, y: 128), to: CGPoint(x: 63, y: 244), width: 16),
-            Path(ellipseIn: CGRect(x: 26, y: 240, width: 18, height: 10)),
-            Path(ellipseIn: CGRect(x: 56, y: 240, width: 18, height: 10)),
+            Path(ellipseIn: CGRect(x: 37.5, y: 4, width: 25, height: 30)),
+            Path(roundedRect: CGRect(x: 45, y: 28, width: 10, height: 20), cornerRadius: 3),
+            torso,
+            limb(from: CGPoint(x: 30, y: 56), to: CGPoint(x: 20, y: 138), width: 10),
+            limb(from: CGPoint(x: 70, y: 56), to: CGPoint(x: 80, y: 138), width: 10),
+            limb(from: CGPoint(x: 41, y: 126), to: CGPoint(x: 39, y: 243), width: 15),
+            limb(from: CGPoint(x: 59, y: 126), to: CGPoint(x: 61, y: 243), width: 15),
+            Path(ellipseIn: CGRect(x: 29, y: 238, width: 16, height: 9)),
+            Path(ellipseIn: CGRect(x: 55, y: 238, width: 16, height: 9)),
         ]
         return parts.dropFirst().reduce(parts[0]) { $0.union($1) }
     }()
+
+    /// Rounded shoulders down to the waist, a little out to the hips: one smooth piece, so the
+    /// outline never steps where parts meet.
+    private static let torso = Path { path in
+        path.move(to: CGPoint(x: 45, y: 44))
+        path.addQuadCurve(to: CGPoint(x: 28, y: 52), control: CGPoint(x: 32, y: 43))
+        path.addQuadCurve(to: CGPoint(x: 33, y: 104), control: CGPoint(x: 27, y: 80))
+        path.addQuadCurve(to: CGPoint(x: 31, y: 132), control: CGPoint(x: 34, y: 118))
+        path.addQuadCurve(to: CGPoint(x: 50, y: 138), control: CGPoint(x: 33, y: 138))
+        path.addQuadCurve(to: CGPoint(x: 69, y: 132), control: CGPoint(x: 67, y: 138))
+        path.addQuadCurve(to: CGPoint(x: 67, y: 104), control: CGPoint(x: 66, y: 118))
+        path.addQuadCurve(to: CGPoint(x: 72, y: 52), control: CGPoint(x: 73, y: 80))
+        path.addQuadCurve(to: CGPoint(x: 55, y: 44), control: CGPoint(x: 68, y: 43))
+        path.closeSubpath()
+    }
 
     /// The figure fitted into `rect`, centered.
     static func path(in rect: CGRect) -> Path {

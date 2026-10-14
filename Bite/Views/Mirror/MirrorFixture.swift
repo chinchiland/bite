@@ -70,6 +70,11 @@ enum MirrorFixture {
             return .mirror(true)
         case "mirror.ask":
             seedShots(context, count: 2, newestDaysAgo: 29)
+            // The demo's week check-in, answered, so the one ask on Today is the mirror's.
+            var checkIn = CheckInHistory()
+            checkIn.start(now: .now)
+            checkIn.kept(gap: 0, now: .now)
+            defaults.set(try? JSONEncoder().encode(checkIn), forKey: "checkin.history")
             defaults.set(true, forKey: "mirror.consented")
             MirrorLog.shared.refresh()
             return nil

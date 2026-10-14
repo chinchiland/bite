@@ -2,7 +2,7 @@ import SwiftUI
 
 /// The one sheet before the camera ever opens, the first time: what your mirror is, where the
 /// photos stay, Face ID on, Start. It is the consent, said in three lines instead of four
-/// paragraphs; swiping it away creates nothing.
+/// paragraphs; swiping it away makes no key and keeps no photo.
 struct MirrorPromise: View {
     /// Start: true when Face ID or the passcode should guard the photos.
     let onStart: (Bool) -> Void
@@ -13,18 +13,18 @@ struct MirrorPromise: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ZStack(alignment: .bottomLeading) {
-                    MirrorFigureShape()
-                        .stroke(Theme.tertiary.opacity(0.35), lineWidth: 1.5)
-                        .frame(width: 110, height: 220)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .accessibilityHidden(true)
-                    Text("Your mirror")
-                        .font(.ui(27, .medium))
-                        .tracking(-0.4)
-                        .foregroundStyle(Theme.ink)
-                        .accessibilityAddTraits(.isHeader)
-                }
+                // The kind of photo this is, drawn, never a photograph.
+                MirrorFigureShape()
+                    .stroke(Theme.tertiary.opacity(0.5), lineWidth: 1.5)
+                    .frame(width: 70, height: 170)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 22)
+                    .accessibilityHidden(true)
+                Text("Your mirror")
+                    .font(.ui(27, .medium))
+                    .tracking(-0.4)
+                    .foregroundStyle(Theme.ink)
+                    .accessibilityAddTraits(.isHeader)
                 Text("A photo of yourself every four weeks, to see what the numbers can't show.")
                     .font(.ui(15))
                     .foregroundStyle(Theme.ink)

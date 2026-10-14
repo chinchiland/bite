@@ -15,7 +15,6 @@ struct MirrorHome: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.isSceneCaptured) private var isCaptured
     @AppStorage("mirror.consented") private var consented = false
     @AppStorage("mirror.faceID") private var faceID = true
     @Query(sort: \MirrorShot.takenAt, order: .reverse) private var shots: [MirrorShot]
@@ -28,7 +27,6 @@ struct MirrorHome: View {
     @State private var comparing = false
     /// Deleted a moment ago: hidden at once, gone for good when its Undo leaves.
     @State private var hiddenID: UUID?
-    @State private var covered = false
     @State private var leftAt: Date?
     @State private var cameraOpened = false
 
@@ -56,13 +54,7 @@ struct MirrorHome: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .overlay(alignment: .bottom) { toast }
-        // Leaving Bite: paper over the photos before the app switcher takes its picture.
-        .overlay {
-            if covered {
-                Theme.page.ignoresSafeArea()
-            }
-        }
-        .blur(radius: isCaptured && unlocked ? 40 : 0)
+        .modifier(MirrorPrivacy(active: unlocked && !cameraUp))
         .fullScreenCover(isPresented: $cameraUp) {
             MirrorCamera(shots: shots) { kept in cameraClosed(kept: kept) }
                 .modelContainer(MirrorStore.container)
@@ -71,9 +63,10 @@ struct MirrorHome: View {
             if let pair { MirrorPair(older: pair.older, newer: pair.newer) }
         }
         .task {
-            // Agreed before, but the key is gone (a phone restored from a backup): start over.
+            // Agreed before, but the key is gone (a phone restored from a backup, or its passcode
+            // removed): the photos can never be opened again, so the mirror starts over.
             if consented, !MirrorVault.shared.hasKeys {
-                consented = false
+                MirrorErase.everything()
             }
             if startOnCamera, consented, !cameraOpened {
                 cameraOpened = true
@@ -88,7 +81,6 @@ struct MirrorHome: View {
         .onChange(of: scenePhase) { _, phase in
             switch phase {
             case .active:
-                covered = false
                 // Back within a minute (Control Center, a glance at a message): still open.
                 if let leftAt, Date.now.timeIntervalSince(leftAt) > 60 {
                     MirrorVault.shared.lockNow()
@@ -96,16 +88,20 @@ struct MirrorHome: View {
                     Task { await unlock() }
                 }
                 leftAt = nil
-            case .inactive:
-                covered = unlocked && !cameraUp
-            default:
-                covered = unlocked && !cameraUp
+            case .background:
                 leftAt = leftAt ?? .now
+            default:
+                break
             }
         }
         .onDisappear {
             finishDelete()
             MirrorVault.shared.clearExports()
+            // Closed (not covered by the camera or pushed under Compare): locked again, so the
+            // next visit asks again.
+            if !comparing, !cameraUp {
+                MirrorVault.shared.lockNow()
+            }
         }
     }
 
@@ -412,6 +408,25 @@ struct MirrorHome: View {
             : shot.takenAt.formatted(.dateTime.day().month(.wide).year())
         guard let weight = shot.weightKg else { return day }
         return "\(day) · \(weight.weightText)"
+    }
+}
+
+/// Paper over the photos the moment Bite leaves the screen, before the app switcher takes its
+/// picture, and a heavy blur while the screen is recorded or mirrored to a TV.
+struct MirrorPrivacy: ViewModifier {
+    var active = true
+
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.isSceneCaptured) private var isCaptured
+
+    func body(content: Content) -> some View {
+        content
+            .blur(radius: active && isCaptured ? 40 : 0)
+            .overlay {
+                if active, scenePhase != .active {
+                    Theme.page.ignoresSafeArea()
+                }
+            }
     }
 }
 

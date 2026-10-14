@@ -42,6 +42,7 @@ struct MirrorPair: View {
         }
         .scrollIndicators(.hidden)
         .background(Theme.page.ignoresSafeArea())
+        .modifier(MirrorPrivacy())
         .navigationTitle("Compare")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(Feel.tick, trigger: atEnd)
@@ -64,13 +65,9 @@ struct MirrorPair: View {
             )
             ZStack(alignment: .topLeading) {
                 MirrorPhoto(id: newer.photoID, thumbnail: false, maxPixel: 1400)
-                    .frame(width: size.width, height: size.height)
+                    .modifier(MirrorMove(align: align, moves: align.movesNewer, size: size))
                 MirrorPhoto(id: older.photoID, thumbnail: false, maxPixel: 1400)
-                    .frame(width: size.width, height: size.height)
-                    .scaleEffect(align.scale, anchor: UnitPoint(x: align.anchorX, y: align.anchorY))
-                    .offset(x: align.dx * size.width, y: align.dy * size.height)
-                    .frame(width: size.width, height: size.height)
-                    .clipped()
+                    .modifier(MirrorMove(align: align, moves: !align.movesNewer, size: size))
                     .mask(alignment: .leading) {
                         Rectangle().frame(width: size.width * split)
                     }
@@ -105,6 +102,22 @@ struct MirrorPair: View {
             case .decrement: split = max(split - 0.1, 0.02)
             @unknown default: break
             }
+        }
+    }
+
+    /// One photo of the pair in the frame: moved into line when it is the one that moves.
+    private struct MirrorMove: ViewModifier {
+        let align: MirrorAlign
+        let moves: Bool
+        let size: CGSize
+
+        func body(content: Content) -> some View {
+            content
+                .frame(width: size.width, height: size.height)
+                .scaleEffect(moves ? align.scale : 1, anchor: UnitPoint(x: align.anchorX, y: align.anchorY))
+                .offset(x: moves ? align.dx * size.width : 0, y: moves ? align.dy * size.height : 0)
+                .frame(width: size.width, height: size.height)
+                .clipped()
         }
     }
 
