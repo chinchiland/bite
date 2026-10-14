@@ -55,10 +55,8 @@ echo "iPhone: $DEVICE   team: $TEAM"
 
 # One app: a Release build for this iPhone, signed automatically with the team (Xcode
 # registers the device and the app id, with Apple Health, the first time), then installed.
-install_app() {
-  local name="$1" bundle="$2"; shift 2
-  local out="build/iphone-$name"
-  echo "== Building $name ($bundle)"
+build_app() {
+  local out="$1" bundle="$2"; shift 2
   xcodebuild build \
     -project Bite.xcodeproj \
     -scheme Bite \
@@ -70,7 +68,30 @@ install_app() {
     CODE_SIGN_STYLE=Automatic \
     BITE_BUNDLE_ID="$bundle" \
     "$@" \
-    -quiet
+    -quiet 2>&1 | tee "$TMP/build.log"
+  return "${PIPESTATUS[0]}"
+}
+
+install_app() {
+  local name="$1" bundle="$2"; shift 2
+  local out="build/iphone-$name"
+  echo "== Building $name ($bundle)"
+  if ! build_app "$out" "$bundle" "$@"; then
+    # A free Apple team can't sign Sign in with Apple. Everything else works without it (only
+    # sharing a count to the community needs it), so build once more without that capability.
+    if grep -qi "sign in with apple\|applesignin" "$TMP/build.log"; then
+      echo "== Your team can't sign Sign in with Apple: building without it (only community sharing needs it)"
+      cp Bite.entitlements "$TMP/Bite.entitlements.saved"
+      trap 'cp "$TMP/Bite.entitlements.saved" Bite.entitlements 2>/dev/null; rm -rf "$TMP"' EXIT
+      /usr/libexec/PlistBuddy -c "Delete :com.apple.developer.applesignin" Bite.entitlements
+      local status=0
+      build_app "$out" "$bundle" "$@" || status=$?
+      cp "$TMP/Bite.entitlements.saved" Bite.entitlements
+      [ "$status" -eq 0 ] || exit "$status"
+    else
+      exit 1
+    fi
+  fi
   echo "== Installing $name"
   xcrun devicectl device install app --device "$DEVICE" "$out/Build/Products/Release-iphoneos/Bite.app"
   xcrun devicectl device process launch --device "$DEVICE" "$bundle" >/dev/null 2>&1 \
@@ -91,4 +112,4 @@ case "$WHICH" in
       EXCLUDED_SOURCE_FILE_NAMES=
     ;;
 esac
-echo "Done. In Bite, tap Connect Health on Today, and paste your Claude key in Settings > Photo estimates."
+echo "Done. In Bite, tap Connect Health on Today. Your mirror is in Settings > Your mirror."
