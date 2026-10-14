@@ -25,29 +25,38 @@ case "$WHICH" in
   *) echo "Usage: tools/install-on-iphone.sh [bite|demo|both]"; exit 1 ;;
 esac
 TMP="$(mktemp -d)"
-trap 'rm -rf "$TMP"' EXIT
+# A build may leave out a capability your team can't sign yet; the entitlements files always
+# come back as they were, even if the script stops halfway.
+cp Bite.entitlements BiteWidgets.entitlements "$TMP/"
+restore_entitlements() { cp "$TMP/Bite.entitlements" "$TMP/BiteWidgets.entitlements" . 2>/dev/null || true; }
+trap 'restore_entitlements; rm -rf "$TMP"' EXIT
 
 command -v xcodebuild >/dev/null || { echo "Xcode is not installed, or not selected: sudo xcode-select -s /Applications/Xcode.app"; exit 1; }
 
-# The iPhone: the one plugged in or on the same network, paired with this Mac.
+# The iPhone: the one plugged in, else one on the same network.
 if [ -z "${DEVICE:-}" ]; then
   xcrun devicectl list devices --json-output "$TMP/devices.json" >/dev/null
-  DEVICE="$(python3 - "$TMP/devices.json" <<'PY'
+  read -r DEVICE PAIRING <<<"$(python3 - "$TMP/devices.json" <<'PY'
 import json, sys
 devices = json.load(open(sys.argv[1])).get("result", {}).get("devices", [])
 phones = [d for d in devices
           if d.get("hardwareProperties", {}).get("platform") == "iOS"
-          and d.get("connectionProperties", {}).get("pairingState") == "paired"]
-# Plugged in first, then on the same network.
-phones.sort(key=lambda d: {"wired": 0, "localNetwork": 1}.get(d.get("connectionProperties", {}).get("transportType"), 2))
-if phones and phones[0].get("connectionProperties", {}).get("transportType"):
-    print(phones[0].get("hardwareProperties", {}).get("udid", ""))
+          and d.get("connectionProperties", {}).get("transportType")]
+phones.sort(key=lambda d: {"wired": 0, "localNetwork": 1}.get(d["connectionProperties"]["transportType"], 2))
+if phones:
+    print(phones[0].get("hardwareProperties", {}).get("udid", ""), phones[0]["connectionProperties"].get("pairingState", ""))
 PY
-)"
+)" || true
+  # A phone can forget this Mac, after an iOS update for one. Pairing again shows the Trust
+  # prompt on it, so you don't have to unplug it and plug it back in.
+  if [ -n "${DEVICE:-}" ] && [ "${PAIRING:-}" != "paired" ]; then
+    echo "Unlock the iPhone, tap Trust and enter your passcode."
+    xcrun devicectl manage pair --device "$DEVICE" >/dev/null
+  fi
 fi
-if [ -z "$DEVICE" ]; then
-  echo "No iPhone found. Plug it in, unlock it, tap Trust, turn on Developer Mode, then run this again."
-  echo "Paired devices Xcode knows about:"
+if [ -z "${DEVICE:-}" ]; then
+  echo "No iPhone found. Plug it in with a cable that carries data, unlock it, then run this again."
+  echo "Devices Xcode knows about:"
   xcrun devicectl list devices || true
   exit 1
 fi
@@ -76,22 +85,27 @@ install_app() {
   local name="$1" bundle="$2"; shift 2
   local out="build/iphone-$name"
   echo "== Building $name ($bundle)"
-  if ! build_app "$out" "$bundle" "$@"; then
-    # A free Apple team can't sign Sign in with Apple. Everything else works without it (only
-    # sharing a count to the community needs it), so build once more without that capability.
-    if grep -qi "sign in with apple\|applesignin" "$TMP/build.log"; then
+  local dropped=""
+  until build_app "$out" "$bundle" "$@"; do
+    if [[ "$dropped" != *siwa* ]] && grep -qi "sign in with apple\|applesignin" "$TMP/build.log"; then
+      # A free Apple team can't sign Sign in with Apple. Everything else works without it (only
+      # sharing a count to the community needs it), so build once more without that capability.
       echo "== Your team can't sign Sign in with Apple: building without it (only community sharing needs it)"
-      cp Bite.entitlements "$TMP/Bite.entitlements.saved"
-      trap 'cp "$TMP/Bite.entitlements.saved" Bite.entitlements 2>/dev/null; rm -rf "$TMP"' EXIT
       /usr/libexec/PlistBuddy -c "Delete :com.apple.developer.applesignin" Bite.entitlements
-      local status=0
-      build_app "$out" "$bundle" "$@" || status=$?
-      cp "$TMP/Bite.entitlements.saved" Bite.entitlements
-      [ "$status" -eq 0 ] || exit "$status"
+      dropped+=" siwa"
+    elif [[ "$dropped" != *group* ]] && grep -qi "application-groups" "$TMP/build.log"; then
+      # Xcode registers an App Group only from its Signing & Capabilities pane, never from the
+      # command line. Until group.$bundle exists, the app keeps the log in its own folder and
+      # moves it into the group the first time a build has it, so nothing is lost.
+      echo "== group.$bundle isn't registered with Apple yet: building without it (the widgets say Open Bite once)"
+      /usr/libexec/PlistBuddy -c "Delete :com.apple.security.application-groups" Bite.entitlements
+      /usr/libexec/PlistBuddy -c "Delete :com.apple.security.application-groups" BiteWidgets.entitlements
+      dropped+=" group"
     else
       exit 1
     fi
-  fi
+  done
+  restore_entitlements
   echo "== Installing $name"
   xcrun devicectl device install app --device "$DEVICE" "$out/Build/Products/Release-iphoneos/Bite.app"
   xcrun devicectl device process launch --device "$DEVICE" "$bundle" >/dev/null 2>&1 \

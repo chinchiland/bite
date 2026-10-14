@@ -12,6 +12,10 @@ The easy way: Xcode signs with your Apple team, so Apple Health works and nothin
 
 Plug it in, unlock it, tap **Trust This Computer**. Turn on **Developer Mode** (Settings › Privacy & Security › Developer Mode, at the bottom; it shows up once the phone has met Xcode), let it restart, tap Turn On.
 
+Use a cable that carries data: a charge-only one charges the phone, but the Mac never sees it. If the phone has forgotten the Mac (an iOS update can do that), the install script asks it to trust the Mac again. Xcode 26.2 installs on iOS 27 fine.
+
+Signing needs the Mac awake: with the display asleep the keychain refuses to sign (`errSecInternalComponent`). The App Groups for the widgets are registered once at developer.apple.com › Identifiers › + › App Groups (`group.com.dylan.bite`, `group.com.dylan.bite.demo`), since Xcode never registers one from the command line; until then the script builds without them.
+
 ## Install
 
 ```sh
