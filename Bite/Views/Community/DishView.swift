@@ -193,12 +193,12 @@ struct DishView: View {
             HStack(spacing: 12) {
                 Image(systemName: "plus")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Theme.accurate)
+                    .foregroundStyle(Theme.action)
                     .frame(width: 32, height: 32)
-                    .background(Theme.accurate.opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .background(Theme.action.opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 Text(dish.estimates.contains(where: \.isMine) ? "Change your estimate" : "Add your estimate")
                     .font(.ui(15))
-                    .foregroundStyle(Theme.accurate)
+                    .foregroundStyle(Theme.action)
                 Spacer()
             }
             .padding(.vertical, 12)

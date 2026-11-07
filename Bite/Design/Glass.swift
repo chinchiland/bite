@@ -104,6 +104,8 @@ private struct PageRoom: ViewModifier {
     var image: UIImage? = nil
     var glow: Color? = nil
     let paper: Color
+    /// Buttons float at the foot of this page, so it fades out before them.
+    var hasBar = true
 
     @State private var picture: UIImage?
 
@@ -112,7 +114,11 @@ private struct PageRoom: ViewModifier {
         let glow = data == nil && image == nil ? glow : nil
         content
             .background { RoomBackground(picture: picture, glow: glow, paper: paper) }
-            .overlay { RoomFoot(room: RoomBackground(picture: picture, glow: glow)) }
+            .overlay {
+                if hasBar {
+                    RoomFoot(room: RoomBackground(picture: picture, glow: glow))
+                }
+            }
             .task(id: data?.count ?? image.map { Int($0.size.width) } ?? 0) {
                 guard data != nil || image != nil else {
                     picture = nil
@@ -274,8 +280,8 @@ extension View {
     }
 
     /// A page that stands in the room of a photo not on file yet: a plate, a menu.
-    func pageRoom(image: UIImage?, paper: Color = Theme.card) -> some View {
-        modifier(PageRoom(image: image, paper: paper))
+    func pageRoom(image: UIImage?, paper: Color = Theme.card, hasBar: Bool = true) -> some View {
+        modifier(PageRoom(image: image, paper: paper, hasBar: hasBar))
     }
 
     /// Things that belong together. In Glass they float as one pane, reaching past the page

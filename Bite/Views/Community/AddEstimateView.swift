@@ -78,7 +78,7 @@ struct AddEstimateView: View {
                                         .frame(width: 44, height: 44)
                                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                                 } else {
-                                    SymbolTile(systemImage: "photo", color: Theme.accurate, glyph: Theme.accurate, size: 44)
+                                    SymbolTile(systemImage: "photo", color: Theme.action, glyph: Theme.action, size: 44)
                                 }
                                 Text(photo == nil ? "Choose a photo of your plate" : "Choose another photo")
                                     .font(.ui(17))

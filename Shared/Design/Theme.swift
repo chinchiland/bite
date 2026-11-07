@@ -83,6 +83,8 @@ enum Theme {
     static let watchFill = Color(lightHex: 0xFBEBDD, darkHex: 0xF0A66C, darkOpacity: 0.16)
     static let infoText = Color(lightHex: 0x2F5E9E, darkHex: 0x9DBBE8)
     static let infoFill = Color(lightHex: 0xE6EEF8, darkHex: 0x9DBBE8, darkOpacity: 0.16)
+    /// What adds something (a dish, your estimate): blue on paper, white in Glass.
+    static let action = Color(lightHex: 0x2F7FD8, darkHex: 0xFFFFFF)
     /// A brand that links to its page.
     static let link = Color(lightHex: 0x3E7F45, darkHex: 0x8FCB8F)
 

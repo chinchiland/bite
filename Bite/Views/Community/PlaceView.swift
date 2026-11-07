@@ -139,12 +139,12 @@ struct PlaceView: View {
             HStack(spacing: 12) {
                 Image(systemName: "plus")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Theme.accurate)
+                    .foregroundStyle(Theme.action)
                     .frame(width: 58, height: 58)
-                    .background(Theme.accurate.opacity(0.1), in: RoundedRectangle(cornerRadius: FoodThumb.radius(for: 58), style: .continuous))
+                    .background(Theme.action.opacity(0.1), in: RoundedRectangle(cornerRadius: FoodThumb.radius(for: 58), style: .continuous))
                 Text("Add a dish")
                     .font(.ui(16))
-                    .foregroundStyle(Theme.accurate)
+                    .foregroundStyle(Theme.action)
                 Spacer()
             }
             .padding(.vertical, 10)

@@ -72,7 +72,7 @@ struct MenuView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
-        .pageRoom(image: heroImage)
+        .pageRoom(image: heroImage, hasBar: false)
         .modifier(HeroBar(heroGone: heroGone, title: menu?.title ?? String(localized: "Menu")))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(overCamera)

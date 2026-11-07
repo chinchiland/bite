@@ -454,6 +454,14 @@ private struct OneTapRow: View {
     let open: () -> Void
     let add: () -> Void
 
+    @Environment(\.colorScheme) private var scheme
+
+    /// The plus and the disc behind it: a lit pane in Glass, where only the main action is solid.
+    private var disc: Color {
+        if isAdded { return Theme.goodText }
+        return scheme == .dark ? Theme.selected : .accentColor
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             Button(action: open) {
@@ -464,7 +472,7 @@ private struct OneTapRow: View {
             Button(action: add) {
                 Image(systemName: isAdded ? "checkmark.circle.fill" : "plus.circle.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(isAdded ? Theme.goodText : Color.accentColor)
+                    .foregroundStyle(isAdded ? Theme.page : Theme.selectedInk, disc)
                     .contentTransition(.symbolEffect(.replace))
             }
             .buttonStyle(.borderless)
