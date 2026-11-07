@@ -334,41 +334,54 @@ struct FastingPlanView: View {
 
     // MARK: Your body
 
+    /// Today's outline, dashed, with the day you look at filled over it: what goes shows as the
+    /// space between the two, which side by side would be too small to see.
     private func bodyPane(_ plan: Plan, shown: FastingDay) -> some View {
         let start = plan.projection.start
         let thenBMI = you.bmi * shown.tissueKg / max(start.tissueKg, 1)
+        let now = BodyFigure.build(bmi: you.bmi)
+        let then = BodyFigure.build(bmi: thenBMI)
         return VStack(alignment: .leading, spacing: 16) {
             SectionLabel(title: "Your body", symbol: "figure.stand")
-            HStack(alignment: .bottom, spacing: 0) {
-                figure(build: BodyFigure.build(bmi: you.bmi), filled: false, title: Text("Today"), kg: start.tissueKg, bmi: you.bmi)
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Theme.tertiary)
-                    .padding(.bottom, 64)
-                    .accessibilityHidden(true)
-                figure(build: BodyFigure.build(bmi: thenBMI), filled: true, title: Text(verbatim: dayText(shown.day)), kg: shown.tissueKg, bmi: thenBMI)
+            HStack(alignment: .center, spacing: 20) {
+                ZStack {
+                    BodyFigureShape(build: then)
+                        .fill(Theme.ink.opacity(0.2))
+                    BodyFigureShape(build: now)
+                        .stroke(Theme.secondary, style: StrokeStyle(lineWidth: 1.5, lineJoin: .round, dash: [3, 3]))
+                    BodyFigureShape(build: then)
+                        .stroke(Theme.ink, style: StrokeStyle(lineWidth: 1.5, lineJoin: .round))
+                }
+                .frame(width: 118, height: 220)
+                .animation(Motion.respond, value: then)
+                .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 18) {
+                    bodyLine(title: Text("Today"), kg: start.tissueKg, bmi: you.bmi, filled: false)
+                    bodyLine(title: Text(verbatim: dayText(shown.day)), kg: shown.tissueKg, bmi: thenBMI, filled: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
 
-    private func figure(build: CGFloat, filled: Bool, title: Text, kg: Double, bmi: Double) -> some View {
-        VStack(spacing: 8) {
-            ZStack {
+    private func bodyLine(title: Text, kg: Double, bmi: Double, filled: Bool) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 10) {
+            Group {
                 if filled {
-                    BodyFigureShape(build: build)
-                        .fill(Theme.ink.opacity(0.2))
+                    Circle().fill(Theme.ink.opacity(0.35)).overlay { Circle().stroke(Theme.ink, lineWidth: 1.5) }
+                } else {
+                    Circle().stroke(Theme.secondary, style: StrokeStyle(lineWidth: 1.5, dash: [2.5, 2.5]))
                 }
-                BodyFigureShape(build: build)
-                    .stroke(filled ? Theme.ink : Theme.tertiary, style: StrokeStyle(lineWidth: 1.5, lineJoin: .round, dash: filled ? [] : [3, 3]))
             }
-            .frame(height: 190)
-            .animation(Motion.respond, value: build)
-            VStack(spacing: 1) {
+            .frame(width: 12, height: 12)
+            .alignmentGuide(.firstTextBaseline) { $0[.bottom] - 1 }
+            .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
                 title
                     .font(.ui(13))
                     .foregroundStyle(Theme.secondary)
                 Text(kg.weightText)
-                    .font(.number(17))
+                    .font(.number(22))
                     .foregroundStyle(Theme.ink)
                     .contentTransition(.numericText(value: kg))
                 Text("BMI \(bmi.formatted(.number.precision(.fractionLength(1))))")
@@ -377,7 +390,6 @@ struct FastingPlanView: View {
                     .foregroundStyle(Theme.secondary)
             }
         }
-        .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
     }
 
