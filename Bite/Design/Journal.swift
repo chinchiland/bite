@@ -465,8 +465,7 @@ struct MacroBlock: View {
                 // right under them, as one label.
                 VStack(spacing: -3) {
                     Text(number.kcalText)
-                        .font(.number(30, .medium))
-                        .numberTracking(30)
+                        .bigNumber(30)
                         .foregroundStyle(Theme.ink)
                         .contentTransition(.numericText(value: number))
                         .lineLimit(1)

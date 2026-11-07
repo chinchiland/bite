@@ -14,6 +14,8 @@ struct WeekStrip: View {
     let onOpenWeek: () -> Void
     let onOpenDay: (Date) -> Void
 
+    @Environment(\.colorScheme) private var scheme
+
     private var calendar: Calendar { .current }
 
     /// Past days with food logged, and how many of them landed on target.
@@ -41,11 +43,17 @@ struct WeekStrip: View {
                     Button {
                         onOpenDay(day.date)
                     } label: {
-                        VStack(spacing: 8) {
-                            Text(day.date.formatted(.dateTime.weekday(.narrow)))
-                                .font(.ui(12, calendar.isDateInToday(day.date) ? .semibold : .regular))
-                                .foregroundStyle(calendar.isDateInToday(day.date) ? Theme.ink : Theme.secondary)
-                            dot(day)
+                        Group {
+                            if scheme == .dark {
+                                pill(day)
+                            } else {
+                                VStack(spacing: 8) {
+                                    Text(day.date.formatted(.dateTime.weekday(.narrow)))
+                                        .font(.ui(12, calendar.isDateInToday(day.date) ? .semibold : .regular))
+                                        .foregroundStyle(calendar.isDateInToday(day.date) ? Theme.ink : Theme.secondary)
+                                    dot(day)
+                                }
+                            }
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 4)
@@ -63,6 +71,31 @@ struct WeekStrip: View {
                     .font(.ui(15))
                     .foregroundStyle(Theme.secondary)
             }
+        }
+    }
+
+    /// In Glass a day is one round pill: its letter on its verdict's color, dim with nothing
+    /// logged, and today as a ring, since it is not over yet.
+    private func pill(_ day: Day) -> some View {
+        let today = calendar.isDateInToday(day.date)
+        return Text(day.date.formatted(.dateTime.weekday(.narrow)))
+            .font(.ui(13, today ? .semibold : .medium))
+            .foregroundStyle(day.verdict == .empty && !today ? Theme.tertiary : Theme.ink)
+            .frame(width: 36, height: 36)
+            .background(today ? Color.clear : pillFill(day.verdict), in: Circle())
+            .overlay {
+                if today {
+                    Circle().strokeBorder(day.verdict == .empty ? Theme.tertiary : day.verdict.dotColor, lineWidth: 1.5)
+                }
+            }
+    }
+
+    private func pillFill(_ verdict: DayVerdict) -> Color {
+        switch verdict {
+        case .empty: Theme.track.opacity(0.6)
+        case .light: Theme.ink.opacity(0.17)
+        case .onTarget: Theme.onTarget.opacity(0.42)
+        case .over: Theme.over.opacity(0.5)
         }
     }
 

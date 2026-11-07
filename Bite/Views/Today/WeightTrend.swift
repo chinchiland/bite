@@ -55,8 +55,7 @@ struct WeightTrend: View {
                 let end = forecast.weight(afterDays: Double(horizonDays))
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(end.weightText)
-                        .font(.number(34, .medium))
-                        .numberTracking(34)
+                        .bigNumber(34)
                         .foregroundStyle(Theme.ink)
                         .contentTransition(.numericText(value: end))
                     Text("by \(endDate.formatted(.dateTime.month(.abbreviated).day()))")

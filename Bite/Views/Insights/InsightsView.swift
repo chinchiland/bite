@@ -154,8 +154,7 @@ struct RangeView<Switcher: View>: View {
                             .foregroundStyle(Theme.secondary)
                         HStack(alignment: .firstTextBaseline, spacing: 5) {
                             Text(now.averageKcal.kcalText)
-                                .font(.number(36))
-                                .numberTracking(36)
+                                .bigNumber(36)
                                 .foregroundStyle(Theme.ink)
                             Text("kcal")
                                 .font(.ui(15))

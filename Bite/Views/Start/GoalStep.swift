@@ -96,6 +96,7 @@ struct GoalStep: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .roomBackground()
+            .overlay { RoomFoot(height: 230) }
             .dockBar { footer }
             .toolbar(.hidden, for: .navigationBar)
             .keyboardDone()
@@ -322,8 +323,7 @@ struct GoalStep: View {
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(Double(result).kcalText)
-                        .font(.number(40, .medium))
-                        .numberTracking(40)
+                        .bigNumber(40)
                         .foregroundStyle(Theme.ink)
                         .contentTransition(.numericText(value: Double(result)))
                     Text("kcal a day")

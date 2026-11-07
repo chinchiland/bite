@@ -33,13 +33,17 @@ struct RoomBackground: View {
     var paper: Color = Theme.page
 
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     var body: some View {
         Group {
-            if scheme == .dark {
-                glass
-            } else {
+            if scheme != .dark {
                 paper
+            } else if reduceTransparency {
+                // With no color behind them the panes read as solid.
+                Theme.page
+            } else {
+                glass
             }
         }
         .ignoresSafeArea()
@@ -104,6 +108,31 @@ extension RoomBackground {
     }
 }
 
+/// The room again over the foot of a page, in Glass: what scrolls down goes back into the room
+/// before it reaches the buttons floating there, so no word shows through under them.
+struct RoomFoot: View {
+    var room = RoomBackground()
+    var height: CGFloat = 150
+
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        if scheme == .dark {
+            room
+                .mask(alignment: .bottom) {
+                    LinearGradient(
+                        stops: [.init(color: .clear, location: 0), .init(color: .black, location: 0.6)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: height)
+                }
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+        }
+    }
+}
+
 /// The bottom bar of a page and the band under the clock. Pages scroll under them, so in Glass
 /// this is the one surface with a real blur, and a flat color on Paper.
 struct BarGround: View {
@@ -131,6 +160,19 @@ struct BarGround: View {
         if #available(iOS 26.0, *) { return true }
         #endif
         return false
+    }
+}
+
+/// See `bigNumber(_:)`.
+private struct BigNumber: ViewModifier {
+    let size: CGFloat
+
+    @Environment(\.colorScheme) private var scheme
+
+    func body(content: Content) -> some View {
+        content
+            .font(.number(size, scheme == .dark ? .regular : .medium))
+            .numberTracking(size)
     }
 }
 
@@ -211,6 +253,12 @@ extension View {
     /// comes before.
     func glassGroup(after gap: CGFloat = 0) -> some View {
         modifier(GlassGroup(gap: gap))
+    }
+
+    /// A number that leads its block. White on dark reads a step heavier than ink on paper, so
+    /// in Glass it is a step lighter, and stays as fine.
+    func bigNumber(_ size: CGFloat) -> some View {
+        modifier(BigNumber(size: size))
     }
 
     /// A photo at the top of a page, fading out at its foot in Glass so it turns into the room

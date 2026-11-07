@@ -136,6 +136,7 @@ struct TodayView: View {
                 case .month:
                     rangePage(.month)
                 }
+                RoomFoot()
                 TopChrome(
                     chrome: chrome,
                     height: topInset,

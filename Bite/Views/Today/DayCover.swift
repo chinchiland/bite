@@ -75,6 +75,7 @@ struct DayCover<Controls: View>: View {
                 .padding(.top, isFramed ? 10 : topInset + 2)
                 .padding(.horizontal, isFramed ? 10 : 16)
         }
+        .background(isFramed ? Theme.card : Color.clear)
         .clipShape(RoundedRectangle(cornerRadius: isFramed ? Theme.groupRadius : 0, style: .continuous))
         .padding(.horizontal, isFramed ? Theme.margin - Theme.groupReach : 0)
         .padding(.top, isFramed ? topInset + 6 : 0)
@@ -154,7 +155,7 @@ struct DayCover<Controls: View>: View {
     /// A soft shade at the head for the controls, clear over the food, paper at the foot. In
     /// Glass the foot has no color of its own: `footFade` lets the room come through instead.
     private func melt(shade: Bool) -> some View {
-        let foot = scheme == .dark ? (isFramed ? Color.black.opacity(0.62) : Color.clear) : Theme.page
+        let foot = scheme == .dark ? Color.clear : Theme.page
         return LinearGradient(
             stops: [
                 .init(color: .black.opacity(shade ? 0.26 : 0), location: 0),
@@ -171,7 +172,7 @@ struct DayCover<Controls: View>: View {
 
     /// The photo itself going, in Glass, down to the room made of its own colors.
     private var footFade: some View {
-        let glass = scheme == .dark && !isFramed
+        let glass = scheme == .dark
         return LinearGradient(
             stops: [
                 .init(color: .black, location: 0.52),
@@ -263,8 +264,7 @@ struct DayCover<Controls: View>: View {
 
     private var bigNumber: some View {
         Text(number.kcalText)
-            .font(.number(66, .medium))
-            .numberTracking(66)
+            .bigNumber(66)
             .contentTransition(.numericText(value: number))
             .lineLimit(1)
             .fixedSize()

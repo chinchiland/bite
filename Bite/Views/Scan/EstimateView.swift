@@ -99,6 +99,7 @@ struct EstimateView: View {
             return nil
         }
         .background { RoomBackground(picture: room, paper: Theme.card) }
+        .overlay { RoomFoot(room: RoomBackground(picture: room)) }
         .dockBar {
             if phase == .ready, let estimate, !estimate.items.isEmpty {
                 actionBar(estimate)
