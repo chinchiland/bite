@@ -122,7 +122,7 @@ struct MirrorPromise: View {
             .padding(.bottom, 28)
         }
         .scrollBounceBehavior(.basedOnSize)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
     }
 
     private func promise(_ symbol: String, _ text: LocalizedStringKey) -> some View {

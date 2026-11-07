@@ -9,6 +9,8 @@ name: Build Bite
 
 on:
   push:
+    branches-ignore:
+      - glass
     # Words alone don't need a cloud Mac.
     paths-ignore:
       - '**.md'

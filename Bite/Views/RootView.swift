@@ -5,6 +5,7 @@ struct RootView: View {
     @AppStorage("onboarded") private var onboarded = false
     @AppStorage("firstRun.stage") private var firstRunRaw = FirstRun.done.rawValue
     @AppStorage("firstRun.day") private var firstRunDay = 0.0
+    @AppStorage(Look.key) private var lookRaw = Look.glass.rawValue
     @State private var startTapped = false
     @State private var events = LogEvents()
     @State private var storeProblem = BiteStore.failedToOpen
@@ -28,6 +29,7 @@ struct RootView: View {
 
     private var journal: some View {
         TodayView()
+            .preferredColorScheme((Look(rawValue: lookRaw) ?? .glass).scheme)
             .environment(events)
             .environment(AppActions.shared)
             .modelContext(context)

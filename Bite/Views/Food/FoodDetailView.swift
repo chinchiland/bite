@@ -71,7 +71,7 @@ struct FoodDetailView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
-        .background(Theme.card.ignoresSafeArea())
+        .background { RoomBackground(food: food, paper: Theme.card) }
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: food.name))
         .navigationBarTitleDisplayMode(.inline)
@@ -123,8 +123,7 @@ struct FoodDetailView: View {
                 ring: DottedRing.food(totals),
                 number: totals.kcal,
                 unit: "kcal",
-                showsTarget: false,
-                surface: Theme.card
+                showsTarget: false
             )
             .padding(.top, 20)
             .accessibilityElement(children: .ignore)
@@ -331,7 +330,7 @@ struct FoodDetailView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.card.ignoresSafeArea())
+        .background { BarGround().ignoresSafeArea() }
     }
 
     private var actionTitle: LocalizedStringKey {
@@ -465,7 +464,7 @@ struct HeroBar: ViewModifier {
 
     private func legacy(_ content: Content) -> some View {
         content
-            .toolbarBackground(Theme.card, for: .navigationBar)
+            .toolbarBackground(Theme.solidCard, for: .navigationBar)
             .toolbarBackground(heroGone ? .visible : .hidden, for: .navigationBar)
     }
 }
@@ -499,9 +498,12 @@ struct FoodHero: View {
                 .overlay {
                     LinearGradient(colors: [.black.opacity(0.3), .clear], startPoint: .top, endPoint: .center)
                 }
+                .meltsIntoRoom()
         } else {
             ZStack {
-                Theme.heroGradient(food.displayTint)
+                if colorScheme != .dark {
+                    Theme.heroGradient(food.displayTint)
+                }
                 if let url = food.imageURL {
                     AsyncImage(url: url) { phase in
                         if let image = phase.image {

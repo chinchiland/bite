@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage("goal.kcal") private var kcal = 2000
     @AppStorage("goal.split") private var splitRaw = MacroSplit.balanced.rawValue
     @AppStorage("goal.noTarget") private var noTarget = false
+    @AppStorage(Look.key) private var lookRaw = Look.glass.rawValue
     @AppStorage("health.asked") private var healthAsked = false
     @AppStorage("health.weightAsked") private var weightAsked = false
     @AppStorage("health.unavailable") private var healthUnavailable = false
@@ -178,6 +179,21 @@ struct SettingsView: View {
                         }
                     } header: {
                         SectionTitle(text: "Macros")
+                    }
+
+                    Section {
+                        Picker(selection: $lookRaw) {
+                            ForEach(Look.allCases) { look in
+                                Text(look.title).tag(look.rawValue)
+                            }
+                        } label: {
+                            Text("Look")
+                                .font(.ui(17))
+                                .foregroundStyle(Theme.ink)
+                        }
+                        .pickerStyle(.menu)
+                        .tint(Theme.secondary)
+                        .listRowBackground(Theme.card)
                     }
 
                     if HealthActivity.isAvailable {
@@ -440,7 +456,7 @@ struct SettingsView: View {
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
-                .background(Theme.page.ignoresSafeArea())
+                .roomBackground()
                 #if DEBUG
                 .task {
                     // `-anchor bottom` scrolls to your data, for its screenshot.

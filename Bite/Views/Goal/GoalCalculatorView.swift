@@ -98,7 +98,7 @@ struct GoalCalculatorView: View {
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
         .scrollDismissesKeyboard(.interactively)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
         .navigationTitle(isWelcome ? "" : "Work it out")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom, spacing: 0) { resultBar }
@@ -168,7 +168,7 @@ struct GoalCalculatorView: View {
         .padding(.horizontal, 20)
         .padding(.top, 14)
         .padding(.bottom, 8)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
     }
 }
 

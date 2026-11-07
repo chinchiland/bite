@@ -15,11 +15,17 @@ struct WelcomeView: View {
         DottedRing.Part(share: 0.13, color: Theme.fat, macro: .fat),
     ]
 
+    @Environment(\.colorScheme) private var scheme
+
     var body: some View {
         ZStack {
-            Theme.coverGradient.ignoresSafeArea()
-            LinearGradient(colors: [Theme.page.opacity(0), Theme.page], startPoint: UnitPoint(x: 0.5, y: 0.35), endPoint: UnitPoint(x: 0.5, y: 0.75))
-                .ignoresSafeArea()
+            if scheme == .dark {
+                RoomBackground()
+            } else {
+                Theme.coverGradient.ignoresSafeArea()
+                LinearGradient(colors: [Theme.page.opacity(0), Theme.page], startPoint: UnitPoint(x: 0.5, y: 0.35), endPoint: UnitPoint(x: 0.5, y: 0.75))
+                    .ignoresSafeArea()
+            }
 
             VStack(spacing: 0) {
                 Spacer(minLength: 24)

@@ -104,14 +104,16 @@ struct RangeView<Switcher: View>: View {
                 } else {
                     averageCard(current, start: start, now: now, before: before)
                         .padding(.top, 18)
-                    SectionLabel(title: range.foodTitle, symbol: "fork.knife")
-                        .padding(.top, 28)
-                        .padding(.bottom, 6)
-                    dayRows(current, entries: periodEntries)
+                    VStack(alignment: .leading, spacing: 0) {
+                        SectionLabel(title: range.foodTitle, symbol: "fork.knife")
+                            .padding(.bottom, 6)
+                        dayRows(current, entries: periodEntries)
+                    }
+                    .glassGroup(after: 28)
                     bestDays(current)
-                        .padding(.top, 30)
+                        .glassGroup(after: 30)
                     mostEaten(periodEntries)
-                        .padding(.top, 30)
+                        .glassGroup(after: 30)
                 }
             }
             .padding(.horizontal, Theme.margin)

@@ -52,7 +52,7 @@ struct MirrorHome: View {
                 gallery
             }
         }
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
         .navigationTitle(consented ? Text("Your mirror") : Text(verbatim: ""))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

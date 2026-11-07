@@ -139,12 +139,12 @@ struct EstimateView: View {
             .accessibilityHidden(true)
     }
 
-    /// The sheet's white under the clock and the back button, once the photo is gone.
+    /// The sheet's own ground under the clock and the back button, once the photo is gone.
     private var topBand: some View {
         Color.clear
             .frame(height: 52)
             .frame(maxWidth: .infinity)
-            .background(Theme.card.ignoresSafeArea(edges: .top))
+            .background { BarGround().ignoresSafeArea(edges: .top) }
             .overlay(alignment: .bottom) {
                 Rectangle()
                     .fill(Theme.hairline)
@@ -315,8 +315,7 @@ struct EstimateView: View {
                     ring: DottedRing.food(totals),
                     number: totals.kcal,
                     unit: "kcal",
-                    showsTarget: false,
-                    surface: Theme.card
+                    showsTarget: false
                 )
                 .padding(.top, 20)
                 .accessibilityElement(children: .ignore)
@@ -412,7 +411,7 @@ struct EstimateView: View {
         .padding(.vertical, 10)
         .padding(.leading, 12)
         .padding(.trailing, 14)
-        .background(Theme.page, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(Theme.well, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func actionBar(_ estimate: MealEstimate) -> some View {
@@ -434,7 +433,7 @@ struct EstimateView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.card.ignoresSafeArea())
+        .background { BarGround().ignoresSafeArea() }
     }
 
     // MARK: Actions

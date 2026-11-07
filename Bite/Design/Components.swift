@@ -3,20 +3,31 @@ import UIKit
 
 // MARK: - Containers
 
-/// A white card on the paper, edged with a hairline so it reads without a shadow.
+/// A white card on the paper, edged with a hairline so it reads without a shadow. In Glass a
+/// pane like any group, with no edge of its own.
 struct Card<Content: View>: View {
     var padding: CGFloat = 16
     @ViewBuilder var content: Content
 
+    @Environment(\.colorScheme) private var scheme
+
     var body: some View {
-        content
-            .padding(padding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous)
-                    .strokeBorder(Theme.edge, lineWidth: 1)
-            }
+        if scheme == .dark {
+            content
+                .padding(padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.groupRadius, style: .continuous))
+                .padding(.horizontal, -Theme.groupReach)
+        } else {
+            content
+                .padding(padding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous)
+                        .strokeBorder(Theme.edge, lineWidth: 1)
+                }
+        }
     }
 }
 
@@ -163,18 +174,18 @@ struct PressableStyle: ButtonStyle {
     }
 }
 
-/// A selectable pill, for portions and filters: ink when chosen, soft otherwise.
+/// A selectable pill, for portions and filters: chosen or soft.
 struct ChipButtonStyle: ButtonStyle {
     var isSelected: Bool
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.ui(15, .medium))
-            .foregroundStyle(isSelected ? Theme.page : Theme.ink)
+            .foregroundStyle(isSelected ? Theme.selectedInk : Theme.ink)
             .lineLimit(1)
             .padding(.horizontal, 15)
             .frame(height: 36)
-            .background(isSelected ? Theme.ink : Theme.fill, in: Capsule())
+            .selectedFill(isSelected, in: Capsule())
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }

@@ -96,7 +96,7 @@ struct AddFoodView: View {
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
-            .background(Theme.page.ignoresSafeArea())
+            .roomBackground()
             .navigationTitle(meal.map { String(localized: "Add to \($0.title)") } ?? String(localized: "Add food"))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, isPresented: $searching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search food or brand")

@@ -43,7 +43,7 @@ struct DishView: View {
         .scrollIndicators(.hidden)
         .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
         .ignoresSafeArea(edges: .top)
-        .background(Theme.card.ignoresSafeArea())
+        .background { RoomBackground(food: dish.food, paper: Theme.card) }
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: dish.name))
         .navigationBarTitleDisplayMode(.inline)
@@ -95,8 +95,7 @@ struct DishView: View {
                 ring: DottedRing.food(consensus.nutrients),
                 number: consensus.nutrients.kcal,
                 unit: "kcal",
-                showsTarget: false,
-                surface: Theme.card
+                showsTarget: false
             )
             .padding(.top, 24)
             .accessibilityElement(children: .ignore)
@@ -285,7 +284,7 @@ struct DishView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.card.ignoresSafeArea())
+        .background { BarGround().ignoresSafeArea() }
     }
 
     // MARK: Actions

@@ -95,7 +95,7 @@ struct GoalStep: View {
                 .padding(.bottom, 24)
             }
             .scrollDismissesKeyboard(.interactively)
-            .background(Theme.page)
+            .roomBackground()
             .safeAreaInset(edge: .bottom, spacing: 0) { footer }
             .toolbar(.hidden, for: .navigationBar)
             .keyboardDone()
@@ -297,10 +297,10 @@ struct GoalStep: View {
                     .minimumScaleFactor(0.85)
             }
         }
-        .foregroundStyle(isOn ? Theme.page : Theme.ink)
+        .foregroundStyle(isOn ? Theme.selectedInk : Theme.ink)
         .frame(maxWidth: .infinity, minHeight: detail == nil ? 44 : 56, alignment: .leading)
         .padding(.horizontal, 14)
-        .background(isOn ? Theme.ink : Theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .selectedFill(isOn, in: RoundedRectangle(cornerRadius: 16, style: .continuous), off: Theme.card)
         .overlay {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .strokeBorder(Theme.hairline, lineWidth: isOn ? 0 : 1)
@@ -341,7 +341,7 @@ struct GoalStep: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 14)
         .padding(.bottom, 8)
-        .background(Theme.page)
+        .background { BarGround(paper: Theme.page).ignoresSafeArea() }
     }
 
     private func use() {

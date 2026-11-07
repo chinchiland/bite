@@ -80,10 +80,10 @@ struct MirrorMoment: View {
             Button(action: onTake) {
                 Label("Take it", systemImage: "camera")
                     .font(.ui(15, .semibold))
-                    .foregroundStyle(Theme.page)
+                    .foregroundStyle(Theme.selectedInk)
                     .padding(.horizontal, 14)
                     .frame(height: 36)
-                    .background(Theme.ink, in: Capsule())
+                    .selectedFill(true, in: Capsule())
             }
             .buttonStyle(PressableStyle(scale: 0.94))
             .fixedSize()

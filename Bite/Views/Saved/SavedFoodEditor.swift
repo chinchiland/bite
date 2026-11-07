@@ -73,7 +73,7 @@ struct SavedFoodEditor: View {
                 .padding(.bottom, 24)
             }
             .scrollDismissesKeyboard(.interactively)
-            .background(Theme.page.ignoresSafeArea())
+            .roomBackground()
             .navigationTitle(isNew ? "New saved food" : "Saved food")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

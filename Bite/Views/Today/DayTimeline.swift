@@ -216,7 +216,7 @@ private struct MealMoment: View {
 struct InlineTipStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .tipBackground(Theme.card)
+            .tipBackground(Theme.solidCard)
             .tipCornerRadius(16)
             .tint(Theme.ink)
     }

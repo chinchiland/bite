@@ -19,8 +19,6 @@ struct DottedRing: View {
     let parts: [Part]
     /// How far past the whole the calories go, as a share of the ring (0 when within it).
     var overflow: Double = 0
-    /// What the ring sits on, so a glyph's disc can cut its dots cleanly.
-    var surface: Color = Theme.page
     /// Each change sends one warmer light round the lit dots: the day just landed on target.
     var glint = 0
 
@@ -30,7 +28,7 @@ struct DottedRing: View {
     var body: some View {
         let shares = Shares(parts)
         let still = reduceMotion
-        DotRingCanvas(shares: shares, overflow: overflow, surface: surface, reveal: reveal)
+        DotRingCanvas(shares: shares, overflow: overflow, reveal: reveal)
             .animation(reduceMotion ? nil : Motion.count, value: shares)
             .animation(reduceMotion ? nil : Motion.count, value: overflow)
             .keyframeAnimator(initialValue: -1.0, trigger: glint) { ring, sweep in
@@ -129,7 +127,6 @@ extension EnvironmentValues {
 private struct DotRingCanvas: View, Animatable {
     var shares: DottedRing.Shares
     var overflow: Double
-    let surface: Color
     var reveal: Double
 
     var animatableData: AnimatablePair<
@@ -223,9 +220,11 @@ private struct DotRingCanvas: View, Animatable {
             let point = CGPoint(x: center.x + middle * CGFloat(cos(angle)), y: center.y + middle * CGFloat(sin(angle)))
             var disc = context
             disc.opacity = shown
-            // A ring of the surface first, so the disc stands clear of the dots around it.
+            // The dots are cut away first, so the disc stands clear of them on any surface.
             let clear = radius + 2 * unit
-            disc.fill(Path(ellipseIn: CGRect(x: point.x - clear, y: point.y - clear, width: clear * 2, height: clear * 2)), with: .color(surface))
+            var cut = disc
+            cut.blendMode = .destinationOut
+            cut.fill(Path(ellipseIn: CGRect(x: point.x - clear, y: point.y - clear, width: clear * 2, height: clear * 2)), with: .color(.black))
             let face = Path(ellipseIn: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
             disc.fill(face, with: .color(macro.tileFill))
             let glyph = CGRect(x: point.x - side / 2, y: point.y - side / 2, width: side, height: side)
@@ -443,8 +442,6 @@ struct MacroBlock: View {
     let number: Double
     let unit: LocalizedStringKey
     var showsTarget = true
-    /// What the block sits on: the paper on Today, a white sheet on a food.
-    var surface: Color = Theme.page
     /// Bumped when a log lands today on target: the ring warms once.
     var glint = 0
     /// The day's fiber line, on Today only.
@@ -460,7 +457,7 @@ struct MacroBlock: View {
         let side: CGFloat = narrow ? 124 : 150
         HStack(alignment: .center, spacing: narrow ? 12 : 16) {
             ZStack {
-                DottedRing(parts: ring, overflow: overflow, surface: surface, glint: glint)
+                DottedRing(parts: ring, overflow: overflow, glint: glint)
                 // Inside the inner ring, which leaves about 81 pt across the middle and less below
                 // it: the number steps down for four digits, the unit takes a second line when a
                 // language needs it ("kcal" over "mangées"), so each word stays short.

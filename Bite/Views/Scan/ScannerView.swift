@@ -324,12 +324,19 @@ struct ScannerView: View {
                             .minimumScaleFactor(0.8)
                             .padding(.horizontal, 4)
                     }
-                    .foregroundStyle(selected ? Color.black : Color.white)
+                    .foregroundStyle(Color.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 72)
                     .background {
+                        // Lit, not solid: the shutter is the one solid thing on the camera.
                         RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .fill(selected ? AnyShapeStyle(Color.white) : AnyShapeStyle(.ultraThinMaterial))
+                            .fill(.ultraThinMaterial)
+                        if selected {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(Color.white.opacity(0.26))
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .strokeBorder(Color.white.opacity(0.34), lineWidth: 1)
+                        }
                     }
                 }
                 .buttonStyle(PressableStyle(scale: 0.94))

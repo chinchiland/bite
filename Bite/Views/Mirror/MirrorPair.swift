@@ -41,7 +41,7 @@ struct MirrorPair: View {
             .padding(.bottom, 32)
         }
         .scrollIndicators(.hidden)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
         .modifier(MirrorPrivacy())
         .navigationTitle("Compare")
         .navigationBarTitleDisplayMode(.inline)

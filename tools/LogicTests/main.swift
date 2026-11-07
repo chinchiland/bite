@@ -26,6 +26,16 @@ func product(_ code: String) throws -> OFFProductResponse {
     return try JSONDecoder().decode(OFFProductResponse.self, from: data)
 }
 
+// MARK: The room
+
+check(near(RoomTone.level(meanBrightness: 0.7), 0.2), "a bright plate is dimmed to the same depth")
+check(near(RoomTone.level(meanBrightness: 0.35), 0.4), "a middling photo is dimmed by half as much")
+check(near(RoomTone.level(meanBrightness: 1), 0.2), "white never goes past the darkest level")
+check(near(RoomTone.level(meanBrightness: 0.05), 0.62), "a dark photo stays behind the words")
+check(near(RoomTone.level(meanBrightness: 0), 0.62), "black does not divide by zero")
+check(near(RoomTone.brightness(red: 1, green: 1, blue: 1), 1), "white has full brightness")
+check(RoomTone.brightness(red: 0, green: 1, blue: 0) > RoomTone.brightness(red: 1, green: 0, blue: 0), "green looks brighter than red")
+
 // MARK: Open Food Facts products
 
 do {

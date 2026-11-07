@@ -113,7 +113,7 @@ struct TypicalDishView: View {
         }
         .scrollIndicators(.hidden)
         .ignoresSafeArea(edges: .top)
-        .background(Theme.card.ignoresSafeArea())
+        .background { RoomBackground(food: heroFood, paper: Theme.card) }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if phase == .ready, dish != nil { actionBar }
         }
@@ -233,8 +233,7 @@ struct TypicalDishView: View {
                 ring: DottedRing.food(totals),
                 number: totals.kcal,
                 unit: "kcal",
-                showsTarget: false,
-                surface: Theme.card
+                showsTarget: false
             )
             .padding(.top, 20)
             .accessibilityElement(children: .ignore)
@@ -354,7 +353,7 @@ struct TypicalDishView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.card.ignoresSafeArea())
+        .background { BarGround().ignoresSafeArea() }
     }
 
     // MARK: Actions
@@ -412,7 +411,7 @@ struct TypicalDishView: View {
     }
 }
 
-/// One answer among a few, as equal tiles: a small picture over a word, ink when chosen.
+/// One answer among a few, as equal tiles: a small picture over a word.
 private struct ChoiceTile<Glyph: View>: View {
     let title: String
     let isSelected: Bool
@@ -422,19 +421,19 @@ private struct ChoiceTile<Glyph: View>: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 7) {
-                glyph(isSelected ? Theme.page : Theme.ink)
+                glyph(isSelected ? Theme.selectedInk : Theme.ink)
                     .frame(height: 24)
                     .accessibilityHidden(true)
                 Text(title)
                     .font(.ui(14, .medium))
-                    .foregroundStyle(isSelected ? Theme.page : Theme.ink)
+                    .foregroundStyle(isSelected ? Theme.selectedInk : Theme.ink)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .padding(.horizontal, 4)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 70)
-            .background(isSelected ? Theme.ink : Theme.fill, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .selectedFill(isSelected, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(PressableStyle(scale: 0.95))
         .accessibilityAddTraits(isSelected ? .isSelected : [])

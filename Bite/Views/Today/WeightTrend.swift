@@ -178,10 +178,10 @@ private struct WeekCheckIn: View {
                 } label: {
                     Text("Use it")
                         .font(.ui(15, .semibold))
-                        .foregroundStyle(Theme.page)
+                        .foregroundStyle(Theme.selectedInk)
                         .padding(.horizontal, 16)
                         .frame(height: 38)
-                        .background(Theme.ink, in: Capsule())
+                        .selectedFill(true, in: Capsule())
                 }
                 .buttonStyle(PressableStyle(scale: 0.94))
                 .accessibilityHint("Makes it your daily goal")

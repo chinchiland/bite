@@ -47,6 +47,62 @@ extension ImageTools {
         return UIImage(cgImage: output)
     }
 
+    // No working color space: the room is worked out on the numbers the photo is stored in,
+    // so `RoomTone`'s brightness means what the eye sees, not light in linear units.
+    private static let roomContext = CIContext(options: [.workingColorSpace: NSNull()])
+
+    private static let rooms: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 24
+        return cache
+    }()
+
+    /// A photo as a room to stand in: its colors richer, blurred until only the color is left,
+    /// and dimmed to the one depth every room shares. Small, and scaled up on screen, so it
+    /// costs nothing behind a page that scrolls. Cached by photo.
+    static func room(_ data: Data) -> UIImage? {
+        var hasher = Hasher()
+        hasher.combine(data.count)
+        hasher.combine(data.prefix(96))
+        hasher.combine(data.suffix(96))
+        let key = "\(hasher.finalize())" as NSString
+        if let cached = rooms.object(forKey: key) { return cached }
+        guard let small = downsample(data, maxPixel: 180), let room = room(from: small) else { return nil }
+        rooms.setObject(room, forKey: key)
+        return room
+    }
+
+    /// The same, for a photo that is not on file yet.
+    static func room(from image: UIImage) -> UIImage? {
+        guard let cgImage = fitted(image, maxPixel: 180).cgImage else { return nil }
+        let input = CIImage(cgImage: cgImage)
+        let level = RoomTone.level(meanBrightness: meanBrightness(of: input))
+        let rich = input.applyingFilter("CIColorControls", parameters: [kCIInputSaturationKey: 1.7])
+        let blurred = rich.clampedToExtent().applyingGaussianBlur(sigma: 16).cropped(to: input.extent)
+        let dimmed = blurred.applyingFilter("CIColorMatrix", parameters: [
+            "inputRVector": CIVector(x: level, y: 0, z: 0, w: 0),
+            "inputGVector": CIVector(x: 0, y: level, z: 0, w: 0),
+            "inputBVector": CIVector(x: 0, y: 0, z: level, w: 0),
+        ])
+        guard let output = roomContext.createCGImage(dimmed, from: input.extent) else { return nil }
+        return UIImage(cgImage: output)
+    }
+
+    /// The photo's mean brightness from 0 to 1.
+    private static func meanBrightness(of image: CIImage) -> Double {
+        let average = image.applyingFilter("CIAreaAverage", parameters: [kCIInputExtentKey: CIVector(cgRect: image.extent)])
+        var pixel = [UInt8](repeating: 0, count: 4)
+        roomContext.render(
+            average,
+            toBitmap: &pixel,
+            rowBytes: 4,
+            bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
+            format: .RGBA8,
+            colorSpace: nil
+        )
+        return RoomTone.brightness(red: Double(pixel[0]) / 255, green: Double(pixel[1]) / 255, blue: Double(pixel[2]) / 255)
+    }
+
     /// An image already in memory, brought down to at most `maxPixel` on the long side.
     static func fitted(_ image: UIImage, maxPixel: CGFloat) -> UIImage {
         let longest = max(image.size.width, image.size.height) * image.scale

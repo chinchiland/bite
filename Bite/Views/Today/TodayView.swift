@@ -127,7 +127,7 @@ struct TodayView: View {
         GeometryReader { proxy in
             let topInset = max(proxy.safeAreaInsets.top, steadyTopInset)
             ZStack(alignment: .bottom) {
-                Theme.page.ignoresSafeArea()
+                RoomBackground()
                 switch tab {
                 case .today:
                     dayPage(topInset: topInset)
@@ -205,6 +205,8 @@ struct TodayView: View {
         .onChange(of: day) { _, _ in
             quietly { coverIndex = 0 }
         }
+        // The room follows the photo on the cover, and the screens opened over Today stand in it.
+        .onChange(of: coverRoom, initial: true) { _, room in Room.shared.picture = room }
         // A tick under the finger when you switch, never when the clock does; and once a day,
         // when a log takes today onto target, success as the food settles.
         .sensoryFeedback(trigger: selectionKey) { _, _ in movedByCode ? nil : Feel.tick }
@@ -256,6 +258,10 @@ struct TodayView: View {
     // MARK: Day
 
     private static let coverAnchor = "cover"
+
+    private var coverRoom: UIImage? {
+        coverPhotos.indices.contains(coverIndex) ? coverPhotos[coverIndex].room : coverPhotos.first?.room
+    }
 
     private func dayPage(topInset: CGFloat) -> some View {
         let hasPhoto = !coverPhotos.isEmpty
@@ -355,39 +361,42 @@ struct TodayView: View {
     private var daySheet: some View {
         let ring = DottedRing.day(totals, goal: budget)
         return VStack(alignment: .leading, spacing: 0) {
-            MacroBlock(
-                nutrients: totals,
-                targets: targets,
-                ring: ring.parts,
-                overflow: noTarget ? 0 : ring.overflow,
-                number: totals.kcal,
-                unit: "kcal eaten",
-                glint: celebrations,
-                fiber: fiberToShow,
-                fiberTarget: FiberTarget.grams(forGoal: Double(goalKcal)),
-                aimOnly: isToday && dayEntries.isEmpty
-            )
-            ActivityChips(
-                health: healthState,
-                water: waterGlasses,
-                waterGoal: waterGoal,
-                onWater: addWater,
-                onWaterRemove: removeWater,
-                onConnect: connectHealth
-            )
-            .padding(.top, 16)
-
-            if let ask = mirrorAsk {
-                MirrorMoment(
-                    kind: ask,
-                    onOpen: { sheet = .mirror(false) },
-                    onTake: { sheet = .mirror(true) },
-                    onNotNow: mirrorNotNow
+            VStack(alignment: .leading, spacing: 0) {
+                MacroBlock(
+                    nutrients: totals,
+                    targets: targets,
+                    ring: ring.parts,
+                    overflow: noTarget ? 0 : ring.overflow,
+                    number: totals.kcal,
+                    unit: "kcal eaten",
+                    glint: celebrations,
+                    fiber: fiberToShow,
+                    fiberTarget: FiberTarget.grams(forGoal: Double(goalKcal)),
+                    aimOnly: isToday && dayEntries.isEmpty
                 )
-                .padding(.top, 18)
-                .transition(.opacity)
-                .id(MirrorMoment.anchor)
+                ActivityChips(
+                    health: healthState,
+                    water: waterGlasses,
+                    waterGoal: waterGoal,
+                    onWater: addWater,
+                    onWaterRemove: removeWater,
+                    onConnect: connectHealth
+                )
+                .padding(.top, 16)
+
+                if let ask = mirrorAsk {
+                    MirrorMoment(
+                        kind: ask,
+                        onOpen: { sheet = .mirror(false) },
+                        onTake: { sheet = .mirror(true) },
+                        onNotNow: mirrorNotNow
+                    )
+                    .padding(.top, 18)
+                    .transition(.opacity)
+                    .id(MirrorMoment.anchor)
+                }
             }
+            .glassGroup()
 
             if isToday, !entries.isEmpty {
                 let learned = self.learned
@@ -404,11 +413,46 @@ struct TodayView: View {
                     onUndoGoal: undoCheckIn,
                     onAddWeight: addWeight
                 )
-                .padding(.top, 28)
+                .glassGroup(after: 28)
             }
 
+            yourDay
+                .glassGroup(after: 26)
+
+            SavedShelf(
+                title: shelfTitle,
+                note: shelfNote,
+                saved: shelfOrder,
+                onAdd: add,
+                onEdit: { sheet = .editSaved($0) },
+                onDelete: removeSaved,
+                onNew: { sheet = .newSaved }
+            )
+            .glassGroup(after: 30)
+
+            if !nearby.isEmpty {
+                NearbyDishes(items: nearby) { sheet = .dish($0) }
+                    .glassGroup(after: 30)
+            }
+
+            WeekStrip(
+                days: weekDays,
+                onOpenWeek: { withAnimation(.snappy) { tab = .week } },
+                onOpenDay: { date in withAnimation(.snappy) { day = date } }
+            )
+            .glassGroup(after: 32)
+        }
+        .padding(.horizontal, Theme.margin)
+        .padding(.top, 10)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(colorScheme == .dark ? Color.clear : Theme.page)
+    }
+
+    /// The day's meals, or what to start with while there are none.
+    private var yourDay: some View {
+        VStack(alignment: .leading, spacing: 0) {
             SectionLabel(title: "Your day", symbol: "fork.knife")
-                .padding(.top, 26)
                 .padding(.bottom, 14)
             let usual = self.usual
             // Every add, delete and Undo settles in, wherever it came from; the first food of
@@ -473,35 +517,7 @@ struct TodayView: View {
                 }
             }
             .animation(reduceMotion ? nil : Motion.settle, value: dayEntries.map(\.persistentModelID))
-
-            SavedShelf(
-                title: shelfTitle,
-                note: shelfNote,
-                saved: shelfOrder,
-                onAdd: add,
-                onEdit: { sheet = .editSaved($0) },
-                onDelete: removeSaved,
-                onNew: { sheet = .newSaved }
-            )
-            .padding(.top, 30)
-
-            if !nearby.isEmpty {
-                NearbyDishes(items: nearby) { sheet = .dish($0) }
-                    .padding(.top, 30)
-            }
-
-            WeekStrip(
-                days: weekDays,
-                onOpenWeek: { withAnimation(.snappy) { tab = .week } },
-                onOpenDay: { date in withAnimation(.snappy) { day = date } }
-            )
-            .padding(.top, 32)
         }
-        .padding(.horizontal, Theme.margin)
-        .padding(.top, 10)
-        .padding(.bottom, 24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.page)
     }
 
     // MARK: Week and month
@@ -1062,7 +1078,7 @@ struct TodayView: View {
             sources.compactMap { source -> CoverPhoto? in
                 if let kept = known[source.id] { return kept }
                 guard let data = source.data, let image = ImageTools.downsample(data, maxPixel: 1320) else { return nil }
-                return CoverPhoto(id: source.id, image: image, soft: ImageTools.softened(data) ?? image, dish: source.dish, place: source.place)
+                return CoverPhoto(id: source.id, image: image, soft: ImageTools.softened(data) ?? image, room: ImageTools.room(data), dish: source.dish, place: source.place)
             }
         }.value
         guard !Task.isCancelled, loaded.map(\.id) != previous.map(\.id) else { return }
@@ -1403,20 +1419,20 @@ private struct TopFade: View {
     let height: CGFloat
 
     var body: some View {
-        LinearGradient(
-            stops: [
-                .init(color: Theme.page, location: 0),
-                .init(color: Theme.page, location: 0.65),
-                .init(color: Theme.page.opacity(0), location: 1),
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .frame(height: height)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .ignoresSafeArea(edges: .top)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
+        // The room again, drawn over what scrolled up, so nothing shows where it ends.
+        RoomBackground()
+            .mask(alignment: .top) {
+                LinearGradient(
+                    stops: [
+                        .init(color: .black, location: 0),
+                        .init(color: .black, location: 0.65),
+                        .init(color: .clear, location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: height)
+            }
     }
 }
 
@@ -1455,10 +1471,10 @@ private struct ReminderOffer: View {
                 Button(action: onRemind) {
                     Text("Remind me")
                         .font(.ui(15, .semibold))
-                        .foregroundStyle(Theme.page)
+                        .foregroundStyle(Theme.selectedInk)
                         .padding(.horizontal, 16)
                         .frame(height: 38)
-                        .background(Theme.ink, in: Capsule())
+                        .selectedFill(true, in: Capsule())
                 }
                 .buttonStyle(PressableStyle(scale: 0.94))
                 Button("Not now", action: onNotNow)

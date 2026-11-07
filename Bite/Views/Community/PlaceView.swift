@@ -33,19 +33,21 @@ struct PlaceView: View {
                     actions
                         .padding(.top, 18)
 
-                    SectionLabel(title: "Dishes here", symbol: "fork.knife")
-                        .padding(.top, 30)
-                        .padding(.bottom, 6)
-                    ForEach(ranked) { dish in
-                        Button {
-                            path.append(dish)
-                        } label: {
-                            DishListRow(dish: dish)
+                    VStack(alignment: .leading, spacing: 0) {
+                        SectionLabel(title: "Dishes here", symbol: "fork.knife")
+                            .padding(.bottom, 6)
+                        ForEach(ranked) { dish in
+                            Button {
+                                path.append(dish)
+                            } label: {
+                                DishListRow(dish: dish)
+                            }
+                            .buttonStyle(.plain)
+                            Rectangle().fill(Theme.hairline).frame(height: 1).padding(.leading, 70)
                         }
-                        .buttonStyle(.plain)
-                        Rectangle().fill(Theme.hairline).frame(height: 1).padding(.leading, 70)
+                        newDishRow
                     }
-                    newDishRow
+                    .glassGroup(after: 30)
 
                     Text("The calories here come from estimates people shared. Each dish shows how sure they are, and yours makes it surer.")
                         .font(.ui(13))
@@ -57,7 +59,7 @@ struct PlaceView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 40)
             }
-            .background(Theme.page.ignoresSafeArea())
+            .roomBackground()
             .navigationDestination(for: CommunityDish.self) { dish in
                 DishView(dish: dish, onDone: onDone)
             }

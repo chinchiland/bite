@@ -135,7 +135,7 @@ struct EstimateAvatar: View {
                 .foregroundStyle(.white)
                 .frame(width: 15, height: 15)
                 .background(estimate.source == .ai ? Theme.accurate : Theme.entered, in: Circle())
-                .overlay { Circle().stroke(Theme.card, lineWidth: 2) }
+                .overlay { Circle().stroke(Theme.solidCard, lineWidth: 2) }
                 .offset(x: 5, y: 5)
         }
         .accessibilityElement(children: .ignore)
@@ -257,7 +257,7 @@ struct AccuracyExplainer: View {
                 }
                 .padding(Theme.margin)
             }
-            .background(Theme.card.ignoresSafeArea())
+            .roomBackground(paper: Theme.card)
             .navigationTitle("Accuracy")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

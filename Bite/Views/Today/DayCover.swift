@@ -7,6 +7,8 @@ struct CoverPhoto: Identifiable, Equatable {
     let image: UIImage
     /// A small blurred copy for where the photo melts into the page.
     let soft: UIImage
+    /// The room this photo makes, in Glass.
+    let room: UIImage?
     let dish: String
     let place: MealPlace?
 
@@ -40,6 +42,8 @@ struct DayCover<Controls: View>: View {
     var quietPaging = false
     @ViewBuilder let controls: Controls
 
+    @Environment(\.colorScheme) private var scheme
+
     private var current: CoverPhoto? {
         photos.indices.contains(index) ? photos[index] : photos.first
     }
@@ -66,9 +70,12 @@ struct DayCover<Controls: View>: View {
 
     @ViewBuilder private var backdrop: some View {
         if photos.isEmpty {
-            Theme.coverGradient
-                .overlay { melt(shade: false) }
-                .accessibilityHidden(true)
+            // In Glass the room is already the day's color.
+            if scheme != .dark {
+                Theme.coverGradient
+                    .overlay { melt(shade: false) }
+                    .accessibilityHidden(true)
+            }
         } else if photos.count == 1 {
             // One photo: nothing to page, so nothing that can slide sideways.
             page(photos[0])
@@ -123,25 +130,42 @@ struct DayCover<Controls: View>: View {
                     }
             }
             .overlay { melt(shade: true) }
+            .mask { footFade }
             .clipped()
             .contentShape(Rectangle())
             .onTapGesture { advance() }
     }
 
-    /// A soft shade at the head for the controls, clear over the food, paper at the foot.
+    /// A soft shade at the head for the controls, clear over the food, paper at the foot. In
+    /// Glass the foot has no color of its own: `footFade` lets the room come through instead.
     private func melt(shade: Bool) -> some View {
-        LinearGradient(
+        let foot = scheme == .dark ? Color.clear : Theme.page
+        return LinearGradient(
             stops: [
                 .init(color: .black.opacity(shade ? 0.26 : 0), location: 0),
                 .init(color: .black.opacity(0), location: 0.24),
-                .init(color: Theme.page.opacity(0), location: 0.52),
-                .init(color: Theme.page.opacity(0.88), location: 0.8),
-                .init(color: Theme.page, location: 0.96),
+                .init(color: foot.opacity(0), location: 0.52),
+                .init(color: foot.opacity(0.88), location: 0.8),
+                .init(color: foot, location: 0.96),
             ],
             startPoint: .top,
             endPoint: .bottom
         )
         .allowsHitTesting(false)
+    }
+
+    /// The photo itself going, in Glass, down to the room made of its own colors.
+    private var footFade: some View {
+        let glass = scheme == .dark
+        return LinearGradient(
+            stops: [
+                .init(color: .black, location: 0.52),
+                .init(color: .black.opacity(glass ? 0.12 : 1), location: 0.8),
+                .init(color: .black.opacity(glass ? 0 : 1), location: 0.96),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private var hero: some View {

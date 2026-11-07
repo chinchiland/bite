@@ -44,7 +44,7 @@ struct PlacePicker: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Theme.page.ignoresSafeArea())
+            .roomBackground()
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Search places"))
             .task(id: query) {
                 results = nil

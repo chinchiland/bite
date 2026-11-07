@@ -105,7 +105,7 @@ struct AddEstimateView: View {
                 .listRowBackground(Theme.card)
             }
             .scrollContentBackground(.hidden)
-            .background(Theme.page.ignoresSafeArea())
+            .roomBackground()
             .navigationTitle(isNewDish ? "New dish" : "Your estimate")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

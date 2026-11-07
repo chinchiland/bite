@@ -60,7 +60,7 @@ struct FirstRunSheet: View {
         .presentationDetents(step == .firstBite ? [.medium, .large] : [.large], selection: $detent)
         .presentationBackgroundInteraction(.disabled)
         .presentationDragIndicator(.visible)
-        .presentationBackground(Theme.card)
+        .presentationBackground(Theme.solidCard)
     }
 
     /// The first food goes in like any other, with its toast and Undo, and the ring lights
@@ -226,7 +226,7 @@ private struct FirstBiteStep: View {
                 }
             }
             .padding(10)
-            .background(Theme.page, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .background(Theme.well, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
 
             Button("Add to \(Meal.likely().title)") {
                 onAdd(food, amount)

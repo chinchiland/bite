@@ -5035,6 +5035,22 @@
         }
       }
     },
+    "Glass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cristal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verre"
+          }
+        }
+      }
+    },
     "Gluten" : {
       "localizations" : {
         "es" : {
@@ -6233,6 +6249,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajoute tes favoris et un verre d’eau d’un geste."
+          }
+        }
+      }
+    },
+    "Look" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aspecto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparence"
           }
         }
       }
@@ -7865,6 +7897,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commander"
+          }
+        }
+      }
+    },
+    "Paper" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Papel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Papier"
           }
         }
       }

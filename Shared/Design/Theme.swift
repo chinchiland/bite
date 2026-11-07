@@ -3,30 +3,42 @@ import UIKit
 
 /// Bite's design tokens. The rules they serve are written up in DESIGN.md.
 ///
-/// The Journal look: a warm paper page, white sheets on it, your food photos as covers, ink
-/// numbers, DM Sans. Color always means something: the three macros, burned and steps, a
-/// verdict, a rank, or the pastel tile that tells foods apart.
+/// Two looks share one set of names. Glass, the default, is the dark side of every token: your
+/// food's own color as the room, groups of panes floating in it, white numbers, and one solid
+/// white button a screen. Paper is the light side: a warm page, white sheets, ink numbers. Both
+/// are DM Sans, and in both color always means something: the three macros, burned and steps, a
+/// verdict, a rank, or the tile that tells foods apart.
 enum Theme {
     // MARK: Surfaces and text
 
-    /// The warm paper every screen sits on.
-    static let page = Color(lightHex: 0xFAFAF8, darkHex: 0x121110)
-    /// White sheets and cards on the page.
-    static let card = Color(lightHex: 0xFFFFFF, darkHex: 0x1C1B19)
-    /// The soft box inside a card that groups secondary facts.
-    static let inset = Color(lightHex: 0xF4F3EF, darkHex: 0x24231F)
-    static let ink = Color(lightHex: 0x141414, darkHex: 0xF3F2EE)
-    static let secondary = Color(lightHex: 0x75736E, darkHex: 0xA3A09A)
-    static let tertiary = Color(lightHex: 0xA9A69F, darkHex: 0x6E6B65)
+    /// The warm paper every screen sits on; in Glass the near-black ground under the room.
+    static let page = Color(lightHex: 0xFAFAF8, darkHex: 0x0A0B0C)
+    /// White sheets and cards on the page; in Glass a pane the room shows through. The room is
+    /// already blurred, so a pane needs no blur of its own and costs nothing to scroll.
+    static let card = Color(lightHex: 0xFFFFFF, darkHex: 0x121315, darkOpacity: 0.62)
+    /// A card that must hide what is behind it: tips, sheets that open over a page.
+    static let solidCard = Color(lightHex: 0xFFFFFF, darkHex: 0x17181A)
+    /// The soft box inside a card that groups secondary facts; in Glass a well sunk into it.
+    static let inset = Color(lightHex: 0xF4F3EF, darkHex: 0x000000, darkOpacity: 0.3)
+    /// The paler box inside a sheet: the paper showing through, or a well in Glass.
+    static let well = Color(lightHex: 0xFAFAF8, darkHex: 0x000000, darkOpacity: 0.3)
+    static let ink = Color(lightHex: 0x141414, darkHex: 0xFFFFFF)
+    static let secondary = Color(lightHex: 0x75736E, darkHex: 0xFFFFFF, darkOpacity: 0.74)
+    static let tertiary = Color(lightHex: 0xA9A69F, darkHex: 0xFFFFFF, darkOpacity: 0.54)
     /// Quiet controls: chips, soft buttons, step buttons.
-    static let fill = Color(lightHex: 0xF0EEE9, darkHex: 0x272622)
+    static let fill = Color(lightHex: 0xF0EEE9, darkHex: 0xFFFFFF, darkOpacity: 0.11)
+    /// What you chose: ink on paper. In Glass a lit pane, because only the main action is solid.
+    static let selected = Color(lightHex: 0x141414, darkHex: 0xFFFFFF, darkOpacity: 0.17)
+    static let selectedInk = Color(lightHex: 0xFAFAF8, darkHex: 0xFFFFFF)
+    /// The fine light round a lit pane. Paper has none.
+    static let rim = Color(lightHex: 0x141414, darkHex: 0xFFFFFF, lightOpacity: 0, darkOpacity: 0.16)
     /// The empty part of a bar.
-    static let track = Color(lightHex: 0xECE9E1, darkHex: 0x2E2C28)
+    static let track = Color(lightHex: 0xECE9E1, darkHex: 0xFFFFFF, darkOpacity: 0.1)
     /// The dots of the ring that are still to eat.
-    static let ringRest = Color(lightHex: 0xE6E3DA, darkHex: 0x3A3833)
-    static let hairline = Color(lightHex: 0xECEAE5, darkHex: 0x2B2A26)
+    static let ringRest = Color(lightHex: 0xE6E3DA, darkHex: 0xFFFFFF, darkOpacity: 0.15)
+    static let hairline = Color(lightHex: 0xECEAE5, darkHex: 0xFFFFFF, darkOpacity: 0.09)
     /// The hairline that keeps a white product tile from melting into a white sheet.
-    static let edge = Color(lightHex: 0xEEECE7, darkHex: 0x33312D)
+    static let edge = Color(lightHex: 0xEEECE7, darkHex: 0xFFFFFF, darkOpacity: 0.1)
     /// Product photos sit on white in both modes so their white backgrounds melt away.
     static let photoTile = Color(lightHex: 0xFFFFFF, darkHex: 0xEDEBE6)
 
@@ -55,19 +67,19 @@ enum Theme {
     static let over = Color(lightHex: 0xD9482B, darkHex: 0xF06A50)
     /// On target and light days, as the dot beside a day.
     static let onTarget = Color(lightHex: 0x2E9E62, darkHex: 0x4CC283)
-    static let light = Color(lightHex: 0xC8C5BE, darkHex: 0x57544E)
+    static let light = Color(lightHex: 0xC8C5BE, darkHex: 0xFFFFFF, darkOpacity: 0.36)
     /// The scan laser in the camera.
     static let laser = Color(lightHex: 0xFF453A, darkHex: 0xFF6961)
 
     // MARK: Status chips (soft fill, strong text)
 
     static let goodText = Color(lightHex: 0x2F6B34, darkHex: 0x9CD49A)
-    static let goodFill = Color(lightHex: 0xE8F3DF, darkHex: 0x1E2A1C)
+    static let goodFill = Color(lightHex: 0xE8F3DF, darkHex: 0x7CC47F, darkOpacity: 0.16)
     static let goodIcon = Color(lightHex: 0x3E8A45, darkHex: 0x7CC47F)
     static let watchText = Color(lightHex: 0x9A4A12, darkHex: 0xF0A66C)
-    static let watchFill = Color(lightHex: 0xFBEBDD, darkHex: 0x33241A)
+    static let watchFill = Color(lightHex: 0xFBEBDD, darkHex: 0xF0A66C, darkOpacity: 0.16)
     static let infoText = Color(lightHex: 0x2F5E9E, darkHex: 0x9DBBE8)
-    static let infoFill = Color(lightHex: 0xE6EEF8, darkHex: 0x1B2636)
+    static let infoFill = Color(lightHex: 0xE6EEF8, darkHex: 0x9DBBE8, darkOpacity: 0.16)
     /// A brand that links to its page.
     static let link = Color(lightHex: 0x3E7F45, darkHex: 0x8FCB8F)
 
@@ -80,13 +92,26 @@ enum Theme {
 
     static func tint(_ tint: FoodTint) -> Color {
         switch tint {
-        case .sand: Color(lightHex: 0xF3EEE7, darkHex: 0x2E2925)
-        case .peach: Color(lightHex: 0xFDE8DB, darkHex: 0x3B2A21)
-        case .butter: Color(lightHex: 0xFBF2CF, darkHex: 0x37311B)
-        case .mint: Color(lightHex: 0xE0F3E7, darkHex: 0x1D3428)
-        case .sky: Color(lightHex: 0xE1EDFA, darkHex: 0x1C2B3E)
-        case .lilac: Color(lightHex: 0xEDE7FA, darkHex: 0x2B2541)
-        case .blush: Color(lightHex: 0xFBE3E8, darkHex: 0x3B2128)
+        case .sand: Color(lightHex: 0xF3EEE7, darkHex: 0xD8C4A8, darkOpacity: 0.17)
+        case .peach: Color(lightHex: 0xFDE8DB, darkHex: 0xFFB38A, darkOpacity: 0.19)
+        case .butter: Color(lightHex: 0xFBF2CF, darkHex: 0xF5D878, darkOpacity: 0.18)
+        case .mint: Color(lightHex: 0xE0F3E7, darkHex: 0x7FDDAA, darkOpacity: 0.17)
+        case .sky: Color(lightHex: 0xE1EDFA, darkHex: 0x8CC0FF, darkOpacity: 0.18)
+        case .lilac: Color(lightHex: 0xEDE7FA, darkHex: 0xBBA3FF, darkOpacity: 0.19)
+        case .blush: Color(lightHex: 0xFBE3E8, darkHex: 0xFF9FB4, darkOpacity: 0.18)
+        }
+    }
+
+    /// The light a food with no photo of its own gives the room in Glass.
+    static func glow(_ tint: FoodTint) -> Color {
+        switch tint {
+        case .sand: Color(hex: 0xB08E66)
+        case .peach: Color(hex: 0xD9794A)
+        case .butter: Color(hex: 0xC9A63A)
+        case .mint: Color(hex: 0x3FA877)
+        case .sky: Color(hex: 0x4A8AD6)
+        case .lilac: Color(hex: 0x8A6DD6)
+        case .blush: Color(hex: 0xD6607C)
         }
     }
 
@@ -125,15 +150,28 @@ enum Theme {
     static let gap: CGFloat = 12
     static let cardRadius: CGFloat = 22
     static let insetRadius: CGFloat = 16
+    /// The big continuous corners of a group floating in the room.
+    static let groupRadius: CGFloat = 30
+    /// How far a group reaches past the page margin, so its words stay where they were and the
+    /// group sits 8 pt from the edge of the screen.
+    static let groupReach: CGFloat = 12
+    /// Space between two groups.
+    static let groupGap: CGFloat = 8
     /// The rounded top of a sheet that rises over a cover.
     static let sheetRadius: CGFloat = 28
 }
 
 extension Color {
-    init(lightHex: UInt32, darkHex: UInt32) {
+    init(lightHex: UInt32, darkHex: UInt32, lightOpacity: CGFloat = 1, darkOpacity: CGFloat = 1) {
         self.init(uiColor: UIColor { traits in
-            UIColor(hex: traits.userInterfaceStyle == .dark ? darkHex : lightHex)
+            traits.userInterfaceStyle == .dark
+                ? UIColor(hex: darkHex).withAlphaComponent(darkOpacity)
+                : UIColor(hex: lightHex).withAlphaComponent(lightOpacity)
         })
+    }
+
+    init(hex: UInt32) {
+        self.init(uiColor: UIColor(hex: hex))
     }
 }
 

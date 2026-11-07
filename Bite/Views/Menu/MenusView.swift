@@ -23,7 +23,7 @@ struct MenusView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
         .navigationTitle("Your menus")
         .navigationBarTitleDisplayMode(.inline)
     }

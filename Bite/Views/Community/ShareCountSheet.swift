@@ -89,7 +89,7 @@ struct ShareCountSheet: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 24)
         .padding(.bottom, 12)
-        .background(Theme.card.ignoresSafeArea())
+        .roomBackground(paper: Theme.card)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .animation(Motion.settle, value: failed)

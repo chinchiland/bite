@@ -64,7 +64,7 @@ struct QuickAddView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
         .navigationTitle("Quick add")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
@@ -120,7 +120,7 @@ struct QuickAddView: View {
         .padding(.horizontal, 20)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background(Theme.page.ignoresSafeArea())
+        .roomBackground()
     }
 
     private func save() {
