@@ -1,0 +1,100 @@
+# A short run for design work: one Debug build and the screens that show the look, about ten
+# minutes instead of the full run's forty.
+name: Design preview
+
+on:
+  push:
+    branches:
+      - fasting
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'server/**'
+  workflow_dispatch:
+
+concurrency:
+  group: design-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shots:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use the newest Xcode
+        run: |
+          latest=$(python3 - <<'PY'
+          import glob, re
+          apps = [a for a in glob.glob('/Applications/Xcode_*.app') if not re.search(r'beta|rc', a, re.I)]
+          key = lambda a: [int(n) for n in re.findall(r'\d+', a.split('Xcode_', 1)[1])]
+          print(max(apps, key=key) if apps else '')
+          PY
+          )
+          if [ -n "$latest" ]; then sudo xcode-select -s "$latest"; fi
+          xcodebuild -version
+
+      - name: Build for the simulator
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Bite.xcodeproj \
+            -scheme Bite \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO -quiet
+
+      - name: Screenshots
+        run: |
+          set -euo pipefail
+          APP=build/Build/Products/Debug-iphonesimulator/Bite.app
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          phones = [d for runtime, items in devices.items() if "iOS" in runtime for d in items
+                    if d["name"].startswith("iPhone") and "SE" not in d["name"]]
+          preferred = [d for d in phones if d["name"] in ("iPhone 16", "iPhone 16 Pro", "iPhone 15", "iPhone 15 Pro")]
+          print((preferred or phones)[-1]["udid"])
+          ')
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl status_bar "$UDID" override --time 9:41 --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl spawn "$UDID" defaults write com.apple.Preferences DidShowContinuousPathIntroduction -bool true || true
+          xcrun simctl spawn "$UDID" defaults write com.apple.keyboard.ContinuousPath DidShowContinuousPathIntroduction -bool true || true
+          mkdir -p screenshots
+
+          shoot() {
+            name=$1; shift
+            case "$*" in
+              *AppleLocale*) ;;
+              *) set -- "$@" -AppleLocale en_IE ;;
+            esac
+            xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
+            xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "$@"
+            sleep 8
+            xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
+          }
+
+          shoot 01-today -onboarded YES
+          shoot 37-today-middle -onboarded YES -anchor center
+          shoot 93-fasting -onboarded YES -screen fasting
+          shoot 94-fasting-methods -onboarded YES -screen fasting -anchor methods
+          shoot 95-fasting-cycle -onboarded YES -screen fasting -anchor cycle
+          shoot 96-fasting-end -onboarded YES -screen fasting -anchor bottom
+          shoot 97-fasting-250lb -onboarded YES -screen fasting -fasting.weight 113.4 -body.sex male -body.age 35 -body.height 180 -body.activity sedentary
+          shoot 98-fasting-250lb-methods -onboarded YES -screen fasting -anchor methods -fasting.weight 113.4 -body.sex male -body.age 35 -body.height 180 -body.activity sedentary
+          shoot 99-fasting-250lb-cycle -onboarded YES -screen fasting -anchor cycle -fasting.weight 113.4 -body.sex male -body.age 35 -body.height 180 -body.activity sedentary
+          shoot 100-fasting-fr -onboarded YES -screen fasting -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 101-fasting-es-methods -onboarded YES -screen fasting -anchor methods -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 102-fasting-paper -onboarded YES -screen fasting -look paper
+          shoot 103-fasting-low-bmi -onboarded YES -screen fasting -fasting.weight 52
+
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: screenshots

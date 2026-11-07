@@ -26,6 +26,56 @@ func product(_ code: String) throws -> OFFProductResponse {
     return try JSONDecoder().decode(OFFProductResponse.self, from: data)
 }
 
+// MARK: Fasting
+
+do {
+    // The Reddit chart's man: 250 pounds, eating a day of what he burns once a week.
+    let man = FastingBody(sex: .male, age: 35, heightCm: 180, weightKg: 113.4, activity: .sedentary)
+    check(near(man.burn(atKg: man.weightKg), 2507, 2), "a 250 lb man at a desk burns about 2,500 kcal, the chart's daily maintenance")
+    check(near(FastingCycle.onceAWeek.shareOfNonstop, 6.0 / 7), "once a week keeps six days of seven")
+    check(near(FastingCycle(fastDays: 7).shareOfNonstop, 0.875), "week-long fasts keep the 87% the post talks about")
+    check(FastingCycle.onceAWeek.length == 7, "once a week is a seven day turn")
+
+    let burn = man.burn(atKg: man.weightKg)
+    let weekly = FastingModel.project(body: man, intake: .cycle(.onceAWeek, mealKcal: burn), goalKg: 90, days: 84)
+    let lost = weekly.lost(by: 84)
+    check(lost.total > 15 && lost.total < 26, "twelve weeks of a meal a week: about 20 kg of tissue, got \(lost.total)")
+    check(lost.fat / lost.total > 0.7, "a heavy body loses mostly fat")
+    check(weekly.goalDay == nil || weekly.goalDay! > 60, "90 kg is not reached in two months")
+    let lastFast = weekly.day(6)
+    let meal = weekly.day(7)
+    check(lastFast.tissueKg - lastFast.scaleKg > 1.5, "after six days the scale is about 2 kg under the trend: water")
+    check(meal.tissueKg - meal.scaleKg < lastFast.tissueKg - lastFast.scaleKg - 0.8, "the meal brings most of that water back")
+    check(!weekly.days[5].ate && weekly.days[6].ate, "the meal is on the seventh day")
+
+    let nonstop = FastingModel.project(body: man, intake: .nothing, goalKg: 0, days: 84)
+    let share = lost.total / nonstop.lost(by: 84).total
+    check(share > 0.75 && share < 0.95, "a meal a week loses most of what never eating would, got \(share)")
+    let daily = FastingModel.project(body: man, intake: .daily(kcal: burn), goalKg: 0, days: 28)
+    check(abs(daily.lost(by: 28).total) < 0.3, "eating what you burn holds your weight")
+
+    // A lean body: it stops at a BMI of 20, and loses more lean for each kilo.
+    let lean = FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 62, activity: .light)
+    let leanPlan = FastingModel.project(body: lean, intake: .cycle(.onceAWeek, mealKcal: lean.burn(atKg: 62)), goalKg: 50, days: 182)
+    check(leanPlan.stoppedAtFloor, "a goal under a BMI of 20 stops at the floor")
+    check(leanPlan.last.tissueKg >= FastingModel.floorKg(for: lean) - 0.5, "it never goes past the floor")
+    let leanLost = leanPlan.lost(by: 14)
+    check(leanLost.lean / leanLost.total > 0.3, "a lean body loses a third or more as lean tissue")
+
+    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 16, heightCm: 165, weightKg: 70, activity: .light)) == .underAge, "no plan under 18")
+    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 54, activity: .light)) == .lowBMI, "no plan under a BMI of 20")
+    check(FastingModel.refusal(for: man) == nil, "a plan for the man")
+    check(near(FastingModel.suggestedGoal(for: man), 102), "a tenth off to start with")
+    check(FastingModel.suggestedGoal(for: lean) <= lean.weightKg, "the suggestion never adds weight")
+    check(FastingModel.horizon(goalDay: 30, cycle: .onceAWeek) == 37, "drawn to the goal and one more turn")
+    check(FastingModel.horizon(goalDay: 3, cycle: .onceAWeek) == 28, "at least four weeks")
+    check(FastingModel.horizon(goalDay: nil, cycle: .onceAWeek) == 182, "26 weeks with no goal in reach")
+    check(FastingStage.through(fastDays: 1).count == 2, "a day's fast: the last meal, then the meal")
+    check(FastingStage.through(fastDays: 6).count == 5, "six days go through every stage")
+    check(FastingStage.through(fastDays: 6).last?.hour == 144, "the meal comes at 144 h")
+    check(FastingCycle.all.allSatisfy { $0.fastDays <= FastingCycle.longest }, "Bite plans fasts up to a week")
+}
+
 // MARK: The room
 
 check(near(RoomTone.level(mean: 0.7, peak: 0.7), 0.2857), "a bright plate is dimmed to the same depth")

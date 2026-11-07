@@ -9,6 +9,8 @@ name: Build Bite
 
 on:
   push:
+    branches-ignore:
+      - fasting
     # Words alone don't need a cloud Mac.
     paths-ignore:
       - '**.md'
@@ -167,6 +169,17 @@ jobs:
           shoot 82-typical-fr -onboarded YES -screen typical -query shawarma -AppleLanguages "(fr)" -AppleLocale fr_FR
           shoot 83-menu-paper -onboarded YES -screen menu -look paper
           shoot 84-typical-paper -onboarded YES -screen typical -query shawarma -look paper
+          # The fasting plan, for the demo body and for a 250 lb man, in both looks and all three languages.
+          shoot 93-fasting -onboarded YES -screen fasting
+          shoot 94-fasting-methods -onboarded YES -screen fasting -anchor methods
+          shoot 95-fasting-cycle -onboarded YES -screen fasting -anchor cycle
+          shoot 96-fasting-end -onboarded YES -screen fasting -anchor bottom
+          shoot 97-fasting-250lb -onboarded YES -screen fasting -fasting.weight 113.4 -body.sex male -body.age 35 -body.height 180 -body.activity sedentary
+          shoot 98-fasting-250lb-methods -onboarded YES -screen fasting -anchor methods -fasting.weight 113.4 -body.sex male -body.age 35 -body.height 180 -body.activity sedentary
+          shoot 100-fasting-fr -onboarded YES -screen fasting -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 101-fasting-es-methods -onboarded YES -screen fasting -anchor methods -AppleLanguages "(es)" -AppleLocale es_ES
+          shoot 102-fasting-paper -onboarded YES -screen fasting -look paper
+          shoot 103-fasting-low-bmi -onboarded YES -screen fasting -fasting.weight 52
 
           shoot_fresh() {
             name=$1; shift

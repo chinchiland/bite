@@ -19,6 +19,8 @@ struct WeightTrend: View {
     var goalSet: Int? = nil
     var onUndoGoal: () -> Void = {}
     let onAddWeight: () -> Void
+    /// Opens the fasting plan.
+    var onPlanFast: (() -> Void)? = nil
     var horizonDays = 28
 
     private var endDate: Date {
@@ -44,6 +46,23 @@ struct WeightTrend: View {
             } else if let checkIn {
                 WeekCheckIn(checkIn: checkIn, onUse: onUseCheckIn, onKeep: onKeepCheckIn)
                     .transition(.opacity)
+            }
+            if let onPlanFast {
+                Button(action: onPlanFast) {
+                    HStack(spacing: 10) {
+                        SymbolTile(systemImage: "timer", color: Theme.ink, glyph: Theme.ink)
+                        Text("Plan a fast")
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.ink)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Theme.tertiary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows what a fast would do")
             }
         }
     }

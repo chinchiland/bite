@@ -65,6 +65,22 @@
         }
       }
     },
+    "%@ days without food, then a meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ días sin comer y luego una comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ jours sans manger, puis un repas"
+          }
+        }
+      }
+    },
     "%@ g of protein to go: the richest in it come first." : {
       "localizations" : {
         "en" : {
@@ -181,6 +197,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ kcal mangées"
+          }
+        }
+      }
+    },
+    "%@ kcal every day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal cada día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kcal chaque jour"
           }
         }
       }
@@ -307,6 +339,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ de moins depuis le %@"
+          }
+        }
+      }
+    },
+    "%@ lost by %@: %@ fat, %@ lean." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ menos para el %@: %@ de grasa, %@ de masa magra."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de moins d’ici le %@ : %@ de graisse, %@ de masse maigre."
           }
         }
       }
@@ -495,6 +543,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@, %@, %@ calories"
+          }
+        }
+      }
+    },
+    "%@, about %@ a week." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, unos %@ por semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, environ %@ par semaine."
+          }
+        }
+      }
+    },
+    "%@, about %@ a week. Bite stops at %@, a BMI of 20." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, unos %@ por semana. Bite se detiene en %@, un IMC de 20."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, environ %@ par semaine. Bite s’arrête à %@, un IMC de 20."
+          }
+        }
+      }
+    },
+    "%@, about %@ a week: your goal by %@." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, unos %@ por semana: tu objetivo para el %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, environ %@ par semaine : ton objectif d’ici le %@."
           }
         }
       }
@@ -1419,6 +1515,22 @@
         }
       }
     },
+    "A day without food, then a meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un día sin comer y luego una comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un jour sans manger, puis un repas"
+          }
+        }
+      }
+    },
     "A drizzle" : {
       "localizations" : {
         "es" : {
@@ -1529,6 +1641,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Une ligne en dessous, comme « avec du miel »"
+          }
+        }
+      }
+    },
+    "A meal every %@ days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una comida cada %@ días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un repas tous les %@ jours"
           }
         }
       }
@@ -2383,6 +2511,38 @@
         }
       }
     },
+    "An estimate, and every body differs. What you burn is learned from your weighings and falls up to %@ deep into a fast; body fat comes from your BMI, and the split between fat and lean from Forbes. Bite plans down to a BMI of 20, and fasts of a week at most." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una estimación, y cada cuerpo es distinto. Lo que quemas sale de tus pesajes y baja hasta un %@ en pleno ayuno; la grasa corporal sale de tu IMC, y el reparto entre grasa y masa magra, de Forbes. Bite planifica hasta un IMC de 20 y ayunos de una semana como mucho."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une estimation, et chaque corps est différent. Ce que tu brûles vient de tes pesées et baisse jusqu’à %@ au cœur d’un jeûne ; la masse grasse vient de ton IMC, et la part entre graisse et masse maigre, de Forbes. Bite prévoit jusqu’à un IMC de 20, et des jeûnes d’une semaine au plus."
+          }
+        }
+      }
+    },
+    "An estimate, and every body differs. What you burn is worked out from your body and falls up to %@ deep into a fast; body fat comes from your BMI, and the split between fat and lean from Forbes. Bite plans down to a BMI of 20, and fasts of a week at most." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una estimación, y cada cuerpo es distinto. Lo que quemas se calcula a partir de tu cuerpo y baja hasta un %@ en pleno ayuno; la grasa corporal sale de tu IMC, y el reparto entre grasa y masa magra, de Forbes. Bite planifica hasta un IMC de 20 y ayunos de una semana como mucho."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une estimation, et chaque corps est différent. Ce que tu brûles est calculé d’après ton corps et baisse jusqu’à %@ au cœur d’un jeûne ; la masse grasse vient de ton IMC, et la part entre graisse et masse maigre, de Forbes. Bite prévoit jusqu’à un IMC de 20, et des jeûnes d’une semaine au plus."
+          }
+        }
+      }
+    },
     "Another day, or your week" : {
       "localizations" : {
         "es" : {
@@ -2443,6 +2603,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Santé"
+          }
+        }
+      }
+    },
+    "Ask your doctor first, above all before fasting 3 days or more." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregunta antes a tu médico, sobre todo antes de ayunar 3 días o más."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande d’abord à ton médecin, surtout avant de jeûner 3 jours ou plus."
+          }
+        }
+      }
+    },
+    "At a BMI under 20, Bite doesn't plan a fast." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con un IMC por debajo de 20, Bite no planifica ayunos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec un IMC sous 20, Bite ne prévoit pas de jeûne."
           }
         }
       }
@@ -2655,6 +2847,22 @@
         }
       }
     },
+    "Before you start" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antes de empezar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avant de commencer"
+          }
+        }
+      }
+    },
     "Best days" : {
       "localizations" : {
         "es" : {
@@ -2831,6 +3039,22 @@
         }
       }
     },
+    "BMI %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMC %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMC %@"
+          }
+        }
+      }
+    },
     "Brand" : {
       "localizations" : {
         "es" : {
@@ -2843,6 +3067,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Marque"
+          }
+        }
+      }
+    },
+    "Break it gently: something small first, then eat slowly." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rómpelo con calma: algo ligero primero y luego come despacio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Romps-le en douceur : quelque chose de léger d’abord, puis mange lentement."
           }
         }
       }
@@ -4101,6 +4341,22 @@
         }
       }
     },
+    "Drink water all the way through. For longer fasts, ask about salt, potassium and magnesium." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bebe agua todo el tiempo. Para ayunos más largos, pregunta por la sal, el potasio y el magnesio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bois de l’eau tout du long. Pour les jeûnes plus longs, demande pour le sel, le potassium et le magnésium."
+          }
+        }
+      }
+    },
     "Each dish gets a calorie estimate. A long menu can take up to a minute." : {
       "localizations" : {
         "es" : {
@@ -4257,6 +4513,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Emoji"
+          }
+        }
+      }
+    },
+    "End a long fast with a small meal, and go slowly for a day." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina un ayuno largo con una comida pequeña y ve despacio durante un día."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termine un long jeûne par un petit repas, et vas-y doucement pendant une journée."
           }
         }
       }
@@ -4485,6 +4757,22 @@
         }
       }
     },
+    "Every other day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un día sí, un día no"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un jour sur deux"
+          }
+        }
+      }
+    },
     "Export your log" : {
       "localizations" : {
         "es" : {
@@ -4545,6 +4833,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wrap falafel"
+          }
+        }
+      }
+    },
+    "Fasting plans are for adults." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los planes de ayuno son para adultos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les plans de jeûne sont pour les adultes."
           }
         }
       }
@@ -5067,6 +5371,22 @@
         }
       }
     },
+    "Glycogen runs low" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El glucógeno se agota"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le glycogène s’épuise"
+          }
+        }
+      }
+    },
     "Goal" : {
       "localizations" : {
         "es" : {
@@ -5505,6 +5825,22 @@
         }
       }
     },
+    "How you fast" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu forma de ayunar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta façon de jeûner"
+          }
+        }
+      }
+    },
     "Huge" : {
       "localizations" : {
         "es" : {
@@ -5533,6 +5869,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Assiette de houmous"
+          }
+        }
+      }
+    },
+    "Hunger often eases" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El hambre suele calmarse"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La faim s’apaise souvent"
           }
         }
       }
@@ -5601,6 +5953,22 @@
         }
       }
     },
+    "In 4 weeks" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En 4 semanas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En 4 semaines"
+          }
+        }
+      }
+    },
     "Ingredients" : {
       "localizations" : {
         "es" : {
@@ -5635,6 +6003,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ kcal, ça te va ?"
+          }
+        }
+      }
+    },
+    "It tends to peak on day 2 or 3, then fade." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suele llegar a su punto más alto el segundo o el tercer día y luego bajar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elle culmine souvent le deuxième ou le troisième jour, puis s’estompe."
           }
         }
       }
@@ -5929,6 +6313,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gardée. Tu en prends une autre ?"
+          }
+        }
+      }
+    },
+    "Ketosis" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cetosis"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cétose"
           }
         }
       }
@@ -7309,6 +7709,22 @@
         }
       }
     },
+    "Not for you if you're pregnant or breastfeeding, take medicine for diabetes, or have had an eating disorder." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No es para ti si estás embarazada o das el pecho, tomas medicación para la diabetes o has tenido un trastorno alimentario."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas pour toi si tu es enceinte ou allaites, si tu prends un traitement contre le diabète, ou si tu as eu un trouble alimentaire."
+          }
+        }
+      }
+    },
     "Not level" : {
       "localizations" : {
         "es" : {
@@ -7561,6 +7977,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dans l’objectif : %lld sur %lld"
+          }
+        }
+      }
+    },
+    "On the scale: about %@ of water goes in the first days and comes back with the meal. The trend line is what counts." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En la báscula: unos %@ de agua se van los primeros días y vuelven con la comida. Lo que cuenta es la línea de tendencia."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur la balance : environ %@ d’eau part les premiers jours et revient avec le repas. C’est la courbe de tendance qui compte."
+          }
+        }
+      }
+    },
+    "Once a week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una vez por semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une fois par semaine"
           }
         }
       }
@@ -7913,6 +8361,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Papier"
+          }
+        }
+      }
+    },
+    "Past a week, each extra day adds little and the risks grow: week-long fasts already keep %@ of what a fast that never ends would do." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más allá de una semana, cada día de más aporta poco y los riesgos crecen: los ayunos de una semana ya logran el %@ de lo que haría un ayuno sin fin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au-delà d’une semaine, chaque jour de plus apporte peu et les risques augmentent : des jeûnes d’une semaine gardent déjà %@ de ce que ferait un jeûne sans fin."
           }
         }
       }
@@ -8281,6 +8745,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Endroit : %@"
+          }
+        }
+      }
+    },
+    "Plan a fast" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planificar un ayuno"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévoir un jeûne"
           }
         }
       }
@@ -9741,6 +10221,22 @@
         }
       }
     },
+    "Shows what a fast would do" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra lo que haría un ayuno"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montre ce que ferait un jeûne"
+          }
+        }
+      }
+    },
     "Shows your last 7 days" : {
       "localizations" : {
         "es" : {
@@ -10201,6 +10697,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pas"
+          }
+        }
+      }
+    },
+    "Stop and eat if you feel faint or dizzy, can't think straight, or your heart races." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para y come si te mareas o te sientes débil, si te cuesta pensar o si se te acelera el corazón."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrête et mange si tu te sens mal, si la tête te tourne, si tu n’arrives plus à réfléchir ou si ton cœur s’emballe."
           }
         }
       }
@@ -10685,6 +11197,22 @@
         }
       }
     },
+    "The cycle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El ciclo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le cycle"
+          }
+        }
+      }
+    },
     "The dressing could add 50 kcal if it was poured generously." : {
       "localizations" : {
         "es" : {
@@ -10733,6 +11261,22 @@
         }
       }
     },
+    "The meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le repas"
+          }
+        }
+      }
+    },
     "The menu's photo" : {
       "localizations" : {
         "es" : {
@@ -10777,6 +11321,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les photos, la copie gardée pour ton prochain iPhone et la clé qui les ouvre disparaissent. Rien ne pourra les récupérer."
+          }
+        }
+      }
+    },
+    "The water stored with it goes too: the first kilos are mostly water." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El agua que guarda se va con él: los primeros kilos son sobre todo agua."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’eau stockée avec lui part aussi : les premiers kilos sont surtout de l’eau."
           }
         }
       }
@@ -11603,6 +12163,22 @@
         }
       }
     },
+    "Week-long fasts" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayunos de una semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeûnes d’une semaine"
+          }
+        }
+      }
+    },
     "Weight" : {
       "localizations" : {
         "es" : {
@@ -12017,6 +12593,86 @@
         }
       }
     },
+    "Your BMI: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu IMC: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton IMC : %@"
+          }
+        }
+      }
+    },
+    "Your body" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cuerpo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton corps"
+          }
+        }
+      }
+    },
+    "Your body runs mostly on fat, and ketones feed your brain." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cuerpo funciona sobre todo con grasa, y las cetonas alimentan tu cerebro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton corps vit surtout sur ses graisses, et les cétones nourrissent ton cerveau."
+          }
+        }
+      }
+    },
+    "Your body runs on it, then on the sugar stored in your liver and muscles." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cuerpo tira de ella y luego del azúcar guardado en tu hígado y tus músculos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton corps vit dessus, puis sur le sucre stocké dans ton foie et tes muscles."
+          }
+        }
+      }
+    },
+    "Your daily goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu objetivo diario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton objectif du jour"
+          }
+        }
+      }
+    },
     "Your data" : {
       "localizations" : {
         "es" : {
@@ -12227,6 +12883,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton journal commence demain. À demain au petit-déjeuner."
+          }
+        }
+      }
+    },
+    "Your last meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu última comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton dernier repas"
+          }
+        }
+      }
+    },
+    "Your meal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu comida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton repas"
           }
         }
       }
@@ -12515,6 +13203,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta semaine dans l’assiette"
+          }
+        }
+      }
+    },
+    "Your weight through the plan" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu peso a lo largo del plan"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton poids au fil du plan"
           }
         }
       }

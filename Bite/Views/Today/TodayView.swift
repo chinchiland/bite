@@ -33,6 +33,7 @@ enum HomeSheet: Identifiable, Hashable {
     case firstRun(FirstRunSheet.Step)
     /// Your mirror; true to open straight on its camera.
     case mirror(Bool)
+    case fasting
 
     var id: Self { self }
 }
@@ -412,7 +413,8 @@ struct TodayView: View {
                     onKeepCheckIn: { if let checkIn { keepCheckIn(checkIn) } },
                     goalSet: checkInHistory.canUndo(now: .now) ? goalKcal : nil,
                     onUndoGoal: undoCheckIn,
-                    onAddWeight: addWeight
+                    onAddWeight: addWeight,
+                    onPlanFast: { sheet = .fasting }
                 )
                 .glassGroup(after: 28)
             }
@@ -626,6 +628,12 @@ struct TodayView: View {
                 MirrorHome(startOnCamera: camera)
             }
             .modelContainer(MirrorStore.container)
+        case .fasting:
+            FastingPlanView(
+                currentKg: WeightForecast.trend(trendWeights.map(\.kilograms)).last,
+                learnedKcal: learned?.kcal,
+                dailyGoal: noTarget ? nil : goalKcal
+            )
         }
     }
 
@@ -1300,7 +1308,7 @@ struct TodayView: View {
 
     #if DEBUG
     /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday|over`
-    /// `|place|dish|addestimate|accuracy|where|cover2|scanmenu|menu|menu.dish|typical|menus|menus.all`
+    /// `|place|dish|addestimate|accuracy|where|cover2|scanmenu|menu|menu.dish|typical|menus|menus.all|fasting`
     /// opens a screen straight away, for screenshots. `over` is the demo's heaviest day, three days back: four digit calories,
     /// past the goal, carbs and fat past their targets.
     private func openDemoScreen() {
@@ -1320,6 +1328,7 @@ struct TodayView: View {
             if let first = dishes.first { sheet = .place(first.place) }
         case "where": editing = dayEntries.first { $0.place != nil } ?? dayEntries.last
         case "cover2": coverIndex = 1
+        case "fasting": sheet = .fasting
         case let screen? where screen.hasPrefix("mirror"):
             sheet = MirrorFixture.open(screen)
         default: break
