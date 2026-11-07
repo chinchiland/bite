@@ -20,7 +20,7 @@ enum BodyFigure {
         let waist = 15 * build
         let belly = 16.5 * build
         let hip = 18 * (1 + gain * 0.9)
-        let limb = 1 + gain * 0.8
+        let limbScale = 1 + gain * 0.8
 
         var torso = Path()
         torso.move(to: CGPoint(x: cx - 5, y: 44))
@@ -45,8 +45,8 @@ enum BodyFigure {
             torso,
         ]
         for side: CGFloat in [-1, 1] {
-            parts.append(limb(from: CGPoint(x: cx + side * armTop, y: 56), to: CGPoint(x: cx + side * armBottom, y: 138), width: 10 * limb))
-            parts.append(limb(from: CGPoint(x: cx + side * thigh, y: 126), to: CGPoint(x: cx + side * ankle, y: 243), width: 15 * limb))
+            parts.append(limb(from: CGPoint(x: cx + side * armTop, y: 56), to: CGPoint(x: cx + side * armBottom, y: 138), width: 10 * limbScale))
+            parts.append(limb(from: CGPoint(x: cx + side * thigh, y: 126), to: CGPoint(x: cx + side * ankle, y: 243), width: 15 * limbScale))
             parts.append(Path(ellipseIn: CGRect(x: cx + side * (ankle + 2) - 8, y: 238, width: 16, height: 9)))
         }
         return parts.dropFirst().reduce(parts[0]) { $0.union($1) }
