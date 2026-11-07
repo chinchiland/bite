@@ -21,6 +21,8 @@ struct FastingPlanView: View {
     @State private var mealKcal: Double?
     @State private var editing = false
     @State private var picked: Int?
+    /// You changed your weight here: what Today learns no longer moves it.
+    @State private var weightTouched = false
 
     init(currentKg: Double?, learnedKcal: Double?, dailyGoal: Int?) {
         self.currentKg = currentKg
@@ -28,9 +30,13 @@ struct FastingPlanView: View {
         self.dailyGoal = dailyGoal
         let defaults = UserDefaults.standard
         var weight = currentKg ?? (defaults.object(forKey: "body.weight") != nil ? defaults.double(forKey: "body.weight") : 70)
+        var touched = false
         #if DEBUG
         // `-fasting.weight 113.4` plans for another body, for screenshots.
-        if defaults.object(forKey: "fasting.weight") != nil { weight = defaults.double(forKey: "fasting.weight") }
+        if defaults.object(forKey: "fasting.weight") != nil {
+            weight = defaults.double(forKey: "fasting.weight")
+            touched = true
+        }
         #endif
         let body = FastingBody(
             sex: Sex(rawValue: defaults.string(forKey: "body.sex") ?? "") ?? .female,
@@ -42,6 +48,7 @@ struct FastingPlanView: View {
         )
         _you = State(initialValue: body)
         _goalKg = State(initialValue: FastingModel.suggestedGoal(for: body))
+        _weightTouched = State(initialValue: touched)
     }
 
     private var cycle: FastingCycle {
@@ -71,7 +78,7 @@ struct FastingPlanView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         if let refusal = FastingModel.refusal(for: you) {
-                            youPane
+                            youPane(showsGoal: false)
                                 .glassGroup()
                             refusalPane(refusal)
                                 .glassGroup(after: 26)
@@ -82,6 +89,7 @@ struct FastingPlanView: View {
                                 .glassGroup()
                             bodyPane(plan, shown: shown)
                                 .glassGroup(after: 30)
+                                .id(Anchor.body)
                             methodsPane
                                 .glassGroup(after: 30)
                                 .id(Anchor.methods)
@@ -102,6 +110,7 @@ struct FastingPlanView: View {
                 }
                 .scrollIndicators(.hidden)
                 .scrollDismissesKeyboard(.interactively)
+                .overlay(alignment: .top) { RoomTop() }
                 .roomBackground()
                 .navigationTitle("Plan a fast")
                 .navigationBarTitleDisplayMode(.inline)
@@ -112,12 +121,20 @@ struct FastingPlanView: View {
                 }
                 .onChange(of: fastDays) { _, _ in picked = nil }
                 .onChange(of: goalKg) { _, _ in picked = nil }
+                // Your weighings and what you burn can arrive after the plan opens.
+                .onChange(of: learnedKcal) { _, kcal in you.learnedKcal = kcal }
+                .onChange(of: currentKg) { _, kilograms in
+                    guard let kilograms, !weightTouched else { return }
+                    you.weightKg = kilograms
+                    goalKg = FastingModel.suggestedGoal(for: you)
+                }
                 #if DEBUG
                 .task {
                     // `-anchor methods|cycle|bottom` scrolls there, for screenshots.
                     guard let anchor = UserDefaults.standard.string(forKey: "anchor") else { return }
                     try? await Task.sleep(for: .seconds(1))
                     switch anchor {
+                    case "body": reader.scrollTo(Anchor.body, anchor: .top)
                     case "methods": reader.scrollTo(Anchor.methods, anchor: .top)
                     case "cycle": reader.scrollTo(Anchor.cycle, anchor: .top)
                     case "bottom": reader.scrollTo(Anchor.safety, anchor: .top)
@@ -130,6 +147,7 @@ struct FastingPlanView: View {
     }
 
     private enum Anchor: Hashable {
+        case body
         case methods
         case cycle
         case safety
@@ -150,6 +168,11 @@ struct FastingPlanView: View {
         date(of: day).formatted(.dateTime.day().month(.abbreviated))
     }
 
+    /// Inside a sentence the month is written out.
+    private func dayInWords(_ day: Int) -> String {
+        date(of: day).formatted(.dateTime.day().month(.wide))
+    }
+
     // MARK: You
 
     private var youSummary: String {
@@ -158,6 +181,10 @@ struct FastingPlanView: View {
     }
 
     private var youPane: some View {
+        youPane(showsGoal: true)
+    }
+
+    private func youPane(showsGoal: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Button {
                 withAnimation(Motion.respond) { editing.toggle() }
@@ -193,7 +220,13 @@ struct FastingPlanView: View {
                     .padding(.vertical, 12)
                     stepRow("Age", value: Text(verbatim: "\(you.age) " + tr("years")), less: { you.age = max(you.age - 1, 10) }, more: { you.age = min(you.age + 1, 100) })
                     stepRow("Height", value: Text(verbatim: "\(Int(you.heightCm)) cm"), less: { you.heightCm = max(you.heightCm - 1, 120) }, more: { you.heightCm = min(you.heightCm + 1, 230) })
-                    stepRow("Weight", value: Text(you.weightKg.weightText), less: { you.weightKg = max(you.weightKg - 0.5, 35) }, more: { you.weightKg = min(you.weightKg + 0.5, 300) })
+                    stepRow("Weight", value: Text(you.weightKg.weightText), less: {
+                        weightTouched = true
+                        you.weightKg = max(you.weightKg - 0.5, 35)
+                    }, more: {
+                        weightTouched = true
+                        you.weightKg = min(you.weightKg + 0.5, 300)
+                    })
                     HStack {
                         Text("Activity")
                             .font(.ui(16))
@@ -211,8 +244,10 @@ struct FastingPlanView: View {
                 .transition(.opacity)
             }
 
-            stepRow("Goal", value: Text(goalKg.weightText), less: { goalKg = max(goalKg - 0.5, 35) }, more: { goalKg = min(goalKg + 0.5, you.weightKg) })
-                .padding(.top, 10)
+            if showsGoal {
+                stepRow("Goal", value: Text(goalKg.weightText), less: { goalKg = max(goalKg - 0.5, 35) }, more: { goalKg = min(goalKg + 0.5, you.weightKg) })
+                    .padding(.top, 10)
+            }
         }
     }
 
@@ -239,7 +274,9 @@ struct FastingPlanView: View {
     private func resultPane(_ plan: Plan, shown: FastingDay) -> some View {
         let projection = plan.projection
         let lost = projection.lost(by: shown.day)
-        let perWeek = projection.perWeek.weightText
+        let early = min(28, max(projection.days.count, 1))
+        let perWeek = (projection.lost(by: early).total / Double(early) * 7).weightText
+        let goal = goalKg.weightText
         return VStack(alignment: .leading, spacing: 14) {
             youPane
             Rectangle().fill(Theme.hairline).frame(height: 1)
@@ -254,8 +291,12 @@ struct FastingPlanView: View {
                         .foregroundStyle(Theme.secondary)
                 }
                 Group {
-                    if let goalDay = projection.goalDay {
-                        Text("\(cycle.title), about \(perWeek) a week: your goal by \(dayText(goalDay)).")
+                    if let goalDay = projection.goalDay, goalDay < 14 {
+                        let days = goalDay
+                        Text("\(cycle.title), about \(perWeek) a week: your goal of \(goal) in \(days) days.")
+                    } else if let goalDay = projection.goalDay {
+                        let weeks = Int((Double(goalDay) / 7).rounded(.up))
+                        Text("\(cycle.title), about \(perWeek) a week: your goal of \(goal) in \(weeks) weeks.")
                     } else if projection.stoppedAtFloor {
                         Text("\(cycle.title), about \(perWeek) a week. Bite stops at \(plan.floorKg.weightText), a BMI of 20.")
                     } else {
@@ -265,6 +306,12 @@ struct FastingPlanView: View {
                 .font(.ui(15))
                 .foregroundStyle(Theme.ink)
                 .fixedSize(horizontal: false, vertical: true)
+                if you.bmi < 25 {
+                    Text("At a BMI of \(you.bmi.formatted(.number.precision(.fractionLength(1)))) you're in the healthy range already.")
+                        .font(.ui(14))
+                        .foregroundStyle(Theme.watchText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
             .animation(Motion.count, value: shown.day)
 
@@ -278,7 +325,7 @@ struct FastingPlanView: View {
             )
             .frame(height: 168)
 
-            Text("\(lost.total.weightText) lost by \(dayText(shown.day)): \(lost.fat.weightText) fat, \(lost.lean.weightText) lean.")
+            Text("\(lost.total.weightText) lost by \(dayInWords(shown.day)): \(lost.fat.weightText) fat, \(lost.lean.weightText) lean.")
                 .font(.ui(14))
                 .foregroundStyle(Theme.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -343,12 +390,18 @@ struct FastingPlanView: View {
         let lostKg: Double
         let share: Double?
         let cycle: FastingCycle?
+        /// The day it reaches a BMI of 20 inside the four weeks, where the comparison stops.
+        var floorDay: Int? = nil
+    }
+
+    private func floorDay(_ projection: FastingProjection) -> Int? {
+        projection.last.tissueKg <= FastingModel.floorKg(for: you) + 0.01 ? projection.days.count : nil
     }
 
     private var methods: [Method] {
         var rows: [Method] = FastingCycle.all.map { cycle in
             let projection = FastingModel.project(body: you, intake: .cycle(cycle, mealKcal: meal), goalKg: 0, days: 28)
-            return Method(id: cycle.fastDays, title: cycle.title, detail: cycle.detail, lostKg: projection.lost(by: 28).total, share: cycle.shareOfNonstop, cycle: cycle)
+            return Method(id: cycle.fastDays, title: cycle.title, detail: cycle.detail, lostKg: projection.lost(by: 28).total, share: cycle.shareOfNonstop, cycle: cycle, floorDay: floorDay(projection))
         }
         if let dailyGoal, Double(dailyGoal) < burn {
             let projection = FastingModel.project(body: you, intake: .daily(kcal: Double(dailyGoal)), goalKg: 0, days: 28)
@@ -387,10 +440,17 @@ struct FastingPlanView: View {
                         Text(verbatim: row.title)
                             .font(.ui(16, .medium))
                             .foregroundStyle(Theme.ink)
-                        Text(verbatim: row.detail)
-                            .font(.ui(13))
-                            .foregroundStyle(Theme.secondary)
-                            .lineLimit(2)
+                        Group {
+                            if let day = row.floorDay {
+                                Text(verbatim: tr("Down to a BMI of 20 by day %@", "\(day)"))
+                                    .foregroundStyle(Theme.watchText)
+                            } else {
+                                Text(verbatim: row.detail)
+                                    .foregroundStyle(Theme.secondary)
+                            }
+                        }
+                        .font(.ui(13))
+                        .lineLimit(2)
                     }
                     Spacer(minLength: 8)
                     Text(verbatim: "−" + row.lostKg.weightText)
@@ -426,21 +486,9 @@ struct FastingPlanView: View {
         let water = plan.projection.days.prefix(cycle.length).map { $0.tissueKg - $0.scaleKg }.max() ?? 0
         return VStack(alignment: .leading, spacing: 14) {
             SectionLabel(title: "The cycle", symbol: "arrow.triangle.2.circlepath")
-            HStack(spacing: 6) {
-                ForEach(1...cycle.fastDays, id: \.self) { day in
-                    Text(verbatim: "\(day)")
-                        .font(.ui(13, .medium))
-                        .foregroundStyle(Theme.secondary)
-                        .frame(maxWidth: 38)
-                        .aspectRatio(1, contentMode: .fit)
-                        .background(Theme.track, in: Circle())
-                }
-                Image(systemName: "fork.knife")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Theme.selectedInk)
-                    .frame(maxWidth: 38)
-                    .aspectRatio(1, contentMode: .fit)
-                    .selectedFill(true, in: Circle())
+            ViewThatFits(in: .horizontal) {
+                pills(size: 38)
+                pills(size: 30)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityHidden(true)
@@ -487,6 +535,25 @@ struct FastingPlanView: View {
         }
     }
 
+    /// One turn as day pills: the days without food, then the meal, lit.
+    private func pills(size: CGFloat) -> some View {
+        HStack(spacing: size > 32 ? 6 : 4) {
+            ForEach(1...cycle.fastDays, id: \.self) { day in
+                Text(verbatim: "\(day)")
+                    .font(.ui(size > 32 ? 14 : 12, .medium))
+                    .foregroundStyle(Theme.secondary)
+                    .frame(width: size, height: size)
+                    .background(Theme.track, in: Circle())
+            }
+            Image(systemName: "fork.knife")
+                .font(.system(size: size * 0.38, weight: .semibold))
+                .foregroundStyle(Theme.selectedInk)
+                .frame(width: size, height: size)
+                .selectedFill(true, in: Circle())
+        }
+        .fixedSize()
+    }
+
     // MARK: Before you start
 
     private var safetyPane: some View {
@@ -515,7 +582,7 @@ struct FastingPlanView: View {
     private var smallPrint: some View {
         let dip = FastingModel.maxDip.formatted(.percent.precision(.fractionLength(0)))
         return Group {
-            if learnedKcal != nil {
+            if you.learnedKcal != nil {
                 Text("An estimate, and every body differs. What you burn is learned from your weighings and falls up to \(dip) deep into a fast; body fat comes from your BMI, and the split between fat and lean from Forbes. Bite plans down to a BMI of 20, and fasts of a week at most.")
             } else {
                 Text("An estimate, and every body differs. What you burn is worked out from your body and falls up to \(dip) deep into a fast; body fat comes from your BMI, and the split between fat and lean from Forbes. Bite plans down to a BMI of 20, and fasts of a week at most.")
@@ -576,12 +643,15 @@ private struct FastingChart: View {
                             y: plot.minY + plot.height * CGFloat(1 - (kg - low) / max(high - low, 0.1))
                         )
                     }
-                    // The goal, dashed, and the floor when it is in view.
-                    for (kg, color) in [(goalKg, Theme.onTarget), (floorKg, Theme.over)] where kg > low && kg < high {
+                    // The goal, dashed, and the floor when it is in view, each named at its end.
+                    let goalName = Text("Goal").font(.ui(11, .medium)).foregroundColor(Theme.onTarget)
+                    let floorName = Text("BMI \("20")").font(.ui(11, .medium)).foregroundColor(Theme.over)
+                    for (kg, color, name) in [(goalKg, Theme.onTarget, goalName), (floorKg, Theme.over, floorName)] where kg > low && kg < high {
                         var line = Path()
                         line.move(to: point(0, kg))
                         line.addLine(to: point(count, kg))
                         context.stroke(line, with: .color(color.opacity(0.7)), style: StrokeStyle(lineWidth: 1.5, dash: [4, 5]))
+                        context.draw(name, at: CGPoint(x: plot.maxX, y: point(count, kg).y - 3), anchor: .bottomTrailing)
                     }
                     // The scale, day by day.
                     var scale = Path()

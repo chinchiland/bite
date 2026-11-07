@@ -171,6 +171,7 @@ jobs:
           shoot 84-typical-paper -onboarded YES -screen typical -query shawarma -look paper
           # The fasting plan, for the demo body and for a 250 lb man, in both looks and all three languages.
           shoot 93-fasting -onboarded YES -screen fasting
+          shoot 93b-fasting-body -onboarded YES -screen fasting -anchor body
           shoot 94-fasting-methods -onboarded YES -screen fasting -anchor methods
           shoot 95-fasting-cycle -onboarded YES -screen fasting -anchor cycle
           shoot 96-fasting-end -onboarded YES -screen fasting -anchor bottom

@@ -159,6 +159,31 @@ struct RoomFoot: View {
     }
 }
 
+/// The room again over the top of a sheet, in Glass, so what scrolls up under the title fades
+/// into the room instead of showing through the bar's soft edge.
+struct RoomTop: View {
+    var room = RoomBackground()
+    var height: CGFloat = 120
+
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        if scheme == .dark {
+            room
+                .mask(alignment: .top) {
+                    LinearGradient(
+                        stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.55), .init(color: .clear, location: 1)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: height)
+                }
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+        }
+    }
+}
+
 /// The bottom bar of a page and the band under the clock. Pages scroll under them, so in Glass
 /// this is the one surface with a real blur, and a flat color on Paper.
 struct BarGround: View {

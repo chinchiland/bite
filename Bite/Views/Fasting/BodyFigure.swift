@@ -15,38 +15,44 @@ enum BodyFigure {
     static func outline(build: CGFloat) -> Path {
         let cx: CGFloat = 60
         let gain = build - 1
-        // Fat goes on the middle first, the frame a little, the limbs in between.
-        let shoulder = 21 * (1 + gain * 0.55)
-        let waist = 15 * build
-        let belly = 16.5 * build
-        let hip = 18 * (1 + gain * 0.9)
-        let limbScale = 1 + gain * 0.8
+        // Weight goes on the middle first: past a BMI of 25 the belly leads, below 22 the waist
+        // shows. The frame moves a little, the tops of the limbs more than their ends.
+        let shoulder = 21 * (1 + gain * 0.5)
+        let waist = 14.5 * pow(build, 1.5)
+        let belly = 16 * pow(build, 1.9)
+        let hip = 18 * (1 + gain * 1.1)
 
         var torso = Path()
         torso.move(to: CGPoint(x: cx - 5, y: 44))
         torso.addQuadCurve(to: CGPoint(x: cx - shoulder, y: 53), control: CGPoint(x: cx - shoulder + 3, y: 43))
-        torso.addQuadCurve(to: CGPoint(x: cx - waist, y: 96), control: CGPoint(x: cx - shoulder - 1, y: 76))
-        torso.addQuadCurve(to: CGPoint(x: cx - hip, y: 128), control: CGPoint(x: cx - belly - 1, y: 112))
-        torso.addQuadCurve(to: CGPoint(x: cx, y: 138), control: CGPoint(x: cx - hip, y: 138))
-        torso.addQuadCurve(to: CGPoint(x: cx + hip, y: 128), control: CGPoint(x: cx + hip, y: 138))
-        torso.addQuadCurve(to: CGPoint(x: cx + waist, y: 96), control: CGPoint(x: cx + belly + 1, y: 112))
-        torso.addQuadCurve(to: CGPoint(x: cx + shoulder, y: 53), control: CGPoint(x: cx + shoulder + 1, y: 76))
+        torso.addQuadCurve(to: CGPoint(x: cx - waist, y: 94), control: CGPoint(x: cx - shoulder - 1, y: 74))
+        torso.addQuadCurve(to: CGPoint(x: cx - hip, y: 128), control: CGPoint(x: cx - belly - 1.5, y: 108))
+        torso.addQuadCurve(to: CGPoint(x: cx, y: 139), control: CGPoint(x: cx - hip, y: 139))
+        torso.addQuadCurve(to: CGPoint(x: cx + hip, y: 128), control: CGPoint(x: cx + hip, y: 139))
+        torso.addQuadCurve(to: CGPoint(x: cx + waist, y: 94), control: CGPoint(x: cx + belly + 1.5, y: 108))
+        torso.addQuadCurve(to: CGPoint(x: cx + shoulder, y: 53), control: CGPoint(x: cx + shoulder + 1, y: 74))
         torso.addQuadCurve(to: CGPoint(x: cx + 5, y: 44), control: CGPoint(x: cx + shoulder - 3, y: 43))
         torso.closeSubpath()
 
-        // Arms hang a little further out as the middle grows, so they never melt into it.
-        let armTop = shoulder - 2
-        let armBottom = shoulder + 8 + gain * 14
-        let thigh = 9 * (1 + gain * 0.8)
-        let ankle = 11 + gain * 3
+        // The arms hang clear of the belly, however round it gets.
+        let armTop = shoulder - 2.5
+        let armBottom = max(shoulder + 8, belly + 9) + gain * 4
+        let thigh = 9.5 * (1 + gain * 0.9)
+        let ankle = 10 + gain * 4
         var parts = [
             Path(ellipseIn: CGRect(x: cx - 12.5, y: 4, width: 25, height: 30)),
             Path(roundedRect: CGRect(x: cx - 5, y: 28, width: 10, height: 20), cornerRadius: 3),
             torso,
         ]
         for side: CGFloat in [-1, 1] {
-            parts.append(limb(from: CGPoint(x: cx + side * armTop, y: 56), to: CGPoint(x: cx + side * armBottom, y: 138), width: 10 * limbScale))
-            parts.append(limb(from: CGPoint(x: cx + side * thigh, y: 126), to: CGPoint(x: cx + side * ankle, y: 243), width: 15 * limbScale))
+            parts.append(limb(
+                from: CGPoint(x: cx + side * armTop, y: 57), to: CGPoint(x: cx + side * armBottom, y: 138),
+                startWidth: 11 * (1 + gain * 1.1), endWidth: 8 * (1 + gain * 0.5)
+            ))
+            parts.append(limb(
+                from: CGPoint(x: cx + side * thigh, y: 128), to: CGPoint(x: cx + side * ankle, y: 242),
+                startWidth: 17 * (1 + gain * 1.3), endWidth: 10 * (1 + gain * 0.5)
+            ))
             parts.append(Path(ellipseIn: CGRect(x: cx + side * (ankle + 2) - 8, y: 238, width: 16, height: 9)))
         }
         return parts.dropFirst().reduce(parts[0]) { $0.union($1) }
@@ -60,11 +66,19 @@ enum BodyFigure {
         return outline(build: build).applying(CGAffineTransform(translationX: x, y: y).scaledBy(x: scale, y: scale))
     }
 
-    private static func limb(from start: CGPoint, to end: CGPoint, width: CGFloat) -> Path {
-        let length = hypot(end.x - start.x, end.y - start.y)
-        let angle = atan2(end.y - start.y, end.x - start.x) - .pi / 2
-        let capsule = Path(roundedRect: CGRect(x: -width / 2, y: 0, width: width, height: length), cornerRadius: width / 2)
-        return capsule.applying(CGAffineTransform(rotationAngle: angle).concatenating(CGAffineTransform(translationX: start.x, y: start.y)))
+    /// A limb from one joint to the next, wider at the top than at the end, rounded at both.
+    private static func limb(from start: CGPoint, to end: CGPoint, startWidth: CGFloat, endWidth: CGFloat) -> Path {
+        let angle = atan2(end.y - start.y, end.x - start.x)
+        let normal = CGPoint(x: -sin(angle), y: cos(angle))
+        var body = Path()
+        body.move(to: CGPoint(x: start.x + normal.x * startWidth / 2, y: start.y + normal.y * startWidth / 2))
+        body.addLine(to: CGPoint(x: end.x + normal.x * endWidth / 2, y: end.y + normal.y * endWidth / 2))
+        body.addLine(to: CGPoint(x: end.x - normal.x * endWidth / 2, y: end.y - normal.y * endWidth / 2))
+        body.addLine(to: CGPoint(x: start.x - normal.x * startWidth / 2, y: start.y - normal.y * startWidth / 2))
+        body.closeSubpath()
+        let top = Path(ellipseIn: CGRect(x: start.x - startWidth / 2, y: start.y - startWidth / 2, width: startWidth, height: startWidth))
+        let foot = Path(ellipseIn: CGRect(x: end.x - endWidth / 2, y: end.y - endWidth / 2, width: endWidth, height: endWidth))
+        return body.union(top).union(foot)
     }
 }
 

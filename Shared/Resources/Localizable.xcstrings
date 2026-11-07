@@ -579,18 +579,118 @@
         }
       }
     },
-    "%@, about %@ a week: your goal by %@." : {
+    "%@, about %@ a week: your goal of %@ in %lld days." : {
       "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@, unos %@ por semana: tu objetivo para el %@."
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, about %@ a week: your goal of %@ in %lld day."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, about %@ a week: your goal of %@ in %lld days."
+                }
+              }
+            }
           }
         },
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@, environ %@ par semaine : ton objectif d’ici le %@."
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, environ %@ par semaine : ton objectif de %@ en %lld jour."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, environ %@ par semaine : ton objectif de %@ en %lld jours."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, unos %@ por semana: tu objetivo de %@ en %lld día."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, unos %@ por semana: tu objetivo de %@ en %lld días."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%@, about %@ a week: your goal of %@ in %lld weeks." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, about %@ a week: your goal of %@ in %lld week."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, about %@ a week: your goal of %@ in %lld weeks."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, environ %@ par semaine : ton objectif de %@ en %lld semaine."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, environ %@ par semaine : ton objectif de %@ en %lld semaines."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, unos %@ por semana: tu objetivo de %@ en %lld semana."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%@, unos %@ por semana: tu objetivo de %@ en %lld semanas."
+                }
+              }
+            }
           }
         }
       }
@@ -2623,6 +2723,22 @@
         }
       }
     },
+    "At a BMI of %@ you're in the healthy range already." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec un IMC de %@, tu es déjà dans la zone saine."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con un IMC de %@ ya estás en el rango saludable."
+          }
+        }
+      }
+    },
     "At a BMI under 20, Bite doesn't plan a fast." : {
       "localizations" : {
         "es" : {
@@ -4321,6 +4437,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En baisse de %lld pour cent"
+          }
+        }
+      }
+    },
+    "Down to a BMI of 20 by day %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMC de 20 atteint au jour %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMC de 20 el día %@"
           }
         }
       }
