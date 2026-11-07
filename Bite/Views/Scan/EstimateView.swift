@@ -41,8 +41,6 @@ struct EstimateView: View {
     @State private var saveToo: Bool?
     @State private var showSettings = false
     @State private var attempt = 0
-    /// The room this plate makes, in Glass.
-    @State private var room: UIImage?
 
     enum Phase: Equatable {
         case working
@@ -98,15 +96,13 @@ struct EstimateView: View {
             if case .failed = new { return Feel.failed }
             return nil
         }
-        .background { RoomBackground(picture: room, paper: Theme.card) }
-        .overlay { RoomFoot(room: RoomBackground(picture: room)) }
+        .pageRoom(image: shownImage)
         .dockBar {
             if phase == .ready, let estimate, !estimate.items.isEmpty {
                 actionBar(estimate)
             }
         }
         .task(id: attempt) { await run() }
-        .task { room = ImageTools.room(from: shownImage) }
         .onAppear {
             // Lunch picked from the library at dinner time is still lunch.
             if let takenAt { meal = Meal.likely(at: takenAt) }

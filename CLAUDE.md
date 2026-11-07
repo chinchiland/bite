@@ -1,6 +1,6 @@
 # Bite
 
-A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 language mode, Xcode 26). The design system is `DESIGN.md`; what the app does is in `README.md`. Where things stand, how Dylan works and what comes next: `docs/handoff.md`.
+A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 language mode, Xcode 26). The design system is `DESIGN.md`, two looks on one set of tokens: Glass (the default, the dark side of `Theme`, tools in `Bite/Design/Glass.swift`) and Paper (the light side); what the app does is in `README.md`. Where things stand, how Dylan works and what comes next: `docs/handoff.md`.
 
 ## Where things are
 
@@ -19,7 +19,7 @@ A calm calorie tracker for iPhone in SwiftUI (iOS 17+, SwiftData, Swift 5 langua
 
 ## CI
 
-Every push to main runs `.github/workflows/ios.yml` on a macOS runner: a Debug build, about 50 simulator screenshots (light, dark, French, Spanish, a fresh install, Bite Demo), and two IPAs for sideloading (`Bite-unsigned-ipa`, `Bite-Demo-unsigned-ipa`). Markdown and `docs/` changes don't trigger it. The repo is public, so the minutes are free, but a run takes about 25 minutes: batch pushes. Everything pushed is public: never commit a key or private data.
+Every push to main runs `.github/workflows/ios.yml` on a macOS runner: a Debug build, about 85 simulator screenshots (Glass, Paper with `-look paper`, French, Spanish, a fresh install, Bite Demo), and two IPAs for sideloading (`Bite-unsigned-ipa`, `Bite-Demo-unsigned-ipa`). Markdown and `docs/` changes don't trigger it. The repo is public, so the minutes are free, but a run takes about 25 minutes: batch pushes. Everything pushed is public: never commit a key or private data.
 
 ## Rules for the code
 

@@ -158,7 +158,7 @@ struct DayCover<Controls: View>: View {
         let foot = scheme == .dark ? Color.clear : Theme.page
         return LinearGradient(
             stops: [
-                .init(color: .black.opacity(shade ? 0.26 : 0), location: 0),
+                .init(color: .black.opacity(shade ? (scheme == .dark ? 0.34 : 0.26) : 0), location: 0),
                 .init(color: .black.opacity(0), location: 0.24),
                 .init(color: foot.opacity(0), location: 0.52),
                 .init(color: foot.opacity(0.88), location: 0.8),

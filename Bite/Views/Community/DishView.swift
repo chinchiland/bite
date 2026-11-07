@@ -43,8 +43,7 @@ struct DishView: View {
         .scrollIndicators(.hidden)
         .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
         .ignoresSafeArea(edges: .top)
-        .background { RoomBackground(food: dish.food, paper: Theme.card) }
-        .overlay { RoomFoot(room: RoomBackground(food: dish.food)) }
+        .pageRoom(food: dish.food)
         .dockBar { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: dish.name))
         .navigationBarTitleDisplayMode(.inline)

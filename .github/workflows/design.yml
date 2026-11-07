@@ -74,23 +74,54 @@ jobs:
             esac
             xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
             xcrun simctl launch "$UDID" com.dylan.bite -demo YES -health.asked YES "$@"
-            sleep 8
+            case "$*" in
+              *estimate*|*menu*) sleep 16 ;;
+              *) sleep 8 ;;
+            esac
             xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
           }
 
+          shoot 00-welcome
+          shoot 01-today -onboarded YES
+          shoot 01b-today-card -onboarded YES -cover card
+          shoot 36b-cover-card -onboarded YES -screen cover2 -cover card
+          shoot 37-today-middle -onboarded YES -anchor center
+          shoot 22-today-end -onboarded YES -anchor bottom
+          shoot 36-cover-breakfast -onboarded YES -screen cover2
+          shoot 26-today-over -onboarded YES -screen over
+          shoot 02-food -onboarded YES -screen food
+          shoot 25-food-plate -onboarded YES -screen plate
           shoot 08-estimate -onboarded YES -screen estimate
-          sleep 8
-          xcrun simctl io "$UDID" screenshot screenshots/08b-later.png
-          pid=$(pgrep -f 'Bite.app/Bite' | head -1 || true)
-          echo "pid $pid"
-          if [ -n "$pid" ]; then sample "$pid" 3 -file screenshots/08.sample.txt || true; fi
-          xcrun simctl spawn "$UDID" log show --last 60s --style compact --predicate 'process == "Bite"' > screenshots/08.log.txt 2>&1 || true
+          shoot 09-week -onboarded YES -screen week
+          shoot 24-week-end -onboarded YES -screen week -anchor bottom
+          shoot 10-month -onboarded YES -screen month
+          shoot 03-search -onboarded YES -screen search -query skyr
+          shoot 05-settings -onboarded YES -screen settings
+          shoot 30-place -onboarded YES -screen place
+          shoot 31-dish -onboarded YES -screen dish
+          shoot 07-scan-food -onboarded YES -screen photo
           shoot 75-menu -onboarded YES -screen menu
-          sleep 8
-          xcrun simctl io "$UDID" screenshot screenshots/75b-later.png
-          pid=$(pgrep -f 'Bite.app/Bite' | head -1 || true)
-          if [ -n "$pid" ]; then sample "$pid" 3 -file screenshots/75.sample.txt || true; fi
-          xcrun simctl spawn "$UDID" log show --last 60s --style compact --predicate 'process == "Bite"' > screenshots/75.log.txt 2>&1 || true
+          shoot 78-typical -onboarded YES -screen typical -query shawarma
+          shoot 57-mirror -onboarded YES -screen mirror
+          shoot 11-saved-editor -onboarded YES -screen saved
+          shoot 16-today-fr -onboarded YES -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 90-paper-today -onboarded YES -look paper
+          shoot 91-paper-food -onboarded YES -screen food -look paper
+          shoot 92-paper-week -onboarded YES -screen week -look paper
+
+          shoot_fresh() {
+            name=$1; shift
+            xcrun simctl terminate "$UDID" com.dylan.bite >/dev/null 2>&1 || true
+            xcrun simctl launch "$UDID" com.dylan.bite -AppleLocale en_IE "$@"
+            sleep 8
+            xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
+          }
+          xcrun simctl uninstall "$UDID" com.dylan.bite
+          xcrun simctl install "$UDID" "$APP"
+          shoot_fresh 60-fresh-welcome
+          shoot_fresh 61-fresh-today -onboarded YES
+          shoot_fresh 67-first-bite -onboarded YES -firstRun.stage firstBite
+          shoot_fresh 68-first-goal -onboarded YES -firstRun.stage goal
 
       - uses: actions/upload-artifact@v4
         if: always()

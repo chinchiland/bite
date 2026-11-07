@@ -2,11 +2,18 @@
 
 Every element either carries data or gets out of the way. Your day reads like a food journal: the day's meal photos are the cover, melting into the page right above the number that matters, then the ring and the macros, where your weight is heading, your meals, what fits, the dishes near you and your week. Brandsearch's discipline: one ground, numbers as the anchors, color that always means something.
 
+## Two looks
+
+**Glass** is the default, brought over from Break Reader: your food's color is the room, groups float in it as panes, numbers are white, and one solid white button leads each screen. **Paper** is the warm page Bite started on, one choice away in Settings (Look). Glass is the dark side of every token in `Theme` and Paper the light side, so a view asks the color scheme which look it is in, and there is no separate dark mode: the app sets its own scheme (`Look`, `preferredColorScheme`), and is dark from the first frame (`UIUserInterfaceStyle`) so Glass never opens on a white flash. Widgets follow the iPhone's appearance, since they live on its Home Screen.
+
 ## Surfaces
 
-- **Paper**: the warm page every screen sits on (#FAFAF8; #121110 in dark mode). **Sheet and card**: white (#1C1B19 dark). A sheet that rises over a cover has 28 pt rounded top corners; a card has 22 pt corners and a 1 pt hairline edge instead of a shadow. **Inset**: the softer box for an amount or an adjuster, 16 pt corners.
-- **Covers.** Today's cover is every photo of the day, latest first (plates Claude estimated, restaurant dishes, saved foods with your picture). Each runs clear down to the number, then softens through its own blur into the page, so the number sits in ink right under the food and needs no dark scrim. Tap or swipe for the next; page dots on dark glass say how many. When the meal has a place, the line under the number is a pin and the place, and opens it; else the meal's name. Before the first photo the cover is a fresh gradient, green into butter, with a greeting for the hour. A food's hero is your photo, or the product standing on a soft light in its tint, or its emoji, big. Pulling down stretches a cover instead of opening a gap.
+- **The room (Glass)**: what every screen stands in, drawn by `RoomBackground`. It is the photo on the day's cover: the middle of the plate, stretched to the shape of a phone so all its colors get a place, blurred, made richer after the blur, then dimmed by `RoomTone` (`ImageTools.room`). A white plate and a dark bar table sit at one depth: a mean brightness of 0.2, and never past 0.36 anywhere, where a quiet word straight on the room still has 4.5 to 1. It is small and baked once, so it costs nothing behind a page that scrolls. It crossfades when the cover pages, and every sheet opened over Today stands in the same room. A food's page stands in that food's photo, or the light of its tint; a plate being estimated and a menu in their own. Before the day's first photo it is fresh green into butter, the kitchen with the lights off. With Reduce Transparency it is the plain ground (#0A0B0C).
+- **Panes (Glass)**: a group of things that belong together, floating in the room (`glassGroup`): #121315 at 62%, 30 pt continuous corners, 8 pt from the edge of the screen, 8 pt apart. It reaches past the 20 pt page margin, so nothing inside moves between looks. The room is already blurred, so a pane is a flat tint and needs no blur of its own. A **well** is a darker box sunk into a pane; a **lit pane** (`Theme.selected`, with its rim) is what you chose. What rises over a hero is a pane too (`heroSheet`). Only what floats over a moving page is real glass: the dock, the toast, the band under the clock.
+- **Paper**: the warm page every screen sits on (#FAFAF8). **Sheet and card**: white. A sheet that rises over a cover has rounded top corners; a card has 22 pt corners and a 1 pt hairline edge instead of a shadow. **Inset**: the softer box for an amount or an adjuster, 16 pt corners.
+- **Covers.** Today's cover is every photo of the day, latest first (plates Claude estimated, restaurant dishes, saved foods with your picture). Each runs clear down to the number, then softens through its own blur into the page, or in Glass into the room made of its own colors, so the number sits right under the food and needs no dark scrim. Tap or swipe for the next; page dots on dark glass say how many. When the meal has a place, the line under the number is a pin and the place, and opens it; else the meal's name. Before the first photo the cover is a fresh gradient, green into butter, with a greeting for the hour. A food's hero is your photo, or the product standing on a soft light in its tint, or its emoji, big; in Glass your photo melts into the room the same way (`meltsIntoRoom`). Pulling down stretches a cover instead of opening a gap.
 - **No drop shadows.** Chrome on a cover is glass: dark on a photo (white words), light on paper (ink words). The dock and the toast are Liquid Glass on iOS 26 and frosted before.
+- **The foot of a page (Glass)**: the buttons float with no band behind them, and the room comes back over the last of the page (`RoomFoot`), so what scrolls down fades out before it reaches them and no word shows through.
 - Screen margin 20 pt. Hairlines only between moments of the day, days of the diary and ranked rows.
 
 ## Type
@@ -15,10 +22,10 @@ DM Sans only, bundled (SIL Open Font License), one variable font: weight and opt
 
 | Use | Size | Weight |
 |---|---|---|
-| The day's number on the cover | 66 | medium, tracking −4% |
-| Range average | 36 | medium |
+| The day's number on the cover | 66 | medium on Paper, regular in Glass, tracking −4% |
+| Range average | 36 | medium on Paper, regular in Glass |
 | Screen title (Last 7 days) | 30 | semibold |
-| Calories in the ring | 30 | medium |
+| Calories in the ring | 30 | medium on Paper, regular in Glass |
 | A food's name, a meal's name on its page | 27 | medium |
 | Macro grams | 17 | semibold |
 | Section title (Your day, Calorie estimates), with its symbol | 20 | semibold |
@@ -27,6 +34,7 @@ DM Sans only, bundled (SIL Open Font License), one variable font: weight and opt
 | Chips, captions, times | 13 to 14 | regular or medium |
 | Smallest labels | 12 | regular |
 
+- White on dark reads a step heavier than ink on paper, so a big number is a step lighter in Glass (`bigNumber`).
 - A number is the biggest thing in its block. Its unit sits beside it, smaller and in the secondary color: `967 kcal left today`, `62 / 125 g`.
 - Nothing smaller than 12 pt.
 
@@ -46,7 +54,7 @@ DM Sans only, bundled (SIL Open Font License), one variable font: weight and opt
 | Water | #2E9BD6 | the drop on the water chip and its fill; the drop means water only, fat wears the avocado |
 | Accuracy | green, blue #2F7FD8, orange #E0872B, gray | a dish's gauge and its tier dot, by tier |
 | An estimate's source | blue sparkle, gray pencil #5E5C57 | the badge on the avatar of the person who counted it |
-| Main action | ink capsule | one per screen: Scan on home, Add to today on a food |
+| Main action | ink capsule, solid white in Glass | one per screen: Scan on home, Add to today on a food. Nothing else is solid: a chosen chip and a small action are a lit pane in Glass (`selectedFill`), ink on Paper |
 | Scan | the laser red | the barcode glyph in the Scan capsule, the only thing that moves on home |
 
 ## Media
@@ -99,7 +107,7 @@ One tile shape for every food (corners 19% of the size): 76 pt on Today and Save
 
 ## Components
 
-`DayCover`, `DottedRing`, `MacroList`, `MacroBlock`, `MacroGlyph`, `MacroTile`, `SymbolTile`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Shared/Design/Theme.swift`, the typeface in `Shared/Design/Typeface.swift`.
+`RoomBackground`, `RoomFoot`, `BarGround`, `glassGroup(after:)`, `heroSheet()`, `meltsIntoRoom()`, `selectedFill`, `bigNumber` (`Bite/Design/Glass.swift`), `DayCover`, `DottedRing`, `MacroList`, `MacroBlock`, `MacroGlyph`, `MacroTile`, `SymbolTile`, `ActivityChips`, `DayTimeline`, `SavedShelf`, `RangeView`, `FoodHero`, `ScanDock`, `ScanGlyph`, `AddedToast`, `GlassCircleButton`, `coverGlass(in:onPhoto:)`, `floatingGlass(in:)`, `Card`, `InsetBox`, `SectionLabel`, `FoodThumb`, `TintChip`, `NutriScoreChip`, `LaurelBadge`, `ChangeLabel`, `ProgressBar`, `MealMenuLabel`, `BookmarkButton`. Buttons: `PrimaryButtonStyle` (ink, one per screen), `SoftButtonStyle`, `ChipButtonStyle`, `PressableStyle`. Tokens live in `Shared/Design/Theme.swift`, the typeface in `Shared/Design/Typeface.swift`.
 
 ## Interactions
 
@@ -124,7 +132,7 @@ The scan laser sweeps, numbers roll, the ring lights up round from twelve the fi
 - **Scrolling never changes the layout.** Heights never follow the status bar or a live safe area; the state that changes as the cover leaves lives in a small object only the top chrome reads.
 - **A data change doesn't move what's under your finger.** Inserts and the cover's photo height animate; another day opens on its cover.
 - **Rows fit 320 pt** (Display Zoom on an SE, in French): rows with fixed parts fall back with `ViewThatFits`, the macro ring steps down under 345 pt, a chip wider than its row truncates inside it.
-- **Words never sit under the bar or the clock.** Paper under the status bar on Today, the bar's background or iOS 26's edge effect once a hero photo has gone, a band of the sheet on the estimate.
+- **Words never sit under the bar or the clock.** Paper under the status bar on Today (in Glass the room again, drawn over what scrolled up, so nothing shows where it ends), the bar's background or iOS 26's edge effect once a hero photo has gone, a band of the sheet on the estimate.
 - **The dock lives in the safe area**, so every page ends above it and iOS 26 softens the page under it.
 - **Images are decoded off the main thread at the size they show**, and cached; the cover's melt uses a small copy blurred once.
 

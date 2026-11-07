@@ -71,8 +71,7 @@ struct FoodDetailView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
-        .background { RoomBackground(food: food, paper: Theme.card) }
-        .overlay { RoomFoot(room: RoomBackground(food: food)) }
+        .pageRoom(food: food)
         .dockBar { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: food.name))
         .navigationBarTitleDisplayMode(.inline)

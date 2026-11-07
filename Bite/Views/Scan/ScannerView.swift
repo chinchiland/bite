@@ -496,26 +496,20 @@ struct ScannerView: View {
         case "photo":
             modeRaw = ScanMode.food.rawValue
         case "estimate":
-            afterArriving { photo = CapturedPhoto(image: DemoData.plateImage(), mode: .food) }
+            photo = CapturedPhoto(image: DemoData.plateImage(), mode: .food)
         case "scanmenu":
             modeRaw = ScanMode.menu.rawValue
         case "menu", "menu.dish":
             modeRaw = ScanMode.menu.rawValue
             guard let menu = MenuShelf.shared.menus.first,
                   let image = MenuShelf.shared.photo(of: menu.id).flatMap(UIImage.init(data:)) else { return }
-            afterArriving { photo = CapturedPhoto(image: image, mode: .menu) }
+            photo = CapturedPhoto(image: image, mode: .menu)
             if UserDefaults.standard.string(forKey: "screen") == "menu.dish", let dish = menu.dishes.first {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { menuPath = [.menuDish(menu.id, dish)] }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) { menuPath = [.menuDish(menu.id, dish)] }
             }
         default:
             break
         }
-    }
-
-    /// The scanner is still sliding in when it appears, and a screen can't open over one that
-    /// is still arriving.
-    private func afterArriving(_ open: @escaping () -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: open)
     }
     #endif
 }

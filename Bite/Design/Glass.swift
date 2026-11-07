@@ -97,14 +97,34 @@ struct RoomBackground: View {
     }
 }
 
-extension RoomBackground {
-    /// A food's page: its photo as the room, or the light of its tint.
-    init(food: Food, paper: Color = Theme.page) {
-        self.init(
-            picture: food.imageData.flatMap { ImageTools.room($0) },
-            glow: Theme.glow(food.displayTint),
-            paper: paper
-        )
+/// See `pageRoom(food:paper:)` and `pageRoom(image:paper:)`.
+private struct PageRoom: ViewModifier {
+    /// The photo, on file or in memory; with neither, the page stands in `glow`.
+    var data: Data? = nil
+    var image: UIImage? = nil
+    var glow: Color? = nil
+    let paper: Color
+
+    @State private var picture: UIImage?
+
+    func body(content: Content) -> some View {
+        // A photo still being baked borrows the day's room, usually the very same color.
+        let glow = data == nil && image == nil ? glow : nil
+        content
+            .background { RoomBackground(picture: picture, glow: glow, paper: paper) }
+            .overlay { RoomFoot(room: RoomBackground(picture: picture, glow: glow)) }
+            .task(id: data?.count ?? image.map { Int($0.size.width) } ?? 0) {
+                guard data != nil || image != nil else {
+                    picture = nil
+                    return
+                }
+                let data = data
+                let image = image
+                picture = await Task.detached(priority: .userInitiated) {
+                    if let data { return ImageTools.room(data) }
+                    return image.flatMap { ImageTools.room(from: $0) }
+                }.value
+            }
     }
 }
 
@@ -246,6 +266,16 @@ extension View {
     /// The screen's room behind this view.
     func roomBackground(paper: Color = Theme.page) -> some View {
         background { RoomBackground(paper: paper) }
+    }
+
+    /// A food's page: its photo as the room, or the light of its tint, and its foot.
+    func pageRoom(food: Food, paper: Color = Theme.card) -> some View {
+        modifier(PageRoom(data: food.imageData, glow: Theme.glow(food.displayTint), paper: paper))
+    }
+
+    /// A page that stands in the room of a photo not on file yet: a plate, a menu.
+    func pageRoom(image: UIImage?, paper: Color = Theme.card) -> some View {
+        modifier(PageRoom(image: image, paper: paper))
     }
 
     /// Things that belong together. In Glass they float as one pane, reaching past the page

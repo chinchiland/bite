@@ -22,8 +22,6 @@ struct MenuView: View {
     @State private var phase: Phase
     @State private var menuID: UUID?
     @State private var heroImage: UIImage?
-    /// The room the menu's photo makes, in Glass.
-    @State private var room: UIImage?
     @State private var attempt = 0
     @State private var filter = ""
     /// Read just now: the line that says it was kept.
@@ -74,10 +72,7 @@ struct MenuView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
-        .background { RoomBackground(picture: room, paper: Theme.card) }
-        .task(id: heroImage == nil) {
-            if let heroImage { room = ImageTools.room(from: heroImage) }
-        }
+        .pageRoom(image: heroImage)
         .modifier(HeroBar(heroGone: heroGone, title: menu?.title ?? String(localized: "Menu")))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(overCamera)

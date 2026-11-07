@@ -113,8 +113,7 @@ struct TypicalDishView: View {
         }
         .scrollIndicators(.hidden)
         .ignoresSafeArea(edges: .top)
-        .background { RoomBackground(food: heroFood, paper: Theme.card) }
-        .overlay { RoomFoot(room: RoomBackground(food: heroFood)) }
+        .pageRoom(food: heroFood)
         .dockBar {
             if phase == .ready, dish != nil { actionBar }
         }
