@@ -80,6 +80,8 @@ jobs:
 
           shoot 00-welcome
           shoot 01-today -onboarded YES
+          shoot 01b-today-card -onboarded YES -cover card
+          shoot 36b-cover-card -onboarded YES -screen cover2 -cover card
           shoot 37-today-middle -onboarded YES -anchor center
           shoot 22-today-end -onboarded YES -anchor bottom
           shoot 36-cover-breakfast -onboarded YES -screen cover2

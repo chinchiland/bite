@@ -114,7 +114,7 @@ struct TypicalDishView: View {
         .scrollIndicators(.hidden)
         .ignoresSafeArea(edges: .top)
         .background { RoomBackground(food: heroFood, paper: Theme.card) }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+        .dockBar {
             if phase == .ready, dish != nil { actionBar }
         }
         .modifier(HeroBar(heroGone: heroGone, title: dish?.title ?? placeholderTitle))
@@ -164,10 +164,7 @@ struct TypicalDishView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, minHeight: 320, alignment: .topLeading)
-        .background(
-            Theme.card,
-            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
-        )
+        .heroSheet()
     }
 
     private var working: some View {
@@ -353,7 +350,7 @@ struct TypicalDishView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background { BarGround().ignoresSafeArea() }
+        .background { BarGround(floats: true).ignoresSafeArea() }
     }
 
     // MARK: Actions

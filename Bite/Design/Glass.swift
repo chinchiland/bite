@@ -108,17 +108,29 @@ extension RoomBackground {
 /// this is the one surface with a real blur, and a flat color on Paper.
 struct BarGround: View {
     var paper: Color = Theme.card
+    /// For a `dockBar`, which softens the page under itself on iOS 26: in Glass its buttons just
+    /// float, with no band behind them.
+    var floats = false
 
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
-        if scheme == .dark {
+        if scheme != .dark {
+            paper
+        } else if floats, Self.pageSoftens {
+            Color.clear
+        } else {
             Rectangle()
                 .fill(.ultraThinMaterial)
                 .overlay { Color.black.opacity(0.28) }
-        } else {
-            paper
         }
+    }
+
+    private static var pageSoftens: Bool {
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *) { return true }
+        #endif
+        return false
     }
 }
 
@@ -127,15 +139,39 @@ private struct RoomMelt: ViewModifier {
     @Environment(\.colorScheme) private var scheme
 
     func body(content: Content) -> some View {
+        let glass = scheme == .dark
         content.mask {
             LinearGradient(
                 stops: [
-                    .init(color: .black, location: 0),
-                    .init(color: .black, location: scheme == .dark ? 0.62 : 1),
-                    .init(color: scheme == .dark ? .clear : .black, location: 1),
+                    .init(color: .black, location: 0.5),
+                    .init(color: .black.opacity(glass ? 0.34 : 1), location: 0.8),
+                    .init(color: .black.opacity(glass ? 0 : 1), location: 0.95),
                 ],
                 startPoint: .top,
                 endPoint: .bottom
+            )
+        }
+    }
+}
+
+/// See `heroSheet()`.
+private struct HeroSheet: ViewModifier {
+    @Environment(\.colorScheme) private var scheme
+
+    func body(content: Content) -> some View {
+        if scheme == .dark {
+            // Masked, not padded: what is inside keeps its place, and a rail in it ends with the
+            // pane instead of running on to the edge of the screen.
+            content
+                .background(Theme.card)
+                .mask {
+                    RoundedRectangle(cornerRadius: Theme.groupRadius, style: .continuous)
+                        .padding(.horizontal, Theme.margin - Theme.groupReach)
+                }
+        } else {
+            content.background(
+                Theme.card,
+                in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
             )
         }
     }
@@ -181,6 +217,11 @@ extension View {
     /// made of its own colors. On Paper it stays whole.
     func meltsIntoRoom() -> some View {
         modifier(RoomMelt())
+    }
+
+    /// What rises over a page's hero: a white sheet on Paper, a pane like any group in Glass.
+    func heroSheet() -> some View {
+        modifier(HeroSheet())
     }
 
     /// A choice: `Theme.selected` with its rim when on, `off` otherwise.

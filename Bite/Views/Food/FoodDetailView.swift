@@ -72,7 +72,7 @@ struct FoodDetailView: View {
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
         .background { RoomBackground(food: food, paper: Theme.card) }
-        .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
+        .dockBar { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: food.name))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -145,10 +145,7 @@ struct FoodDetailView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Theme.card,
-            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
-        )
+        .heroSheet()
     }
 
     @ViewBuilder private var brand: some View {
@@ -330,7 +327,7 @@ struct FoodDetailView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background { BarGround().ignoresSafeArea() }
+        .background { BarGround(floats: true).ignoresSafeArea() }
     }
 
     private var actionTitle: LocalizedStringKey {

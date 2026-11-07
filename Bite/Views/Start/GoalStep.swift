@@ -96,7 +96,7 @@ struct GoalStep: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .roomBackground()
-            .safeAreaInset(edge: .bottom, spacing: 0) { footer }
+            .dockBar { footer }
             .toolbar(.hidden, for: .navigationBar)
             .keyboardDone()
         }
@@ -341,7 +341,7 @@ struct GoalStep: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 14)
         .padding(.bottom, 8)
-        .background { BarGround(paper: Theme.page).ignoresSafeArea() }
+        .background { BarGround(paper: Theme.page, floats: true).ignoresSafeArea() }
     }
 
     private func use() {

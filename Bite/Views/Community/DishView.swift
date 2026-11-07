@@ -44,7 +44,7 @@ struct DishView: View {
         .defaultScrollAnchor(ScreenshotFlags.scrollAnchor)
         .ignoresSafeArea(edges: .top)
         .background { RoomBackground(food: dish.food, paper: Theme.card) }
-        .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
+        .dockBar { actionBar }
         .modifier(HeroBar(heroGone: heroGone, title: dish.name))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAccuracy) {
@@ -137,10 +137,7 @@ struct DishView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Theme.card,
-            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
-        )
+        .heroSheet()
     }
 
     @ViewBuilder private var placeLink: some View {
@@ -284,7 +281,7 @@ struct DishView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background { BarGround().ignoresSafeArea() }
+        .background { BarGround(floats: true).ignoresSafeArea() }
     }
 
     // MARK: Actions

@@ -22,6 +22,8 @@ struct MenuView: View {
     @State private var phase: Phase
     @State private var menuID: UUID?
     @State private var heroImage: UIImage?
+    /// The room the menu's photo makes, in Glass.
+    @State private var room: UIImage?
     @State private var attempt = 0
     @State private var filter = ""
     /// Read just now: the line that says it was kept.
@@ -72,7 +74,10 @@ struct MenuView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea(edges: .top)
-        .roomBackground(paper: Theme.card)
+        .background { RoomBackground(picture: room, paper: Theme.card) }
+        .task(id: heroImage == nil) {
+            if let heroImage { room = ImageTools.room(from: heroImage) }
+        }
         .modifier(HeroBar(heroGone: heroGone, title: menu?.title ?? String(localized: "Menu")))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(overCamera)
@@ -138,6 +143,7 @@ struct MenuView: View {
             .overlay {
                 if phase == .reading { ScanBand() }
             }
+            .meltsIntoRoom()
             .clipped()
             .contentShape(Rectangle())
             .onTapGesture {
@@ -177,10 +183,7 @@ struct MenuView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, minHeight: 360, alignment: .topLeading)
-        .background(
-            Theme.card,
-            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
-        )
+        .heroSheet()
     }
 
     private var reading: some View {

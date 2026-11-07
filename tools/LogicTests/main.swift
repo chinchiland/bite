@@ -28,11 +28,16 @@ func product(_ code: String) throws -> OFFProductResponse {
 
 // MARK: The room
 
-check(near(RoomTone.level(meanBrightness: 0.7), 0.2), "a bright plate is dimmed to the same depth")
-check(near(RoomTone.level(meanBrightness: 0.35), 0.4), "a middling photo is dimmed by half as much")
-check(near(RoomTone.level(meanBrightness: 1), 0.2), "white never goes past the darkest level")
-check(near(RoomTone.level(meanBrightness: 0.05), 0.62), "a dark photo stays behind the words")
-check(near(RoomTone.level(meanBrightness: 0), 0.62), "black does not divide by zero")
+check(near(RoomTone.level(mean: 0.7, peak: 0.7), 0.2857), "a bright plate is dimmed to the same depth")
+check(near(RoomTone.level(mean: 0.4, peak: 0.45), 0.5), "a middling photo is dimmed less")
+check(near(RoomTone.level(mean: 1, peak: 1), 0.2), "white never goes past the darkest level, even under the peak")
+check(near(RoomTone.level(mean: 0.05, peak: 0.1), 0.62), "a dark photo stays behind the words")
+check(near(RoomTone.level(mean: 0, peak: 0), 0.62), "black does not divide by zero")
+check(near(RoomTone.level(mean: 0.3, peak: 1), 0.36), "a dark photo with a white plate is held down by the plate")
+check(RoomTone.level(mean: 0.3, peak: 1) * 1 <= RoomTone.brightest + 0.0001, "no part of a room passes the brightest")
+check(near(RoomTone.peak(of: (0..<100).map(Double.init)), 98), "the peak skips the brightest specks")
+check(near(RoomTone.peak(of: [0.5]), 0.5), "one value is its own peak")
+check(RoomTone.peak(of: []) == 0, "no values, no peak")
 check(near(RoomTone.brightness(red: 1, green: 1, blue: 1), 1), "white has full brightness")
 check(RoomTone.brightness(red: 0, green: 1, blue: 0) > RoomTone.brightness(red: 1, green: 0, blue: 0), "green looks brighter than red")
 

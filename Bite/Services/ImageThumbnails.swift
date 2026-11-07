@@ -57,9 +57,9 @@ extension ImageTools {
         return cache
     }()
 
-    /// A photo as a room to stand in: its colors richer, blurred until only the color is left,
-    /// and dimmed to the one depth every room shares. Small, and scaled up on screen, so it
-    /// costs nothing behind a page that scrolls. Cached by photo.
+    /// A photo as a room to stand in: its colors, blurred and made richer, then dimmed to the
+    /// depth every room shares. Small, and scaled up on screen, so it costs nothing behind a page
+    /// that scrolls. Cached by photo.
     static func room(_ data: Data) -> UIImage? {
         var hasher = Hasher()
         hasher.combine(data.count)
@@ -67,40 +67,61 @@ extension ImageTools {
         hasher.combine(data.suffix(96))
         let key = "\(hasher.finalize())" as NSString
         if let cached = rooms.object(forKey: key) { return cached }
-        guard let small = downsample(data, maxPixel: 180), let room = room(from: small) else { return nil }
+        guard let small = downsample(data, maxPixel: 360), let room = room(from: small) else { return nil }
         rooms.setObject(room, forKey: key)
         return room
     }
 
     /// The same, for a photo that is not on file yet.
     static func room(from image: UIImage) -> UIImage? {
-        guard let cgImage = fitted(image, maxPixel: 180).cgImage else { return nil }
-        let input = CIImage(cgImage: cgImage)
-        let level = RoomTone.level(meanBrightness: meanBrightness(of: input))
-        let rich = input.applyingFilter("CIColorControls", parameters: [kCIInputSaturationKey: 1.7])
-        let blurred = rich.clampedToExtent().applyingGaussianBlur(sigma: 16).cropped(to: input.extent)
-        let dimmed = blurred.applyingFilter("CIColorMatrix", parameters: [
+        guard let cgImage = fitted(image, maxPixel: 360).cgImage else { return nil }
+        let photo = CIImage(cgImage: cgImage)
+        // The plate is in the middle: the table around it would only gray the room.
+        let plate = photo.extent.insetBy(dx: photo.extent.width * 0.14, dy: photo.extent.height * 0.14)
+        // Stretched to the shape of a phone before the blur, so every color on the plate gets
+        // a place in the room, not only the ones in the middle of it.
+        let size = CGSize(width: 130, height: 282)
+        let frame = CGRect(origin: .zero, size: size)
+        let stretched = photo.cropped(to: plate)
+            .transformed(by: CGAffineTransform(translationX: -plate.minX, y: -plate.minY))
+            .transformed(by: CGAffineTransform(scaleX: size.width / plate.width, y: size.height / plate.height))
+        // Richer after the blur: what the blur left is the color of the meal, and that is what
+        // the room should say.
+        let rich = stretched.clampedToExtent()
+            .applyingGaussianBlur(sigma: 24)
+            .cropped(to: frame)
+            .applyingFilter("CIColorControls", parameters: [kCIInputSaturationKey: 3])
+        let level = roomLevel(of: rich, in: frame)
+        let dimmed = rich.applyingFilter("CIColorMatrix", parameters: [
             "inputRVector": CIVector(x: level, y: 0, z: 0, w: 0),
             "inputGVector": CIVector(x: 0, y: level, z: 0, w: 0),
             "inputBVector": CIVector(x: 0, y: 0, z: level, w: 0),
         ])
-        guard let output = roomContext.createCGImage(dimmed, from: input.extent) else { return nil }
+        guard let output = roomContext.createCGImage(dimmed, from: frame) else { return nil }
         return UIImage(cgImage: output)
     }
 
-    /// The photo's mean brightness from 0 to 1.
-    private static func meanBrightness(of image: CIImage) -> Double {
-        let average = image.applyingFilter("CIAreaAverage", parameters: [kCIInputExtentKey: CIVector(cgRect: image.extent)])
-        var pixel = [UInt8](repeating: 0, count: 4)
-        roomContext.render(
-            average,
-            toBitmap: &pixel,
-            rowBytes: 4,
-            bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
-            format: .RGBA8,
-            colorSpace: nil
-        )
-        return RoomTone.brightness(red: Double(pixel[0]) / 255, green: Double(pixel[1]) / 255, blue: Double(pixel[2]) / 255)
+    /// How far to dim an image, read from its own pixels.
+    private static func roomLevel(of image: CIImage, in frame: CGRect) -> Double {
+        let width = Int(frame.width)
+        let height = Int(frame.height)
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        roomContext.render(image, toBitmap: &pixels, rowBytes: width * 4, bounds: frame, format: .RGBA8, colorSpace: nil)
+        // Every fourth pixel across and down is plenty for something this blurred.
+        var values: [Double] = []
+        values.reserveCapacity(width * height / 16)
+        for y in stride(from: 0, to: height, by: 4) {
+            for x in stride(from: 0, to: width, by: 4) {
+                let at = (y * width + x) * 4
+                values.append(RoomTone.brightness(
+                    red: Double(pixels[at]) / 255,
+                    green: Double(pixels[at + 1]) / 255,
+                    blue: Double(pixels[at + 2]) / 255
+                ))
+            }
+        }
+        let mean = values.reduce(0, +) / Double(max(values.count, 1))
+        return RoomTone.level(mean: mean, peak: RoomTone.peak(of: values))
     }
 
     /// An image already in memory, brought down to at most `maxPixel` on the long side.

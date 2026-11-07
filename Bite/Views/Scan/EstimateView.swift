@@ -41,6 +41,8 @@ struct EstimateView: View {
     @State private var saveToo: Bool?
     @State private var showSettings = false
     @State private var attempt = 0
+    /// The room this plate makes, in Glass.
+    @State private var room: UIImage?
 
     enum Phase: Equatable {
         case working
@@ -96,13 +98,14 @@ struct EstimateView: View {
             if case .failed = new { return Feel.failed }
             return nil
         }
-        .background(Theme.card.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+        .background { RoomBackground(picture: room, paper: Theme.card) }
+        .dockBar {
             if phase == .ready, let estimate, !estimate.items.isEmpty {
                 actionBar(estimate)
             }
         }
         .task(id: attempt) { await run() }
+        .task { room = ImageTools.room(from: shownImage) }
         .onAppear {
             // Lunch picked from the library at dinner time is still lunch.
             if let takenAt { meal = Meal.likely(at: takenAt) }
@@ -131,6 +134,7 @@ struct EstimateView: View {
                     ScanBand()
                 }
             }
+            .meltsIntoRoom()
             .clipped()
             .visualEffect { content, proxy in
                 let pull = max(proxy.frame(in: .scrollView).minY, 0)
@@ -223,10 +227,7 @@ struct EstimateView: View {
         .padding(.top, 26)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, minHeight: 360, alignment: .topLeading)
-        .background(
-            Theme.card,
-            in: UnevenRoundedRectangle(topLeadingRadius: 32, topTrailingRadius: 32, style: .continuous)
-        )
+        .heroSheet()
     }
 
     private var working: some View {
@@ -433,7 +434,7 @@ struct EstimateView: View {
         .padding(.horizontal, Theme.margin)
         .padding(.top, 10)
         .padding(.bottom, 8)
-        .background { BarGround().ignoresSafeArea() }
+        .background { BarGround(floats: true).ignoresSafeArea() }
     }
 
     // MARK: Actions

@@ -640,7 +640,7 @@ extension View {
     @ViewBuilder func floatingGlass<S: Shape>(in shape: S) -> some View {
         #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
-            glassEffect(.regular.tint(Theme.page.opacity(0.6)), in: shape)
+            glassEffect(.regular.tint(Theme.glassTint), in: shape)
         } else {
             frosted(in: shape)
         }

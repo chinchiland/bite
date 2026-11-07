@@ -30,6 +30,9 @@ enum Theme {
     /// What you chose: ink on paper. In Glass a lit pane, because only the main action is solid.
     static let selected = Color(lightHex: 0x141414, darkHex: 0xFFFFFF, darkOpacity: 0.17)
     static let selectedInk = Color(lightHex: 0xFAFAF8, darkHex: 0xFFFFFF)
+    /// What colors the floating glass: a paper tint, so the tiles under it stay a soft blur, or
+    /// a little light in Glass, so it reads as a pane above the others.
+    static let glassTint = Color(lightHex: 0xFAFAF8, darkHex: 0xFFFFFF, lightOpacity: 0.6, darkOpacity: 0.1)
     /// The fine light round a lit pane. Paper has none.
     static let rim = Color(lightHex: 0x141414, darkHex: 0xFFFFFF, lightOpacity: 0, darkOpacity: 0.16)
     /// The empty part of a bar.

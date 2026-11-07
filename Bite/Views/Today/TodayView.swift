@@ -1433,6 +1433,7 @@ private struct TopFade: View {
                 )
                 .frame(height: height)
             }
+            .ignoresSafeArea()
     }
 }
 

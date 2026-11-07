@@ -48,6 +48,16 @@ struct DayCover<Controls: View>: View {
         photos.indices.contains(index) ? photos[index] : photos.first
     }
 
+    /// Design lab, until one wins: `-cover card` draws the photo as a pane in Glass, the number
+    /// on the picture, instead of melting it into the room.
+    private var isFramed: Bool {
+        #if DEBUG
+        scheme == .dark && !photos.isEmpty && UserDefaults.standard.string(forKey: "cover") == "card"
+        #else
+        false
+        #endif
+    }
+
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             backdrop
@@ -58,20 +68,25 @@ struct DayCover<Controls: View>: View {
                 }
             hero
         }
-        .frame(height: height)
+        .frame(height: isFramed ? height - topInset - 6 : height)
         .frame(maxWidth: .infinity)
         .overlay(alignment: .top) {
             controls
-                .padding(.top, topInset + 2)
-                .padding(.horizontal, 16)
+                .padding(.top, isFramed ? 10 : topInset + 2)
+                .padding(.horizontal, isFramed ? 10 : 16)
         }
+        .clipShape(RoundedRectangle(cornerRadius: isFramed ? Theme.groupRadius : 0, style: .continuous))
+        .padding(.horizontal, isFramed ? Theme.margin - Theme.groupReach : 0)
+        .padding(.top, isFramed ? topInset + 6 : 0)
         .sensoryFeedback(trigger: index) { _, _ in quietPaging ? nil : Feel.tick }
     }
 
     @ViewBuilder private var backdrop: some View {
         if photos.isEmpty {
             // In Glass the room is already the day's color.
-            if scheme != .dark {
+            if scheme == .dark {
+                Color.clear
+            } else {
                 Theme.coverGradient
                     .overlay { melt(shade: false) }
                     .accessibilityHidden(true)
@@ -139,7 +154,7 @@ struct DayCover<Controls: View>: View {
     /// A soft shade at the head for the controls, clear over the food, paper at the foot. In
     /// Glass the foot has no color of its own: `footFade` lets the room come through instead.
     private func melt(shade: Bool) -> some View {
-        let foot = scheme == .dark ? Color.clear : Theme.page
+        let foot = scheme == .dark ? (isFramed ? Color.black.opacity(0.62) : Color.clear) : Theme.page
         return LinearGradient(
             stops: [
                 .init(color: .black.opacity(shade ? 0.26 : 0), location: 0),
@@ -156,7 +171,7 @@ struct DayCover<Controls: View>: View {
 
     /// The photo itself going, in Glass, down to the room made of its own colors.
     private var footFade: some View {
-        let glass = scheme == .dark
+        let glass = scheme == .dark && !isFramed
         return LinearGradient(
             stops: [
                 .init(color: .black, location: 0.52),
@@ -211,8 +226,8 @@ struct DayCover<Controls: View>: View {
             .font(.ui(13))
         }
         .foregroundStyle(Theme.ink)
-        .padding(.horizontal, Theme.margin)
-        .padding(.bottom, 6)
+        .padding(.horizontal, isFramed ? Theme.groupReach : Theme.margin)
+        .padding(.bottom, isFramed ? 16 : 6)
         .animation(.snappy, value: number)
         .accessibilityElement(children: .combine)
         .accessibilityActions {
