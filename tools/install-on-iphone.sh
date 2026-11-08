@@ -62,6 +62,25 @@ if [ -z "${DEVICE:-}" ]; then
 fi
 echo "iPhone: $DEVICE   team: $TEAM"
 
+# Xcode mounts its developer disk image on the iPhone before it builds for it, and the phone
+# allows that only while it is unlocked. Without this wait the build times out after a minute
+# with "The developer disk image could not be mounted".
+tries=0
+until ddi="$(xcrun devicectl device info ddiServices --device "$DEVICE" 2>&1)"; do
+  if ! grep -qi "locked" <<<"$ddi"; then
+    tail -5 <<<"$ddi"
+    echo "Xcode can't set up the iPhone for development. Check that Developer Mode is on (Settings > Privacy & Security > Developer Mode), then run this again."
+    exit 1
+  fi
+  [ "$tries" = 0 ] && echo "Unlock the iPhone and leave it on the Home Screen for a moment."
+  tries=$((tries + 1))
+  if [ "$tries" -gt 60 ]; then
+    echo "The iPhone stayed locked. Unlock it, then run this again."
+    exit 1
+  fi
+  sleep 5
+done
+
 # One app: a Release build for this iPhone, signed automatically with the team (Xcode
 # registers the device and the app id, with Apple Health, the first time), then installed.
 build_app() {
@@ -87,7 +106,12 @@ install_app() {
   echo "== Building $name ($bundle)"
   local dropped=""
   until build_app "$out" "$bundle" "$@"; do
-    if [[ "$dropped" != *siwa* ]] && grep -qi "sign in with apple\|applesignin" "$TMP/build.log"; then
+    if grep -qi "No Accounts\|No Account for Team" "$TMP/build.log"; then
+      # Without an Apple ID in Xcode nothing can be signed, and every capability then looks
+      # refused, so say this before trying to build without any of them.
+      echo "== Xcode has no Apple ID for team $TEAM. Xcode > Settings > Accounts > +, sign in, then run this again."
+      exit 1
+    elif [[ "$dropped" != *siwa* ]] && grep -qi "sign in with apple\|applesignin" "$TMP/build.log"; then
       # A free Apple team can't sign Sign in with Apple. Everything else works without it (only
       # sharing a count to the community needs it), so build once more without that capability.
       echo "== Your team can't sign Sign in with Apple: building without it (only community sharing needs it)"

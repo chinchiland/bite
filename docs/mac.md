@@ -5,14 +5,14 @@ The easy way: Xcode signs with your Apple team, so Apple Health works and nothin
 ## Once per Mac
 
 1. **Xcode 26 or later** from the App Store. Open it once and let it install its components.
-2. **Your Apple ID in Xcode**: Xcode › Settings › Accounts › + › Apple ID, the account of team **CKPJMS3P4U**.
+2. **Your Apple ID in Xcode**: Xcode › Settings › Accounts › + › Apple ID, the account of team **CKPJMS3P4U**. Without it nothing signs (`No Accounts`). It also keeps your development certificate: one lasts a year, and when it runs out (`No signing certificate "iOS Development" found`) Xcode makes the next one, but only while the Apple ID is there.
 3. **The code**: `gh repo clone chinchiland/bite` (the repo is public; `gh auth login` first if you will push), or `git pull` in an existing copy.
 
 ## Once per iPhone
 
 Plug it in, unlock it, tap **Trust This Computer**. Turn on **Developer Mode** (Settings › Privacy & Security › Developer Mode, at the bottom; it shows up once the phone has met Xcode), let it restart, tap Turn On.
 
-Use a cable that carries data: a charge-only one charges the phone, but the Mac never sees it. If the phone has forgotten the Mac (an iOS update can do that), the install script asks it to trust the Mac again. Xcode 26.2 installs on iOS 27 fine.
+Use a cable that carries data: a charge-only one charges the phone, but the Mac never sees it. If the phone has forgotten the Mac (an iOS update can do that), the install script asks it to trust the Mac again. Xcode 26.2 installs on iOS 27 fine. Keep the phone unlocked when the script starts: Xcode sets it up for development only then (`The developer disk image could not be mounted`), and the script waits for it.
 
 Signing needs the Mac awake: with the display asleep the keychain refuses to sign (`errSecInternalComponent`). The App Groups for the widgets are registered once at developer.apple.com › Identifiers › + › App Groups (`group.com.dylan.bite`, `group.com.dylan.bite.demo`), since Xcode never registers one from the command line; until then the script builds without them.
 
