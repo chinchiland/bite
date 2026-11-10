@@ -171,7 +171,7 @@ jobs:
           shoot 84-typical-paper -onboarded YES -screen typical -query shawarma -look paper
           # The fasting plan, for the demo body and for a 250 lb man, in both looks and all three languages.
           shoot 93-fasting -onboarded YES -screen fasting
-          shoot 93b-fasting-body -onboarded YES -screen fasting -anchor body
+          shoot 93b-fasting-burn -onboarded YES -screen fasting -anchor burn
           shoot 94-fasting-methods -onboarded YES -screen fasting -anchor methods
           shoot 95-fasting-cycle -onboarded YES -screen fasting -anchor cycle
           shoot 96-fasting-end -onboarded YES -screen fasting -anchor bottom
@@ -183,6 +183,8 @@ jobs:
           shoot 103-fasting-low-bmi -onboarded YES -screen fasting -fasting.weight 52
           shoot 104-fasting-once -onboarded YES -screen fasting -fasting.once YES -fasting.days 7
           shoot 105-fasting-electrolytes -onboarded YES -screen fasting -anchor electrolytes
+          shoot 106-fasting-muscle -onboarded YES -screen fasting -anchor muscle
+          shoot 107-fasting-sport -onboarded YES -screen fasting -anchor burn -fasting.steps 12500 -fasting.sports "running:45:3 gym:60:2" -fasting.sportOpen YES
 
           shoot_fresh() {
             name=$1; shift

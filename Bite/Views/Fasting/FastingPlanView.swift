@@ -541,7 +541,7 @@ struct FastingPlanView: View {
                         .font(.ui(16))
                         .foregroundStyle(Theme.ink)
                     Spacer(minLength: 8)
-                    Text(verbatim: tr("%@ min, %@× a week", "\(sport.minutes)", "\(sport.perWeek)"))
+                    Text(verbatim: String(format: tr("%@ min, %@× a week"), "\(sport.minutes)", "\(sport.perWeek)"))
                         .font(.ui(15))
                         .monospacedDigit()
                         .foregroundStyle(Theme.secondary)
