@@ -7450,13 +7450,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pierde grasa, conserva el músculo"
+            "value" : "Conserva el músculo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Perdre du gras, garder le muscle"
+            "value" : "Garder le muscle"
           }
         }
       }
@@ -9765,18 +9765,18 @@
         }
       }
     },
-    "Protein first in your meal: **%@** or more." : {
+    "Protein first in your meal: %@ or more." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Proteína primero en tu comida: **%@** o más."
+            "value" : "Proteína primero en tu comida: %@ o más."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Des protéines d’abord dans ton repas : **%@** ou plus."
+            "value" : "Des protéines d’abord dans ton repas : %@ ou plus."
           }
         }
       }

@@ -805,7 +805,7 @@ struct FastingPlanView: View {
                 }
             }
             VStack(alignment: .leading, spacing: 14) {
-                tip(MacroTile(macro: .protein, size: 32), Text("Protein first in your meal: **\(grams)** or more."))
+                tip(MacroTile(macro: .protein, size: 32), Text("Protein first in your meal: \(grams) or more."))
                 tip(SymbolTile(systemImage: "dumbbell.fill", color: Theme.ink, glyph: Theme.ink, size: 32), Text("Lift 2 or 3 times a week, on your meal day or the day after."))
                 tip(SymbolTile(systemImage: "moon.zzz.fill", color: Theme.water, glyph: Theme.water, size: 32), Text("Sleep 7 hours or more: on 5½ hours, dieters lost half the fat and \(more) more muscle."))
                 tip(SymbolTile(systemImage: "figure.walk", color: Theme.steps, glyph: Theme.steps, size: 32), Text("Keep walking on days without food. Save hard sport for after the meal."))
