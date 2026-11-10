@@ -137,11 +137,15 @@ enum FastingModel {
     static let maxDip = 0.1
     /// Bite never plans below this BMI, whatever the goal.
     static let floorBMI = 20.0
+    /// The single fasts the plan offers, a week at most like the cycles.
+    static let onceLengths = [2, 3, 5, 7]
     static let adultAge = 18
 
     enum Intake: Equatable {
         /// Fasting days, then a meal of this many kilocalories.
         case cycle(FastingCycle, mealKcal: Double)
+        /// One fast of so many days, then a day of this many kilocalories, every day after.
+        case once(fastDays: Int, mealKcal: Double)
         /// The same every day, your daily goal.
         case daily(kcal: Double)
         /// No food at all, for comparison only: nobody should plan it.
@@ -182,6 +186,8 @@ enum FastingModel {
             switch intake {
             case .cycle(let cycle, let meal):
                 kcal = index % cycle.length == cycle.fastDays ? max(meal, 0) : nil
+            case .once(let fastDays, let meal):
+                kcal = index < fastDays ? nil : max(meal, 0)
             case .daily(let daily):
                 kcal = max(daily, 0)
             case .nothing:

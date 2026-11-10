@@ -9,6 +9,8 @@ name: Build Bite
 
 on:
   push:
+    branches-ignore:
+      - fasting2
     # Words alone don't need a cloud Mac.
     paths-ignore:
       - '**.md'
@@ -179,6 +181,8 @@ jobs:
           shoot 101-fasting-es-methods -onboarded YES -screen fasting -anchor methods -AppleLanguages "(es)" -AppleLocale es_ES
           shoot 102-fasting-paper -onboarded YES -screen fasting -look paper
           shoot 103-fasting-low-bmi -onboarded YES -screen fasting -fasting.weight 52
+          shoot 104-fasting-once -onboarded YES -screen fasting -fasting.once YES -fasting.days 7
+          shoot 105-fasting-electrolytes -onboarded YES -screen fasting -anchor electrolytes
 
           shoot_fresh() {
             name=$1; shift

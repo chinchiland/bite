@@ -74,6 +74,14 @@ do {
     check(FastingStage.through(fastDays: 6).count == 5, "six days go through every stage")
     check(FastingStage.through(fastDays: 6).last?.hour == 144, "the meal comes at 144 h")
     check(FastingCycle.all.allSatisfy { $0.fastDays <= FastingCycle.longest }, "Bite plans fasts up to a week")
+
+    // One 7-day fast, then eating what he burns: the water comes back, the tissue stays gone.
+    let single = FastingModel.project(body: man, intake: .once(fastDays: 7, mealKcal: burn), goalKg: 0, days: 28)
+    check(single.day(7).tissueKg - single.day(7).scaleKg > 1.5, "at the end of a week's fast the scale is well under the trend")
+    check(single.day(10).tissueKg - single.day(10).scaleKg < 0.3, "a few days of eating bring the water back")
+    check(single.lost(by: 28).total > single.lost(by: 7).total * 0.8, "what the fast took stays mostly off")
+    check(!single.days[6].ate && single.days[7].ate && single.days[20].ate, "seven days without food, then food every day")
+    check(FastingModel.onceLengths.allSatisfy { $0 <= FastingCycle.longest }, "single fasts stop at a week too")
 }
 
 // MARK: The room

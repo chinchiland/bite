@@ -81,6 +81,22 @@
         }
       }
     },
+    "%@ days without food, then back to eating as usual" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ días sin comer y luego vuelves a comer como siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ jours sans manger, puis tu remanges normalement"
+          }
+        }
+      }
+    },
     "%@ g of protein to go: the richest in it come first." : {
       "localizations" : {
         "en" : {
@@ -355,6 +371,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ de moins d’ici le %@ : %@ de graisse, %@ de masse maigre."
+          }
+        }
+      }
+    },
+    "%@ mg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ mg"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ mg"
           }
         }
       }
@@ -1911,6 +1943,22 @@
         }
       }
     },
+    "About 5 g of salt, a level teaspoon, spread over the day. A clear broth counts." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unos 5 g de sal, una cucharadita rasa, repartidos durante el día. Un caldo claro también cuenta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ 5 g de sel, une cuillère à café rase, répartis sur la journée. Un bouillon clair compte aussi."
+          }
+        }
+      }
+    },
     "About half a kilo a week down" : {
       "localizations" : {
         "es" : {
@@ -2703,6 +2751,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Santé"
+          }
+        }
+      }
+    },
+    "As citrate or glycinate: the most a supplement should give in a day. More tends to loosen the gut. Not with kidney disease." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En citrato o glicinato: lo máximo que un suplemento debería dar al día. Más suele soltar el intestino. No si tienes una enfermedad renal."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En citrate ou en glycinate : le maximum qu’un complément devrait apporter par jour. Au-delà, il relâche souvent les intestins. Pas en cas de maladie des reins."
           }
         }
       }
@@ -4633,6 +4697,22 @@
         }
       }
     },
+    "Electrolytes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electrolitos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Électrolytes"
+          }
+        }
+      }
+    },
     "Emoji" : {
       "localizations" : {
         "es" : {
@@ -5375,6 +5455,22 @@
         }
       }
     },
+    "From a potassium salt substitute: a quarter teaspoon has about 650 mg. Split it, never all at once. Not with kidney disease, or with ACE inhibitors, sartans or spironolactone, unless your doctor says so." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con un sustituto de sal de potasio: un cuarto de cucharadita tiene unos 650 mg. Repártelo, nunca todo de golpe. No si tienes una enfermedad renal ni si tomas IECA, ARA II o espironolactona, salvo que tu médico lo indique."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec un substitut de sel au potassium : un quart de cuillère à café en contient environ 650 mg. Répartis-le, jamais tout d’un coup. Pas en cas de maladie des reins, ni avec des IEC, des sartans ou de la spironolactone, sauf avis de ton médecin."
+          }
+        }
+      }
+    },
     "From your menus" : {
       "localizations" : {
         "es" : {
@@ -5681,6 +5777,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entraînement intense presque tous les jours"
+          }
+        }
+      }
+    },
+    "Headache, dizzy when you stand up, cramps: usually salt. A racing heart or fainting: stop, eat, and get help." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dolor de cabeza, mareo al levantarte, calambres: suele ser la sal. Corazón acelerado o desmayo: para, come y pide ayuda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mal de tête, vertige en te levant, crampes : souvent le sel. Cœur qui s’emballe ou malaise : arrête, mange et fais-toi aider."
           }
         }
       }
@@ -6183,6 +6295,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ses plats n’apparaîtront plus dans ta recherche. Ce que tu en as déjà noté reste."
+          }
+        }
+      }
+    },
+    "Just once" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una sola vez"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une seule fois"
           }
         }
       }
@@ -7053,6 +7181,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fait comme d’habitude"
+          }
+        }
+      }
+    },
+    "Magnesium" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magnesio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magnésium"
           }
         }
       }
@@ -8081,6 +8225,22 @@
         }
       }
     },
+    "On days without food, in water you sip through the day." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los días sin comer, en agua que bebes a lo largo del día."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les jours sans manger, dans de l’eau que tu bois au fil de la journée."
+          }
+        }
+      }
+    },
     "On target" : {
       "localizations" : {
         "es" : {
@@ -8189,6 +8349,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Une seule estimation pour l’instant. Ajoute la tienne pour la consolider."
+          }
+        }
+      }
+    },
+    "One fast of %@ days" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un ayuno de %@ días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un jeûne de %@ jours"
+          }
+        }
+      }
+    },
+    "One fast of %@ days: %@ of fat and lean gone, and %@ of water that comes back with food." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un ayuno de %@ días: %@ menos de grasa y masa magra, y %@ de agua que vuelve al comer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un jeûne de %@ jours : %@ de graisse et de masse maigre en moins, et %@ d’eau qui revient avec les repas."
           }
         }
       }
@@ -8477,6 +8669,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Commander"
+          }
+        }
+      }
+    },
+    "Over and over" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En bucle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En boucle"
           }
         }
       }
@@ -8909,6 +9117,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vise un code-barres"
+          }
+        }
+      }
+    },
+    "Potassium" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potasio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potassium"
           }
         }
       }
@@ -10561,6 +10785,38 @@
         }
       }
     },
+    "Sodium" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodium"
+          }
+        }
+      }
+    },
+    "Sodium and potassium as fasting is usually done; magnesium is the most a supplement should give in a day (US National Academy of Medicine). Ask your doctor about your own amounts." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodio y potasio como suelen tomarse en ayuno; el magnesio es lo máximo que debería dar un suplemento al día (Academia Nacional de Medicina de EE. UU.). Pregunta a tu médico tus propias cantidades."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sodium et potassium tels qu’on les prend d’habitude en jeûne ; le magnésium est le maximum conseillé pour un complément (Académie nationale de médecine des États-Unis). Demande à ton médecin tes propres quantités."
+          }
+        }
+      }
+    },
     "Someone" : {
       "localizations" : {
         "es" : {
@@ -11473,6 +11729,22 @@
         }
       }
     },
+    "Then back to eating as usual" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luego vuelves a comer como siempre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puis tu remanges normalement"
+          }
+        }
+      }
+    },
     "These photos stay on this phone, out of iCloud and out of your camera roll. A new phone starts fresh, so export before you switch." : {
       "localizations" : {
         "es" : {
@@ -12049,6 +12321,22 @@
         }
       }
     },
+    "Up to %@ mg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasta %@ mg"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jusqu’à %@ mg"
+          }
+        }
+      }
+    },
     "Use %@ kcal" : {
       "localizations" : {
         "en" : {
@@ -12275,6 +12563,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eau : %1$lld sur %2$lld verres"
+          }
+        }
+      }
+    },
+    "Water: drink to thirst, about 2 to 3 litres. Plain water alone for days can lower your sodium." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua: bebe según tu sed, unos 2 a 3 litros. Solo agua durante días puede bajarte el sodio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eau : bois selon ta soif, environ 2 à 3 litres. De l’eau seule pendant des jours peut faire baisser ton sodium."
           }
         }
       }

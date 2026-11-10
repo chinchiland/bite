@@ -14,6 +14,8 @@ struct FastingPlanView: View {
 
     @Environment(\.dismiss) private var dismiss
     @AppStorage("fasting.days") private var fastDays = FastingCycle.onceAWeek.fastDays
+    /// One fast, then eating as usual, instead of the fast over and over.
+    @AppStorage("fasting.once") private var once = false
 
     @State private var you: FastingBody
     @State private var goalKg: Double
@@ -52,7 +54,11 @@ struct FastingPlanView: View {
     }
 
     private var cycle: FastingCycle {
-        FastingCycle.all.first { $0.fastDays == fastDays } ?? .onceAWeek
+        FastingCycle(fastDays: min(max(fastDays, 1), FastingCycle.longest))
+    }
+
+    private var intake: FastingModel.Intake {
+        once ? .once(fastDays: cycle.fastDays, mealKcal: meal) : .cycle(cycle, mealKcal: meal)
     }
 
     private var burn: Double { you.burn(atKg: you.weightKg) }
@@ -67,8 +73,9 @@ struct FastingPlanView: View {
     }
 
     private var plan: Plan {
-        let projection = FastingModel.project(body: you, intake: .cycle(cycle, mealKcal: meal), goalKg: goalKg, days: 26 * 7)
-        let horizon = FastingModel.horizon(goalDay: projection.goalDay, cycle: cycle)
+        let projection = FastingModel.project(body: you, intake: intake, goalKg: goalKg, days: 26 * 7)
+        // One fast is drawn to three weeks past it, so the water coming back shows.
+        let horizon = once ? max(28, cycle.fastDays + 21) : FastingModel.horizon(goalDay: projection.goalDay, cycle: cycle)
         return Plan(projection: projection, days: Array(projection.days.prefix(horizon)), floorKg: FastingModel.floorKg(for: you))
     }
 
@@ -96,6 +103,9 @@ struct FastingPlanView: View {
                             cyclePane(plan)
                                 .glassGroup(after: 30)
                                 .id(Anchor.cycle)
+                            electrolytesPane
+                                .glassGroup(after: 30)
+                                .id(Anchor.electrolytes)
                             safetyPane
                                 .glassGroup(after: 30)
                                 .id(Anchor.safety)
@@ -120,6 +130,12 @@ struct FastingPlanView: View {
                     }
                 }
                 .onChange(of: fastDays) { _, _ in picked = nil }
+                .onChange(of: once) { _, single in
+                    picked = nil
+                    // Each list has its own lengths: land on one it shows.
+                    if single, !FastingModel.onceLengths.contains(fastDays) { fastDays = FastingCycle.longest }
+                    if !single, !FastingCycle.all.contains(where: { $0.fastDays == fastDays }) { fastDays = FastingCycle.onceAWeek.fastDays }
+                }
                 .onChange(of: goalKg) { _, _ in picked = nil }
                 // Your weighings and what you burn can arrive after the plan opens.
                 .onChange(of: learnedKcal) { _, kcal in you.learnedKcal = kcal }
@@ -137,6 +153,7 @@ struct FastingPlanView: View {
                     case "body": reader.scrollTo(Anchor.body, anchor: .top)
                     case "methods": reader.scrollTo(Anchor.methods, anchor: .top)
                     case "cycle": reader.scrollTo(Anchor.cycle, anchor: .top)
+                    case "electrolytes": reader.scrollTo(Anchor.electrolytes, anchor: .top)
                     case "bottom": reader.scrollTo(Anchor.safety, anchor: .top)
                     default: break
                     }
@@ -150,13 +167,14 @@ struct FastingPlanView: View {
         case body
         case methods
         case cycle
+        case electrolytes
         case safety
     }
 
     /// The day the chart and the figure show: the one you dragged to, else the goal's, else
     /// the chart's last.
     private func shownDay(_ plan: Plan) -> FastingDay {
-        let fallback = plan.projection.goalDay ?? plan.days.count
+        let fallback = once ? cycle.fastDays : plan.projection.goalDay ?? plan.days.count
         return plan.projection.day(min(picked ?? fallback, max(plan.days.count, 1)))
     }
 
@@ -291,7 +309,13 @@ struct FastingPlanView: View {
                         .foregroundStyle(Theme.secondary)
                 }
                 Group {
-                    if let goalDay = projection.goalDay, goalDay < 14 {
+                    if once {
+                        let end = projection.day(cycle.fastDays)
+                        let length = "\(cycle.fastDays)"
+                        let gone = projection.lost(by: cycle.fastDays).total.weightText
+                        let waterBack = max(end.tissueKg - end.scaleKg, 0).weightText
+                        Text("One fast of \(length) days: \(gone) of fat and lean gone, and \(waterBack) of water that comes back with food.")
+                    } else if let goalDay = projection.goalDay, goalDay < 14 {
                         let days = goalDay
                         Text("\(cycle.title), about \(perWeek) a week: your goal of \(goal) in \(days) days.")
                     } else if let goalDay = projection.goalDay {
@@ -411,15 +435,23 @@ struct FastingPlanView: View {
     }
 
     private var methods: [Method] {
-        var rows: [Method] = FastingCycle.all.map { cycle in
+        var rows: [Method] = once ? singleFasts : FastingCycle.all.map { cycle in
             let projection = FastingModel.project(body: you, intake: .cycle(cycle, mealKcal: meal), goalKg: 0, days: 28)
             return Method(id: cycle.fastDays, title: cycle.title, detail: cycle.detail, lostKg: projection.lost(by: 28).total, share: cycle.shareOfNonstop, cycle: cycle, floorDay: floorDay(projection))
         }
-        if let dailyGoal, Double(dailyGoal) < burn {
+        if let dailyGoal, Double(dailyGoal) < burn, !once {
             let projection = FastingModel.project(body: you, intake: .daily(kcal: Double(dailyGoal)), goalKg: 0, days: 28)
             rows.insert(Method(id: 0, title: tr("Your daily goal"), detail: tr("%@ kcal every day", Double(dailyGoal).kcalText), lostKg: projection.lost(by: 28).total, share: nil, cycle: nil), at: 0)
         }
         return rows
+    }
+
+    /// One fast of each length, then eating as usual.
+    private var singleFasts: [Method] {
+        FastingModel.onceLengths.map { days in
+            let projection = FastingModel.project(body: you, intake: .once(fastDays: days, mealKcal: meal), goalKg: 0, days: 28)
+            return Method(id: days, title: tr("One fast of %@ days", "\(days)"), detail: tr("Then back to eating as usual"), lostKg: projection.lost(by: 28).total, share: nil, cycle: FastingCycle(fastDays: days), floorDay: floorDay(projection))
+        }
     }
 
     private var methodsPane: some View {
@@ -429,14 +461,22 @@ struct FastingPlanView: View {
         return VStack(alignment: .leading, spacing: 6) {
             SectionLabel(title: "How you fast", detail: "In 4 weeks", symbol: "timer")
                 .padding(.bottom, 6)
+            Picker("How you fast", selection: $once) {
+                Text("Over and over").tag(false)
+                Text("Just once").tag(true)
+            }
+            .pickerStyle(.segmented)
+            .padding(.bottom, 8)
             ForEach(rows) { row in
                 methodRow(row, fraction: row.lostKg / most)
             }
+            if !once {
             Text("Past a week, each extra day adds little and the risks grow: week-long fasts already keep \(weekLong.formatted(.percent.precision(.fractionLength(0)))) of what a fast that never ends would do.")
                 .font(.ui(13))
                 .foregroundStyle(Theme.secondary)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top, 8)
+            }
         }
     }
 
@@ -504,7 +544,7 @@ struct FastingPlanView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityHidden(true)
-            Text(verbatim: cycle.detail)
+            Text(verbatim: once ? tr("%@ days without food, then back to eating as usual", "\(cycle.fastDays)") : cycle.detail)
                 .font(.ui(15))
                 .foregroundStyle(Theme.ink)
 
@@ -564,6 +604,59 @@ struct FastingPlanView: View {
                 .selectedFill(true, in: Circle())
         }
         .fixedSize()
+    }
+
+    // MARK: Electrolytes
+
+    /// What to take on days without food, the same for everyone, so the plan never works out a
+    /// dose: sodium at the usual reference amount, potassium kept modest because too much is the
+    /// dangerous one, magnesium at the most a supplement should give in a day.
+    private var electrolytesPane: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SectionLabel(title: "Electrolytes", symbol: "drop.fill", symbolColor: Theme.water)
+            Text("On days without food, in water you sip through the day.")
+                .font(.ui(15))
+                .foregroundStyle(Theme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: 0) {
+                electrolyteRow("Sodium", amount: Text("\(2000.0.kcalText) mg"), detail: "About 5 g of salt, a level teaspoon, spread over the day. A clear broth counts.")
+                electrolyteRow("Potassium", amount: Text("Up to \(1000.0.kcalText) mg"), detail: "From a potassium salt substitute: a quarter teaspoon has about 650 mg. Split it, never all at once. Not with kidney disease, or with ACE inhibitors, sartans or spironolactone, unless your doctor says so.")
+                electrolyteRow("Magnesium", amount: Text("Up to \(350.0.kcalText) mg"), detail: "As citrate or glycinate: the most a supplement should give in a day. More tends to loosen the gut. Not with kidney disease.")
+            }
+            Text("Water: drink to thirst, about 2 to 3 litres. Plain water alone for days can lower your sodium.")
+                .font(.ui(14))
+                .foregroundStyle(Theme.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Headache, dizzy when you stand up, cramps: usually salt. A racing heart or fainting: stop, eat, and get help.")
+                .font(.ui(14))
+                .foregroundStyle(Theme.watchText)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Sodium and potassium as fasting is usually done; magnesium is the most a supplement should give in a day (US National Academy of Medicine). Ask your doctor about your own amounts.")
+                .font(.ui(13))
+                .foregroundStyle(Theme.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func electrolyteRow(_ name: LocalizedStringKey, amount: Text, detail: LocalizedStringKey) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text(name)
+                    .font(.ui(16, .medium))
+                    .foregroundStyle(Theme.ink)
+                Spacer(minLength: 8)
+                amount
+                    .font(.number(17))
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.ink)
+            }
+            Text(detail)
+                .font(.ui(14))
+                .foregroundStyle(Theme.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 12)
+        .overlay(alignment: .top) { Rectangle().fill(Theme.hairline).frame(height: 1) }
     }
 
     // MARK: Before you start
