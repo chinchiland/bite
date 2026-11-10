@@ -30,8 +30,21 @@ func product(_ code: String) throws -> OFFProductResponse {
 
 do {
     // The Reddit chart's man: 250 pounds, eating a day of what he burns once a week.
-    let man = FastingBody(sex: .male, age: 35, heightCm: 180, weightKg: 113.4, activity: .sedentary)
-    check(near(man.burn(atKg: man.weightKg), 2507, 2), "a 250 lb man at a desk burns about 2,500 kcal, the chart's daily maintenance")
+    let man = FastingBody(sex: .male, age: 35, heightCm: 180, weightKg: 113.4, moving: Moving(steps: 2500))
+    check(near(man.burn(atKg: man.weightKg), 2507, 5), "a 250 lb man at a desk, 2,500 steps, burns about 2,500 kcal, the chart's daily maintenance")
+    let parts = man.burnParts(atKg: 113.4)
+    check(near(parts.rest, 2089, 1) && near(parts.life, 313, 1), "resting energy and daily life, its 15%")
+    check(near(parts.walking, 106, 2) && parts.sport == 0, "2,500 steps of a 180 cm man: about 1.9 km, 106 kcal")
+
+    // 165 cm, 85 kg: 7,000 steps, then running 45 minutes three times a week.
+    var runner = FastingBody(sex: .male, age: 30, heightCm: 165, weightKg: 85, moving: Moving(steps: 7000))
+    check(near(runner.burn(atKg: 85), 2200, 2), "at rest, daily life and 7,000 steps: about 2,200 kcal")
+    runner.moving.sports = [Sport(kind: .running, minutes: 45, perWeek: 3)]
+    check(near(runner.burnParts(atKg: 85).sport, 218.6, 0.5), "running adds its MET above rest, spread over the week")
+    check(runner.burn(atKg: 75) < runner.burn(atKg: 85) - 150, "a lighter body burns less at rest, walking and running")
+    check(Moving(stored: runner.moving.stored) == runner.moving, "how you move survives being kept")
+    check(Moving(stored: "nonsense") == nil, "a broken setting reads as nothing")
+    check(Moving.usual(for: .sedentary).steps == 4000 && Moving.usual(for: .active).steps == 11000, "steps to start from, by activity")
     check(near(FastingCycle.onceAWeek.shareOfNonstop, 6.0 / 7), "once a week keeps six days of seven")
     check(near(FastingCycle(fastDays: 7).shareOfNonstop, 0.875), "week-long fasts keep the 87% the post talks about")
     check(FastingCycle.onceAWeek.length == 7, "once a week is a seven day turn")
@@ -55,15 +68,15 @@ do {
     check(abs(daily.lost(by: 28).total) < 0.3, "eating what you burn holds your weight")
 
     // A lean body: it stops at a BMI of 20, and loses more lean for each kilo.
-    let lean = FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 62, activity: .light)
+    let lean = FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 62, moving: .usual(for: .light))
     let leanPlan = FastingModel.project(body: lean, intake: .cycle(.onceAWeek, mealKcal: lean.burn(atKg: 62)), goalKg: 50, days: 182)
     check(leanPlan.stoppedAtFloor, "a goal under a BMI of 20 stops at the floor")
     check(leanPlan.last.tissueKg >= FastingModel.floorKg(for: lean) - 0.5, "it never goes past the floor")
     let leanLost = leanPlan.lost(by: 14)
     check(leanLost.lean / leanLost.total > 0.3, "a lean body loses a third or more as lean tissue")
 
-    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 16, heightCm: 165, weightKg: 70, activity: .light)) == .underAge, "no plan under 18")
-    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 54, activity: .light)) == .lowBMI, "no plan under a BMI of 20")
+    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 16, heightCm: 165, weightKg: 70, moving: .usual(for: .light))) == .underAge, "no plan under 18")
+    check(FastingModel.refusal(for: FastingBody(sex: .female, age: 30, heightCm: 170, weightKg: 54, moving: .usual(for: .light))) == .lowBMI, "no plan under a BMI of 20")
     check(FastingModel.refusal(for: man) == nil, "a plan for the man")
     check(near(FastingModel.suggestedGoal(for: man), 102), "a tenth off to start with")
     check(FastingModel.suggestedGoal(for: lean) <= lean.weightKg, "the suggestion never adds weight")

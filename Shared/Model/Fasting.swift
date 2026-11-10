@@ -33,16 +33,14 @@ struct FastingCycle: Hashable, Identifiable {
     }
 }
 
-/// What the plan knows of you: the goal calculator's numbers, your latest weighing, and what
-/// you burn when your weighings and meals have taught Bite.
+/// What the plan knows of you: the goal calculator's numbers, your latest weighing, and how
+/// you move on an average day.
 struct FastingBody: Equatable {
     var sex: Sex
     var age: Int
     var heightCm: Double
     var weightKg: Double
-    var activity: Activity
-    /// What you burn in a day, learned from two weeks of weighings and meals; nil until then.
-    var learnedKcal: Double? = nil
+    var moving: Moving
 
     var bmi: Double { weightKg / pow(max(heightCm, 100) / 100, 2) }
 
@@ -55,13 +53,164 @@ struct FastingBody: Equatable {
         return min(max(percent / 100, 0.08), 0.55)
     }
 
-    /// What this body burns in a day at a given weight: the learned number when there is one,
-    /// moving with weight the way Mifflin-St Jeor does, else Mifflin-St Jeor times activity.
-    func burn(atKg kilograms: Double) -> Double {
-        let worked = GoalCalculator.maintenance(sex: sex, age: age, heightCm: heightCm, weightKg: kilograms, activity: activity)
-        guard let learnedKcal else { return worked }
-        let atStart = GoalCalculator.maintenance(sex: sex, age: age, heightCm: heightCm, weightKg: weightKg, activity: activity)
-        return learnedKcal + worked - atStart
+    /// What this body burns in a day at a given weight, part by part. Each part moves with the
+    /// weight: resting energy the way Mifflin-St Jeor does, walking and sport kilo for kilo.
+    func burnParts(atKg kilograms: Double) -> DailyBurn {
+        let rest = GoalCalculator.resting(sex: sex, age: age, heightCm: heightCm, weightKg: kilograms)
+        return DailyBurn(
+            rest: rest,
+            life: rest * DailyBurn.lifeShare,
+            walking: walkingKm * DailyBurn.walkKcalPerKgKm * kilograms,
+            sport: moving.sports.reduce(0) { $0 + $1.kcalPerDay(atKg: kilograms) }
+        )
+    }
+
+    func burn(atKg kilograms: Double) -> Double { burnParts(atKg: kilograms).total }
+
+    /// Your steps as a distance: a stride is about 41% of your height.
+    var walkingKm: Double {
+        Double(max(moving.steps, 0)) * min(max(heightCm, 100), 250) * DailyBurn.strideShareOfHeight / 100_000
+    }
+}
+
+/// What a day burns, part by part.
+struct DailyBurn: Equatable {
+    /// Resting energy: Mifflin-St Jeor.
+    let rest: Double
+    /// Standing, chores and digesting.
+    let life: Double
+    let walking: Double
+    let sport: Double
+
+    var total: Double { rest + life + walking + sport }
+
+    /// Daily life as a share of resting energy: with 4,000 steps it lands where the goal
+    /// calculator's Mostly sitting does.
+    static let lifeShare = 0.15
+    /// Walking costs about half a kilocalorie for each kilo and kilometre above rest.
+    static let walkKcalPerKgKm = 0.5
+    static let strideShareOfHeight = 0.414
+}
+
+/// How you move on an average day: your steps and your sport.
+struct Moving: Codable, Equatable {
+    var steps: Int
+    var sports: [Sport] = []
+
+    /// Steps for each of the goal calculator's activity levels, until you say.
+    static func usual(for activity: Activity) -> Moving {
+        switch activity {
+        case .sedentary: Moving(steps: 4000)
+        case .light: Moving(steps: 7000)
+        case .moderate: Moving(steps: 9000)
+        case .active: Moving(steps: 11000)
+        }
+    }
+
+    /// As it is kept in settings.
+    var stored: String {
+        (try? JSONEncoder().encode(self)).flatMap { String(data: $0, encoding: .utf8) } ?? ""
+    }
+
+    init(steps: Int, sports: [Sport] = []) {
+        self.steps = steps
+        self.sports = sports
+    }
+
+    init?(stored: String) {
+        guard let data = stored.data(using: .utf8), let moving = try? JSONDecoder().decode(Moving.self, from: data) else { return nil }
+        self = moving
+    }
+}
+
+/// A sport you do in an average week: how long a session lasts and how many you do.
+struct Sport: Codable, Equatable, Identifiable {
+    var id = UUID()
+    var kind: SportKind
+    var minutes: Int
+    var perWeek: Int
+
+    private enum CodingKeys: String, CodingKey {
+        case kind, minutes, perWeek
+    }
+
+    init(kind: SportKind, minutes: Int = 45, perWeek: Int = 2) {
+        self.kind = kind
+        self.minutes = minutes
+        self.perWeek = perWeek
+    }
+
+    /// Two sports are the same when you do the same thing as often: the id only tells rows apart.
+    static func == (lhs: Sport, rhs: Sport) -> Bool {
+        lhs.kind == rhs.kind && lhs.minutes == rhs.minutes && lhs.perWeek == rhs.perWeek
+    }
+
+    /// What it adds to an average day at a weight: its MET above rest, times kilos and hours,
+    /// spread over the week.
+    func kcalPerDay(atKg kilograms: Double) -> Double {
+        (kind.met - 1) * kilograms * Double(max(minutes, 0)) / 60 * Double(max(perWeek, 0)) / 7
+    }
+}
+
+enum SportKind: String, Codable, CaseIterable, Identifiable {
+    case running
+    case cycling
+    case swimming
+    case gym
+    case hiit
+    case yoga
+    case hiking
+    case football
+    case tennis
+    case boxing
+
+    var id: String { rawValue }
+
+    /// From the Compendium of Physical Activities: what an hour of it costs for each kilo, rest
+    /// counted as 1.
+    var met: Double {
+        switch self {
+        case .running: 9
+        case .cycling: 7
+        case .swimming: 6
+        case .gym: 5
+        case .hiit: 8
+        case .yoga: 2.5
+        case .hiking: 6
+        case .football: 7
+        case .tennis: 6.5
+        case .boxing: 7.5
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .running: tr("Running")
+        case .cycling: tr("Cycling")
+        case .swimming: tr("Swimming")
+        case .gym: tr("Weights")
+        case .hiit: tr("HIIT")
+        case .yoga: tr("Yoga")
+        case .hiking: tr("Hiking")
+        case .football: tr("Football")
+        case .tennis: tr("Tennis, padel")
+        case .boxing: tr("Boxing")
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .running: "figure.run"
+        case .cycling: "figure.outdoor.cycle"
+        case .swimming: "figure.pool.swim"
+        case .gym: "figure.strengthtraining.traditional"
+        case .hiit: "figure.highintensity.intervaltraining"
+        case .yoga: "figure.yoga"
+        case .hiking: "figure.hiking"
+        case .football: "figure.soccer"
+        case .tennis: "figure.tennis"
+        case .boxing: "figure.boxing"
+        }
     }
 }
 

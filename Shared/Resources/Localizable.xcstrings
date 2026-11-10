@@ -391,6 +391,22 @@
         }
       }
     },
+    "%@ min, %@× a week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ min, %@× por semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ min, %@× par semaine"
+          }
+        }
+      }
+    },
     "%@ more since %@" : {
       "localizations" : {
         "es" : {
@@ -1583,6 +1599,22 @@
         }
       }
     },
+    "5 g of salt" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 g de sal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 g de sel"
+          }
+        }
+      }
+    },
     "50 to 69" : {
       "localizations" : {
         "es" : {
@@ -1905,6 +1937,154 @@
         }
       }
     },
+    "About %@ a week." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unos %@ por semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ %@ par semaine."
+          }
+        }
+      }
+    },
+    "About %@ a week. Bite stops at %@, a BMI of 20." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unos %@ por semana. Bite se detiene en %@, un IMC de 20."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ %@ par semaine. Bite s’arrête à %@, un IMC de 20."
+          }
+        }
+      }
+    },
+    "About %@ a week: your goal in %lld days." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %@ a week: your goal in %lld day."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %@ a week: your goal in %lld days."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %@ par semaine : ton objectif en %lld jour."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %@ par semaine : ton objectif en %lld jours."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Unos %@ por semana: tu objetivo en %lld día."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Unos %@ por semana: tu objetivo en %lld días."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "About %@ a week: your goal in %lld weeks." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %@ a week: your goal in %lld week."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %@ a week: your goal in %lld weeks."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %@ par semaine : ton objectif en %lld semaine."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %@ par semaine : ton objectif en %lld semaines."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Unos %@ por semana: tu objetivo en %lld semana."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Unos %@ por semana: tu objetivo en %lld semanas."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "About %@ g" : {
       "localizations" : {
         "es" : {
@@ -2147,6 +2327,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouter un endroit"
+          }
+        }
+      }
+    },
+    "Add a sport" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir un deporte"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un sport"
           }
         }
       }
@@ -2691,6 +2887,22 @@
         }
       }
     },
+    "An estimate, and every body differs. What you burn: resting energy from your body (Mifflin-St Jeor), %@ more for daily life, your steps, and your sport from the Compendium of Physical Activities; it falls up to %@ deep into a fast. Body fat comes from your BMI, the split between fat and lean from Forbes. Muscle: protein at %@ g a kilo (Helms, Refalo), lifting on a very low calorie diet (Bryner), sleep (Nedeltcheva). Bite plans down to a BMI of 20, and fasts of a week at most." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una estimación, y cada cuerpo es distinto. Lo que quemas: la energía en reposo de tu cuerpo (Mifflin-St Jeor), un %@ más por el día a día, tus pasos y tu deporte según el Compendium of Physical Activities; baja hasta un %@ con el ayuno. La grasa corporal sale de tu IMC, y el reparto entre grasa y masa magra, de Forbes. Músculo: proteína a %@ g por kilo (Helms, Refalo), pesas durante una dieta muy baja en calorías (Bryner), sueño (Nedeltcheva). Bite planifica hasta un IMC de 20 y ayunos de una semana como máximo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une estimation, et chaque corps est différent. Ce que tu brûles : l’énergie au repos de ton corps (Mifflin-St Jeor), %@ de plus pour la vie courante, tes pas, et ton sport d’après le Compendium of Physical Activities ; il baisse jusqu’à %@ au fil d’un jeûne. Le gras vient de ton IMC, la part entre gras et masse maigre de Forbes. Muscle : protéines à %@ g par kilo (Helms, Refalo), musculation pendant un régime très basses calories (Bryner), sommeil (Nedeltcheva). Bite planifie jusqu’à un IMC de 20, et des jeûnes d’une semaine au plus."
+          }
+        }
+      }
+    },
     "Another day, or your week" : {
       "localizations" : {
         "es" : {
@@ -2815,6 +3027,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Avec un IMC sous 20, Bite ne prévoit pas de jeûne."
+          }
+        }
+      }
+    },
+    "at most" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "como máximo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "au plus"
+          }
+        }
+      }
+    },
+    "At rest" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En reposo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au repos"
           }
         }
       }
@@ -3231,6 +3475,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "IMC %@"
+          }
+        }
+      }
+    },
+    "Body fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gras"
+          }
+        }
+      }
+    },
+    "Boxing" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boxeo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boxe"
           }
         }
       }
@@ -4153,6 +4429,22 @@
         }
       }
     },
+    "Cycling" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciclismo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vélo"
+          }
+        }
+      }
+    },
     "Daily average" : {
       "localizations" : {
         "es" : {
@@ -4181,6 +4473,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Objectif quotidien"
+          }
+        }
+      }
+    },
+    "Daily life" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Día a día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vie courante"
           }
         }
       }
@@ -5391,6 +5699,22 @@
         }
       }
     },
+    "Football" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fútbol"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Football"
+          }
+        }
+      }
+    },
     "Free" : {
       "localizations" : {
         "es" : {
@@ -5957,6 +6281,38 @@
         }
       }
     },
+    "HIIT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HIIT"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HIIT"
+          }
+        }
+      }
+    },
+    "Hiking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senderismo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Randonnée"
+          }
+        }
+      }
+    },
     "Hold a food to add it again, or scan your next meal." : {
       "localizations" : {
         "es" : {
@@ -6065,6 +6421,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comment la précision est calculée"
+          }
+        }
+      }
+    },
+    "How to take them" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo tomarlos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment les prendre"
           }
         }
       }
@@ -6433,6 +6805,22 @@
         }
       }
     },
+    "Keep walking on days without food. Save hard sport for after the meal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue caminando los días sin comer. Deja el deporte intenso para después de la comida."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue de marcher les jours sans manger. Garde le sport intense pour après le repas."
+          }
+        }
+      }
+    },
     "Kept" : {
       "localizations" : {
         "es" : {
@@ -6689,6 +7077,22 @@
         }
       }
     },
+    "Lean tissue" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa magra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masse maigre"
+          }
+        }
+      }
+    },
     "Less" : {
       "localizations" : {
         "es" : {
@@ -6749,6 +7153,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiens le téléphone droit"
+          }
+        }
+      }
+    },
+    "Lift 2 or 3 times a week, on your meal day or the day after." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrena con pesas 2 o 3 veces por semana, el día de tu comida o el siguiente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fais de la muscu 2 ou 3 fois par semaine, le jour de ton repas ou le lendemain."
           }
         }
       }
@@ -7021,6 +7441,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perdre un peu"
+          }
+        }
+      }
+    },
+    "Lose fat, keep muscle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierde grasa, conserva el músculo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perdre du gras, garder le muscle"
           }
         }
       }
@@ -7361,6 +7797,22 @@
         }
       }
     },
+    "Minutes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
+          }
+        }
+      }
+    },
     "Mirror" : {
       "localizations" : {
         "es" : {
@@ -7613,6 +8065,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Près de toi"
+          }
+        }
+      }
+    },
+    "Near your goal, fast less often: the leaner you are, the more of each kilo is muscle." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca de tu objetivo, ayuna menos a menudo: cuanta menos grasa tengas, más músculo hay en cada kilo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Près de ton objectif, jeûne moins souvent : plus tu es mince, plus chaque kilo perdu est du muscle."
           }
         }
       }
@@ -9297,6 +9765,22 @@
         }
       }
     },
+    "Protein first in your meal: **%@** or more." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteína primero en tu comida: **%@** o más."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des protéines d’abord dans ton repas : **%@** ou plus."
+          }
+        }
+      }
+    },
     "Protein shake" : {
       "localizations" : {
         "es" : {
@@ -9757,6 +10241,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "À peu près juste"
+          }
+        }
+      }
+    },
+    "Running" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correr"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Course à pied"
           }
         }
       }
@@ -10689,6 +11189,22 @@
         }
       }
     },
+    "Sleep 7 hours or more: on 5½ hours, dieters lost half the fat and %@ more muscle." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duerme 7 horas o más: con 5 horas y media, quienes hacían dieta perdieron la mitad de grasa y un %@ más de músculo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dors 7 heures ou plus : avec 5 h 30 de sommeil, des personnes au régime ont perdu deux fois moins de gras et %@ de muscle en plus."
+          }
+        }
+      }
+    },
     "Small" : {
       "localizations" : {
         "es" : {
@@ -10913,6 +11429,22 @@
         }
       }
     },
+    "Sport" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deporte"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sport"
+          }
+        }
+      }
+    },
     "Sport most days" : {
       "localizations" : {
         "es" : {
@@ -11089,6 +11621,22 @@
         }
       }
     },
+    "Steps a day" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasos al día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas par jour"
+          }
+        }
+      }
+    },
     "Stop and eat if you feel faint or dizzy, can't think straight, or your heart races." : {
       "localizations" : {
         "es" : {
@@ -11181,6 +11729,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maïs"
+          }
+        }
+      }
+    },
+    "Swimming" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Natación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Natation"
           }
         }
       }
@@ -11469,6 +12033,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Touche pour ajouter"
+          }
+        }
+      }
+    },
+    "Tennis, padel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tenis, pádel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tennis, padel"
           }
         }
       }
@@ -11901,6 +12481,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Heure"
+          }
+        }
+      }
+    },
+    "Times a week" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veces por semana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fois par semaine"
           }
         }
       }
@@ -12503,6 +13099,22 @@
         }
       }
     },
+    "Walking" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caminar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marche"
+          }
+        }
+      }
+    },
     "Walks, 1 to 3 workouts" : {
       "localizations" : {
         "es" : {
@@ -12631,6 +13243,22 @@
         }
       }
     },
+    "Weights" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pesas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musculation"
+          }
+        }
+      }
+    },
     "Welcome back" : {
       "localizations" : {
         "es" : {
@@ -12723,6 +13351,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "C’était quoi ?"
+          }
+        }
+      }
+    },
+    "What you burn" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que quemas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que tu brûles"
           }
         }
       }
@@ -12889,6 +13533,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hier"
+          }
+        }
+      }
+    },
+    "Yoga" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yoga"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yoga"
           }
         }
       }
@@ -13639,6 +14299,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ta semaine dans l’assiette"
+          }
+        }
+      }
+    },
+    "Your weighings say about %@ kcal a day." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus pesajes dicen unos %@ kcal al día."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes pesées disent environ %@ kcal par jour."
           }
         }
       }

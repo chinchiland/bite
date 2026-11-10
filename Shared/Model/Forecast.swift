@@ -117,10 +117,14 @@ extension GoalCalculator {
     /// What a body burns in a day: Mifflin-St Jeor resting energy times activity, before any
     /// goal is taken off or added.
     static func maintenance(sex: Sex, age: Int, heightCm: Double, weightKg: Double, activity: Activity) -> Double {
+        resting(sex: sex, age: age, heightCm: heightCm, weightKg: weightKg) * activity.factor
+    }
+
+    /// Mifflin-St Jeor resting energy: what a body burns lying still for a day.
+    static func resting(sex: Sex, age: Int, heightCm: Double, weightKg: Double) -> Double {
         let weightKg = min(max(weightKg, 25), 400)
         let heightCm = min(max(heightCm, 100), 250)
         let age = min(max(age, 10), 110)
-        let resting = 10 * weightKg + 6.25 * heightCm - 5 * Double(age) + (sex == .male ? 5 : -161)
-        return resting * activity.factor
+        return 10 * weightKg + 6.25 * heightCm - 5 * Double(age) + (sex == .male ? 5 : -161)
     }
 }
