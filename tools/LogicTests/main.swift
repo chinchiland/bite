@@ -1159,5 +1159,56 @@ do {
     check(dishConfig?["effort"] as? String == "low" && (dishBody["messages"] as? [[String: Any]])?.first?["content"] as? [[String: String]] != nil, "a typed dish asks quickly, with words only")
 }
 
+// MARK: Your body
+
+do {
+    // 165 cm, 85 kg: at 30% fat that is 59.5 kg of lean, muscular for the height.
+    let man = BodyFrame(sex: .male, heightCm: 165)
+    let now = BodyNumbers(kg: 85, fat: 30)
+    check(near(now.leanKg, 59.5) && near(now.fatKg, 25.5), "85 kg at 30% is 25.5 kg of fat and 59.5 kg of lean")
+    check(near(man.index(leanKg: 59.5), 22.77, 0.02) && man.level(now) == .muscular, "59.5 kg of lean at 165 cm: an index of 22.8, muscular")
+    check(man.level(BodyNumbers(kg: 85, fat: 15)) == .beyond, "85 kg at 15% is more muscle than nature builds at 165 cm")
+    check(man.fatRange(kg: 62.5).upperBound == 38, "62.5 kg at 165 cm cannot be more than 38% fat: there is not that little muscle")
+    check(man.settle(BodyNumbers(kg: 62.5, fat: 55), goal: false) == BodyNumbers(kg: 62.5, fat: 38), "an impossible body is brought back to the nearest possible one")
+    check(man.settle(BodyNumbers(kg: 33, fat: 15), goal: true).kg >= 18.5 * 1.65 * 1.65 - 0.5, "a goal never goes under a BMI of 18.5")
+    check(man.choices(around: now) == [25, 30, 35, 40, 45], "five bodies at 85 kg, from the leanest natural one up, got \(man.choices(around: now))")
+    check(man.choices(around: BodyNumbers(kg: 60, fat: 15)).first == 5, "a light body starts lean")
+    let plan = man.plan(from: now, to: BodyNumbers(kg: 72, fat: 15))
+    check(plan.months > 5 && plan.months < 7.5, "85 kg at 30% to 72 kg at 15%: about 6 months, got \(plan.months)")
+    check(plan.fatChange < -14 && plan.leanChange > 1, "it loses about 15 kg of fat and adds a little lean")
+    check(near(man.tape(waist: 100, neck: 40, hips: 0) ?? 0, 27.8, 0.3), "a 100 cm waist and a 40 cm neck at 165 cm: about 28% fat")
+    check(man.tape(waist: 38, neck: 40, hips: 0) == nil, "a waist narrower than the neck reads as nothing")
+    let sliders = man.sliders(now)
+    check(sliders.muscle > 0.75 && sliders.muscle < 0.9 && sliders.weight > 0.75 && sliders.weight < 0.9, "a muscular body with some fat sits high on both of MakeHuman's sliders")
+    let woman = BodyFrame(sex: .female, heightCm: 165)
+    check(woman.fatRange(kg: 60).lowerBound >= 12, "a woman's body fat never goes under 12%")
+
+    // The body itself: MakeHuman's mesh and skeleton, posed and skinned.
+    let data = try Data(contentsOf: root.appendingPathComponent("Bite/Resources/Body/body.bin"))
+    let mesh = try BodyMesh(data: data)
+    check(mesh.count == 13676 && mesh.bones.count == 20 && mesh.indices.count == 27036 * 3, "the packed body: 13,676 vertices, 27,036 triangles, 20 bones")
+    let shape = BodyShape(mesh: mesh, sex: .male, muscle: sliders.muscle, weight: sliders.weight, bare: sliders.bare)
+    let m = Rig.pose(shape, mesh, BodyMotion.still)
+    func at(_ name: String, _ m: [Affine]) -> SIMD3<Float> { let i = mesh.id[name]!; return m[i].apply(shape.joints[i]) }
+    let shoulder = at("upperarm.L", m), elbow = at("lowerarm.L", m), wrist = at("hand.L", m)
+    check(elbow.y < shoulder.y - 1.5 && wrist.y < elbow.y - 1.5, "standing, the arm hangs: elbow under the shoulder, wrist under the elbow")
+    check(abs(wrist.x) > shape.hipWidth, "the hand rests beside the hip, not inside it")
+    let positions = UnsafeMutablePointer<Float>.allocate(capacity: mesh.count * 3), normals = UnsafeMutablePointer<Float>.allocate(capacity: mesh.count * 3)
+    Rig.skin(shape, mesh, m, puff: nil, swing: nil, positions: positions, normals: normals)
+    var lo = Float.infinity, hi = -Float.infinity, finite = true
+    for v in 0..<mesh.count { lo = min(lo, positions[v * 3 + 1]); hi = max(hi, positions[v * 3 + 1]); finite = finite && positions[v * 3].isFinite && normals[v * 3 + 2].isFinite }
+    check(finite && hi - lo > mesh.span * 0.9 && hi - lo < mesh.span * 1.05, "the posed body stands as tall as the mesh, every number finite")
+    positions.deallocate()
+    normals.deallocate()
+    let director = BodyMotion.Director()
+    director.set(.flex)
+    _ = director.pose(at: 10, breathing: false)
+    let raised = Rig.pose(shape, mesh, director.pose(at: 12, breathing: false))
+    check(at("hand.L", raised).y > shoulder.y, "flexing, the fists come up above the shoulders")
+    check(!shape.fat.isEmpty && (shape.fat.max() ?? 0) > 0.2, "the fat map finds fat under the skin")
+} catch {
+    check(false, "the packed body loads: \(error)")
+}
+
 print("\(passes) passed, \(failures) failed")
 exit(failures == 0 ? 0 : 1)

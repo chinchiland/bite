@@ -1,3 +1,5 @@
 # Line endings stay LF in the working copy too, whatever Git for Windows is set to: the
 # checks run in WSL, where a CRLF script does not even start.
 * text=auto eol=lf
+# The packed body is bytes, never text.
+*.bin binary

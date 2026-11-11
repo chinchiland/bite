@@ -9,6 +9,8 @@ name: Build Bite
 
 on:
   push:
+    branches-ignore:
+      - body3d
     # Words alone don't need a cloud Mac.
     paths-ignore:
       - '**.md'
@@ -183,6 +185,14 @@ jobs:
           shoot 105-fasting-electrolytes -onboarded YES -screen fasting -anchor electrolytes
           shoot 106-fasting-muscle -onboarded YES -screen fasting -anchor muscle
           shoot 107-fasting-sport -onboarded YES -screen fasting -anchor burn -fasting.steps 12500 -fasting.sports "running:45:3 gym:60:2" -fasting.sportOpen YES
+          # Your body in 3D: the stage, the fat map, the chart, a woman, French, Paper.
+          shoot 110-body -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.move stand
+          shoot 111-body-fat -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.outfit fat -bodymap.move flex
+          shoot 112-body-goal -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.move stand -anchor goal
+          shoot 113-body-chart -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.move stand -anchor chart
+          shoot 114-body-woman -onboarded YES -screen body -bodymap.sex female -bodymap.height 165 -bodymap.now 68:34 -bodymap.goal 60:25 -bodymap.outfit clothes -bodymap.move strike -bodymap.tone 3
+          shoot 115-body-fr -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.move stand -AppleLanguages "(fr)" -AppleLocale fr_FR
+          shoot 116-body-paper -onboarded YES -screen body -bodymap.sex male -bodymap.height 165 -bodymap.now 85:30 -bodymap.goal 72:15 -bodymap.move stand -look paper
 
           shoot_fresh() {
             name=$1; shift

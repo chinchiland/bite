@@ -21,6 +21,8 @@ struct WeightTrend: View {
     let onAddWeight: () -> Void
     /// Opens the fasting plan.
     var onPlanFast: (() -> Void)? = nil
+    /// Opens your body, now and at your goal.
+    var onSeeBody: (() -> Void)? = nil
     var horizonDays = 28
 
     private var endDate: Date {
@@ -63,6 +65,23 @@ struct WeightTrend: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint("Shows what a fast would do")
+            }
+            if let onSeeBody {
+                Button(action: onSeeBody) {
+                    HStack(spacing: 10) {
+                        SymbolTile(systemImage: "figure.stand", color: Theme.ink, glyph: Theme.ink)
+                        Text("See your body")
+                            .font(.ui(15))
+                            .foregroundStyle(Theme.ink)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Theme.tertiary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint("Shows your body now and at your goal, in 3D")
             }
         }
     }

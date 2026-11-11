@@ -34,6 +34,8 @@ enum HomeSheet: Identifiable, Hashable {
     /// Your mirror; true to open straight on its camera.
     case mirror(Bool)
     case fasting
+    /// Your body now and at your goal, in 3D.
+    case bodyMap
 
     var id: Self { self }
 }
@@ -414,7 +416,8 @@ struct TodayView: View {
                     goalSet: checkInHistory.canUndo(now: .now) ? goalKcal : nil,
                     onUndoGoal: undoCheckIn,
                     onAddWeight: addWeight,
-                    onPlanFast: { sheet = .fasting }
+                    onPlanFast: { sheet = .fasting },
+                    onSeeBody: { sheet = .bodyMap }
                 )
                 .glassGroup(after: 28)
             }
@@ -634,6 +637,8 @@ struct TodayView: View {
                 learnedKcal: learned?.kcal,
                 dailyGoal: noTarget ? nil : goalKcal
             )
+        case .bodyMap:
+            BodyMapView(currentKg: WeightForecast.trend(trendWeights.map(\.kilograms)).last)
         }
     }
 
@@ -1308,7 +1313,7 @@ struct TodayView: View {
 
     #if DEBUG
     /// `-screen food|plate|search|settings|scanner|photo|estimate|edit|saved|week|month|yesterday|over`
-    /// `|place|dish|addestimate|accuracy|where|cover2|scanmenu|menu|menu.dish|typical|menus|menus.all|fasting`
+    /// `|place|dish|addestimate|accuracy|where|cover2|scanmenu|menu|menu.dish|typical|menus|menus.all|fasting|body`
     /// opens a screen straight away, for screenshots. `over` is the demo's heaviest day, three days back: four digit calories,
     /// past the goal, carbs and fat past their targets.
     private func openDemoScreen() {
@@ -1329,6 +1334,7 @@ struct TodayView: View {
         case "where": editing = dayEntries.first { $0.place != nil } ?? dayEntries.last
         case "cover2": coverIndex = 1
         case "fasting": sheet = .fasting
+        case "body": sheet = .bodyMap
         case let screen? where screen.hasPrefix("mirror"):
             sheet = MirrorFixture.open(screen)
         default: break

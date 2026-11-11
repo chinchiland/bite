@@ -37,6 +37,8 @@ struct FastingPlanView: View {
     /// The day's body has grown from today's into its own: once, when the plan opens.
     @State private var revealed = false
     @State private var showsDoses = false
+    /// Your body today and on the day you look at, in 3D.
+    @State private var showsBody = false
 
     init(currentKg: Double?, learnedKcal: Double?, dailyGoal: Int?) {
         self.currentKg = currentKg
@@ -154,6 +156,13 @@ struct FastingPlanView: View {
                 .overlay(alignment: .top) { RoomTop() }
                 .roomBackground()
                 .navigationTitle("Plan a fast")
+                .sheet(isPresented: $showsBody) {
+                    // The day you look at, as what it changes: its fat and lean lost, applied to
+                    // the body you set there.
+                    let plan = self.plan
+                    let lost = plan.projection.lost(by: shownDay(plan).day)
+                    BodyMapView(currentKg: you.weightKg, change: BodyChange(fatKg: -lost.fat, leanKg: -lost.lean))
+                }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
@@ -335,6 +344,14 @@ struct FastingPlanView: View {
                 }
             }
             .accessibilityElement(children: .combine)
+
+            Button {
+                showsBody = true
+            } label: {
+                Label("See it in 3D", systemImage: "rotate.3d")
+            }
+            .buttonStyle(SoftButtonStyle(height: 38))
+            .frame(maxWidth: .infinity)
 
             VStack(alignment: .leading, spacing: 6) {
                 Group {

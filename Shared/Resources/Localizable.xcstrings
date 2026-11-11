@@ -17,6 +17,22 @@
         }
       }
     },
+    "%@ body fat, %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de grasa corporal, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de masse grasse, %@"
+          }
+        }
+      }
+    },
     "%@ calories left" : {
       "localizations" : {
         "es" : {
@@ -93,6 +109,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ jours sans manger, puis tu remanges normalement"
+          }
+        }
+      }
+    },
+    "%@ fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de grasa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de gras"
           }
         }
       }
@@ -343,6 +375,22 @@
         }
       }
     },
+    "%@ lean" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de masa magra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de masse maigre"
+          }
+        }
+      }
+    },
     "%@ less since %@" : {
       "localizations" : {
         "es" : {
@@ -575,6 +623,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@, %@ kcal, %@"
+          }
+        }
+      }
+    },
+    "%@, %@ lean" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@ de masa magra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@ de masse maigre"
           }
         }
       }
@@ -2123,6 +2187,80 @@
         }
       }
     },
+    "About %lld months" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unos %lld meses"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Environ %lld mois"
+          }
+        }
+      }
+    },
+    "About %lld weeks" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %lld week"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "About %lld weeks"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Una %lld semana"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Unas %lld semanas"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %lld semaine"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Environ %lld semaines"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "About 5 g of salt, a level teaspoon, spread over the day. A clear broth counts." : {
       "localizations" : {
         "es" : {
@@ -2263,6 +2401,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajouter %@"
+          }
+        }
+      }
+    },
+    "Add %@ of lean mass at about %@ a month, and put on %@ of fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade %@ de masa magra a unos %@ al mes, y gana %@ de grasa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute %@ de masse maigre à environ %@ par mois, et prends %@ de gras."
+          }
+        }
+      }
+    },
+    "Add %@ of lean mass at about %@ a month." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade %@ de masa magra a unos %@ al mes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute %@ de masse maigre à environ %@ par mois."
           }
         }
       }
@@ -2967,6 +3137,22 @@
         }
       }
     },
+    "Around %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacia %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vers %@"
+          }
+        }
+      }
+    },
     "As citrate or glycinate: the most a supplement should give in a day. More tends to loosen the gut. Not with kidney disease." : {
       "localizations" : {
         "es" : {
@@ -3091,6 +3277,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tu as mangé plus tôt ?"
+          }
+        }
+      }
+    },
+    "Auto" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        }
+      }
+    },
+    "Average" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyen"
+          }
+        }
+      }
+    },
+    "Average muscle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Músculo medio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musculature moyenne"
           }
         }
       }
@@ -3303,6 +3537,38 @@
         }
       }
     },
+    "Beyond" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más allá"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au-delà"
+          }
+        }
+      }
+    },
+    "Beyond natural" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más allá de lo natural"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au-delà du naturel"
+          }
+        }
+      }
+    },
     "Big" : {
       "localizations" : {
         "es" : {
@@ -3475,6 +3741,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "IMC %@"
+          }
+        }
+      }
+    },
+    "Body" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuerpo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corps"
           }
         }
       }
@@ -4189,6 +4471,22 @@
         }
       }
     },
+    "Clothes" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con ropa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Habillé"
+          }
+        }
+      }
+    },
     "Coffee" : {
       "localizations" : {
         "fr" : {
@@ -4845,6 +5143,22 @@
         }
       }
     },
+    "Drag to turn" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desliza para girar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fais glisser pour tourner"
+          }
+        }
+      }
+    },
     "Drink water all the way through. For longer fasts, ask about salt, potassium and magnesium." : {
       "localizations" : {
         "es" : {
@@ -5229,6 +5543,22 @@
         }
       }
     },
+    "Every body at %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los cuerpos de %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tous les corps de %@"
+          }
+        }
+      }
+    },
     "Every dish with its calories" : {
       "localizations" : {
         "es" : {
@@ -5289,6 +5619,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un jour sur deux"
+          }
+        }
+      }
+    },
+    "Example numbers: put in yours." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Números de ejemplo: pon los tuyos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiffres d’exemple : mets les tiens."
           }
         }
       }
@@ -5401,6 +5747,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lipides (g)"
+          }
+        }
+      }
+    },
+    "Fat map" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mapa de grasa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carte du gras"
+          }
+        }
+      }
+    },
+    "Fat mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa grasa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masse grasse"
           }
         }
       }
@@ -5565,6 +5943,22 @@
         }
       }
     },
+    "Fit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En forma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Athlétique"
+          }
+        }
+      }
+    },
     "Fit the menu in the frame" : {
       "localizations" : {
         "es" : {
@@ -5647,6 +6041,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pour tes %@ kcal restantes"
+          }
+        }
+      }
+    },
+    "Flex" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bíceps"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biceps"
           }
         }
       }
@@ -5977,6 +6387,22 @@
         }
       }
     },
+    "Goal body fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa corporal objetivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux de gras visé"
+          }
+        }
+      }
+    },
     "Good afternoon" : {
       "localizations" : {
         "es" : {
@@ -6117,6 +6543,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mal de tête, vertige en te levant, crampes : souvent le sel. Cœur qui s’emballe ou malaise : arrête, mange et fais-toi aider."
+          }
+        }
+      }
+    },
+    "Heavier" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus lourd"
           }
         }
       }
@@ -6309,6 +6751,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Randonnée"
+          }
+        }
+      }
+    },
+    "Hips" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cadera"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hanches"
           }
         }
       }
@@ -7061,6 +7519,38 @@
         }
       }
     },
+    "Lean mass" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masa magra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masse maigre"
+          }
+        }
+      }
+    },
+    "Lean mass is everything that isn't fat: muscle, bone, organs and water. The muscle levels use the fat-free mass index adjusted for height (Kouri, 1995): about 25 is as much as most men build without drugs, about 21 for women. The tape is the US Navy's method (Hodgdon and Beckett, 1984), right to within about 3 or 4 points." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La masa magra es todo lo que no es grasa: músculo, hueso, órganos y agua. Los niveles de músculo salen del índice de masa libre de grasa ajustado a la altura (Kouri, 1995): unos 25 es lo máximo que la mayoría de los hombres desarrolla sin dopaje, unos 21 en las mujeres. La cinta es el método de la Marina de EE. UU. (Hodgdon y Beckett, 1984), precisa a unos 3 o 4 puntos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La masse maigre, c’est tout ce qui n’est pas du gras : muscles, os, organes et eau. Les niveaux de muscle viennent de l’indice de masse non grasse ajusté à la taille (Kouri, 1995) : environ 25, c’est le plus que la plupart des hommes construisent sans dopage, environ 21 pour les femmes. Le mètre ruban, c’est la méthode de l’US Navy (Hodgdon et Beckett, 1984), juste à 3 ou 4 points près."
+          }
+        }
+      }
+    },
     "Lean or rich, small or huge" : {
       "localizations" : {
         "es" : {
@@ -7205,6 +7695,22 @@
         }
       }
     },
+    "Lighter" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus léger"
+          }
+        }
+      }
+    },
     "Lightly active" : {
       "localizations" : {
         "es" : {
@@ -7233,6 +7739,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lilas"
+          }
+        }
+      }
+    },
+    "Little" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peu"
+          }
+        }
+      }
+    },
+    "Little muscle" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poco músculo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peu musclé"
           }
         }
       }
@@ -7425,6 +7963,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Perdre"
+          }
+        }
+      }
+    },
+    "Lose %@ of fat at about %@ a week and add %@ of lean mass at about %@ a month, both at once." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierde %@ de grasa a unos %@ por semana y añade %@ de masa magra a unos %@ al mes, las dos cosas a la vez."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perds %@ de gras à environ %@ par semaine et ajoute %@ de masse maigre à environ %@ par mois, les deux en même temps."
+          }
+        }
+      }
+    },
+    "Lose %@ of fat at about %@ a week." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pierde %@ de grasa a unos %@ por semana."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perds %@ de gras à environ %@ par semaine."
           }
         }
       }
@@ -7649,6 +8219,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maintenir"
+          }
+        }
+      }
+    },
+    "Make %@ at %@ fat your goal" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fijar como objetivo %@ con %@ de grasa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viser %@ à %@ de gras"
           }
         }
       }
@@ -7941,6 +8527,38 @@
         }
       }
     },
+    "Muscle down, fat across, the weight under each. The dashed line is %@, the dot is you, the green ring your goal. Tap a body to make it your goal." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El músculo de arriba abajo, la grasa de izquierda a derecha y el peso debajo de cada uno. La línea discontinua es %@, el punto eres tú y el anillo verde, tu objetivo. Toca un cuerpo para que sea tu objetivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le muscle de haut en bas, le gras de gauche à droite, le poids sous chaque corps. La ligne pointillée, c’est %@, le point, c’est toi, l’anneau vert, ton objectif. Touche un corps pour en faire ton objectif."
+          }
+        }
+      }
+    },
+    "Muscular" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musculoso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musclé"
+          }
+        }
+      }
+    },
     "Mustard" : {
       "localizations" : {
         "es" : {
@@ -8053,6 +8671,38 @@
         }
       }
     },
+    "Near limit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al límite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limite"
+          }
+        }
+      }
+    },
+    "Near the limit" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca del límite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Près de la limite"
+          }
+        }
+      }
+    },
     "Near you" : {
       "localizations" : {
         "es" : {
@@ -8081,6 +8731,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Près de ton objectif, jeûne moins souvent : plus tu es mince, plus chaque kilo perdu est du muscle."
+          }
+        }
+      }
+    },
+    "Neck" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuello"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cou"
           }
         }
       }
@@ -8501,6 +9167,22 @@
         }
       }
     },
+    "Not sure? Measure it" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿No estás seguro? Mídete"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas sûr ? Mesure-toi"
+          }
+        }
+      }
+    },
     "Not today" : {
       "localizations" : {
         "es" : {
@@ -8577,6 +9259,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les notifications de Bite sont désactivées. Réglages, Notifications, Bite."
+          }
+        }
+      }
+    },
+    "Now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenant"
           }
         }
       }
@@ -9589,6 +10287,22 @@
         }
       }
     },
+    "Pose" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pose"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pose"
+          }
+        }
+      }
+    },
     "Potassium" : {
       "localizations" : {
         "es" : {
@@ -9797,6 +10511,22 @@
         }
       }
     },
+    "Put on %@ of fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gana %@ de grasa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prends %@ de gras."
+          }
+        }
+      }
+    },
     "Quick add" : {
       "localizations" : {
         "es" : {
@@ -9953,6 +10683,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Normal"
+          }
+        }
+      }
+    },
+    "Relaxed, the tape level: the waist at the navel, the neck just under the Adam's apple." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relajado, con la cinta recta: la cintura a la altura del ombligo y el cuello justo debajo de la nuez."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détendu, le mètre bien droit : la taille au nombril, le cou juste sous la pomme d’Adam."
+          }
+        }
+      }
+    },
+    "Relaxed, the tape level: the waist at the navel, the neck just under the larynx, the hips at their widest." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relajada, con la cinta recta: la cintura a la altura del ombligo, el cuello justo debajo de la laringe y la cadera en su parte más ancha."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détendue, le mètre bien droit : la taille au nombril, le cou juste sous le larynx, les hanches au plus large."
           }
         }
       }
@@ -10341,6 +11103,22 @@
         }
       }
     },
+    "Same body, nothing to change." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El mismo cuerpo, nada que cambiar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Même corps, rien à changer."
+          }
+        }
+      }
+    },
     "Same day" : {
       "localizations" : {
         "es" : {
@@ -10369,6 +11147,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Au même endroit ?"
+          }
+        }
+      }
+    },
+    "Same weight" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mismo peso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Même poids"
           }
         }
       }
@@ -10837,6 +11631,22 @@
         }
       }
     },
+    "See it in 3D" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlo en 3D"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir en 3D"
+          }
+        }
+      }
+    },
     "See the places around you" : {
       "localizations" : {
         "es" : {
@@ -10881,6 +11691,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vois ce qu’il te reste aujourd’hui et où en sont tes macros."
+          }
+        }
+      }
+    },
+    "See your body" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver tu cuerpo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir ton corps"
           }
         }
       }
@@ -10965,6 +11791,22 @@
         }
       }
     },
+    "Sex and height" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sexo y altura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sexe et taille"
+          }
+        }
+      }
+    },
     "Share" : {
       "localizations" : {
         "es" : {
@@ -11025,6 +11867,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Assiette shawarma, frites"
+          }
+        }
+      }
+    },
+    "Shorter" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos altura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus petit"
           }
         }
       }
@@ -11093,6 +11951,22 @@
         }
       }
     },
+    "Shows your body now and at your goal, in 3D" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra tu cuerpo ahora y en tu objetivo, en 3D"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montre ton corps aujourd’hui et à ton objectif, en 3D"
+          }
+        }
+      }
+    },
     "Shows your last 7 days" : {
       "localizations" : {
         "es" : {
@@ -11153,6 +12027,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se déconnecter"
+          }
+        }
+      }
+    },
+    "Skin tone" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tono de piel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teint"
           }
         }
       }
@@ -11457,6 +12347,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sport presque tous les jours"
+          }
+        }
+      }
+    },
+    "Stand" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De pie"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debout"
           }
         }
       }
@@ -11973,6 +12879,22 @@
         }
       }
     },
+    "Taller" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más altura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus grand"
+          }
+        }
+      }
+    },
     "Tap a meal's time to change when you ate it." : {
       "localizations" : {
         "es" : {
@@ -12101,6 +13023,22 @@
         }
       }
     },
+    "That much lean mass at %@ is more than most people build without drugs. At %@, the natural range starts at %@ fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanta masa magra con %@ es más de lo que la mayoría de la gente desarrolla sin dopaje. Con %@, el rango natural empieza en %@ de grasa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autant de masse maigre pour %@, c’est plus que ce que la plupart des gens construisent sans dopage. À %@, la zone naturelle commence à %@ de gras."
+          }
+        }
+      }
+    },
     "That saved food isn't on your shelf any more." : {
       "localizations" : {
         "es" : {
@@ -12145,6 +13083,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ça fait beaucoup d’estimations en une minute. Attends quelques secondes."
+          }
+        }
+      }
+    },
+    "The body is MakeHuman's (CC0), with its own skeleton and skin weights, shaped from these numbers by its muscle and weight targets. It shows a build, not you: real bodies carry fat in their own places." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El cuerpo es el de MakeHuman (CC0), con su propio esqueleto y pesos de piel, moldeado a partir de estas cifras con sus objetivos de músculo y peso. Muestra una complexión, no a ti: cada cuerpo real guarda la grasa a su manera."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le corps est celui de MakeHuman (CC0), avec son squelette et ses poids de peau, façonné à partir de ces chiffres par ses cibles de muscle et de poids. Il montre une silhouette, pas toi : chaque vrai corps stocke son gras à sa façon."
+          }
+        }
+      }
+    },
+    "The body you want, at the weight you want. It stays as it is while you change the rest." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El cuerpo que quieres, con el peso que quieres. No cambia mientras ajustas el resto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le corps que tu veux, au poids que tu veux. Il ne bouge pas quand tu changes le reste."
           }
         }
       }
@@ -12293,6 +13263,38 @@
         }
       }
     },
+    "The time assumes you lose about %@ of your weight a week, between %@ and %@, which keeps muscle (Helms, 2014), and gain lean mass at typical natural rates, slower the more you have: about 1 kg a month for a man new to lifting, half that for a woman. Doing both at once works best when you are new to lifting or carry some fat." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tiempo supone que pierdes alrededor de %@ de tu peso por semana, entre %@ y %@, lo que conserva el músculo (Helms, 2014), y que ganas masa magra al ritmo natural habitual, más lento cuanto más tienes: alrededor de 1 kg al mes para un hombre que empieza a entrenar, la mitad para una mujer. Hacer las dos cosas a la vez funciona mejor cuando empiezas a entrenar o tienes grasa que perder."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le temps suppose que tu perds environ %@ de ton poids par semaine, entre %@ et %@, ce qui garde le muscle (Helms, 2014), et que tu gagnes de la masse maigre au rythme naturel habituel, plus lent à mesure que tu en as : environ 1 kg par mois pour un homme qui débute la muscu, moitié moins pour une femme. Faire les deux à la fois marche le mieux quand tu débutes ou que tu as du gras à perdre."
+          }
+        }
+      }
+    },
+    "The waist must be wider than the neck." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La cintura tiene que ser más ancha que el cuello."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La taille doit être plus large que le cou."
+          }
+        }
+      }
+    },
     "The water stored with it goes too: the first kilos are mostly water." : {
       "localizations" : {
         "es" : {
@@ -12389,6 +13391,38 @@
         }
       }
     },
+    "Thick fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa gruesa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gras épais"
+          }
+        }
+      }
+    },
+    "Thin fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grasa fina"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gras fin"
+          }
+        }
+      }
+    },
     "This copy of Bite was installed without Apple Health, so steps, burned calories and weighings stay off." : {
       "localizations" : {
         "es" : {
@@ -12401,6 +13435,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cette copie de Bite a été installée sans l’app Santé : les pas, les calories brûlées et les pesées restent éteints."
+          }
+        }
+      }
+    },
+    "This goal has %@ less lean mass than you: muscle you would lose. Keep lifting and eat enough protein to hold on to it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este objetivo tiene %@ menos de masa magra que tú: músculo que perderías. Sigue entrenando y come suficiente proteína para conservarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cet objectif a %@ de masse maigre en moins que toi : du muscle que tu perdrais. Continue la muscu et mange assez de protéines pour le garder."
           }
         }
       }
@@ -12933,6 +13983,22 @@
         }
       }
     },
+    "Use %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser %@"
+          }
+        }
+      }
+    },
     "Use %@ kcal" : {
       "localizations" : {
         "en" : {
@@ -13095,6 +14161,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voix"
+          }
+        }
+      }
+    },
+    "Waist" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cintura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tour de taille"
+          }
+        }
+      }
+    },
+    "Walk" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marche"
           }
         }
       }
@@ -13425,6 +14523,22 @@
         }
       }
     },
+    "Which one looks like you? Tap the closest, then slide to fine-tune." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuál se parece a ti? Toca el más parecido y desliza para afinar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lequel te ressemble ? Touche le plus proche, puis fais glisser pour ajuster."
+          }
+        }
+      }
+    },
     "White bread" : {
       "localizations" : {
         "fr" : {
@@ -13521,6 +14635,22 @@
         }
       }
     },
+    "Years, not months" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Años, no meses"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des années, pas des mois"
+          }
+        }
+      }
+    },
     "Yesterday" : {
       "localizations" : {
         "es" : {
@@ -13565,6 +14695,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toi"
+          }
+        }
+      }
+    },
+    "You are there" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya lo tienes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu y es"
           }
         }
       }
@@ -13673,6 +14819,22 @@
         }
       }
     },
+    "You now" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tú ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toi aujourd’hui"
+          }
+        }
+      }
+    },
     "Your aim" : {
       "localizations" : {
         "es" : {
@@ -13717,6 +14879,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ton corps"
+          }
+        }
+      }
+    },
+    "Your body fat" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu grasa corporal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton taux de gras"
+          }
+        }
+      }
+    },
+    "Your body now and your goal, moving. Drag to turn them." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu cuerpo ahora y tu objetivo, en movimiento. Desliza para girarlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton corps aujourd’hui et ton objectif, en mouvement. Fais glisser pour les tourner."
           }
         }
       }
