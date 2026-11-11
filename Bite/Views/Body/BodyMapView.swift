@@ -824,16 +824,17 @@ struct BodyMapView: View {
 
     // MARK: Every body
 
-    /// The chart's grid, in points, so its marks land on the bodies without measuring them.
+    /// The chart's grid, in points, so its marks land on the bodies without measuring them. The
+    /// names stay put on the left and the bodies scroll beside them, like a frozen column.
     private enum Grid {
-        static let name: CGFloat = 104
+        static let name: CGFloat = 96
         static let cell: CGFloat = 84
         static let gap: CGFloat = 2
         static let head: CGFloat = 22
         static let row: CGFloat = 166
         static let thumb = CGSize(width: 70, height: 136)
 
-        static func x(_ column: Int) -> CGFloat { name + gap + CGFloat(column) * (cell + gap) + cell / 2 }
+        static func x(_ column: Int) -> CGFloat { CGFloat(column) * (cell + gap) + cell / 2 }
         static func y(_ row: Int) -> CGFloat { head + gap + CGFloat(row) * (Self.row + gap) + 4 + thumb.height / 2 }
     }
 
@@ -871,21 +872,49 @@ struct BodyMapView: View {
                 .font(.ui(14))
                 .foregroundStyle(Theme.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            ScrollViewReader { across in
-                ScrollView(.horizontal) {
-                    chart(reader)
+            HStack(alignment: .top, spacing: 0) {
+                rowNames
+                ScrollViewReader { across in
+                    ScrollView(.horizontal) {
+                        chart(reader)
+                    }
+                    .scrollIndicators(.hidden)
+                    .contentMargins(.trailing, Theme.margin, for: .scrollContent)
+                    .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+                    // The bodies fade as they pass under the names.
+                    .mask {
+                        LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: 0.05)], startPoint: .leading, endPoint: .trailing)
+                    }
+                    .padding(.trailing, -Theme.margin)
+                    // It opens on you and your goal, wherever they stand across.
+                    .onAppear {
+                        // A turn of the run loop first, so the row is laid out before it scrolls.
+                        let column = ChartColumn(index: focusColumn)
+                        DispatchQueue.main.async { across.scrollTo(column, anchor: .center) }
+                    }
+                    .onChange(of: map.sex) { _, _ in across.scrollTo(ChartColumn(index: focusColumn), anchor: .center) }
                 }
-                .scrollIndicators(.hidden)
-                .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
-                .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-                .padding(.horizontal, -Theme.margin)
-                // It opens on you and your goal, wherever they stand across.
-                .onAppear {
-                    // A turn of the run loop first, so the row is laid out before it scrolls.
-                    let column = ChartColumn(index: focusColumn)
-                    DispatchQueue.main.async { across.scrollTo(column, anchor: .center) }
+            }
+        }
+    }
+
+    /// Each row's muscle, by name and lean mass, beside its bodies.
+    private var rowNames: some View {
+        VStack(alignment: .leading, spacing: Grid.gap) {
+            Color.clear
+                .frame(height: Grid.head)
+            ForEach(rows.indices, id: \.self) { row in
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(verbatim: frame.level(index: rows[row]).title)
+                        .font(.ui(14, .medium))
+                        .foregroundStyle(Theme.ink)
+                    Text("\(frame.leanKg(index: rows[row]).weightText) lean")
+                        .font(.ui(13))
+                        .foregroundStyle(Theme.secondary)
                 }
-                .onChange(of: map.sex) { _, _ in across.scrollTo(ChartColumn(index: focusColumn), anchor: .center) }
+                .padding(.trailing, 8)
+                .frame(width: Grid.name, height: Grid.row, alignment: .leading)
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -893,8 +922,6 @@ struct BodyMapView: View {
     private func chart(_ reader: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: Grid.gap) {
             HStack(spacing: Grid.gap) {
-                Color.clear
-                    .frame(width: Grid.name, height: Grid.head)
                 ForEach(columns.indices, id: \.self) { column in
                     Text(verbatim: percentText(columns[column]))
                         .font(.ui(13))
@@ -907,16 +934,6 @@ struct BodyMapView: View {
             .accessibilityHidden(true)
             ForEach(rows.indices, id: \.self) { row in
                 HStack(spacing: Grid.gap) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(verbatim: frame.level(index: rows[row]).title)
-                            .font(.ui(14, .medium))
-                            .foregroundStyle(Theme.ink)
-                        Text("\(frame.leanKg(index: rows[row]).weightText) lean")
-                            .font(.ui(13))
-                            .foregroundStyle(Theme.secondary)
-                    }
-                    .padding(.trailing, 8)
-                    .frame(width: Grid.name, height: Grid.row, alignment: .leading)
                     ForEach(columns.indices, id: \.self) { column in
                         chartCell(row: row, column: column, reader: reader)
                     }
