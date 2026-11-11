@@ -883,7 +883,7 @@ struct BodyMapView: View {
                     .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
                     // The bodies fade as they pass under the names.
                     .mask {
-                        LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: 0.05)], startPoint: .leading, endPoint: .trailing)
+                        LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: 0.08)], startPoint: .leading, endPoint: .trailing)
                     }
                     .padding(.trailing, -Theme.margin)
                     // It opens on you and your goal, wherever they stand across.
@@ -902,7 +902,7 @@ struct BodyMapView: View {
     private var rowNames: some View {
         VStack(alignment: .leading, spacing: Grid.gap) {
             Color.clear
-                .frame(height: Grid.head)
+                .frame(width: Grid.name, height: Grid.head)
             ForEach(rows.indices, id: \.self) { row in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: frame.level(index: rows[row]).title)
@@ -917,6 +917,7 @@ struct BodyMapView: View {
                 .accessibilityElement(children: .combine)
             }
         }
+        .frame(width: Grid.name)
     }
 
     private func chart(_ reader: ScrollViewProxy) -> some View {
