@@ -72,7 +72,7 @@ enum BodyShader {
         } else if (u.look.x < 1.5) {
             float wa = max(fwidth(along) * 0.8, 0.0006);
             float torso = within(0.535, 0.835, band) * (1.0 - smoothstep(0.35, 0.6, arm)) * (1.0 - smoothstep(0.45, 0.65, head));
-            float sleeve = step(0.0, along) * (1.0 - smoothstep(0.43 - wa, 0.43 + wa, along));
+            float sleeve = step(-0.75, along) * (1.0 - smoothstep(0.43 - wa, 0.43 + wa, along));
             float tee = max(torso, sleeve);
             float jeans = within(0.04, 0.552, band) * (1.0 - smoothstep(0.35, 0.6, arm)) * (1.0 - tee);
             float shoe = 1.0 - smoothstep(0.032, 0.036, band);

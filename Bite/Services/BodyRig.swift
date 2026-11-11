@@ -33,7 +33,8 @@ final class BodyMesh {
     let head: [Float]
     let still: [Float]
     /// Where clothes go, from each body at rest: height (0 at the soles, 1 at the crown) and, on
-    /// the arms, how far from the shoulder to the wrist (-1 off the arms).
+    /// the arms and the shoulders they hang from, how far from the shoulder to the wrist (-1 off
+    /// them), so a sleeve meets the tee with no skin between.
     let band: [Sex: [Float]]
     let armT: [Sex: [Float]]
     let mid: Float
@@ -98,10 +99,9 @@ final class BodyMesh {
             for side in ["L", "R"] {
                 guard let s = id["upperarm.\(side)"], let w = id["hand.\(side)"] else { continue }
                 let axis = joints[w] - joints[s], length = (axis * axis).sum()
-                for v in 0..<n where arm[v] >= 0.5 {
+                for v in 0..<n where arm[v] >= 0.12 && (p[v * 3] > 0) == (axis.x > 0) {
                     let x = SIMD3(p[v * 3], p[v * 3 + 1], p[v * 3 + 2]) - joints[s]
-                    if (x.x > 0) != (axis.x > 0) { continue }
-                    along[v] = (x * axis).sum() / length
+                    along[v] = max((x * axis).sum() / length, -0.5)
                 }
             }
             armT[sex] = along
@@ -404,7 +404,7 @@ enum Rig {
         func step(_ a: Float, _ b: Float, _ x: Float) -> Float { let t = min(max((x - a) / (b - a), 0), 1); return t * t * (3 - 2 * t) }
         return (0..<mesh.count).map { v in
             let torso = step(0.525, 0.545, band[v]) * (1 - step(0.825, 0.845, band[v])) * (1 - mesh.arm[v]) * (1 - mesh.head[v])
-            let sleeve: Float = armT[v] >= 0 ? 1 - step(0.4, 0.46, armT[v]) : 0
+            let sleeve: Float = armT[v] > -0.75 ? 1 - step(0.4, 0.46, armT[v]) : 0
             let jeans = step(0.03, 0.05, band[v]) * (1 - step(0.545, 0.56, band[v])) * (1 - mesh.arm[v])
             return max(torso, sleeve) * 0.1 + jeans * 0.06
         }

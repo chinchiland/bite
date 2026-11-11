@@ -37,8 +37,9 @@ struct BodyMapSettings: Codable, Equatable {
     }
 
     /// The first visit: your numbers from the goal calculator and your weighings, your body fat
-    /// estimated from them (Deurenberg), and a goal a tenth lighter at the same lean mass, or
-    /// leaner at the same weight when you are light already.
+    /// estimated from them (Deurenberg), and a goal of the same muscle, leaner: eight points of
+    /// body fat off, down to a lean but easy to keep 10% for a man and 18% for a woman, or a few
+    /// kilos of muscle more when you are that lean already.
     static func fresh(currentKg: Double?) -> BodyMapSettings {
         let defaults = UserDefaults.standard
         let sex = Sex(rawValue: defaults.string(forKey: "body.sex") ?? "") ?? .female
@@ -47,10 +48,10 @@ struct BodyMapSettings: Codable, Equatable {
         let age = defaults.object(forKey: "body.age") != nil ? defaults.integer(forKey: "body.age") : 30
         let you = FastingBody(sex: sex, age: age, heightCm: height, weightKg: kg, moving: .usual(for: .light))
         let now = BodyNumbers(kg: kg, fat: (you.fatShare * 100).rounded())
-        let goalKg = FastingModel.suggestedGoal(for: you)
-        let goal = goalKg < kg - 0.25
-            ? BodyNumbers(kg: goalKg, fat: 100 * (1 - now.leanKg / goalKg))
-            : BodyNumbers(kg: kg, fat: now.fat - 5)
+        let leanest: Double = sex == .male ? 10 : 18, fat = max(now.fat - 8, leanest)
+        let goal = fat < now.fat - 1
+            ? BodyNumbers(kg: now.leanKg / (1 - fat / 100), fat: fat)
+            : BodyNumbers(kg: kg + 3, fat: now.fat)
         var settings = BodyMapSettings(
             sex: sex.rawValue, heightCm: height, now: now, goal: goal,
             outfit: BodyOutfit.body.rawValue, move: BodyMove.auto.rawValue, tone: 1,
@@ -95,7 +96,7 @@ struct BodyMapView: View {
         let defaults = UserDefaults.standard
         #if DEBUG
         // A screenshot that sets the screen up starts from a first visit, whatever the shot before kept.
-        let staged = defaults.volatileDomain(forName: UserDefaults.argumentDomain).keys.contains { $0.hasPrefix("bodymap.") }
+        let staged = defaults.volatileDomain(forName: UserDefaults.argumentDomain).keys.contains { $0.hasPrefix("bodymap") && $0 != "bodymap" }
         let tape = defaults.bool(forKey: "bodymap.tape")
         #else
         let staged = false, tape = false
@@ -416,15 +417,15 @@ struct BodyMapView: View {
             }
             VStack(spacing: 0) {
                 StageChoice(options: BodyOutfit.allCases, selection: outfitBinding) { $0.title }
-                Spacer(minLength: 0)
                 if !map.turned, studio.gpu != nil {
-                    Label("Drag to turn", systemImage: "rotate.3d")
+                    Label("Drag to turn", systemImage: "arrow.left.and.right")
                         .font(.ui(12))
                         .foregroundStyle(Color.white.opacity(0.54))
-                        .padding(.bottom, 8)
+                        .padding(.top, 8)
                         .transition(.opacity)
                         .accessibilityHidden(true)
                 }
+                Spacer(minLength: 0)
                 StageChoice(options: BodyMove.allCases, selection: moveBinding) { $0.title }
             }
             .padding(10)
@@ -840,6 +841,16 @@ struct BodyMapView: View {
     private var rows: [Double] { female ? [14, 15.5, 17, 18.5, 20] : [17, 19, 21, 23, 25] }
     private var columns: [Double] { female ? [16, 20, 24, 28, 32, 36, 40, 45] : [8, 12, 16, 20, 25, 30, 35, 40] }
 
+    private struct ChartColumn: Hashable {
+        let index: Int
+    }
+
+    /// The column halfway between you and your goal.
+    private var focusColumn: Int {
+        let middle = (map.now.fat + map.goal.fat) / 2
+        return columns.indices.min { abs(columns[$0] - middle) < abs(columns[$1] - middle) } ?? 0
+    }
+
     private func cellBody(row: Int, column: Int) -> BodyNumbers {
         let lean = frame.leanKg(index: rows[row]), fat = columns[column]
         return BodyNumbers(kg: lean / (1 - fat / 100), fat: fat)
@@ -860,13 +871,22 @@ struct BodyMapView: View {
                 .font(.ui(14))
                 .foregroundStyle(Theme.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            ScrollView(.horizontal) {
-                chart(reader)
+            ScrollViewReader { across in
+                ScrollView(.horizontal) {
+                    chart(reader)
+                }
+                .scrollIndicators(.hidden)
+                .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+                .padding(.horizontal, -Theme.margin)
+                // It opens on you and your goal, wherever they stand across.
+                .onAppear {
+                    // A turn of the run loop first, so the row is laid out before it scrolls.
+                    let column = ChartColumn(index: focusColumn)
+                    DispatchQueue.main.async { across.scrollTo(column, anchor: .center) }
+                }
+                .onChange(of: map.sex) { _, _ in across.scrollTo(ChartColumn(index: focusColumn), anchor: .center) }
             }
-            .scrollIndicators(.hidden)
-            .contentMargins(.horizontal, Theme.margin, for: .scrollContent)
-            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-            .padding(.horizontal, -Theme.margin)
         }
     }
 
@@ -875,12 +895,13 @@ struct BodyMapView: View {
             HStack(spacing: Grid.gap) {
                 Color.clear
                     .frame(width: Grid.name, height: Grid.head)
-                ForEach(columns, id: \.self) { fat in
-                    Text(verbatim: percentText(fat))
+                ForEach(columns.indices, id: \.self) { column in
+                    Text(verbatim: percentText(columns[column]))
                         .font(.ui(13))
                         .monospacedDigit()
                         .foregroundStyle(Theme.secondary)
                         .frame(width: Grid.cell, height: Grid.head)
+                        .id(ChartColumn(index: column))
                 }
             }
             .accessibilityHidden(true)
