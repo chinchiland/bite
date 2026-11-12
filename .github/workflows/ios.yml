@@ -9,8 +9,6 @@ name: Build Bite
 
 on:
   push:
-    branches-ignore:
-      - body3d
     # Words alone don't need a cloud Mac.
     paths-ignore:
       - '**.md'
